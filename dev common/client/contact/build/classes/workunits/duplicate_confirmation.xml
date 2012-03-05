@@ -1,0 +1,85 @@
+<workunit>
+    <invokers>
+        <invoker type="formActions" caption="Accept" action="save" mnemonic="s"/>
+        <invoker type="formActions" caption="Cancel" action="_close" mnemonic="b" immediate="true"/>
+        <invoker type="confirm_duplicates" caption="Check Duplicates" action="init"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.util.*;
+
+        /**
+        * callers must pass the ff. parameters
+        *    info = should be the warning message data. info.list must exist.
+        *    entity = the entity object to compare
+        *    saveHandler = handler for calling the save routine
+        */
+        
+        public class AlertDuplicateController {
+        
+            @Service("ContactService")
+            def svc;
+        
+            @Script("ContactDef")
+            def custDef;
+            
+            /*********************************
+            * caller parameters
+            *********************************/
+            def entity;
+            def info;
+            def saveHandler;
+            
+            def custInfo;
+            def oldInfo;
+            def selection;
+            def oldSelection;
+            def cachedView;
+            
+            public void init() {
+                cachedView = [ fetch : { id-> return svc.open( [objid: id]); } ] as CacheMap;
+                custInfo = custDef.getFormFields( entity, "entity" );
+            }
+            
+            def duplicateHandler = [
+                 getColumns:{
+                    return [
+                        new Column(name:"item.name", caption:"Name", width:195),
+                        new Column(name:"item.score", caption:"Score", width: 60)
+                    ];
+                },
+                fetchList:{
+                    return info.list;
+                }
+            ] as SubListModel;
+            
+            public void setSelected(o) {
+                selection = o;
+                if( o?.item?.objid != null ) {
+                    oldSelection = cachedView[ o.item.objid ];
+                    oldInfo = custDef.getFormFields( oldSelection, "oldSelection" );
+                }    
+                else {
+                    oldInfo = [];
+                }    
+            }
+                
+            public def getSelected() {
+                return selection;
+            }
+            
+            public def save() {
+                if(MsgBox.confirm("You are about to save this record. Continue?")) {
+                    saveHandler( false );
+                    return "_close";
+                }
+            }
+        }
+        ]]>
+    </code>  
+    <pages>
+        <page template="contact.ui.DuplicateMatchPage"/>
+    </pages>    
+</workunit>

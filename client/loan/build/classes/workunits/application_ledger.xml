@@ -1,0 +1,285 @@
+<workunit>
+    <invokers>
+        <invoker type="application:formActions" caption="View Ledger" mnemonic="l" 
+                 permission="application.viewLedger"
+                 target="window" index="10" action="init" 
+                 visibleWhen="#{!empty entity and !empty entity.ledger}"/>
+        
+        <invoker type="ledger:formActions" caption="Open" mnemonic="o" 
+                 permission="application.viewLedger"
+                 target="window" action="init" icon="images/open16.png"/>
+        
+        <invoker type="formActions" caption="Close" action="_close" icon="images/cancel16.png" visibleWhen="#{view!='details'}"/>
+        
+        <invoker type="formActions" caption="Back" icon="images/back16.png" mnemonic="b" 
+                 action="back" visibleWhen="#{view!='main'}"/>
+                 
+        <invoker type="formActions" caption="View Details" mnemonic="d" action="viewDetails"
+                 visibleWhen="#{view=='main'}"/>
+                 
+        <invoker type="formActions" caption="Capture Payment" mnemonic="c" action="capturePayment"
+                 permission="application.capturePayment" visibleWhen="#{view!='main'}"/>
+                 <!--visibleWhen="#{ledger.principalBalance &gt; 0 and entity.mode == 'CAPTURE' || entity.mode == 'ONLINE'}"/>-->
+                 <!--visibleWhen="#{ledger.principalBalance &gt; 0 and entity.mode == 'CAPTURE'}"/>-->
+        <invoker type="formActions" caption="Waive Ledger" mnemonic="w"
+                 action="waiveLedger" permission="application.waiveLedger"/>
+                 
+        <invoker type="formActions" caption="Print Ledger" mnemonic="p" action="print" icon="images/print16.png"
+                 permission="application.printLedger" tooltip="Print this ledger"/>
+                 
+        <invoker type="formActions" caption="Add Interest" mnemonic="a" action="addInterest" icon="images/add16.png"
+                 permission="application.addInterest" tooltip="Add 7 Days of interest on this account"/>
+                 
+        <invoker type="formActions" caption="Search Payment" mnemonic="s" action="searchPayment" 
+                 icon="images/search16.png" permission="application.searchLedgerPaymentDate" 
+                 tooltip="Search Loan Ledger Payment Date" visibleWhen="#{view!='main'}"/>
+        
+        <invoker type="formActions" caption="Remove Payment" mnemonic="r" action="removePayment" 
+                 icon="images/backout16.png" permission="application.removePayment" 
+                 tooltip="Remove Loan Ledger Payment Date" visibleWhen="#{view!='main'}"/>
+                 
+        <invoker type="formPrintActions" caption="Back" tooltip="Back"
+                 icon="images/back16.png" action="viewDetails" mnemonic="p"/>
+                 
+        <invoker type="formActions" caption="Refresh" icon="images/refresh16.png" 
+                 mnemonic="r" action="loadLedgerInfo"/>
+        <!--<invoker type="formActions" caption="Change Mode" mnemonic="m"
+                 action="changeMode" tooltip="Change Mode" visibleWhen="#{view!='main'}"/>-->
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.util.*;  
+        import com.rameses.io.*;
+        import java.io.*;
+        import java.sql.Timestamp;
+        
+        public class LoanAppLedgerController{
+            @Service('LoanLedgerService')
+            def svc;
+        
+            @FormId
+            @FormTitle
+            def formTitle;
+            
+            @Binding
+            def binding;
+        
+            def entity;
+            def selectHandler;
+            def info;
+            def ledger;
+            def details;
+            
+            def view = 'main';
+            
+            void init() {
+                if( !entity || !entity.objid ) 
+                    throw new RuntimeException('Please select an application.');
+
+                formTitle = 'Ledger Info - ' + entity.appno;
+                loadLedgerInfo();
+            }
+            
+            void loadLedgerInfo() {
+                ledger = svc.read( [objid: entity.objid] );                
+                initLedger();
+            }
+            
+            void initLedger() {
+                if( ledger.dtcreated )    ledger.dtcreated = parseDate( ledger.dtcreated );
+                if( ledger.maturityDate ) ledger.maturityDate = parseDate( ledger.maturityDate );
+                if( ledger.startDate )    ledger.startDate = parseDate( ledger.startDate + ' 00:00:00' );
+                if( ledger.lastDatePaid ) ledger.lastDatePaid = parseDate( ledger.lastDatePaid + ' 00:00:00' );
+                
+                ledger.interest = ledger.interestrate*100.00;
+            }
+            
+            def parseDate( date ) {
+                if( date.length() == 19 )
+                    return java.sql.Timestamp.valueOf( date );
+                
+                return java.sql.Date.valueOf( date );
+            }
+            
+            def listHandler = [
+                getRows: { 50 },
+                fetchList:{ 
+                    it.objid = entity.objid;
+                    return svc.getDetails(it)
+                },
+                getColumns: {
+                    return[
+                        new Column(name:'date',                 caption:'Schedule' ,         width:95),
+                        new Column(name:'principal',            caption:'Principal Payment', width:110),
+                        new Column(name:'principal_balance',    caption:'Partial Balance',   width:95),
+                        new Column(name:'interest',             caption:'Interest Paid',     width:90),
+                        new Column(name:'absent_penalty',       caption:'Absent',            width:75),
+                        new Column(name:'underpayment_penalty', caption:'Underpayment',      width:96),
+                        new Column(name:'pastdue',              caption:'Overdue',           width:60),
+                        new Column(name:'payment',              caption:'Total Payment',     width:97),
+                        new Column(name:'refno',                caption:'OR/Ref. No.',       width:75),
+                        new Column(name:'paymentdate',          caption:'Payment Date',      width:100),
+                    ];
+                }
+            ]as PageListModel;
+            
+            def viewDetails(){
+                return (view = 'details');
+            }
+            
+            def back() {
+                loadLedgerInfo();
+                return (view = 'main');
+            }
+            
+            def capturePayment(){
+                return InvokerUtil.lookupOpener('application:capturePayment',[
+                    appid: entity.objid,
+                    handler:{
+                        loadLedgerInfo();
+                        listHandler.refresh();
+                    }
+                ]);
+            }            
+            
+            def waiveLedger(){
+                return InvokerUtil.lookupOpener('application:waiveLedger',[
+                    appid: entity.objid,
+                    borrowername: entity.fullborrowername,
+                    handler:{ ledger ->
+                        this.ledger = ledger;
+                        initLedger();
+                        binding.refresh();
+                    }
+                ]);
+            }
+            
+            def addInterest(){
+                if(MsgBox.confirm("Are you sure you want to add an additional interest on this account?")){
+                    return InvokerUtil.lookupOpener('application:addInterest',[
+                        appid: entity.objid,
+                        handler:{
+                            loadLedgerInfo();
+                            listHandler.refresh();
+                        }
+                    ]);
+                }
+            }
+            
+            //def changeMode(){
+                //if(MsgBox.confirm("Are you sure you want to change mode from online to capture?")){
+                    //MsgBox.alert("Mode successfully changed to capture payment(s).");
+                    //binding.refresh();
+                    //capturePayment();
+                    
+                    //return InvokerUtil.lookupOpener('application:capturePayment',[
+                        //appid: entity.objid,
+                        //handler:{
+                            //loadLedgerInfo();
+                            //listHandler.refresh();
+                        //}
+                    //]);
+                //}
+            //}
+            
+            def searchPayment(){
+                return InvokerUtil.lookupOpener("application:searchPaymentDate",[:]);
+            }
+            
+            def removePayment(){
+                return InvokerUtil.lookupOpener("application:removePaymentDate",[:]);
+            }
+            
+            def getCustName( cust ){
+                return cust.lastname + ', ' + cust.firstname + (cust.middlename? " ( $cust.middlename )" : "")
+            }
+            
+            void print(){
+                //MsgBox.alert('Print ledger not yet supported.');
+                setPrintOut();
+            }
+            
+             //--- Report Support -----//
+            def itemReport = [  "Loan Ledger" ]            
+            def report;            
+            def printOut;
+            def mode="printPage";
+            
+            void setPrintOut( po ){
+                this.printOut = po;
+                initReportModel();
+                
+                binding.fireNavigation( (mode='printPage') );
+            }
+            
+            void initReportModel(){
+                if( !printOut ) printOut = itemReport[0];
+                report = [
+                    getReportName:{
+                        if( "Loan Ledger".equals(printOut) )
+                            return 'loan/printout/Ledger.jasper';
+                    },
+                    getReportData:{
+                    
+                        //it.objid = entity.objid;
+                        //return svc.getDetails(it)
+                        
+                        def data = [ledger:ledger];
+                        
+                        data.appno = data.appno;
+                        data.borrowername = data.borrowername;
+                        if( data.routecode ==null )
+                            data.routecode = '';
+                        else data.routecode = data.routecode;
+                        if( data.routedescription ==null )
+                            data.routedescription = '';
+                        else data.routedescription = data.routedescription;
+                        data.route = data.routecode + " - " + data.routedescription;
+                        
+                        /*
+                        if( !data.ledger.checkInfo.bankname )
+                            data.ledger.checkInfo.bankname = '';
+                        else data.ledger.checkInfo.bankname = data.ledger.checkInfo.bankname;
+                        if( !data.ledger.checkno )
+                            data.ledger.checkno = '';
+                        else data.ledger.checkno = data.ledger.checkno;
+                        data.bank = data.ledger.checkInfo.bankname + " - " + data.ledger.checkno;
+                        */
+                        
+                        if (data.ledger.loanAmount !=null) data.ledger.loanAmount =  data.ledger.loanAmount as BigDecimal;
+                        if (data.ledger.dailyPayment !=null) data.ledger.dailyPayment =  data.ledger.dailyPayment as BigDecimal;
+                        if (data.ledger.interestrate !=null) data.ledger.interestrate =  data.ledger.interestrate as BigDecimal;
+                        if (data.ledger.term !=null) data.ledger.term = data.ledger.term as BigDecimal;
+                        if (data.ledger.totalPaid !=null) data.ledger.totalPaid =  data.ledger.totalPaid as BigDecimal;
+                        if (data.ledger.totalPenaltyPaid !=null) data.ledger.totalPenaltyPaid =  data.ledger.totalPenaltyPaid as BigDecimal;
+                        if (data.ledger.totalInterestPaid !=null) data.ledger.totalInterestPaid =  data.ledger.totalInterestPaid as BigDecimal;
+                        if (data.ledger.totalPrincipalPaid !=null) data.ledger.totalPrincipalPaid =  data.ledger.totalPrincipalPaid as BigDecimal;
+                        if (data.ledger.principalBalance !=null) data.ledger.principalBalance =  data.ledger.principalBalance as BigDecimal;
+                        if (data.ledger.principalBalance !=null) data.ledger.principalBalance =  data.ledger.principalBalance as BigDecimal;
+                        
+                        return data;
+                    },
+                    getParameters:{
+                        return[
+                            BRANCH_NAME: OsirisContext.env.CLIENT.name,
+                            PRINTDATE: new Date(),
+                            User: OsirisContext.env.USERINFO.firstname + ' ' + OsirisContext.env.USERINFO.lastname
+                        ]
+                    }
+                ] as ReportModel;
+                
+                report.viewReport();
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page name="main" template="loan.ui.ledger.LedgerPage2"/>
+        <page name="details" template="loan.ui.ledger.LedgerItemPage"/>
+        <page name="printPage" template="loan.ui.LoanAppReport"/>
+    </pages>
+</workunit>

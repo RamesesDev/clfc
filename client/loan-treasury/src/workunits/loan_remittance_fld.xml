@@ -1,0 +1,191 @@
+<workunit>
+    
+    <invokers>
+        <invoker folderid="menu/services/loan" caption="Field Collection Remittance" action="init"
+                 permission="field_collection_remittance.create"/>
+        
+        <invoker type="home:menu" caption="Field Collection Remittance" action="init" permission="field_collection_remittance.create"
+                 target="window" icon="images/indent32.png"/>
+        
+        <invoker type="formActions" mnemonic="n" action="open" caption="Next"
+            tooltip="Next" icon="images/next16.png" visibleWhen="#{mode=='init'}"/>
+            
+        <invoker type="formActions" mnemonic="s" action="save" caption="Save"
+            tooltip="Save Remittance" icon="images/save16.png" visibleWhen="#{mode=='create'}" />
+            
+        <invoker type="formActions" mnemonic="c" action="cancel" caption="Cancel" icon="images/cancel16.png" 
+            tooltip="Cancel" visibleWhen="#{mode=='create'}"/>
+            
+        <invoker type="formActions" mnemonic="f" action="findPayee" caption="Find" 
+            tooltip="Find/Search Payee" icon="images/search16.png" immediate="true" visibleWhen="#{mode=='create'}"/>
+            
+        <invoker type="formActions" mnemonic="c" action="cancel" caption="Close" 
+            tooltip="Close" icon="images/cancel16.png" visibleWhen="#{mode=='read'}"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        
+        class LoanRemittanceController{
+            @Service("LoanRemittanceService")
+            def svc;
+            
+            @Service("LoanCollectionSheetService")
+            def colSheetSvc;
+
+            @Binding
+            def binding;
+            
+            def entity=[:];
+            def filter = [:];
+            
+            def mode;
+            
+            def selected;
+            def prevRAmount;
+            
+            def breakDownOpener;
+            
+            void init(){
+                mode = 'init';
+            }
+            
+            def open() {
+                entity = colSheetSvc.findByCode( filter );
+                entity.total=0.00;
+                entity.list.each{
+                    if( !it.amountpaid ) it.amountpaid = 0.00;
+                    entity.total += it.amountpaid;
+                };
+                breakDownOpener = InvokerUtil.lookupOpener('cashreceipt:breakdown',[totalAmount:entity.total]);
+                listHandler.load();
+                mode="create";
+                return "form";
+            }
+            
+            def cancel(){
+                entity = null;
+                mode='init';
+                return "_default";
+            }
+        
+            def listHandler = [
+                getRows:{return 21;},
+                getColumns:{
+                    return[ 
+                            new Column(name:"billno",       caption:"Bill No.", width:100),
+                            new Column(name:"name",         caption:"Name", width:250),
+                            new Column(name:"totalDaysDue", caption:"Days Due", width:90),
+                            new Column(name:"totalDue",     caption:"Total Due", width:90),
+                            new Column(name:"dailyPayment", caption:"Daily Pyt", width:100),
+                            new Column(name:"amountpaid",   caption:"Amount Paid", editable:true, type:"decimal", width: 110),
+                          ]
+                },
+                fetchList:{o-> 
+                    return entity.list;
+                },
+                onUpdateItem:{o->
+                    if(!o?.amountpaid)
+                        o?.amountpaid = 0.00;
+                    if(o?.amountpaid || o?.amountpaid == 0.00){
+                        entity.total += o?.amountpaid - prevRAmount;
+                    }
+                    breakDownOpener.handle.totalAmount = entity.total;
+                }
+            ]as PageListModel;
+
+            void setSelected( e ){
+                selected = e;
+                def pos = entity.list.indexOf( selected )
+                if(pos!=-1) prevRAmount = entity.list.amountpaid[pos];
+            }
+    
+            def save() {
+                def brkHandle = breakDownOpener.handle;
+                if(brkHandle.totalBreakdown != entity.total){
+                    //throw new Exception("Total breakdown and Total Amount is not equal.");
+                    
+                    MsgBox.alert("Total breakdown and Total Amount is not equal.");
+                        //for over payment/remittance
+                        if(brkHandle.totalBreakdown > entity.total){
+                            return InvokerUtil.lookupOpener("collection:overPayment",[:])
+                        }
+                        //for short payment/remittance
+                        if(brkHandle.totalBreakdown < entity.total){
+                            return InvokerUtil.lookupOpener("collection:shortagePayment",[:])
+                        }
+                        
+                    
+                    //if(!MsgBox.confirm('Are you sure you want to remit this collection \nwith the Total breakdown and Total Amount is not equal?')){
+                        //return confirm({InvokerUtil.lookupOpener("collection:shortagePayment",[:]) });
+                    //}
+                    /*
+                    if(MsgBox.confirm("You are about to return this application to pending, proceed?")){
+                        return confirm({ message ->
+                            def p = [comment: message, objid: entity.objid];
+                            entity.putAll( service.returnApp(p) ); 
+                            if( selectHandler ) selectHandler(entity);
+                                binding.refresh();
+                        });
+                    }
+                    */
+                }    
+                if( entity.total <= 0 ){
+                    if(!MsgBox.confirm('Are you sure you want to remit this collection sheet with 0(zero) amount?')) return;
+                }
+                else{
+                    if(!MsgBox.confirm('You are about to remit this collection sheet.\nPlease verify that all items correct. Proceed?')) return;
+                }
+            
+                entity.breakdown = brkHandle.list;
+                svc.remitCollectionSheet( entity );
+                mode = "read";
+            }
+            
+            def routeSelectHandler={o->
+                entity.routecode=o.code;
+                entity.routedescription=o.description;
+                binding.refresh("entity.routecode");
+            };
+            
+            def lookupRoute() {
+                return InvokerUtil.lookupOpener("loan:routeLookup",[selectHandler:routeSelectHandler]);
+            }
+            
+            def searchText;
+            def selectHandler;
+            def searchPayee;
+            
+            def payeeHandler={o->
+                entity.searchText
+            };
+            
+            def findPayee(){
+                return InvokerUtil.lookupOpener("collection:findPayee",[:]);
+                                   //[selectHandler:payeeHandler]);                    
+                                  //[searchText:entity.borrowername,selectHandler:payeeHandler]);                    
+            }
+            
+            /*
+            def capturePayment() {
+                return InvokerUtil.lookupOpener('application:capturePayment',[
+                    appid: entity.objid,
+                    handler: {
+                        loadLedgerInfo();
+                        listHandler.refresh();
+                    }
+                ]);
+            }
+            */
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="loantreasury.remittance.field.LoanRemittanceInitPage"/>
+        <page name="form" template="loantreasury.remittance.field.LoanRemittancePage"/>
+    </pages>
+</workunit>

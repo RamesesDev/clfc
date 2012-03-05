@@ -1,0 +1,105 @@
+<workunit>
+    <invokers>
+        <invoker type="loan:applicationform" caption="Application Form" target="window" action="init"/>
+        <invoker type="formActions" caption="Save" action="saveData"  visibleWhen="#{entity.state==null}"/>
+        <invoker type="formActions" caption="Borrower" action="lookupBorrower" immediate="true"  visibleWhen="#{entity.state==null}"/>
+        <invoker type="formActions" caption="Edit" action="editData" visibleWhen="#{entity.state=='PENDING'}" />
+        <invoker type="formActions" caption="For Inspection" action="forInspection" immediate="true" visibleWhen="#{entity.state=='PENDING'}"/>
+        <invoker type="formActions" caption="Return" action="returnMain" visibleWhen="#{entity.state=='FOR INSPECTION'}"/>
+        <invoker type="formActions" caption="For Approval" action="forApproval" immediate="true" visibleWhen="#{entity.state=='FOR INSPECTION'}"/>
+        <invoker type="formActions" caption="Release" action="Release" immediate="true"  visibleWhen="#{entity.state=='APPROVED'}"/>
+        
+        <invoker type="formActions" caption="Print" action="printData" immediate="true" visibleWhen="#{mode!='add'}"/>
+        <invoker type="formActions" caption="Close" action="_close" immediate="true" />
+        
+        <invoker type="formPrintActions" tooltip="Back" icon="images/back16.png" action="_default" mnemonic="p" />
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        import java.io.*;
+        import com.rameses.io.*;
+        
+        class ApplicationFormController extends loan.ui.AbstractLoanAppReport {
+            
+            
+            @Binding
+            def binding;
+            
+            @Script('ContactDef')
+            def contactDef;
+            
+            @Service( "LoanApplicationService" )
+            def svc;
+            
+            def itemBusinessStatus=["Full of Stocks","Plenty of Stocks","Average","Below Average"];
+            def itemOwnership=["Sole Propreitorship","Corportaion","Partnership","Cooperative"];
+            def scheduleItem=["DAILY","MONTHLY"];
+
+            def entity;
+            
+            def isEmployed;
+            def isBusiness;
+            def assettype;
+            
+            def assetsInfo;
+            def borrowerInfo;
+            def comments;
+            def translog;
+            
+            def selectedLoanHistory;
+            def _assetsSelected;
+
+            def mode='read';
+            def modeComment='overall';
+            
+            def borrowerControls;
+            def connectionControls;
+            
+            def selectHandler;
+
+            
+            void init(){
+            
+            }
+            
+            void setAssetsSelected(e){
+                _assetsSelected=e;
+                String o="loan/ui/asset-"+assettype+".gtpl";
+                assetsInfo = TemplateProvider.instance.getResult(o,[data:_assetsSelected]);
+            }
+            
+            def getAssetsSelected(){
+                return _assetsSelected;
+            }
+            
+            def getAssetsList(){
+                return entity[assettype];
+            }
+            
+            def listLoanHistory=[
+                getColumns:{
+                    return[new Column(name:"item.renewalno",caption:"Renewal"),
+                           new Column(name:"item.approvedate",caption:"Date Approved"),
+                           new Column(name:"item.amountapproved",caption:"Amount")
+                    ]      
+                },
+                fetchList:{o->
+                    def list=[];
+                    list.addAll(svc.readHistory([appno:entity.appno]));
+                    return list;
+                }
+            ]as SubListModel;
+       }    
+       ]]>
+    </code>
+    <pages>
+        <page template="loan.ui.ApplicationForm"/>
+        <page name="page2" template="loan.ui.LoanAppReport"/>
+    </pages>
+</workunit>

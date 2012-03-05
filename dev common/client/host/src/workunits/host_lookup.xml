@@ -1,0 +1,68 @@
+<workunit>
+     <invokers>
+        <invoker type="lookup:host" target="popup" caption="Lookup Host"/>
+
+        <invoker type="leftFormActions" icon="images/new16.png" tooltip="Add New Host" action="addNew" permission="host.create" />
+        <invoker type="formActions"  caption="OK" action="doSelect"/>
+        <invoker type="formActions" caption="Cancel" action="_close" />
+        
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class HostLookupController {
+            
+            @Binding
+            def binding;
+        
+            @Service("HostService")
+            def svc;
+            
+            def parent;
+            def excludes = [];
+            def selectHandler;
+            def selection;
+            
+            def listHandler = [
+                getColumns : {
+                    return [
+                            new Column(name:"item.code", caption:"Code"),
+                            new Column(name:"item.name", caption:"Name"),
+                        ];
+                },
+                fetchList : { o->
+                    o.excludes = excludes;
+                    return svc.getList( o );
+                }
+            ] as PageListModel;
+            
+            public def addNew() {
+                return InvokerUtil.lookupOpener( "host_form:add", 
+                    [   
+                        saveNewHandler: saveNewHandler,
+                        cancelHandler: { return "_close";} 
+                    ] );
+            }
+            
+            def saveNewHandler = { o->
+                selectHandler( o ); 
+                return "_exit";
+            }
+            
+            public def doSelect() {
+                if(!selection?.item)
+                    throw new Exception("Please select an item"); 
+                selectHandler( selection.item ); 
+                return "_exit";
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="host.ui.HostLookupPage"/>
+    </pages>
+</workunit>

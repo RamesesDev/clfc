@@ -1,0 +1,48 @@
+<workunit>
+    <invokers>
+        <invoker type="control:lot"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class LotController extends SubControlModel {
+        
+            public void onInit() {
+                
+            }
+            
+            public void onRefresh() {
+
+            }
+            
+            public def createContext() {
+                return [:];
+            }
+            
+            public String getHtmlFormat() {
+                def buffer = new StringBuffer();
+                buffer << '<table>';
+                buffer << "<tr><td><b>Type: </b></td><td>${context.type}</td></tr>";
+                buffer << "<tr><td><b>Since: </b></td><td>${context.since? context.since: '' }</td></tr>";
+                if( context.type == 'RENTED' ) {
+                    buffer << "<tr><td><b>Rent Type: </b></td><td>${context.renttype}</td></tr>";
+                    buffer << "<tr><td><b>Rent Amount: </b></td><td>${context.rentamount}</td></tr>";
+                    buffer << "<tr><td><b>Since: </b></td><td>${context.since? context.since: '' }</td></tr>";
+                }
+                if( context.remarks )
+                    buffer << "<tr><td><b>Remarks: </b></td><td>${context.remarks}</td></tr>";
+                    
+                buffer << '</table>';
+
+                return buffer.toString();
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="shared.custom.lot.LotPage"/>
+    </pages>
+</workunit>

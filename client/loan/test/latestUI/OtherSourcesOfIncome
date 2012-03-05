@@ -1,0 +1,36 @@
+<!--
+<div class="source">
+    <table>
+        <%if(data.otherSourcesOfIncomeList.size() <1){%>
+            <th><b>OTHER SOURCE(S) OF INCOME</b></th><br>
+            <tr><font color="red"><i>Not Specified at present</i></font></tr>
+        <%}%>
+    </table>
+</div>
+<br>
+<div class="source">
+    <table>
+        <%if(data.otherSourcesOfIncomeList.size()>0){%>
+            <th><b>OTHER SOURCE(S) OF INCOME</b></th><br>
+            <tr>
+                <th>Kind Of Business/Firm : </th>    
+                <td>${data.otherSourcesOfIncomeList.kindOfBusiness}</td> 
+            </tr>
+            <tr>
+                <th>Gross Net/Income : </th>
+                <td>${data.otherSourcesOfIncomeList.grossNetIncome}</td>
+            </tr>
+            <tr>
+                <th>Available Time  :</th>
+                <td>
+                    ${data.otherSourcesOfIncomeList.availTimeFrom} - ${data.otherSourcesOfIncomeList.availTimeTo}
+                </td>
+            </tr>
+            <tr>
+                <th>Remarks : </th>
+                <td>${data.otherSourcesOfIncomeList.remarks}</td>
+            </tr>
+        <%}%>
+    </table>
+</div>
+-->

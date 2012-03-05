@@ -1,0 +1,1479 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="PromissoryNote"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="595"
+		 pageHeight="842"
+		 columnWidth="535"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="2" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="BRANCH_NAME" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="PRINTDATE" isForPrompting="false" class="java.util.Date"/>
+	<parameter name="User" isForPrompting="false" class="java.lang.String"/>
+
+	<field name="dtreleased" class="java.lang.Byte"/>
+	<field name="borrowerName" class="java.lang.String"/>
+	<field name="jointBorrowerNames" class="java.lang.String"/>
+	<field name="coMakerNames" class="java.lang.String"/>
+	<field name="loaninfo.loanamount" class="java.lang.String"/>
+	<field name="ledger.maturityDate" class="java.util.Date"/>
+
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="40"  isSplitAllowed="true" >
+				<line direction="TopDown">
+					<reportElement
+						x="121"
+						y="24"
+						width="313"
+						height="1"
+						key="line-1"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="2"
+						y="2"
+						width="532"
+						height="20"
+						key="staticText-1"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="14" isBold="true"/>
+					</textElement>
+				<text><![CDATA[   CAPITAL and LEVERAGE FINANCE CORPORATION]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="178"
+						y="26"
+						width="182"
+						height="13"
+						key="textField-1"/>
+					<box></box>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{BRANCH_NAME}+ " " + "Business Office"]]></textFieldExpression>
+				</textField>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="33"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="3"
+						y="4"
+						width="75"
+						height="13"
+						key="staticText-2"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[PN NO :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="2"
+						y="17"
+						width="75"
+						height="13"
+						key="staticText-3"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Amount :]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="51"
+						y="16"
+						width="92"
+						height="1"
+						forecolor="#999999"
+						key="line-2"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="51"
+						y="28"
+						width="92"
+						height="1"
+						forecolor="#999999"
+						key="line-3"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="381"
+						y="4"
+						width="75"
+						height="13"
+						key="staticText-4"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Date Released :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="412"
+						y="17"
+						width="48"
+						height="13"
+						key="staticText-5"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Amount :]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="458"
+						y="16"
+						width="74"
+						height="1"
+						forecolor="#999999"
+						key="line-4"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="457"
+						y="28"
+						width="75"
+						height="1"
+						forecolor="#999999"
+						key="line-5"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="700"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="24"
+						y="3"
+						width="208"
+						height="17"
+						key="staticText-6"/>
+					<box></box>
+					<textElement textAlignment="Justified">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[FOR THE VALUE RECIEVED, I/We,]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="218"
+						y="17"
+						width="131"
+						height="1"
+						forecolor="#999999"
+						key="line-6"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="349"
+						y="3"
+						width="185"
+						height="17"
+						key="staticText-7"/>
+					<box></box>
+					<textElement textAlignment="Justified">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[(borrower), of legal age, single/married.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="1"
+						y="20"
+						width="86"
+						height="13"
+						key="staticText-8"/>
+					<box></box>
+					<textElement textAlignment="Justified">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[and a resident of]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="77"
+						y="32"
+						width="151"
+						height="1"
+						forecolor="#999999"
+						key="line-7"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="231"
+						y="23"
+						width="30"
+						height="13"
+						key="staticText-9"/>
+					<box></box>
+					<textElement textAlignment="Justified">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[, and]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="257"
+						y="33"
+						width="103"
+						height="1"
+						forecolor="#999999"
+						key="line-8"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="361"
+						y="23"
+						width="173"
+						height="13"
+						key="staticText-10"/>
+					<box></box>
+					<textElement textAlignment="Justified">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[,(co-maker), of legal age, single/]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="1"
+						y="34"
+						width="126"
+						height="13"
+						key="staticText-11"/>
+					<box></box>
+					<textElement textAlignment="Justified">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[married, and a resident of]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="120"
+						y="45"
+						width="155"
+						height="1"
+						forecolor="#999999"
+						key="line-9"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="276"
+						y="35"
+						width="258"
+						height="13"
+						key="staticText-12"/>
+					<box></box>
+					<textElement textAlignment="Justified">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[,jointly and severally promise to pay Capital and Leverage]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="46"
+						width="202"
+						height="13"
+						key="staticText-13"/>
+					<box></box>
+					<textElement textAlignment="Justified">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[Finance Corporation, or order at its office at]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="195"
+						y="57"
+						width="314"
+						height="1"
+						forecolor="#999999"
+						key="line-10"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="513"
+						y="47"
+						width="18"
+						height="13"
+						key="staticText-14"/>
+					<box></box>
+					<textElement textAlignment="Justified">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[the]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="1"
+						y="58"
+						width="86"
+						height="13"
+						key="staticText-15"/>
+					<box></box>
+					<textElement textAlignment="Justified">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[principal sum of]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="75"
+						y="70"
+						width="217"
+						height="1"
+						forecolor="#999999"
+						key="line-11"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="293"
+						y="59"
+						width="19"
+						height="13"
+						key="staticText-16"/>
+					<box></box>
+					<textElement textAlignment="Justified">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[(P]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="304"
+						y="70"
+						width="52"
+						height="1"
+						forecolor="#999999"
+						key="line-12"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="356"
+						y="60"
+						width="175"
+						height="13"
+						key="staticText-17"/>
+					<box></box>
+					<textElement textAlignment="Justified">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[.00) Phiippine Currency, with interest]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="71"
+						width="534"
+						height="13"
+						key="staticText-18"/>
+					<box></box>
+					<textElement textAlignment="Justified">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[at the rate of five percent (6%) per month, exclusive of corresponding penalties for default payment and other charges incidentl to]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="1"
+						y="83"
+						width="534"
+						height="13"
+						key="staticText-19"/>
+					<box></box>
+					<textElement textAlignment="Justified">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[incidental to the extension of credit and/or attorney's fees and other damages, payable in the hereunder described ma-]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="1"
+						y="95"
+						width="534"
+						height="13"
+						key="staticText-20"/>
+					<box></box>
+					<textElement textAlignment="Justified">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[nner, until the whole obligation shall have been fully paid, to wit:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="26"
+						y="157"
+						width="163"
+						height="13"
+						key="staticText-25"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[That the obligation is payable in]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="179"
+						y="169"
+						width="62"
+						height="1"
+						forecolor="#999999"
+						key="line-13"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="245"
+						y="157"
+						width="289"
+						height="13"
+						key="staticText-26"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[installments including the accrued interest until the whole amount]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="1"
+						y="168"
+						width="111"
+						height="13"
+						key="staticText-27"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[shall be fully settled.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="26"
+						y="182"
+						width="508"
+						height="13"
+						key="staticText-28"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[Upon default of any installment when due, all other installments shall become due and demandable. Interest and]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="1"
+						y="194"
+						width="498"
+						height="13"
+						key="staticText-29"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[penalty not paid shall be added to the principal and shall bear interest at the same rate.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="26"
+						y="208"
+						width="508"
+						height="13"
+						key="staticText-30"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[In case of default or underpayment of any semi-monthly and monthly installment, apenalty will be charged at the rate]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="220"
+						width="534"
+						height="13"
+						key="staticText-31"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[rate of Three Percent (3%) per semi month and Six Percent (6%) per month, respectively based on the outstanding ba-]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="1"
+						y="232"
+						width="534"
+						height="13"
+						key="staticText-32"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[lance upon maturity. Interest and penalties not paid shall likewise added to, and become part of the principal and shall]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="244"
+						width="534"
+						height="13"
+						key="staticText-33"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[likewise bear an interest at the same rate. Further, a Twenty-Five Percent (25%) of the total amount due and deman-]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="256"
+						width="534"
+						height="13"
+						key="staticText-34"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[dable as and for attorney's fees, exclusive of costs and judicial/extra-judicial expenses.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="25"
+						y="272"
+						width="508"
+						height="13"
+						key="staticText-35"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[Moreover, I/We jointly and severally, further empower and authorize Capital and Leverage Finance Corporation,]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="1"
+						y="284"
+						width="534"
+						height="13"
+						key="staticText-36"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[at it's option and without notice to set-off or to apply to the payment of this note, any and all of my/our funds which may]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="296"
+						width="534"
+						height="13"
+						key="staticText-37"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[be in their hands on deposit or in any other manner and by virtue of any other contract, and hold the same in its  posse-]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="308"
+						width="534"
+						height="13"
+						key="staticText-38"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[sion or control.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="26"
+						y="323"
+						width="508"
+						height="13"
+						key="staticText-39"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[It is expressly understood that capital and Leverage Fincance Corporation, at it's option to declare any or all of my]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="335"
+						width="534"
+						height="13"
+						key="staticText-40"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[/our financial obligation(s) with the same, immediately due and demandable in case of non-payment/default of my/our]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="1"
+						y="347"
+						width="534"
+						height="13"
+						key="staticText-41"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[other loan(s)/obligation(s) with the said Capital and Leverage Corporation, or any other financial institution(s).]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="26"
+						y="362"
+						width="508"
+						height="13"
+						key="staticText-42"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[In case of judicial execution of this obligation or any part of it, the debtor(s), waive(s) all his/her/their right(s) under]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="1"
+						y="374"
+						width="534"
+						height="13"
+						key="staticText-43"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[the provisions of Rule 39, Section 13 of the Revised Rules of Court.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="25"
+						y="390"
+						width="508"
+						height="13"
+						key="staticText-44"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[All and any legal action(s) arising from or connected with this note shall be brought to the proper court of]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="1"
+						y="413"
+						width="94"
+						height="1"
+						forecolor="#999999"
+						key="line-14"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="96"
+						y="402"
+						width="438"
+						height="13"
+						key="staticText-45"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[, Philippines, or at the place of execution of this note or at the sole option of Capital and Leverage]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="1"
+						y="414"
+						width="77"
+						height="13"
+						key="staticText-46"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[Corporation.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="25"
+						y="430"
+						width="50"
+						height="13"
+						key="staticText-47"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[Done this]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="72"
+						y="441"
+						width="98"
+						height="1"
+						forecolor="#999999"
+						key="line-15"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="169"
+						y="430"
+						width="26"
+						height="13"
+						key="staticText-48"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[, at]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="189"
+						y="441"
+						width="245"
+						height="1"
+						forecolor="#999999"
+						key="line-16"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="433"
+						y="431"
+						width="101"
+						height="13"
+						key="staticText-49"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[, Philippines.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="25"
+						y="452"
+						width="509"
+						height="17"
+						key="staticText-50"/>
+					<box></box>
+					<textElement textAlignment="Justified">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[I/WE ACKNOWLEDGE THE RECEIPT OF THIS NOTE PRIOR TO THE CONSUMATION OF ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="1"
+						y="468"
+						width="533"
+						height="17"
+						key="staticText-51"/>
+					<box></box>
+					<textElement textAlignment="Justified">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[THE TANSACTION AND THAT I/WE UNDERSTAND AND FULLY AGREE TO THE TERMS AND]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="484"
+						width="533"
+						height="17"
+						key="staticText-52"/>
+					<box></box>
+					<textElement textAlignment="Justified">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[CONDITIONS STIPULATED HEREOF.]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="10"
+						y="515"
+						width="117"
+						height="1"
+						forecolor="#999999"
+						key="line-17"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="17"
+						y="515"
+						width="104"
+						height="13"
+						key="staticText-53"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[Principal Borrower]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="202"
+						y="515"
+						width="117"
+						height="1"
+						forecolor="#999999"
+						key="line-18"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="209"
+						y="515"
+						width="104"
+						height="13"
+						key="staticText-54"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[Joint Borrower]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="405"
+						y="515"
+						width="117"
+						height="1"
+						forecolor="#999999"
+						key="line-19"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="412"
+						y="515"
+						width="104"
+						height="13"
+						key="staticText-55"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[Co-Maker]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="2"
+						y="536"
+						width="136"
+						height="13"
+						key="staticText-56"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[Signed in the presence of:]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="151"
+						y="547"
+						width="161"
+						height="1"
+						forecolor="#999999"
+						key="line-20"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="327"
+						y="549"
+						width="195"
+						height="1"
+						forecolor="#999999"
+						key="line-21"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="2"
+						y="555"
+						width="161"
+						height="13"
+						key="staticText-57"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[Republic of the Philippines)]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="2"
+						y="579"
+						width="131"
+						height="1"
+						forecolor="#999999"
+						key="line-22"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="132"
+						y="568"
+						width="31"
+						height="13"
+						key="staticText-58"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[)]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="2"
+						y="592"
+						width="131"
+						height="1"
+						forecolor="#999999"
+						key="line-23"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="132"
+						y="581"
+						width="31"
+						height="13"
+						key="staticText-59"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[) Sc.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="189"
+						y="568"
+						width="147"
+						height="17"
+						key="staticText-60"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[ACKNOWLEDGEMENT]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="1"
+						y="600"
+						width="23"
+						height="13"
+						key="staticText-61"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[At]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="17"
+						y="612"
+						width="161"
+						height="1"
+						forecolor="#999999"
+						key="line-24"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="177"
+						y="601"
+						width="25"
+						height="13"
+						key="staticText-62"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[, on]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="197"
+						y="612"
+						width="161"
+						height="1"
+						forecolor="#999999"
+						key="line-25"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="357"
+						y="601"
+						width="13"
+						height="13"
+						key="staticText-63"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[,]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="364"
+						y="611"
+						width="70"
+						height="1"
+						forecolor="#999999"
+						key="line-26"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="433"
+						y="600"
+						width="101"
+						height="13"
+						key="staticText-64"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[, personally appeared:]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="2"
+						y="625"
+						width="125"
+						height="1"
+						forecolor="#999999"
+						key="line-27"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="126"
+						y="615"
+						width="52"
+						height="13"
+						key="staticText-65"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[, CTC No.:]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="177"
+						y="626"
+						width="98"
+						height="1"
+						forecolor="#999999"
+						key="line-28"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="274"
+						y="616"
+						width="53"
+						height="13"
+						key="staticText-66"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[issued on]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="321"
+						y="627"
+						width="75"
+						height="1"
+						forecolor="#999999"
+						key="line-29"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="395"
+						y="617"
+						width="22"
+						height="13"
+						key="staticText-67"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[at]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="409"
+						y="627"
+						width="118"
+						height="1"
+						forecolor="#999999"
+						key="line-30"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="2"
+						y="638"
+						width="125"
+						height="1"
+						forecolor="#999999"
+						key="line-31"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="126"
+						y="628"
+						width="52"
+						height="13"
+						key="staticText-68"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[, CTC No.:]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="177"
+						y="639"
+						width="98"
+						height="1"
+						forecolor="#999999"
+						key="line-32"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="274"
+						y="629"
+						width="53"
+						height="13"
+						key="staticText-69"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[issued on]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="321"
+						y="640"
+						width="75"
+						height="1"
+						forecolor="#999999"
+						key="line-33"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="395"
+						y="630"
+						width="22"
+						height="13"
+						key="staticText-70"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[at]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="409"
+						y="640"
+						width="118"
+						height="1"
+						forecolor="#999999"
+						key="line-34"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="2"
+						y="651"
+						width="125"
+						height="1"
+						forecolor="#999999"
+						key="line-35"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="126"
+						y="641"
+						width="52"
+						height="13"
+						key="staticText-71"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[, CTC No.:]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="177"
+						y="652"
+						width="98"
+						height="1"
+						forecolor="#999999"
+						key="line-36"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="274"
+						y="642"
+						width="53"
+						height="13"
+						key="staticText-72"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[issued on]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="321"
+						y="653"
+						width="75"
+						height="1"
+						forecolor="#999999"
+						key="line-37"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="395"
+						y="643"
+						width="22"
+						height="13"
+						key="staticText-73"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[at]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="409"
+						y="653"
+						width="118"
+						height="1"
+						forecolor="#999999"
+						key="line-38"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="0"
+						y="656"
+						width="534"
+						height="13"
+						key="staticText-74"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[known to me and known to be the same persons who executed the foregoing instument and who anknowledged to me]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="1"
+						y="668"
+						width="534"
+						height="13"
+						key="staticText-75"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[that the same is their free and voluntary act and deed.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="29"
+						y="684"
+						width="481"
+						height="13"
+						key="staticText-76"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[WITNESS MY HAND AND SEAL at the place and date abovewriten.]]></text>
+				</staticText>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="22"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="40"
+						y="12"
+						width="122"
+						height="10"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-2"
+						positionType="Float"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Tahoma" pdfFontName="Helvetica" size="7" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format($P{PRINTDATE}) )]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="2"
+						y="0"
+						width="122"
+						height="10"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-3"
+						positionType="Float"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Tahoma" pdfFontName="Helvetica" size="7" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Printed by : " + $P{User}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="453"
+						y="11"
+						width="51"
+						height="10"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-4"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Tahoma" pdfFontName="Helvetica" size="7" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Page " + $V{PAGE_NUMBER} + " of "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="504"
+						y="11"
+						width="30"
+						height="10"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-5"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Tahoma" pdfFontName="Helvetica" size="7" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER} + ""]]></textFieldExpression>
+				</textField>
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

@@ -1,0 +1,104 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+
+class LoanBillingService {
+
+	@PersistenceContext('java:loan')
+	def em;
+
+	@Service('DateService')
+	def datesvc;
+
+	@Service('LoanApplicationService')
+	def appSvc;
+
+	@Service('LoanCalculationService')
+	def calcSvc;
+
+	@Service('Var')
+	def vars;
+
+
+	def generateCollectionNo(){
+		def o =em.sqlContext.createQuery("select * from loanappno").resultList;
+		def x =o.find{it.objid=='1';}
+		x.collectionno+=1;
+		em.update("loanapplication:loanappno",x);
+		return x.collectionno;
+	}
+
+	@ProxyMethod
+	public def createCollectionSheet(def o){
+		o.collectionno = generateCollectionNo();
+		o.date = datesvc.serverDate;
+		int i = 0;
+		o.list.each{
+			it.billno = o.collectionno + "-" + ++i;
+		}
+		return em.create("collectionsheet", o);
+	}
+
+	@ProxyMethod
+	public def read(def param){
+		def o=em.read("collectionsheet", param);
+		if(o) return o;
+	}
+
+	@ProxyMethod
+	public void updateLoanLedger(def x, def y){
+		em.update("collectionsheet:loanapplication", x);
+		em.update("collectionsheet:loanapplication", y);
+	}
+
+	@ProxyMethod
+	public def isCollected(def param){
+		def flag = false;
+		def sql = 'select * from collection_sheet where routeno = $P{routeno}';
+		def o =em.sqlContext.createQuery(sql).setParameters(param).resultList;
+		if(o)	flag = true;
+		return flag;
+	}
+
+	@ProxyMethod
+	public def getList(def param){
+		def list = em.sqlContext.createQuery('select objid from loanapplication where routecode = ? and state = ?')
+		             .setParameter(1, param.routeno)
+		             .setParameter(2, 'APPROVED')
+		             .resultList;
+
+		def billing = [];
+		list.each {
+			def app = appSvc.read( it );
+
+			/* other info: startdate, interest, surcharge, overduerate, principal_balance, */
+			def p = [
+				billdate:  datesvc.serverDate.toString()[0..9],
+				enddate:   dtstart[0..9],
+				principal: app.loaninfo.loanamount,
+				interest: 0.00, surcharge: 0.00, overduerate: 0.00, principal_balance: 0.00,
+			];
+
+			if( app.loaninfo.startdate )
+				p.startdate = app.loaninfo.startdate[0..9];
+			else
+				p.startdate = app.approvedate[0..9];
+
+			def term = app.loaninfo.term;
+			def dtend;
+
+
+			def items = calcSvc.generateBilling( p );
+
+			def amount = 0.00;
+			items.each {
+				if( it.principal ) amount += it.principal;
+				if( it.interest  ) amount += it.interest;
+				if( it.surcharge ) amount += it.surcharge;
+			};
+			billing << [name: app.borrowername, amount: amount];
+		}
+
+		return billing;
+	}
+
+}

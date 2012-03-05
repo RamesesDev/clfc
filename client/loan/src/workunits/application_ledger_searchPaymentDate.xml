@@ -1,0 +1,36 @@
+<workunit>
+    <invokers>        
+        <invoker type="application:searchPaymentDate" caption="Search Payment Date" target="popup"/>
+    </invokers>
+    <code> 
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        
+        class LoanLedgerSearchPaymentDateController{
+            @Service('LoanLedgerService')
+            def svc;
+            
+            @Binding
+            def binding;
+            
+            def selectHandler;
+            //def filter=[:];
+            
+            def filter = [date: OsirisContext.env.LOCALE_TIME];
+            
+            def find(){
+                if(!filter.date){
+                    MsgBox.alert("Date is required");
+                    return;
+                }else
+                    return "_close";
+            }
+        }    
+        ]]>
+    </code>
+    <pages>
+        <page template="loan.ui.ledger.LedgerSearchDate"/>
+    </pages>    
+</workunit>

@@ -1,0 +1,4 @@
+"entity.*" [mode=='read'] {enabled:false;}
+"entity.*" [mode!='read'] {enabled:true;}
+"changeAmount" [mode=='read'] {enabled:false;}
+"changeAmount" [mode!='read'] {enabled:true;}

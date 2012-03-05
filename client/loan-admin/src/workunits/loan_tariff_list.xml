@@ -1,0 +1,81 @@
+<workunit>
+    <invokers>
+        <invoker folderid="menu/mgmt/loan" caption="Loan Charges" permission="loan_charge.view"/>
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        import classes.Rules;
+        
+        public class LoanTariffListController
+        {
+            @Service("LoanTariffService")
+            def svc;
+        
+            @Binding
+            def binding;
+            
+            def search;
+            def selectedItem;
+            def mode;
+            
+            def cache = [ 
+                fetch: { key ->
+                    return svc.read([objid: key]);
+                }
+            ] as CacheMap;
+            
+            def onUpdate = { item=null, m=null ->
+                mode = m? m : 'read';
+                if( item ) {
+                    listHandler.setSelectedItem( item );
+                }
+                binding.refresh('selectedItem');
+            }
+            
+            def opener = InvokerUtil.lookupOpener('tarrif:form', [onUpdate: onUpdate]);
+            
+            def listHandler = [
+                getRows: { 20 },
+                getColumns: {
+                    return [
+                        new Column(name:'objid', primary: true, visible: false),
+                        new Column(name:'description', caption:'Description'),
+                        new Column(name:'state', caption:'State')
+                    ];
+                },
+                fetchList: {
+                    cache.clear();
+                    if( search ) it.description = search;
+                    return svc.getList( it );
+                }
+            
+            ] as PageListModel;
+            
+            
+            void setSelectedItem( e ) {
+                this.selectedItem = e;
+                def obj = e? cache.get(e.objid) : null;
+                if( opener.handle )
+                    opener.handle.data = obj;
+                else
+                    opener.params.data = obj;
+            }
+            
+            
+        }
+        
+        ]]>
+    </code>
+    
+    <pages>
+        <page template="loan.charge.LoanTariffListPage" />
+    </pages>
+</workunit>

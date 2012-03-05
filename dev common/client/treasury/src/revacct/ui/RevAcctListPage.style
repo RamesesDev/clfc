@@ -1,0 +1,3 @@
+
+'selection' [editing] { enabled: false; }
+'selection' [!editing] { enabled: true; }

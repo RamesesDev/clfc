@@ -1,0 +1,37 @@
+<workunit>
+
+    <invokers>
+        <invoker type="contact:formActions" immediate="true" action="open" caption="Connections" index="10" target="popup" visibleWhen="#{mode=='read' and entity!=null}"/>
+
+        <invoker type="formActions" caption="Close" immediate="true"  action="_close" />
+    </invokers>
+
+    <code>
+        <![CDATA[
+            import com.rameses.rcp.common.*;
+            import com.rameses.rcp.annotations.*;
+            import com.rameses.util.*;
+            import com.rameses.osiris2.client.*;
+
+            public class SocialConnectionViewController {
+                
+                def opener;
+                def entityHandler;
+                
+                @FormId
+                def formId;
+                
+                void open() {
+                    if(!entityHandler)
+                        throw new Exception("Please specify an entity handler");
+                    def entity = entityHandler();    
+                    opener = InvokerUtil.lookupOpener( "socialconnection", [principal:entity] );
+                    formId = "socialconnectionview:"+entity.objid;
+                }
+            }
+        ]]>
+    </code>
+    <pages>
+        <page template="contact.ui.OpenerPopupPage"/> 
+    </pages>
+</workunit>

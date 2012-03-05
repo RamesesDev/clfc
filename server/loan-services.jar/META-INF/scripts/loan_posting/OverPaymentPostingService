@@ -1,0 +1,19 @@
+import com.rameses.annotations.*;
+import com.rameses.eserver.*;
+import com.rameses.rules.common.*;
+import com.rameses.util.*;
+
+
+public class OverPaymentPostingService
+{
+    @Service('DateService')
+	def dateSvc;
+	
+	@Service('LoanBillingService')
+	def billingSvc;
+	
+	@Service('LoanLedgerService')
+	def ledgerSvc;
+	
+	static final def dt_formatter = new java.text.SimpleDateFormat('yyyy-MM-dd');
+}

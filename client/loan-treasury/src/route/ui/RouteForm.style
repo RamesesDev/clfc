@@ -1,0 +1,3 @@
+"entity.*" [formMode=="read"] { readonly: true; }
+"entity.*" [formMode!="read"] { readonly: false; }
+

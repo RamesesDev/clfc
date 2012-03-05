@@ -1,0 +1,100 @@
+<workunit>
+     <invokers>
+        <invoker folderid="menu/services" caption="Manage Contacts" action="init" permission="contact.search"/>
+        <invoker type="contact:search" action="init"/>
+    </invokers>
+    
+    <code>
+        <![CDATA[
+            import com.rameses.rcp.common.*;
+            import com.rameses.rcp.annotations.*;
+            import com.rameses.util.*;
+            import com.rameses.osiris2.client.*;
+
+            public class ContactSearchController {
+            
+                @Binding
+                def binding;
+
+                @Service("ContactSearchService")
+                def searchSvc;
+                
+                @Service("ContactService")
+                def formSvc;
+                
+                def criteria = [:];
+                def results = [];
+                def formOpener;
+                def defaultFields;
+                def cachedView;
+                
+                def mode = "read";
+
+                public void init() {
+                    cachedView = [ fetch: { id-> return formSvc.open([objid:id]); }  ] as CacheMap;
+                    formOpener = InvokerUtil.lookupOpener( "contact:form", 
+                        [
+                                editHandler: editHandler,
+                                saveHandler: saveHandler,
+                                cancelHandler: cancelHandler
+                        ]);
+                }
+                
+                def _selection;
+                public def getSelection() {
+                    return _selection;
+                }
+                
+                public void setSelection(o) {
+                    _selection = o;
+                    formOpener.handle.data = (o) ? cachedView[o.objid] : null ;
+                }
+                
+                public def getSelectedItem() {
+                    if( !_selection ) return null;
+                    return cachedView[_selection.objid];
+                }
+                
+                public def doSearch() {
+                    cachedView.clear();
+                    results = searchSvc.search( criteria );
+                    setSelection( (results) ? results[0] : null );
+                }
+                
+                 //check first the parameter passed, if null then saving was cancelled.
+                def editHandler = { o, isNew ->
+                    mode = (isNew) ? "create" : "edit"; 
+                    binding.refresh("criteria.*|selection|doSearch");
+                }
+                
+                def saveHandler = { e, isNew ->
+                    def o = [:];
+                    o.putAll( e );
+                    o.name = e.lastname + ", " + e.firstname;
+                    cachedView.put( e.objid, e );
+                    if(isNew) {
+                        results = [ o ];
+                        _selection = o;
+                    }   
+                    else {
+                        _selection = results.find{ it.objid == e.objid };
+                        _selection?.name = o.name; 
+                    }
+                    
+                    mode = "read";
+                    _selection = e;
+                    binding.refresh("criteria.*|selection|doSearch");
+                }
+
+                def cancelHandler = { o, isNew ->
+                    if(o?.objid) cachedView.remove( o.objid );
+                    mode = "read";
+                    binding.refresh("criteria.*|selection|doSearch");
+                }
+            }
+        ]]>
+    </code>
+    <pages>
+        <page template="contact.ui.ContactSearchPage"/>    
+    </pages>
+</workunit>

@@ -1,0 +1,30 @@
+import com.rameses.annotations.*;
+
+class RevenueAccountService {
+
+	@PersistenceContext("java:treasury")
+	def em;
+
+	@ProxyMethod
+	public def create( def entity ) {
+		if(!entity.objid) entity.objid = "REVACCT-" + new java.rmi.server.UID();
+		return em.create( "revenueaccount", entity );
+	}
+
+	@ProxyMethod
+	public def read( def entity ) {
+		return em.read( "revenueaccount", entity );
+	}
+	
+	@ProxyMethod
+	public def update( def entity ) {
+		return em.update( "revenueaccount", entity );
+	}
+
+	@ProxyMethod
+	public def getList( def param ) {
+		return em.sqlContext.createNamedQuery( "revenueaccount:list" ).setParameters(param).resultList;
+	}
+
+	
+}

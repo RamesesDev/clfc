@@ -1,0 +1,38 @@
+<workunit>
+    
+    <invokers>
+        <invoker type="glaccount:form"/> 
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class GLAccountFormController extends shared.crud.CrudForm {
+            
+            @Service("GLService")
+            def service;
+            
+            def acctClasses = ["CONTROL", "ACCT_GRP", "SUB_ACCT"];
+             
+            public def getControlTypes() {
+                if(!entity.accttype && !entity.acctclass) return [];
+                String _type = "GL:"+entity.acctclass;
+                return InvokerUtil.lookup( _type ).findAll{ it.properties.class && entity.accttype.matches(it.properties.class) }.collect{ [code:it.properties.code, caption:it.caption]  };  
+            }
+            
+            public def open(def id) {
+                return service.read( [objid:id] );
+            }
+        
+        }
+        ]]>
+    </code>
+    
+    <pages>
+        <page template="gl.account.ui.GLAccountFormPage"/>
+    </pages>    
+    
+</workunit>

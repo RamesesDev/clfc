@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.3" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <AuxValues>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="2"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Container class="javax.swing.JPanel" name="jPanel1">
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jScrollPane1" alignment="1" pref="388" max="32767" attributes="0"/>
+                      <Component id="xLabel1" alignment="0" min="-2" pref="113" max="-2" attributes="0"/>
+                      <Component id="xActionBar1" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="formPanel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="formPanel1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="xLabel1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jScrollPane1" pref="172" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="xActionBar1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+          <AuxValues>
+            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+          </AuxValues>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+          <SubComponents>
+            <Component class="com.rameses.rcp.control.XTextArea" name="xTextArea1">
+              <Properties>
+                <Property name="columns" type="int" value="20"/>
+                <Property name="rows" type="int" value="5"/>
+                <Property name="name" type="java.lang.String" value="filter.reasons"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="com.rameses.rcp.util.FormPanel" name="formPanel1">
+          <Properties>
+            <Property name="captionWidth" type="int" value="102"/>
+          </Properties>
+          <SubComponents>
+            <Component class="com.rameses.rcp.control.XTextField" name="xTextField1">
+              <Properties>
+                <Property name="caption" type="java.lang.String" value="Collector&apos;s Name"/>
+                <Property name="name" type="java.lang.String" value="filter.collector"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[150, 19]"/>
+                </Property>
+                <Property name="readonly" type="boolean" value="true"/>
+                <Property name="toolTipText" type="java.lang.String" value="Collector&apos;s Name"/>
+              </Properties>
+            </Component>
+            <Component class="com.rameses.rcp.control.XDateField" name="xDateField1">
+              <Properties>
+                <Property name="caption" type="java.lang.String" value="Date"/>
+                <Property name="name" type="java.lang.String" value="filter.date"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[150, 19]"/>
+                </Property>
+                <Property name="readonly" type="boolean" value="true"/>
+                <Property name="toolTipText" type="java.lang.String" value="Date"/>
+              </Properties>
+            </Component>
+            <Component class="com.rameses.rcp.control.XTextField" name="xTextField3">
+              <Properties>
+                <Property name="caption" type="java.lang.String" value="Route"/>
+                <Property name="name" type="java.lang.String" value="filter.route"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[150, 19]"/>
+                </Property>
+                <Property name="readonly" type="boolean" value="true"/>
+                <Property name="toolTipText" type="java.lang.String" value="Time of Arrival"/>
+              </Properties>
+            </Component>
+            <Component class="com.rameses.rcp.control.XTextField" name="xTextField2">
+              <Properties>
+                <Property name="caption" type="java.lang.String" value="Time of Arrival"/>
+                <Property name="name" type="java.lang.String" value="filter.timeOfArrival"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[150, 19]"/>
+                </Property>
+                <Property name="required" type="boolean" value="true"/>
+                <Property name="toolTipText" type="java.lang.String" value="Time of Arrival"/>
+              </Properties>
+            </Component>
+            <Component class="com.rameses.rcp.control.XNumberField" name="xNumberField1">
+              <Properties>
+                <Property name="caption" type="java.lang.String" value="Amount"/>
+                <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="java.math.BigDecimal.class" type="code"/>
+                </Property>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="18" style="1"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="cc" type="rgb"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="filter.amount"/>
+                <Property name="pattern" type="java.lang.String" value="#,##0.00"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[150, 40]"/>
+                </Property>
+                <Property name="required" type="boolean" value="true"/>
+                <Property name="toolTipText" type="java.lang.String" value="Amount Shortage"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Component class="com.rameses.rcp.control.XLabel" name="xLabel1">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Reasons :"/>
+          </Properties>
+        </Component>
+        <Component class="com.rameses.rcp.control.XActionBar" name="xActionBar1">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="formActions"/>
+            <Property name="opaque" type="boolean" value="false"/>
+            <Property name="useToolBar" type="boolean" value="false"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+  </SubComponents>
+</Form>

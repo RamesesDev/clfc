@@ -1,0 +1,220 @@
+import com.rameses.annotations.*;
+import com.rameses.eserver.*;
+import com.rameses.rules.common.*;
+import com.rameses.util.*;
+
+
+class LoanPaymentService
+{
+
+    @PersistenceContext('java:loan')
+	def em;
+	
+	@Resource("RuleService/local")
+    def ruleService;
+    
+
+	@Service('DateService')
+	def dateSvc;
+
+	@Service('LoanApplicationService')
+	def loanSvc;
+
+	@Service('LoanBillingService')
+	def billingSvc;
+
+	@Service('CashReceiptService')
+	def receiptSvc;
+
+	@Service('TreasuryDocNoService')
+	def docSvc;
+
+	@Service('Var')
+	def vars;
+	
+
+	@Env
+	def env;
+
+	static final def dt_formatter = new java.text.SimpleDateFormat('yyyy-MM-dd');
+
+
+	@ProxyMethod
+	public def post( def param ){
+		assert param.appid;
+		assert param.amount;
+		//assert param.currency;
+		assert param.borrower;
+
+		if( !param.billno )
+			param.billno = 'LP-' + docSvc.getNextNo('loan_payment');
+
+		def items_paid = postPayment( param );
+
+		def receipt = [:];
+		receipt.receiptno = param.billno;
+		receipt.payerid = param.borrower.objid;
+		receipt.payername = getName( param.borrower );
+		receipt.payertype = param.borrower.type;
+		receipt.collection_type = 'loan_collection';
+		receipt.collectorid = env.USERID;
+		receipt.collectorname = env.USER;
+		receipt.collectedby = env.USER;
+		receipt.particulars = 'Loan Payment';
+		receipt.amount = param.amount;
+		receipt.currency = param.currency;
+		receipt.info = [refid: param.appid, reftype: 'loan_payment'];
+
+		receipt.details = createReceiptDetails(items_paid, param.currency);
+
+		return receiptSvc.post( receipt );
+	}
+
+	private def getName( cust ) {
+		return cust.lastname + ', ' + cust.firstname + (cust.middlename? ' ' + cust.middlename : '');
+	}
+
+	private def createReceiptDetails( paid, currency ) {
+		def list = [];
+		def settings = vars.loan_settings;
+		if( !settings ) throw new Exception('Loan Settings is not defined.');
+
+		if( paid.principal > 0 ) {
+			if( !settings.curr_principal_acct ) throw new Exception('Loan Principal Account is not defined.');
+			list << createReceiptItem( settings.curr_principal_acct, paid.principal, currency );
+		}
+		if( paid.interest > 0 ) {
+			if( !settings.interest_acct ) throw new Exception('Loan Interest Account is not defined.');
+			list << createReceiptItem( settings.interest_acct, paid.interest, currency );
+		}
+		if( paid.surcharge > 0 ) {
+			if( !settings.surcharge_acct ) throw new Exception('Loan Surcharge Account is not defined.');
+			list << createReceiptItem( settings.surcharge_acct, paid.surcharge, currency );
+		}
+		if( paid.pastdue > 0 ) {
+			if( !settings.past_due_interest_acct ) throw new Exception('Loan Past Due Account is not defined.');
+			list << createReceiptItem( settings.past_due_interest_acct, paid.pastdue, currency );
+		}
+
+		return list;
+	}
+
+	private def createReceiptItem( acct, amount, currency ) {
+		return [
+			acctid: acct.objid,
+			acctcode: acct.code,
+			accttitle: acct.title,
+			amount: amount,
+			currency: currency
+		];
+	}
+	
+	private def parseDate( date ) {
+		def strDate = date instanceof String? date : dt_formatter.format( date );
+		return dt_formatter.parse( strDate );
+	}
+	
+	private def fixDecimal( amount, format='##0.00' ) {
+		return NumberUtil.formatDecimal(amount, format);
+	}
+	
+	private def roundDecimal( amount ) {
+		def dec = amount - (int) amount;
+		def offset = dec - fixDecimal(dec, '0.0')
+		return amount + ((offset>0)? 0.05 - offset : -(offset));
+	}
+	
+	private def createLedger() {
+		//mock the ledger
+		def app = [dtreleased: dateSvc.serverDate];
+		def start_date = DateUtil.add( app.dtreleased, '1d' );
+		def prodType = [code: 'DAILY', term: 120, interest: 5.00, absentpenalty: 3.00, underpaymentpenalty: 3.00, pastduepenalty: 6.00]
+		def principal = 10000;
+		def int_rate = fixDecimal( prodType.interest/100, '#0.0000' );
+		
+		return [
+			loanAmount:        principal,
+			principalBalance:  principal,
+			dtcreated:         app.dtreleased,
+			startDate:         start_date,
+			maturityDate:      DateUtil.add(start_date, prodType.term + 'd'),
+			nextPaymentDate:   parseDate( start_date ),
+			
+			dailyPayment:      fixDecimal( ((principal * int_rate * (prodType.term/30)) + principal) / prodType.term ),
+			dailyInt:          roundDecimal( fixDecimal( principal * int_rate / 30 ) ),
+			dailyPastdue:       0.00,
+
+			productType:       prodType.code,
+			term:              prodType.term,
+			interestrate:      int_rate,
+			absentrate:        fixDecimal( prodType.absentpenalty/100, '#0.0000' ),
+			underpaymentrate:  fixDecimal( prodType.underpaymentpenalty/100, '#0.0000' ),
+			pastduerate:       fixDecimal( prodType.pastduepenalty/100, '#0.0000' ),
+			
+			fullyPaidAmt:      0.00,
+			totalPaid:         0.00,
+			totalPenalty:      0.00,
+			totalPenalty_wcup: 0.00, // w/ cover-up
+			totalPenalty_wocup:0.00, // w/o cover-up
+			totalAbsent:       0,
+			totalUnderpayment: 0,
+		];
+	}
+	
+	@ProxyMethod
+	public def postPayment( param ) {
+		assert param.amtpaid;
+		
+		param.amtpaid = fixDecimal( param.amtpaid );
+		param.paydate = parseDate( param.paydate )
+	
+		def ledger = createLedger();
+		
+		def ldrFact = ruleService.createFact( 'loan', 'clfc.loan.payment.LedgerFact' );
+		ldrFact.nextPaymentDate = parseDate( ledger.nextPaymentDate );
+		ldrFact.maturityDate = parseDate( ledger.maturityDate );
+		ldrFact.dailyPayment = ledger.dailyPayment;
+		ldrFact.dailyInt = ledger.dailyInt;
+		ldrFact.principalBalance = ledger.principalBalance;
+		ldrFact.underpaymentrate = ledger.underpaymentrate;
+		ldrFact.absentrate = ledger.absentrate;
+		ldrFact.pastduerate = ledger.pastduerate;
+		ldrFact.daysDue = DateUtil.diff( ledger.nextPaymentDate, param.paydate ) + 1;
+		ldrFact.totalDue = ledger.dailyPayment * ldrFact.daysDue;
+		ldrFact.daysCanPay = (int) (param.amtpaid / ledger.dailyPayment);
+		ldrFact.daysExempted = 0;
+				
+		def pymtFact = ruleService.createFact( 'loan', 'clfc.loan.payment.PaymentFact' );
+		pymtFact.amount = param.amtpaid;
+		pymtFact.date = param.paydate;
+		
+		def list = []
+		def actionHandler = ruleService.createRuleAction();
+		actionHandler.addCommand( 'payment', new ApplyPaymentAction(ledger:ledger, result: list) );
+		ruleService.execute( 'loan',  [ldrFact, pymtFact], [action: actionHandler] ); 
+		
+		return list;
+	}
+
+}
+
+
+class ApplyPaymentAction implements RuleActionHandler {
+
+	def ledger;
+	def result;
+	
+	private def fixDecimal( amount, format='##0.00' ) {
+		return NumberUtil.formatDecimal(amount, format);
+	}
+	
+	public void execute(def o, def args) {
+		def payment = args[0];
+		ledger.nextPaymentDate = DateUtil.add( payment.date, '1d' );
+
+		if( payment.principal )
+			ledger.principalBalance -= payment.principal;
+		
+		result.add( payment );
+	}
+}

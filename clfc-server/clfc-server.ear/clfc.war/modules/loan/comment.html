@@ -1,0 +1,35 @@
+<script>
+	$put(
+		"loan_comment", 
+		new function() {
+			
+			this.confirmMsg;
+			this.comment;
+			this.commentHandler;
+			
+			this.close = function() {
+				return '_close';
+			};
+
+			this.post = function(){
+				var msg = this.confirmMsg? this.confirmMsg : 'You are about to post this message. Proceed?';
+				if (!confirm(msg)) return;
+				
+				if (this.commentHandler) this.commentHandler(this.comment);
+				return "_close";
+			};
+		}
+	);
+	
+</script>
+
+Please specify remarks
+<br/>
+<textarea cols="60" rows="7" context="loan_comment" name="comment" required="true" caption="Comment" placeholder="Leave your comments here..."></textarea>
+
+
+<div class="dialog-buttons">
+	<input type="button" context="loan_comment" name="post" value="Post" 
+	       onClick="confirm( 'You are about to submit this transaction for disapproval. Proceed?' )"/>
+	<input type="button" context="loan_comment" name="close" value="Cancel" immediate="true"/>
+</div>

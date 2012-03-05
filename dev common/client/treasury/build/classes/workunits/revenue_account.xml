@@ -1,0 +1,69 @@
+<workunit>
+    <invokers>
+        <invoker type="revenueaccount:form"/>
+        
+        <invoker type="formActions" tooltip="New Revenue Account" icon="images/new16.png" action="create" visibleWhen="#{editmode == 'read'}" permission="revenue_account.create"/>
+        <invoker type="formActions" tooltip="Edit Revenue Account" icon="images/edit16.png" action="edit" visibleWhen="#{editmode == 'read'}" permission="revenue_account.edit"/>
+        <invoker type="formActions" tooltip="Save Revenue Account" icon="images/save16.png" action="save" visibleWhen="#{editmode != 'read'}" />
+        <invoker type="formActions" tooltip="Edit Revenue Account" icon="images/cancel16.png" action="cancel" visibleWhen="#{editmode != 'read'}" immediate="true"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        import groovy.text.*;
+        
+        public class RevenueAccountController{
+            @Binding
+            def binding;
+            
+            @Service('RevenueAccountService')
+            def svc;
+        
+            def editmode = 'read';
+            def entity;
+            
+            def onUpdate;
+            
+            
+            void create() {
+                entity = [ objid : "REVACCT-" + new java.rmi.server.UID() ];
+                editmode = 'create';
+                if( onUpdate ) onUpdate( true );
+            }
+            
+            void edit() {
+                editmode = 'edit';
+                if( onUpdate ) onUpdate( true );
+            }
+            
+            void cancel() {
+                editmode = 'read';
+                if( onUpdate ) onUpdate( false );
+            }
+            
+            void save() {
+                if( editmode == 'create' )
+                    entity.putAll( svc.create( entity ) );
+                else
+                    entity.putAll( svc.update( entity ) );
+
+                if( onUpdate ) onUpdate( false );
+                editmode = 'read';
+            }
+          
+            void setData( def d ) {
+                entity = d;
+                binding?.refresh();
+            }
+            
+            def getData() { return entity; }
+            
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="revacct.ui.RevAcctFormPage"/>
+    </pages>
+</workunit>

@@ -1,0 +1,48 @@
+<workunit>
+    <invokers>
+        <invoker folderid="menu/treasury/master" caption="Check Account" permission="check_account.view"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        import groovy.text.*;
+        
+        class CheckAccountListController{
+            @Binding
+            def binding;
+            
+            @Service("BankAccountService")
+            def svc;
+            
+            def selection;
+            
+            def checkOpener = InvokerUtil.lookupOpener("disbursement:check",[
+                selectHandler:{ e ->
+                    selection = e;
+                    binding.refresh('selection');
+                }
+            ]);
+            
+            def getAccountList() {
+                return svc.getList([type:'checking']);
+            }
+
+            void setSelection(e){
+                this.selection=e;
+                if( checkOpener.handle )
+                    checkOpener.handle.data = selection;
+                else
+                    checkOpener.params.data = selection;
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="treasury.check.CheckAccountList"/>
+    </pages>
+</workunit>

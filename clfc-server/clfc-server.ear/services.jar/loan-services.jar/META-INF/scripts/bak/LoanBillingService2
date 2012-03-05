@@ -1,0 +1,104 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+import com.rameses.util.*;
+import java.util.*;
+
+
+class LoanBillingService2
+{
+
+	@PersistenceContext('java:loan')
+	def em;
+
+	@Service('DateService')
+	def datesvc;
+
+	@Service('LoanLedgerService')
+	def ledgerSvc;
+
+	static final def dt_formatter = new java.text.SimpleDateFormat('yyyy-MM-dd');
+
+
+	@ProxyMethod
+	public def bill( def param ) {
+		assert param.ledger;
+		assert param.term;
+		assert param.surchargerate;
+		assert param.pastduerate;
+
+		def ledger = param.ledger;
+
+		def currDate = param.billDate; //datesvc.serverDate;
+
+		def next_bill_date = dt_formatter.parse( ledger.next_bill_date );
+		if( next_bill_date > currDate ) return null;
+
+		def days_interval = DateUtil.diff(next_bill_date, currDate, Calendar.DATE) + 1;
+		ledger.next_bill_date = dt_formatter.format( DateUtil.add(currDate, '1d') );
+
+		for(int i=0; i<days_interval; ++i) {
+			/* transfer current amount to absent */
+			def curr_amt = 0.00;
+			if( ledger.principal_current > 0 ) {
+				curr_amt += ledger.principal_current;
+				if( ledger.principal_absent == null ) ledger.principal_absent = 0.00;
+				ledger.principal_absent += ledger.principal_current;
+			}
+			if( ledger.interest_current > 0 ) {
+				curr_amt += ledger.interest_current;
+				if( ledger.interest_absent == null ) ledger.interest_absent = 0.00;
+				ledger.interest_absent += ledger.interest_current;
+			}
+			if( curr_amt > 0 ) {
+				def surcharge = fixDecimal(curr_amt * param.surchargerate);
+				if( ledger.surcharge == null ) ledger.surcharge = 0.00;
+				ledger.surcharge += surcharge;
+
+				def currPayment = 0.00;
+				if( ledger.principal_current_paid ) {
+					currPayment += ledger.principal_current_paid;
+					if( ledger.principal_absent_paid == null ) ledger.principal_absent_paid = 0.00;
+					ledger.principal_absent_paid += ledger.principal_current_paid;
+					ledger.principal_current_paid = 0.00;
+				}
+				if( ledger.interest_current_paid ) {
+					currPayment += ledger.interest_current_paid;
+					if( ledger.interest_absent_paid == null ) ledger.interest_absent_paid = 0.00;
+					ledger.interest_absent_paid += ledger.interest_current_paid;
+					ledger.interest_current_paid = 0.00;
+				}
+
+				if( currPayment == 0 )
+					ledger.absent_count = ledger.absent_count? ++ledger.absent_count : 1;
+			}
+
+
+			/* increment billing days */
+			ledger.days_count = ledger.days_count? ++ledger.days_count : 1;
+
+			/* transfer portion of the principal_balance to the current */
+			if( ledger.principal_balance > 0 ) {
+				def principal = 0.00;
+				if( ledger.days_count >= param.term )
+					principal = ledger.principal_balance;
+				else
+					principal = ledger.principal;
+
+				ledger.principal_balance -= principal;
+				ledger.principal_current = principal;
+				ledger.interest_current = ledger.interest;
+			}
+			else {
+				ledger.interest_pastdue += ledger.interest;
+				ledger.penalty_pastdue_paid += fixDecimal( ledger.interest * param.pastduerate );
+			}
+		}
+
+		return ledger;
+	}
+
+	private def fixDecimal( value ) {
+		return NumberUtil.formatDecimal(value, '###0.00');
+	}
+
+}

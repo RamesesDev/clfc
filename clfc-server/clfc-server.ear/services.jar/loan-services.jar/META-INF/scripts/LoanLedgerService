@@ -1,0 +1,201 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+import com.rameses.util.*;
+
+
+class LoanLedgerService
+{
+
+	@PersistenceContext('java:loan')
+	def em;
+
+
+	/**
+	 * computation formulas:
+	 *   daily due:        ((principal * interest * (term/30)) + principal) / term
+	 *   total interest:   principal * interest * (term / 30)
+	 *   daily interest:   principal * interest / 30
+	 */
+	@ProxyMethod
+	public void create( app, options ) {
+        def loanInfo = app.loaninfo;
+		def prodType = loanInfo.producttype;
+
+		if( prodType.code != 'DAILY' ) throw new Exception("Product Type $prodType.code is not yet supported.");
+
+		def dtreleased = parseDate( app.dtreleased );
+		def start_date = DateUtil.add(dtreleased, '1d');
+		def principal = loanInfo.amountapproved;
+		def int_rate = fixDecimal( prodType.interestrate / 100, '0.0000' );
+
+		def ledger = [
+		    loanAmount:        principal,
+		    principalBalance:  principal,
+		    dtcreated:         app.dtreleased,
+		    startDate:         start_date,
+		    maturityDate:      DateUtil.add(dtreleased, prodType.term + 'd'),
+		    nextBillDate:      start_date,
+			lastDatePaid:	   null,
+			
+		    dailyPayment:      fixDecimal( ((principal * int_rate * (prodType.term/30)) + principal) / prodType.term ),
+		    dailyInt:          roundDecimal( fixDecimal( principal * int_rate / 30 ) ),
+		    dailyPastdue:       0.00,
+
+			productType:       prodType.code,
+			term:              prodType.term,
+			interestrate:      int_rate,
+		    absentrate:        fixDecimal( prodType.absentpenalty/100, '0.0000' ),
+		    underpaymentrate:  fixDecimal( prodType.underpaymentpenalty/100, '0.0000' ),
+			pastduerate :      fixDecimal( prodType.pastduerate/100, '0.0000' ),
+			
+		    fullyPaidAmt:      0.00, //last payment that fully pays the total balance
+		    dateFullyPaid:     null,
+		    totalPaid:         0.00,
+			totalPrincipalPaid:0.00,
+			totalInterestPaid: 0.00,
+			totalPenaltyPaid:  0.00,
+			
+		    totalPenalty:      0.00,
+		    totalPenalty_wcup: 0.00, // w/ cover-up (absent_penalty)
+		    totalPenalty_wocup:0.00, // w/o cover-up (absent_penalty + underpayment_penalty)
+		    totalAbsent:       0,
+		    totalUnderpayment: 0,
+		];
+		
+		ledger.checkInfo = [:];		
+		if( options.acctno )    ledger.checkInfo.acctno = options.acctno;
+		if( options.bankname )  ledger.checkInfo.bankname = options.bankname;
+		if( options.checkno )   ledger.checkno = options.checkno;
+
+        em.sqlContext.createExecutor('update loanapplication set ledger=? where objid=?')
+          .setParameter(1, em.serializer.write( ledger ) )
+          .setParameter(2, app.objid)
+          .execute();
+        
+	}
+	
+	
+	private def parseDate( date ) {
+		def dt_formatter = new java.text.SimpleDateFormat('yyyy-MM-dd');
+		def strDate = date instanceof String? date : dt_formatter.format( date );
+		return dt_formatter.parse( strDate );
+	}
+	
+	private def roundDecimal( amount ) {
+		def dec = amount - (int) amount;
+		def offset = dec - fixDecimal(dec, '0.0')
+		return amount + ((offset>0)? 0.05 - offset : -(offset));
+	}
+	
+	private def fixDecimal( amount, format='##0.00' ) {
+		return NumberUtil.formatDecimal(amount, format);
+	}
+
+	/**
+	 * @param [objid: <app_id>]
+	 * @return application ledger
+	 */
+	@ProxyMethod
+	public def read( param ) {
+		assert param.objid;
+
+		def app = em.sqlContext.createQuery('select ledger from loanapplication where objid=?')
+		            .setParameter(1, param.objid).singleResult;
+
+		if( !app ) throw new Exception("No loan application record found.");
+		if( !app.ledger ) throw new Exception("Application $app.appno has no ledger.");
+
+		return em.serializer.read( app.ledger );
+	}
+
+	/**
+	 * @param [objid: <app_id>, ledger: <map>]
+	 * @return application ledger
+	 */
+	@ProxyMethod
+	public def update( param ) {
+		assert param.objid;
+		assert param.ledger;
+
+		def ledger = read( param );
+		ledger.putAll( param.ledger );
+		
+		param.ledger = em.serializer.write( ledger );
+		def sql = new StringBuffer('update loanapplication set ledger=$P{ledger}');
+		if( ledger.principalBalance <= 0.00 ) {
+			sql.append(', state=$P{state}');
+			param.state = 'CLOSED';
+		}
+		sql.append(' where objid=$P{objid}');
+
+		em.sqlContext.createExecutor( sql.toString() )
+		  .setParameters( param )
+		  .execute();
+
+		return ledger;
+	}
+	
+	@ProxyMethod
+	public def readDetail( param ) {
+		assert param.objid;
+		assert param.date;
+		
+		return em.read('loanapplication:ledger_item', [appid: param.objid, date: param.date]);
+	}
+	
+	@ProxyMethod
+	public def createDetail( param ) {
+		return em.create("loanapplication:ledger_item", param);
+	}
+	
+	@ProxyMethod
+	public def updateDetail( param ) {
+		return em.update("loanapplication:ledger_item", param);
+	}
+
+	/**
+	 * @return LegderDetails
+	 */
+	@ProxyMethod
+	public def getDetails( param ) {
+		assert param.objid;
+
+		if( !param.dateto ) {
+			def ledger = read( param );
+			if( ledger.lastDatePaid ) param.dateto = ledger.lastDatePaid
+		}
+		
+		def ql = ['select * from loan_ledger_item where appid=$P{objid}'];
+		if( param.datefrom ) ql << 'date >= $P{datefrom}';
+		if( param.dateto   ) ql << 'date <= $P{dateto}';
+				
+		def qry = em.sqlContext.createQuery(ql.join(' and ')).setParameters(param);
+		
+		if( param._start ) qry.setFirstResult( param._start );
+		if( param._limit ) qry.setMaxResults( param._limit ); 
+		
+		return qry.resultList.each {
+			it.penalty = 0.00;
+			if( it.absent_penalty ) it.penalty += it.absent_penalty;
+			if( it.underpayment_penalty ) it.penalty += it.underpayment_penalty;
+			if( it.pastdue ) it.penalty += it.pastdue;
+		};
+	}
+	
+	@ProxyMethod
+	public def updateDetails( param ) {
+		assert param.appid;
+		assert param.details;
+				
+		return param.details.each {
+			if( !it.appid ) {
+				it.appid = param.appid;
+				createDetail( it );
+			}
+			else {
+				updateDetail( it );
+			}
+		};
+	}
+
+}

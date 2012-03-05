@@ -1,0 +1,6 @@
+
+
+'borrowername|entity.*' [editmode=='read'] { readonly: true; }
+'borrowername|entity.*' [editmode!='read'] { readonly: false; }
+
+'entity.(appno|loanAmount)' [true] { readonly: true; }

@@ -1,0 +1,11 @@
+<jboss-app>
+	<loader-repository>
+        com.rameses:loader=clfc.ear
+    </loader-repository>
+    <module>
+	   <service>META-INF/clfc-system-ds.xml</service>
+    </module>
+    <module>
+	   <service>META-INF/clfc-service.xml</service>
+    </module>
+</jboss-app>

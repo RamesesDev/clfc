@@ -1,0 +1,41 @@
+<workunit>
+     <invokers>
+        <!--
+        <invoker type="contact:formActions" immediate="true" action="init" caption="Accounts" index="20" target="popup" visibleWhen="#{mode=='read' and entity!=null}"/>
+        -->
+        
+        <invoker type="formActions" caption="Close" action="_close" />
+    </invokers>
+
+    <code>
+        <![CDATA[
+        
+            import com.rameses.rcp.common.*;
+            import com.rameses.rcp.annotations.*;
+            import com.rameses.util.*;
+            import com.rameses.osiris2.client.*;
+
+            public class ContactAccountsController {
+            
+                @Binding
+                def binding;
+            
+                def entityHandler;
+                def entity;
+                def account;
+                def acctTypes;
+                
+                public void init() {
+                    entity = entityHandler();
+                    acctTypes = InvokerUtil.lookupOpeners( "contact:account", [contact: entity] );
+                }
+                
+            }
+        ]]>
+    </code>
+    
+    <pages>
+        <page template="contact.ui.ContactAccountsPage"/> 
+    </pages>
+    
+</workunit>

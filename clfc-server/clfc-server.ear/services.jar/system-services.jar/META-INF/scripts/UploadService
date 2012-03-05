@@ -1,0 +1,10 @@
+import com.rameses.annotations.*;
+
+class UploadService {
+	
+    @ProxyMethod
+    public def post( def o ) {
+	    
+    }     
+
+}

@@ -1,0 +1,1890 @@
+<workunit>
+    <invokers>
+        <invoker type="application:formActions" tooltip="New Application" icon="images/new16.png" action="create" mnemonic="n" caption="New" target="window" permission="application.create"/>
+        <invoker type="application:formActions" tooltip="Edit Application" icon="images/edit16.png" action="edit" mnemonic="e" caption="Edit" target="window" permission="application.edit" visibleWhen="#{entity.state=='PENDING' or entity.state=='FOR_INSPECTION' or entity.state=='DISAPPROVED' or entity.state=='CANCELED' or entity.state=='FOR_FLA'}"/>
+        <invoker type="application:formActions" tooltip="Renew Application" action="renew" mnemonic="r" caption="Renew" target="window" permission="application.renew" visibleWhen="#{entity.state=='CLOSED'}"/>
+        <invoker type="application:formActions" caption="View Ledger" mnemonic="l" permission="application.viewLedger"
+                 target="window" action="init" visibleWhen="#{!empty entity and !empty entity.ledger and entity.state=='isDataMigrated'}"/>
+        
+        <!--Application Data Capture-->         
+        <invoker type="application:createDataCapture" tooltip="Edit Application" icon="images/edit16.png" mnemonic="e" action="createDataCapture"/>
+        
+        <!--Application Form Actions -->
+        <invoker type="formActions" caption="Save" action="saveData" icon="images/save16.png" mnemonic="s" visibleWhen="#{mode != 'read'}"/>
+        <invoker type="formActions" caption="Submit for FLA" action="forFLA" mnemonic="s" visibleWhen="#{mode=='read' and entity.state=='FOR_INSPECTION'}" permission="application.submitForFLA"/>
+        <invoker type="formActions" caption="Submit for Approval" action="forApproval" mnemonic="s" visibleWhen="#{mode=='read' and entity.state=='FOR_FLA'}" permission="application.submitForApproval"/> 
+        <invoker type="formActions" caption="Return to Pending" action="returnPending" mnemonic="r" visibleWhen="#{mode=='read' and entity.state=='CANCELED' || entity.state=='BACK_OUT' || entity.state=='DISQUALIFIED_OUT'}" permission="application.submitForApproval"/>
+        <invoker type="formActions" caption="Return For CI" action="returnForCI" mnemonic="r" visibleWhen="#{mode=='read' and entity.state=='FOR_FLA'}" permission="application.submitForInspection"/>        
+        <invoker type="formActions" caption="Submit for Inspection" action="forInspection" mnemonic="s" visibleWhen="#{mode=='read' and entity.state=='PENDING'}" permission="application.submitForInspection"/>
+        
+        <invoker type="formActions" caption="Edit" action="editData" mnemonic="e" icon="images/edit16.png" visibleWhen="#{mode=='read' and !empty entity or (entity.state=='PENDING' and entity.state=='FOR_INSPECTION' and entity.state=='FOR_FLA')}"/>
+        <invoker type="formActions" caption="Print" tooltip="Print"  mnemonic="p" icon="images/print16.png"  action="printData" immediate="true" visibleWhen="#{mode!='add' or mode=='read'}" permission="application.print"/>
+        <invoker type="formActions" caption="Close" action="_exit" icon="images/cancel16.png" mnemonic="c" immediate="true" visibleWhen="#{mode!='edit'}"/>
+        <invoker type="formActions" caption="Cancel" action="cancel" icon="images/cancel16.png" immediate="true" mnemonic="p" visibleWhen="#{mode=='edit'}"/>
+        <invoker type="formPrintActions" caption="Back" tooltip="Back" icon="images/back16.png" action="_default" mnemonic="p"/>
+        
+        <invoker type="jointBorrowerActions" action="addJointBorrower"  icon="images/add16.png" caption="Add"  mnemonic="j" immediate="true" tooltip="Add JointBorrower" visibleWhen="#{mode!='read' or mode=='add' and entity.state=='PENDING' || entity.state=='DISAPPROVED' || entity.state=='CANCELED' || entity.state=='FOR_INSPECTION' and (entity.loancount gt 1 or  mode == 'renew') }"/>
+        <invoker type="jointBorrowerActions" action="removeJointBorrower" icon="images/remove16.png" caption="Remove" mnemonic="r" immediate="true" tooltip="Remove JointBorrower" visibleWhen="#{mode!='read' or mode=='add' and entity.state=='PENDING' || entity.state=='DISAPPROVED' || entity.state=='CANCELED' || entity.state=='FOR_INSPECTION' and (entity.loancount gt 1 or  mode == 'renew') }"/>
+        
+        <invoker type="coMakerActions" action="addCoMaker"    caption="Add"    icon="images/add16.png" immediate="true"  mnemonic="c" tooltip="Add Co-Maker" visibleWhen="#{mode!='read' or mode=='add' and entity.state=='PENDING' || entity.state=='DISAPPROVED' || entity.state=='CANCELED' || entity.state=='FOR_INSPECTION' and (entity.loancount gt 1 or  mode == 'renew') }"/>
+        <invoker type="coMakerActions" action="removeCoMaker" caption="Remove" icon="images/remove16.png" immediate="true" mnemonic="r" tooltip="Remove Co-Maker" visibleWhen="#{mode!='read' or mode=='add' and entity.state=='PENDING' || entity.state=='DISAPPROVED'|| entity.state=='CANCELED' || entity.state=='FOR_INSPECTION' and (entity.loancount gt 1 or  mode == 'renew') }"/>  
+        
+        <invoker type="addCommentActions"          action="addComment"              caption="Add Comments"             immediate="true" mnemonic="a" tooltip="Add Comments"              visibleWhen="#{mode!='read'}" permission="application.addComment"/>
+        <invoker type="addCIRecommendationActions" action="addCIRecommendation"     caption="Add CI Recommendation"    immediate="true" mnemonic="a" tooltip="Add CI Recommendation"     visibleWhen="#{mode!='read'}" permission="application.addRecommendation"/>
+        <invoker type="addCrecomRecommendationActions" action="addCrecomRecommendation" caption="Add Crecom Recommendation" immediate="true" mnemonic="a" tooltip="Add Crecom Recommendation" visibleWhen="#{mode!='read'}" permission="application.addCrecomRecommendation"/>
+        <!--<invoker type="addAnnotationActions"       action="addAnnotation"           caption="Add Annotation"           immediate="true" mnemonic="a" tooltip="Add Annotation"            visibleWhen="#{mode!='read'}" permission="application.addAnnotation"/>-->
+        <!--<invoker type="addNoteActions"             action="addNotes"                caption="Add Notes"                immediate="true" mnemonic="a" tooltip="Add Notes"                 visibleWhen="#{mode!='read'}" permission="application.addNotes"/>-->
+        
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        import java.io.*;
+        import com.rameses.io.*;
+        import loan.ui.asset.util.*;
+        import javax.swing.*;
+        
+        
+        class ApplicationFormController extends loan.ui.AbstractLoanAppController 
+        {
+            @FormTitle
+            def formTitle;
+        
+            @Binding
+            def binding;
+            
+            @Script('ContactDef')
+            def contactDef;
+            
+            @Script('EmploymentInfoDef')
+            def empInfoDef;
+            
+            @Script('BusinessInfoDef')
+            def busInfoDef;
+            
+            @Service( "LoanApplicationService" )
+            def svc;
+            
+            @Service( "RouteService" )
+            def routeSvc;
+            
+            @Service('LoanBorrowerService')    
+            def loanBorrowerSvc;
+            
+            @Service('Var')
+            def vars;
+            
+            @Service('LoanProductTypeService')
+            def prodTypeSvc;
+            
+            @Service('LoanLedgerService')
+            def LedgerSvc;
+            
+            @Service('LoanHouseLotService')
+            def loanHouseLotSvc;
+            
+            //@Service('LoanMarketingService')
+            //def loanMarketingSvc;
+            
+            @Caller
+            def caller;
+            
+            def itemBusinessStatus=["Full of Stocks","Plenty of Stocks","Average","Below Average"];
+            def itemOwnership=["Sole Propreitorship","Corporation","Partnership","Cooperative"];
+            
+            def productTypeList; // = ["DAILY","MONTHLY"];
+
+            def oldEntity;
+            
+            def assettype;
+            def borrowerInfo;
+            def comments;
+            def cirecommendation;
+            def crecomrecommendation;
+            def translog;
+            
+            def attachmentOpener;
+            def selectedAttachment;
+            def attachmentsList;
+            
+            def selectedLoanHistory;
+            def selectedAsset;
+            def assetsList;
+            def photonum;
+            
+            def selectHandler;
+            
+            def employmentInfoControls;
+            def businessInfoControls;
+
+            def clientTypeList;
+            def employeeList;
+            def houseInfoList;
+            def lotInfoList;
+            
+            //def selected;
+            //boolean selectedIsFirst = true;
+            //boolean selectedIsLast = true;
+            //def selectedIdx;
+            
+            def dt_formatter = new java.text.SimpleDateFormat('yyyy-MM-dd');
+            
+            boolean isflaVisible() { 
+                return entity.state == 'FOR_INSPECTION';
+            }
+            
+            //must override abstract method
+            def getService() { 
+                return svc; 
+            }
+            
+            def getProductTypeList() {
+                return prodTypeSvc.list;
+            }
+            
+            def getFormActions() {
+                def state = entity?.state?.toLowerCase();
+                return InvokerUtil.lookupActions("application:${state}_action", {
+                    return [application: entity, selectHandler: selectHandler]
+                } as InvokerParameter);
+            }
+ 
+            //======= Photo Support ===========
+            def _fileChooser;
+            
+            def getFileChooser() {
+                return _fileChooser? _fileChooser : (_fileChooser = new JFileChooser());
+            }
+            
+            void browsePic(){
+                if( !entity.borrower ) throw new Exception('Please specify principal borrower first.');
+                int resp = fileChooser.showOpenDialog(null);
+                if( resp == JFileChooser.CANCEL_OPTION ) return;
+                
+                entity.borrower.hasPhoto = true;
+                entity.borrower.photo = AssetUtil.transferImage( fileChooser.selectedFile, entity.objid, entity.borrower.objid );
+                binding.refresh('entity.borrower.photo');
+            }
+            
+            void browseJointPic(){
+                if( !selectedJointBorrower ) throw new Exception('Please select a joint borrower first.');
+                int resp = fileChooser.showOpenDialog(null);
+                if( resp == JFileChooser.CANCEL_OPTION ) return;
+                
+                selectedJointBorrower.hasPhoto = true;
+                selectedJointBorrower.photo = AssetUtil.transferImage( fileChooser.selectedFile, entity.objid, selectedJointBorrower.objid );
+                binding.refresh('selectedJointBorrower.photo');
+            }
+            
+            void browseCoMakerPic(){
+                if( !selectedCoMaker ) throw new Exception('Please select a co-maker first.');
+                int resp = fileChooser.showOpenDialog(null);
+                if( resp == JFileChooser.CANCEL_OPTION ) return;
+                
+                selectedCoMaker.hasPhoto = true;
+                selectedCoMaker.photo = AssetUtil.transferImage( fileChooser.selectedFile, entity.objid, selectedCoMaker.objid );
+                binding.refresh('selectedCoMaker.photo');
+            }
+            
+            void capturePic(){
+                MsgBox.alert("No Camera connected");
+            }
+           
+            //-- user message feedback
+            def message;
+            //def emp;
+            
+            void init(){
+                clientTypeList=svc.getClientTypeList();
+                employeeList=svc.getEmployeeList().collect{[objid:it.objid, name:it.name]};
+                houseInfoList=loanHouseLotSvc.getHouseList();
+                lotInfoList=loanHouseLotSvc.getLotList();
+                oldEntity = new HashMap(entity);
+                initEntity();
+                
+                
+                //"emp" [entity.clientType=="MARKETED" || entity.clientType=="REMARKETED" || entity.clientType=="RETURNEE" || entity.clientType=="INACTIVE/EXPIRED" && mode!='read']{enabled:true;}
+                //"emp" [mode=='read']{enabled:false;}
+                /*
+                if (entity.clientType!="MARKETED"){ 
+                    emp = mode=='read'; //|enabled:false;
+                }  
+                else (entity.clientType=="WALK-IN"){
+                    emp = mode=='read';
+                }
+                */
+                entity.putAll(oldEntity);
+                if(mode=='add') 
+                {
+                    entity.encodedBy = OsirisContext.env.USERINFO.firstname+ ' '+OsirisContext.env.USERINFO.lastname;
+                    entity.objid="LAPP-" + new java.rmi.server.UID();
+                }
+                else
+                {
+                    def photoids = [];
+                    if( entity.borrower.hasPhoto ) {
+                        entity.borrower.photo = AssetUtil.getFile( entity.objid, entity.borrower.objid );
+                        if( entity.borrower.photo == null ) photoids << entity.borrower.objid;
+                    }
+                    entity.jointBorrowerList?.each { jb->
+                        if( jb.hasPhoto ) jb.photo = AssetUtil.getFile( entity.objid, jb.objid );
+                        if( jb.photo == null ) photoids << jb.objid;
+                    }
+                    entity.coMakerList?.each { cm->
+                        if( cm.hasPhoto ) cm.photo = AssetUtil.getFile( entity.objid, cm.objid );
+                        if( cm.photo == null ) photoids << cm.objid;
+                    }
+                
+                    if(entity.jointBorrowerList==null)
+                        entity.jointBorrowerList=[];
+                    if(entity.coMakerList==null)
+                        entity.coMakerList=[];
+
+                    borrowerControls = contactDef.getFormFields( entity.borrower, 'entity.borrower' );
+                    connectionControls = !entity.spouse? [] : contactDef.getFormFields( entity.spouse, 'entity.spouse' );
+                    
+                    if(entity.jointBorrowerList)
+                        setSelectedJointBorrower( entity.jointBorrowerList[0] );
+                    else 
+                        setSelectedJointBorrower( null );
+                                            
+                    if(entity.coMakerList)
+                        setSelectedCoMaker( entity.coMakerList[0] );
+                    else
+                        setSelectedCoMaker( null );
+                    
+                    comments=TemplateProvider.instance.getResult("loan/ui/CommentForm.gtpl",[data:entity]);
+                    
+                    if(entity.cirecommendation)                    
+                        cirecommendation=TemplateProvider.instance.getResult("loan/ui/CIRecommendationForm.gtpl",[data:entity]);    
+                        
+                    if(entity.crecomrecommendation)                    
+                        crecomrecommendation=TemplateProvider.instance.getResult("loan/ui/CrecomRecommendationForm.gtpl",[data:entity]);
+                        
+                    //download photos if photoids has items
+                    if( photoids ) {
+                        message = "Please wait while downloading profile photos...";
+                        new PhotoDownloader(
+                            appid: entity.objid,
+                            images: photoids,
+                            onCompleted: {
+                                message = "";
+                                initPhotos();
+                                binding?.refresh();
+                            },
+                            onMessage: { msg ->
+                                message = "Please wait... " + msg;
+                                binding?.refresh('message');
+                            }
+                        ).start();
+                    }
+                    
+                }
+                
+                setAssettype("appliance");
+                
+                if( !entity.employment ) entity.employment = empInfoDef.createModel();
+                employmentInfoControls = empInfoDef.getFormFields( entity.employment, 'entity.employment' );
+                
+                if( !entity.business ) entity.business = busInfoDef.createModel();
+                businessInfoControls = busInfoDef.getFormFields( entity.business, 'entity.business' );
+                
+            }
+            
+            void initPhotos() {
+                if( entity.borrower.hasPhoto ) entity.borrower.photo = AssetUtil.getFile( entity.objid, entity.borrower.objid );
+                entity.jointBorrowerList?.each { jb->
+                    if( jb.hasPhoto ) jb.photo = AssetUtil.getFile( entity.objid, jb.objid );
+                }
+                entity.coMakerList?.each { cm->
+                    if( cm.hasPhoto ) cm.photo = AssetUtil.getFile( entity.objid, cm.objid );
+                }
+            }
+                        
+            def emp;           
+            def getEmp() {
+                if(!emp && entity.marketedbyid)
+                    emp=[objid:entity.marketedbyid, name:entity.marketedby]
+                
+                return emp;
+            }
+            void setEmp(d){
+                entity.marketedbyid = d?.objid;
+                entity.marketedby = d?.name;
+                emp = d;
+            }
+            
+            def captureInfo;
+            void createDataCapture(){
+                create();
+                if( captureInfo ) entity.putAll( captureInfo );
+                entity.mode = "CAPTURE";
+            }
+            
+            void create(){
+                formTitle = 'New Application';
+                initEntity();                
+                def settings = vars.loan_settings;
+                if( !settings )
+                    throw new Exception('Loan Settings is not defined.');
+                mode='add';
+                init();
+            }
+            
+             def lookupRoute() {
+                return InvokerUtil.lookupOpener("loan:routeLookup",[selectHandler:routeSelectHandler]);
+            }
+            
+            def routeSelectHandler={o->
+                entity.routedescription=o.description;
+                entity.routecode=o.code 
+                binding.refresh("entity.routedescription");
+            };
+            
+            void saveData(){
+                def o=[:];
+                if(!entity.borrower)throw new Exception("Please specify the borrower");
+                //if(!entity.propertylist || !entity.coMakerList)throw new Exception("Please specify a CoMaker of the borrower");
+                if(!entity.loaninfo.loanamount) throw new Exception("Please specify Loan Amount");
+                if(!entity.state) entity.state="PENDING";
+                if(mode=='renew'){
+                    o=svc.createRenewal(entity);
+                    MsgBox.alert('Renewal request was successfully save');
+                }
+                else{                    
+                    entity=svc.save(entity);                    
+                    if(mode=='add') MsgBox.alert('Application no. '+ entity.appno +' was successfully save');
+                    else if(mode!='add') MsgBox.alert('Application was successfully updated');
+                }
+
+                uploadAssets();
+                
+                if( selectHandler ) selectHandler(o);
+                if( mode == 'add' ) binding.title = entity.appno;
+                mode='read';
+                binding.refresh("entity.*");
+                oldEntity.putAll( entity );
+                
+                //param=loanMarketingSvc.save(param);
+            }
+            
+            void edit(){
+                editData();
+                formTitle = entity.appno;
+                init();
+            }
+            
+            void editData(){
+                mode = "edit";
+                binding?.refresh();
+            }
+            
+            void cancel(){
+                mode = "read";
+            }
+            
+            void renew() {
+                entity.putAll(svc.readByAppNo([appno:entity.appno]));
+                entity.state=null;
+                entity.dtfiled=null;
+                entity.approvedate=null;
+                entity.amountapproved=null;
+                entity.loaninfo=[interestrate:20];
+                entity.comments=[];
+                entity.tempObjid="APP"+new java.rmi.server.UID();
+
+                clearAssetComments("propertylist");
+                clearAssetComments("appliancelist");
+                clearAssetComments("vehiclelist");
+                
+                mode = "renew";
+                init();
+            }
+            
+            void uploadAssets() {
+                def uploader = PhotoUploader.instance;
+                if( entity.borrower.hasPhoto )
+                    uploader.add( entity.objid, [objid: entity.borrower.objid, name: 'borrower photo'] );
+                    
+                entity.jointBorrowerList?.each { jb->
+                    if( jb.hasPhoto ) uploader.add( entity.objid, [objid: jb.objid, name: 'joint borrower photo'] );
+                }
+                entity.coMakerList?.each { cm->
+                    if( cm.hasPhoto ) uploader.add( entity.objid, [objid: cm.objid, name: 'co-maker photo'] );
+                }
+
+                def items = [];
+                entity.propertylist.each{ items.addAll( it.photos ) }
+                if( items ) uploader.addAll( entity.objid, items );
+                
+                items = [];
+                entity.vehiclelist.each{ items.addAll( it.photos ) }
+                if( items ) uploader.addAll( entity.objid, items );
+                
+                items = [];
+                entity.appliancelist.each{ items.addAll( it.photos ) }
+                if( items ) uploader.addAll( entity.objid, items );
+                
+                if( uploader.processList ) {
+                    def inv = InvokerUtil.lookup("application:filemgr");
+                    if( inv ) InvokerUtil.invoke( inv[0] );
+                }
+            }
+            
+            void clearAssetComments(def o){
+                entity[o].each(){
+                    if (it.comments.size()>0) it.comments=[];
+                }
+            }
+            
+            //****Loan History****//
+            def viewLoanHistory(){
+                //return InvokerUtil.lookupOpener("loan:history", [selectHandler:loanHistoryHandler]);
+            }    
+            
+            def listLoanHistory=[
+                getColumns:{
+                    return[new Column(name:"item.loancount",caption:"Loan Count",width:30),
+                           new Column(name:"item.approvedate",caption:"Date Approved"),
+                           new Column(name:"item.amountapproved",caption:"Amount")
+                    ]      
+                },
+                getRows:{
+                    return 23;
+                },
+                fetchList:{o->
+                   return svc.readHistory([appno:entity.appno]);
+                }
+            ]as SubListModel;
+            
+            //****Ledger Evaluation****//
+            def ledgerEvaluationList;
+            def ledgerEvaluationHandler = [
+                getRows: { 15 },
+                getColumns: {
+                    return [
+                        new Column(name: 'state',              caption: 'Status',               width:80),
+                        new Column(name: 'loanAmount',         caption: 'Loan Amount',          width: 80),
+                        new Column(name: 'fullyPaidAmt',       caption: 'Amount Fully Paid',    width: 150),
+                        new Column(name: 'totalUnderpayment',  caption: 'Underpayment',         width: 80),
+                        new Column(name: 'dtcreated',          caption: 'Date Granted',         width: 80),
+                        new Column(name: 'maturityDate',       caption: 'Maturity Date',        width: 80),
+                        new Column(name: 'totalPenalty',       caption: 'Total Penalty',        width: 80),
+                        new Column(name: 'lastDatePaid',       caption: 'Date Fully Paid',      width: 85),
+                        new Column(name: 'totalAbsent',        caption: 'Total Absences',       width: 85),
+                        new Column(name: 'principalBalance',   caption: 'Loan Balance',         width: 80),
+                        new Column(name: 'totalPenalty_wcup',  caption: 'Totl Penalty w/ cup',  width: 150),
+                        new Column(name: 'totalPenalty_wocup', caption: 'Totl Penalty w/o cup', width: 150),
+                    ]
+                },
+                fetchList: { 
+                    if(entity.ledgerEvaluationList==null)entity.ledgerEvaluationList=[]; 
+                        return entity.ledgerEvaluationList;
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        entity.ledgerEvaluationList.remove(o);
+                }
+            ] as SubListModel;
+
+            def _assetOpener;
+            
+            def getAssetOpener(){               
+            
+                if( !_assetOpener ) {
+                    _assetOpener = InvokerUtil.lookupOpener('loan:asset_info', [
+                        appid:entity.objid, entity:selectedAsset, mode:mode, type:assettype,
+                        selectHandler:{ setSelectedAsset(it) }
+                    ]);
+                }
+                return _assetOpener;
+            }
+            
+            void setSelectedAsset( asst ) {
+                this.selectedAsset = asst;
+                if( assetOpener.handle ) {
+                    assetOpener.handle.refresh([
+                        appid: entity.objid, entity:asst, mode:mode, type:assettype
+                    ]);
+                }
+                else{
+                    assetOpener.params = [
+                        appid: entity.objid, entity:asst, mode:mode, type:assettype
+                    ];
+                }
+            }
+           
+            void setAssettype( type ) {
+                this.assettype = type;
+                assetsList = entity[ type+'list' ];                
+                if( assetsList ) {
+                    setSelectedAsset( assetsList[0] );
+                }
+                else{
+                    assetsList=null;
+                    setSelectedAsset( null );
+                }
+            }
+            
+            def addAsset(){
+                if(!borrowerControls)throw new Exception("Please specify the principal borrower.");
+                return InvokerUtil.lookupOpener("asset:"+assettype,[
+                    appid: entity.objid,
+                    selectHandler:{o->
+                        assetsList = entity[ assettype+'list' ];
+                        assetsList.add(o);
+                        setSelectedAsset(o);
+                        binding.refresh('selectedAsset');
+                     }
+                ]);
+            }
+
+            void removeAsset(){
+                if( selectedAsset ) {
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?")){    
+                        assetsList.remove(selectedAsset)
+                        if( assetsList ) {
+                            setSelectedAsset( assetsList[-1] );
+                        }
+                        else {
+                            setSelectedAsset( null );
+                        }
+                    }    
+                }
+            }
+
+            def addAttachments(){
+                /*
+                return InvokerUtil.lookupOpener("asset:"+attachmentType,[
+                    appid: entity.objid,
+                    selectHandler:{o->
+                        attachmentsList = entity[ attachmentType+'list' ];
+                        attachmentsList.add(o);
+                        setSelecteddAttachment(o);
+                        binding.refresh('selecteddAttachment');
+                     }
+                ]);
+                */
+            }
+            
+            def removeAttachments(){
+                /*
+                if( selecteddAttachment ) {
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?")){    
+                        attachmentsList.remove(selectedAttachment)
+                        if( assetsList ) {
+                            setSelectedAsset( attachmentsList[-1] );
+                        }
+                        else {
+                            setSelectedAsset( null );
+                        }
+                    }    
+                }
+                */
+            }
+            
+            def addComment(){
+                return InvokerUtil.lookupOpener("loan:comment",[
+                    selectHandler:{o->
+                        addCommentForm(o);
+                    }
+               ]);
+            }
+
+            void addCommentForm(def msg){
+                if(!entity.appno) return;
+                def p = [objid: entity.objid, comment: msg];
+                entity.comments = service.addComment( p );
+                comments=TemplateProvider.instance.getResult("loan/ui/CommentForm.gtpl",[data:entity]);
+                binding.refresh("comments");
+            }
+            
+            def addCIRecommendation(){
+                return InvokerUtil.lookupOpener("application:ci_recomendation",[
+                    application:entity,
+                    selectHandler:{msg->
+                        cirecommendation=TemplateProvider.instance.getResult("loan/ui/CIRecommendationForm.gtpl",[data:entity]);    
+                        binding.refresh("cirecommendation");
+                    }
+               ]);
+            }
+            
+            def addCrecomRecommendation(){
+                return InvokerUtil.lookupOpener("application:crecom_recomendation",[
+                    application:entity,
+                    selectHandler:{msg->
+                        crecomrecommendation=TemplateProvider.instance.getResult("loan/ui/CrecomRecommendationForm.gtpl",[data:entity]);    
+                        binding.refresh("crecomrecommendation");
+                    }
+               ]);
+            }
+            void viewAllComments(){
+                if(entity.loancount==1) throw new Exception ("No previous comments available in this application" );
+                def prevComment=[];
+                def commentList=[];
+                prevComment=svc.readHistory(entity);
+                prevComment.each(){it.comments.each(){commentList.add(it)}}
+                comments=TemplateProvider.instance.getResult("loan/ui/CommentForm.gtpl",[data:[comments:commentList]]);
+                binding.refresh("comments");
+            }
+            
+            void viewAllRecommendations(){
+                if(entity.loancount==1) throw new Exception ("No previous recommendations available in this application" );
+                def prevRecommendation=[];
+                def recommendationList=[];
+                prevRecommendation=svc.readHistory(entity);
+                prevRecommendation.each(){it.cirecommendation.each(){recommendationList.add(it)}}
+                cirecommendation=TemplateProvider.instance.getResult("loan/ui/CIRecommendationForm.gtpl",[data:[cirecommendation:recommendationList]]);
+                binding.refresh("cirecommendation");
+            }
+            
+            /*
+            def addNotes(){
+                return InvokerUtil.lookupOpener("application:notes",[
+                    application:entity,
+                    selectHandler:{msg->
+                        notes=TemplateProvider.instance.getResult("loan/ui/NotesForm.gtpl",[data:entity]);    
+                        binding.refresh("notes");
+                    }
+               ]);
+            }
+            void viewAllAnnotations(){
+                if(entity.loancount==1) throw new Exception ("No previous annotations available in this application" );
+                def prevAnnotation=[];
+                def annotationList=[];
+                prevAnnotation=svc.readHistory(entity);
+                prevAnnotation.each(){it.cirecommendation.each(){recommendationList.add(it)}}
+                annotations=TemplateProvider.instance.getResult("loan/ui/AnnotationForm.gtpl",[data:[annotations:annotationList]]);
+                binding.refresh("annotations");
+            }
+            */
+                              
+            //--- Borrower Related Fields
+            def borrowerControls;
+            def connectionControls;
+            def selectedJointBorrower;
+            def jointBorrowerControls;
+            def jointBorrowerConnectionControls;
+            def selectedCoMaker;      
+            def coMakerControls;
+            def coMakerConnectionControls;
+            def tempBorrower;
+            
+            def clearBorrower(){
+                entity.spouse.borrower=[];
+                entity.jointBorrowerList=[];
+                selectedJointBorrower=null;
+                entity.coMakerList=[];
+                selectedCoMaker=null;
+            }
+            
+            void verifyContact(o){
+                //--Spouse connection to Principal
+                if(o.contactno==entity.borrower.contactno)   
+                    throw new Exception("Contact is the Principal Borrower");
+                    
+                //--Joint Borrower & CoMaker
+                if(entity.jointBorrowerList.contains(o))
+                    throw new Exception("Contact is already in the Joint Borrowers List");
+                    
+                //if(entity.jointBorrowerList.contains(o)==entity.coMakerList.contains(o))    
+                    //throw new Exception("Contact is already in the CoMakers List");
+                    
+                //if(entity.coMakerList==entity.jointBorrowerList){
+                  //  throw new Exception("Contact is already in the CoMakers List");
+                //}     
+                //else if(entity.coMakerList.contains(o))
+                if(entity.coMakerList.contains(o))
+                    throw new Exception("Contact is already in the CoMakers List");
+            }
+            //Principal Borrower Info
+            def lookupBorrower(){
+                return InvokerUtil.lookupOpener("contact:lookup",[
+                    selectHandler:{o->
+                        svc.checkBorrower(o);
+                        entity.borrower=o;
+                        tempBorrower=entity.borrower;
+                        borrowerControls = contactDef.getFormFields( o, 'entity.borrower' );
+                        binding.refresh("borrowerControls");
+                        return "_close";
+                    }
+                ]);
+            }
+            //Principal Spouse Info
+            def addConnection(){
+                return InvokerUtil.lookupOpener("socialconnection:lookup",[
+                    selectHandler:{o->
+                        verifyContact(o);
+                        entity.spouse=o;
+                        connectionControls = contactDef.getFormFields( entity.spouse, 'entity.spouse' );
+                        binding.refresh("connectionControls");
+                        return "_close";
+                    },
+                    principal:entity.borrower
+                ]);
+            }
+            
+            /* Remove Spouse
+            def removeConnection(){
+                connectionControls = contactDef.getFormFields( entity.spouse, 'entity.spouse' );
+                binding.refresh("connectionControls");
+                //return "_close";
+            }
+            */
+            
+            def showWarning(){
+                return InvokerUtil.lookupOpener("loan:warning",[:]);
+            }
+
+            def addJointBorrower(){
+                return InvokerUtil.lookupOpener("socialconnection:lookup",[
+                    selectHandler:{o->
+                        verifyContact(o);
+                        entity.jointBorrowerList.add(o);
+                        setSelectedJointBorrower(o);
+                        binding.refresh("selectedJointBorrower");
+                        return "_close";
+                        
+                    },
+                    principal:entity.borrower
+                ]);
+            }
+            
+            void setSelectedJointBorrower(e){
+                selectedJointBorrower=e;
+                
+                if( e ) {
+                    jointBorrowerControls = contactDef.getFormFields( selectedJointBorrower, 'selectedJointBorrower' ); 
+                    if(selectedJointBorrower.spouse)
+                        jointBorrowerConnectionControls = contactDef.getFormFields( selectedJointBorrower.spouse, 'selectedJointBorrower.spouse' );
+                    else
+                        jointBorrowerConnectionControls = [];    
+                }
+                else {
+                    jointBorrowerControls = [];
+                    jointBorrowerConnectionControls = [];
+                }
+                binding?.refresh("jointBorrowerControls|jointBorrowerConnectionControls");
+            }
+           
+            def getSelected(){
+                return _selectedJointBorrower;
+            }
+            
+            void removeJointBorrower(){
+                if(!selectedJointBorrower) return;
+                if(MsgBox.confirm("Are you sure you want to remove the selected item?")){
+                    entity.jointBorrowerList.remove(selectedJointBorrower);
+                    selectedJointBorrower=null;
+                    jointBorrowerControls=[];
+                    binding.refresh("selectedJointBorrower");
+                }
+            }
+            
+            //Joint Borrower Spouse Info
+            def addJointBorrowerConnection(){
+                if(!selectedJointBorrower)throw new Exception("No Joint Borrower specified.");
+                return InvokerUtil.lookupOpener("socialconnection:lookup",[
+                    selectHandler:{o->
+                        verifyContact(o);
+                        selectedJointBorrower.spouse=o;
+                        jointBorrowerConnectionControls = contactDef.getFormFields( selectedJointBorrower.spouse, 'selectedJointBorrower.spouse' );
+                        binding.refresh("jointBorrowerConnectionControls");
+                        return "_close";
+                    },
+                    principal:selectedJointBorrower
+                ]);
+            }
+            
+            //Co-Maker Info
+            def addCoMaker(){
+                return InvokerUtil.lookupOpener("socialconnection:lookup",[
+                    selectHandler:{o->
+                        verifyContact(o);
+                        entity.coMakerList.add(o);
+                        selectedCoMaker=o;
+                        coMakerControls = contactDef.getFormFields( selectedCoMaker, 'selectedCoMaker' );
+                        binding.refresh("coMakerControls|selectedCoMaker");
+                        return "_close";
+                    },
+                    principal:entity.borrower
+                ]);
+            }
+            
+            void setSelectedCoMaker(e){
+                selectedCoMaker=e;
+                if( e ) {
+                    coMakerControls = contactDef.getFormFields( selectedCoMaker, 'selectedCoMaker' );
+                    if(selectedCoMaker.spouse)
+                        coMakerConnectionControls = contactDef.getFormFields( selectedCoMaker.spouse, 'selectedCoMaker.spouse' );
+                    else
+                        coMakerConnectionControls = [];
+                }
+                else {
+                    coMakerControls = [];
+                    coMakerConnectionControls = [];
+                }
+                binding?.refresh("coMakerControls|coMakerConnectionControls");
+            }
+           
+            def getSelectedCoMaker(){
+                return selectedCoMaker;
+            }
+            
+            void removeCoMaker(){
+                if(!selectedCoMaker) return;
+                if(MsgBox.confirm("Are you sure you want to remove the selected item?")){
+                    entity.coMakerList.remove(selectedCoMaker);
+                    selectedCoMaker=null;
+                    coMakerControls=[];
+                    binding.refresh("selectedCoMaker");
+                }
+            }
+            
+            //Co-Maker Spouse Info
+            def addCoMakerConnection(){
+                if(!selectedCoMaker)throw new Exception("No Co-Maker Specified.");
+                return InvokerUtil.lookupOpener("socialconnection:lookup",[
+                    selectHandler:{o->
+                        verifyContact(o);
+                        selectedCoMaker.spouse=o;
+                        coMakerConnectionControls = contactDef.getFormFields( selectedCoMaker.spouse, 'selectedCoMaker.spouse' );
+                        binding.refresh("coMakerConnectionControls");
+                        return "_close";
+                    },
+                    principal:selectedCoMaker
+                ]);
+            }
+            
+            //**************************************************************************************************//
+                                        /*        PRINCIPAL BORROWER           */                                        
+            //**************************************************************************************************//
+            //****  Children Information  ****//
+            def childrenInfo;
+            def childrenHandler = [
+                getRows: { 15 },
+                getColumns: {
+                    return [
+                        new Column(name: 'name',         caption: 'Name',           width: 120, editable: true, required:true),
+                        new Column(name: 'age',          caption: 'Age ',           minWidth: 30, maxWidth: 50, editable: true, required:true, type:"integer", fieldType:Integer.class),
+                        new Column(name: 'year',         caption: 'Grade/Yr',       width: 90,  editable: true, required:true),
+                        new Column(name: 'school',       caption: 'School',         width: 200, editable: true, required:true),
+                        new Column(name: 'course',       caption: 'Course',         width: 150, editable: true, required:true),
+                        new Column(name: 'dateGraduted', caption: 'Date Graduated', width: 150, editable: true, required:true),
+                        new Column(name: 'employed',     caption: 'If Employed',    width: 200, editable: true, required:true),
+                        new Column(name: 'status',       caption: 'Status/Remarks', width: 180, editable: true, required:true),
+                    ]
+                },
+                fetchList: { 
+                    if(entity.childrenList==null)entity.childrenList=[]; 
+                    return entity.childrenList;
+                },
+                createItem:{ [:] },
+                
+                onAddItem:{o-> 
+                    entity.childrenList.add(o);
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        entity.childrenList.remove(o);
+                }
+            ] as SubListModel;
+            
+            //****  Main Source(s) of Income / Main Business  ****//
+            def selectedBusinessInfo;
+            def principalMainBusinessInfo;
+            def principalMainBusinessHandler = [
+                getRows: { 14 },
+                getColumns: {
+                    return [
+                        new Column(name: 'tradename',        caption: 'Firm/Trade Name',     width: 150),
+                        new Column(name: 'telno',            caption: 'Tel. No.',            width: 70),
+                        new Column(name: 'address',          caption: 'Address',             width: 150),
+                        new Column(name: 'occupancy',        caption: 'Occupancy',           width: 100),
+                        new Column(name: 'ownership',        caption: 'Ownership',           width: 90),
+                        new Column(name: 'invested',         caption: 'Capital Invested',    width: 100),
+                        new Column(name: 'established',      caption: 'Established',         width: 100),
+                        new Column(name: 'status',           caption: 'Status',              width: 100),
+                        new Column(name: 'stallsize',        caption: 'Stall Size/P.O.',     width: 100),
+                        new Column(name: 'avgsales',         caption: 'Avg Sales From',      width: 100),
+                    ]
+                },
+                fetchList: { 
+                    if(entity.principalMainBusinessList==null)entity.principalMainBusinessList=[]; 
+                    return entity.principalMainBusinessList.each{ it.avgsales = it.avgsales_from + '-' + it.avgsales_to};
+                    
+                },
+                createItem:{ [:] },
+                
+                onAddItem:{o-> 
+                    entity.principalMainBusinessList.add(o);
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        entity.principalMainBusinessList.remove(o);
+                }
+            ] as SubListModel;
+            
+            def addMainSourcesOfIncome(){
+                if(!borrowerControls)throw new Exception("Please specify the principal borrower.");
+                return InvokerUtil.lookupOpener("loan:mainSourcesOfIncome",[selectHandler:{ o ->
+                    entity.principalMainBusinessList.add( o );
+                    principalMainBusinessHandler.load();
+                }]);
+            }
+            
+            /*
+            void setSelectedJointBorrower(e){
+                selectedJointBorrower=e;
+                
+                if( e ) {
+                    jointBorrowerControls = contactDef.getFormFields( selectedJointBorrower, 'selectedJointBorrower' ); 
+                    if(selectedJointBorrower.spouse)
+                        jointBorrowerConnectionControls = contactDef.getFormFields( selectedJointBorrower.spouse, 'selectedJointBorrower.spouse' );
+                    else
+                        jointBorrowerConnectionControls = [];    
+                }
+                else {
+                    jointBorrowerControls = [];
+                    jointBorrowerConnectionControls = [];
+                }
+                binding?.refresh("jointBorrowerControls|jointBorrowerConnectionControls");
+            }
+           
+            def getSelected(){
+                return _selectedJointBorrower;
+            }
+           */
+           /*
+           void setSelectedMainBusiness(e){
+                selectedPrincipalMainBusinessList=e;
+                if( e ) {
+                    
+                }
+           }
+           */
+           def editMainSourcesOfIncome() {
+                if(!borrowerControls)throw new Exception("Please specify the principal borrower.");
+                return InvokerUtil.lookupOpener("loan:mainSourcesOfIncome",[
+                    entity:selectedPrincipalMainBusinessList,
+                    selectHandler:{ o ->
+                        selectedPrincipalMainBusinessList.putAll( o );
+                    if ( selectHandler )    
+                        selectHandler(selectedPrincipalMainBusinessList);
+                    else
+                        binding?.refresh();
+                    },
+                ]);
+           }
+           
+           /*
+           def addPhoto(){
+                if( !addPhotoOpener ) {
+                    addPhotoOpener = InvokerUtil.lookupOpener('loan:asset_photo_lookup',[
+                        handler:{ photo ->
+                            this.photo = photo;
+                            photo.file = AssetUtil.transferImage( photo.file, appid, photo.objid );
+                            asset.photos << photo;
+                            binding.refresh('photo');
+                        }
+                    ]);
+                }
+
+                return addPhotoOpener;
+            }
+            */
+            /*
+            def lookupRoute() {
+                return InvokerUtil.lookupOpener("loan:routeLookup",[selectHandler:routeSelectHandler]);
+            }
+            
+            def routeSelectHandler={o->
+                entity.routedescription=o.description;
+                entity.routecode=o.code 
+                binding.refresh("entity.routedescription");
+            };
+            */
+           
+           def attachment;
+           def addPhotoOpener;
+           def appid;
+           def addBusinessPhoto(){
+                if(!borrowerControls)throw new Exception("Please specify the principal borrower.");
+                if( !selectedBusinessInfo )throw new Exception("No Business Selected.");
+                return InvokerUtil.lookupOpener("asset:attachment",[entity:entity, appid: entity.objid])
+                /*
+                return InvokerUtil.lookupOpener("asset:"attachment,[ //("asset:"+assettype,[
+                    appid: entity.objid,
+                    selectHandler:{o->
+                        //assetsList = entity[ assettype+'list' ];
+                        //assetsList.add(o);
+                        //setSelectedAsset(o);
+                        //binding.refresh('selectedAsset');
+                     }
+                ]);
+                */
+                /*
+                //return InvokerUtil.lookupOpener("loan:asset_photo_lookup",[handler:photo]);
+                
+                if( !addPhotoOpener ) {
+                        addPhotoOpener = InvokerUtil.lookupOpener('loan:asset_photo_lookup',[
+                            handler:{ photo ->
+                                this.photo = photo;
+                                photo.file = AssetUtil.transferImage( photo.file, appid, photo.objid );
+                                selectedBusinessInfo.photos << photo;
+                                binding.refresh('photo');
+                            }
+                        ]);
+                    }
+                 return addPhotoOpener;
+                 */
+           }
+           
+            //def removeMainSourcesOfIncome(){
+            
+            //}
+            
+            //****  Other Lending Information  ****//            
+            def otherLendingInfo;
+            def selectOtherLendingHandler;
+            def otherLendingHandler = [
+                getRows: { 15 },
+                getColumns: {
+                    return [
+                        new Column(name: 'kindofLoan',       caption: 'Kind of Loan',                width: 150),
+                        new Column(name: 'company',          caption: 'Name of Lending Institution', width: 190),
+                        new Column(name: 'address',          caption: 'Address ',                    width: 200),
+                        new Column(name: 'loanAmount',       caption: 'Loan Amount ',                minWidth: 80, maxWidth: 80),
+                        new Column(name: 'dateGranted',      caption: 'Date Granted',                minWidth: 80, maxWidth: 80),
+                        new Column(name: 'maturityDate',     caption: 'Maturity Date',               minWidth: 80, maxWidth: 80),
+                        new Column(name: 'term',             caption: 'Term',                        minWidth: 40, maxWidth: 40),
+                        new Column(name: 'interestRate',     caption: 'Int. Rate',                   minWidth: 70, maxWidth: 70),
+                        new Column(name: 'modeofPayment',    caption: 'Mode of Pyt',                 minWidth: 90, maxWidth: 90),
+                        new Column(name: 'lendingPayment',   caption: 'Payment',                     minWidth: 60, maxWidth: 60),                        
+                        new Column(name: 'collateralOffered',caption: 'Collateral Offered',          minWidth:150),
+                        new Column(name: 'remarks',          caption: 'Remarks',                     width: 190),
+                        new Column(name: 'specs',            caption: 'Others Specifications',       width: 190),
+                    ]
+                },
+                fetchList: { 
+                    if(entity.otherLendingList==null)entity.otherLendingList=[]; 
+                        return entity.otherLendingList;
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        entity.otherLendingList.remove(o);
+                }
+            ] as SubListModel;
+            
+            def addOtherLending(){
+                if(!borrowerControls)throw new Exception("Please specify the principal borrower.");
+                return InvokerUtil.lookupOpener("loan:otherLending",[selectHandler:{ o ->
+                    entity.otherLendingList.add( o );
+                    otherLendingHandler.load();
+                    }]);
+            }
+            
+            def editOtherLending() {
+                if(!borrowerControls)throw new Exception("Please specify the principal borrower.");
+                return InvokerUtil.lookupOpener("loan:otherLending",[
+                    entity:entity,
+                    selectHandler:{ o ->
+                        entity.otherLendingList.putAll( o );
+                    if ( selectHandler )    
+                        selectHandler(entity.otherLendingList);
+                    //else
+                      //  binding?.refresh();
+                    },
+                ]);
+           }
+           
+            /*
+            def removeOtherLending(){
+                if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                    entity.otherLendingList.remove(selected.otherLendingList);
+            }*/
+            
+            //****  Professional Background  ****//
+            def principalProfessionalBackgroundInfo;
+            def principalProfessionalBackgroundHandler = [
+                getRows: { 12 },
+                getColumns: {
+                    return [
+                       new Column(name: 'schoolAttended',caption: 'School Attended', width: 200),                        
+                       new Column(name: 'profession',    caption: 'Profession',      width: 150),
+                       new Column(name: 'dateGraduated', caption: 'Date Graduated',  width: 100),
+                       new Column(name: 'othersSpecs',   caption: 'Others',          width: 150),
+                    ]
+                },
+                fetchList: { 
+                    if(entity.principalProfessionalBackgroundList==null)entity.principalProfessionalBackgroundList=[]; 
+                    return entity.principalProfessionalBackgroundList;
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        entity.principalProfessionalBackgroundList.remove(o);
+                }
+            ] as SubListModel;
+            
+            def addPrincipalProfessionalBackground(){
+                if(!borrowerControls)throw new Exception("Please specify the principal borrower.");
+                return InvokerUtil.lookupOpener("loan:professionalBackground",[selectHandler:{ o ->
+                    entity.principalProfessionalBackgroundList.add( o );
+                    principalProfessionalBackgroundHandler.load();
+                }]);
+            }
+            
+            /*def removePrincipalProfessionalBackground(){
+            
+            }*/
+            
+            //****  Employment Information  ****//
+            def principalEmploymentInfo;
+            def principalEmploymentHandler = [
+                getRows: { 12 },
+                getColumns: {
+                    return [
+                       new Column(name: 'employer', caption: 'Employer',         width: 110),                        
+                       new Column(name: 'telno',    caption: 'Tel No.',          width: 70),
+                       new Column(name: 'address',  caption: 'Address',          width: 100),
+                       new Column(name: 'position', caption: 'Job Desc/Position',width: 110),
+                       new Column(name: 'status',   caption: 'Status', width:90, maxWidth: 100),
+                       new Column(name: 'years',    caption: 'Length of Svc',    width: 90),
+                       new Column(name: 'salary',   caption: 'Compensation',     width: 100, maxWidth: 100),
+                       new Column(name: 'others',   caption: 'Others',           width: 100),
+                    ]
+                },
+                fetchList: { 
+                    if(entity.principalEmploymentList==null)entity.principalEmploymentList=[]; 
+                    return entity.principalEmploymentList;
+                },
+                createItem:{ [:] },
+                
+                onAddItem:{o-> 
+                    entity.principalEmploymentList.add(o);
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        entity.principalEmploymentList.remove(o);
+                }
+            ] as SubListModel;
+            
+            def addPrincipalEmployment(){
+                if(!borrowerControls)throw new Exception("Please specify the principal borrower.");
+                return InvokerUtil.lookupOpener("loan:employment",[selectHandler:{ o ->
+                    entity.principalEmploymentList.add( o );
+                    principalEmploymentHandler.load();
+                }]);
+            }
+            
+            /*def removePrincipalEmployment(){
+            
+            }*/
+            
+            //****  Principal Siblings Information  ****//
+            def principalsiblingsInfo;
+            def principalsiblingsHandler = [
+                getRows: { 10 },
+                getColumns: {
+                    return [
+                       new Column(name: 'name',    caption: 'Name',    width: 110),                        
+                       new Column(name: 'age',     caption: 'Age',     width: 50,  maxWidth:50, type:"integer", fieldType:Integer.class),                       
+                       new Column(name: 'address', caption: 'Address', width: 100),
+                    ]
+                },
+                fetchList: { 
+                    if(entity.principalsiblingsList==null)entity.principalsiblingsList=[]; 
+                    return entity.principalsiblingsList;
+                },
+                createItem:{ [:] },
+                
+                onAddItem:{o-> 
+                    entity.principalsiblingsList.add(o);
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        entity.principalsiblingsList.remove(o);
+                }
+            ] as SubListModel;
+            
+            def addPrincipalSiblings(){
+                if(!borrowerControls)throw new Exception("Please specify the principal borrower.");
+                return InvokerUtil.lookupOpener("loan:principalSiblings",[selectHandler:{ o ->
+                    entity.principalsiblingsList.add( o );
+                    principalsiblingsHandler.load();
+                }]);
+            }
+            
+            /*def removePrincipalSiblings(){
+                if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                    entity.principalsiblingsList.remove(selected.principalsiblingsList);
+            }*/
+            
+            //****  Spouse Siblings Information  ****//
+            def principalSpouseSiblingsInfo;
+            def principalSpouseSiblingsHandler = [
+                getRows: { 10 },
+                getColumns: {
+                    return [
+                       new Column(name: 'name',    caption: 'Name',    width: 110),                        
+                       new Column(name: 'age',     caption: 'Age',     width: 50,   maxWidth:50, type:"integer", fieldType:Integer.class),
+                       new Column(name: 'address', caption: 'Address', width: 100),
+                    ]
+                },
+                fetchList: { 
+                    if(entity.principalSpouseSiblingsList==null)entity.principalSpouseSiblingsList=[]; 
+                    return entity.principalSpouseSiblingsList;
+                },
+                createItem:{ [:] },
+                
+                onAddItem:{o-> 
+                    entity.principalSpouseSiblingsList.add(o);
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        entity.principalSpouseSiblingsList.remove(o);
+                }
+            ] as SubListModel;
+            
+            def addPrincipalSpouseSiblings(){
+                if(!borrowerControls)throw new Exception("Please specify the principal borrower.");
+                return InvokerUtil.lookupOpener("loan:principalSiblings",[selectHandler:{ o ->
+                    entity.principalSpouseSiblingsList.add( o );
+                    principalSpouseSiblingsHandler.load();
+                }]);
+            }
+            
+            /*def removePrincipalSpouseSiblings(){
+                if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                    entity.principalSpouseSiblingsList.remove(selected.principalSpouseSiblingsList);
+            }*/
+            
+            //****  Other Sources Of Income Information  ****//
+            def principalOtherSourcesOfIncomeInfo;
+            def principalOtherSourcesOfIncomeHandler = [
+                getRows: { 15 },
+                getColumns: {
+                    return [
+                        new Column(name: 'kindOfBusiness',caption: 'Income Sources',    width: 150),
+                        new Column(name: 'grossNetIncome',caption: 'Gross/Net Income ', width: 150),
+                        new Column(name: 'remarks',       caption: 'Remarks',           width: 250),
+                    ]
+                },
+                fetchList: { 
+                    if(entity.principalOtherSourcesOfIncomeList==null)entity.principalOtherSourcesOfIncomeList=[]; 
+                        return entity.principalOtherSourcesOfIncomeList;
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        entity.principalOtherSourcesOfIncomeList.remove(o);
+                }
+            ] as SubListModel;
+            
+            def addPrincipalOtherSourcesOfIncome(){
+                if(!borrowerControls)throw new Exception("Please specify the principal borrower.");
+                return InvokerUtil.lookupOpener("loan:otherSourcesOfIncome",[selectHandler:{ o ->
+                    entity.principalOtherSourcesOfIncomeList.add( o );
+                    principalOtherSourcesOfIncomeHandler.load();
+                }]);
+            }
+            
+            /*def removePrincipalOtherSourcesOfIncome(){
+                if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                    entity.principalOtherSourcesOfIncomeList.remove(selected.principalOtherSourcesOfIncomeList);
+            }*/
+            
+            //****  Saving Account  ****//
+            def principalSavingsInfo;
+            def principalSavingsAccountHandler = [
+                getRows: { 10 },
+                getColumns: {
+                    return [
+                       new Column(name: 'bankName',    caption: 'Bank Name', width: 200),                        
+                       new Column(name: 'branch',      caption: 'Branch',    width: 120),
+                       new Column(name: 'status',      caption: 'Status',    width: 80),
+                       new Column(name: 'othersSpecs', caption: 'Others',    width: 200),
+                    ]
+                },
+                fetchList: { 
+                    if(entity.principalSavingsAccountsList==null)entity.principalSavingsAccountsList=[]; 
+                    return entity.principalSavingsAccountsList;
+                },
+                createItem:{ [:] },
+                
+                onAddItem:{o-> 
+                    entity.principalSavingsAccountsList.add(o);
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        entity.principalSavingsAccountsList.remove(o);
+                }
+            ] as SubListModel;
+            
+            def addPrincipalSavingsAccount(){
+                if(!borrowerControls)throw new Exception("Please specify the principal borrower.");
+                return InvokerUtil.lookupOpener("loan:savings",[selectHandler:{ o ->
+                    entity.principalSavingsAccountsList.add( o );
+                    principalSavingsAccountHandler.load();
+                }]);
+            }
+            
+            /*def removePrincipalSavingsAccount(){
+                if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                    entity.principalSavingsAccountsList.remove(selected.principalSavingsAccountsList);
+            }*/
+            
+            //****  Checking Account  ****//
+            def principalCheckingInfo;
+            def principalCheckingAccountHandler = [
+                getRows: { 10 },
+                getColumns: {
+                    return [
+                       new Column(name: 'bankName',    caption: 'Bank Name',     width: 200),                        
+                       new Column(name: 'branch',      caption: 'Branch',        width: 120),
+                       new Column(name: 'kindOfCheck', caption: 'Kind of Check', width: 110),
+                       new Column(name: 'status',      caption: 'Status',        width: 80),
+                       new Column(name: 'othersSpecs', caption: 'Others',        width: 200),
+                    ]
+                },
+                fetchList: { 
+                    if(entity.principalCheckingAccountsList==null)entity.principalCheckingAccountsList=[]; 
+                    return entity.principalCheckingAccountsList;
+                },
+                createItem:{ [:] },
+                
+                onAddItem:{o-> 
+                    entity.principalCheckingAccountsList.add(o);
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        entity.principalCheckingAccountsList.remove(o);
+                }
+            ] as SubListModel;
+            
+            def addPrincipalCheckingAccount(){
+                if(!borrowerControls)throw new Exception("Please specify the principal borrower.");
+                return InvokerUtil.lookupOpener("loan:checking",[selectHandler:{ o ->
+                    entity.principalCheckingAccountsList.add( o );
+                    principalCheckingAccountHandler.load();
+                }]);
+            }
+            
+            /*def removePrincipalCheckingAccount(){
+                if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                    entity.principalCheckingAccountsList.remove(selected.principalCheckingAccountsList);
+            }*/
+            
+            //**************************************************************************************************//
+                                        /*        JOINT BORROWER         */                                        
+            //**************************************************************************************************//
+            //****  Main Source(s) of income / Main Business  ****//
+            def jbMainBusiness;
+            def jbMainBusinessHandler = [
+                getRows: { 14 },
+                getColumns: {
+                    return [
+                        new Column(name: 'tradename',        caption: 'Firm/Trade Name',     width: 150),
+                        new Column(name: 'telno',            caption: 'Tel. No.',            width: 70),
+                        new Column(name: 'address',          caption: 'Address',             width: 150),
+                        new Column(name: 'occupancy',        caption: 'Occupancy',           width: 100),
+                        new Column(name: 'ownership',        caption: 'Ownership',           width: 100),
+                        new Column(name: 'invested',         caption: 'Capital Invested',    width: 90),
+                        new Column(name: 'established',      caption: 'Established',         width: 90),
+                        new Column(name: 'status',           caption: 'Status',              width: 80),
+                        new Column(name: 'stallsize',        caption: 'Stall Size/P.O. Size',width: 90),
+                        new Column(name: 'avgsales',         caption: 'Avg Sales From',      width: 90),
+                    ]
+                },
+                fetchList: { 
+                    if(selectedJointBorrower.mainBusinessList==null)
+                       selectedJointBorrower.mainBusinessList=[]; 
+                    return selectedJointBorrower.mainBusinessList.each{ it.avgsales = it.avgsales_from + '-' + it.avgsales_to};
+                },
+                createItem:{ [:] },
+                
+                onAddItem:{o-> 
+                    selectedJointBorrower.mainBusinessList.add(o);
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        selectedJointBorrower.mainBusinessList.remove(o);
+                }
+            ] as SubListModel;
+            
+            def addJointBorrowerMainSourcesOfIncome(){
+                if(!selectedJointBorrower)throw new Exception("No Joint Borrower specified.");
+                return InvokerUtil.lookupOpener("loan:mainSourcesOfIncome",[selectHandler:{ o ->
+                    selectedJointBorrower.mainBusinessList.add( o );
+                    jbMainBusinessHandler.load();
+                }]);
+            }
+            
+            /*if removeJointBorrowerMainSourcesOfIncome(){
+            
+            }*/
+            
+            //****  Other Sources Of Income Info  ****//
+            def jbOtherSourcesOfIncome;
+            def jbOtherSourcesOfIncomeHandler = [
+                getRows: { 15 },
+                getColumns: {
+                    return [
+                        new Column(name: 'kindOfBusiness',caption: 'Income Sources',    width: 150),
+                        new Column(name: 'grossNetIncome',caption: 'Gross/Net Income ', width: 150),
+                        new Column(name: 'remarks',       caption: 'Remarks',           width: 250),
+                    ]
+                },
+                fetchList: { 
+                      if(selectedJointBorrower.otherSourcesOfIncomeList==null)selectedJointBorrower.otherSourcesOfIncomeList=[]; 
+                                return selectedJointBorrower.otherSourcesOfIncomeList;
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        selectedJointBorrower.otherSourcesOfIncomeList.remove(o);
+                }
+            ] as SubListModel;
+            
+            def addJointBorrowerOtherSourcesOfIncome(){
+                if(!selectedJointBorrower)throw new Exception("No Joint Borrower specified.");
+                return InvokerUtil.lookupOpener("loan:otherSourcesOfIncome",[selectHandler:{ o ->
+                    selectedJointBorrower.otherSourcesOfIncomeList.add( o );
+                    //entity.jointBorrowerOtherSourcesOfIncomeList.add( o );
+                    jbOtherSourcesOfIncomeHandler.load();
+                }]);
+            }
+            
+            /*def removeJointBorrowerOtherSourcesOfIncome(){
+                if(!selectedJointBorrower)throw new Exception("No Joint Borrower specified.");
+                if(entity.jointBorrowerOtherSourcesOfIncomeList==null)throw new Exception("No items to delete.");
+                if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                    entity.jointBorrowerOtherSourcesOfIncomeList.remove(selected.jointBorrowerOtherSourcesOfIncomeList);
+            }*/
+            
+            //****  Professional Background  ****//
+            def jbProfBackground;
+            def jbProfBackgroundHandler = [
+                getRows: { 12 },
+                getColumns: {
+                    return [
+                       new Column(name: 'schoolAttended',caption: 'School Attended', width: 200),                        
+                       new Column(name: 'profession',    caption: 'Profession',      width: 150),
+                       new Column(name: 'dateGraduated', caption: 'Date Graduated',  width: 100),
+                       new Column(name: 'othersSpecs',   caption: 'Others',          width: 150),
+                    ]
+                },
+                fetchList: { 
+                    if(selectedJointBorrower.profBackgroundList==null)
+                        selectedJointBorrower.profBackgroundList=[]; 
+                    return selectedJointBorrower.profBackgroundList;
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        selectedJointBorrower.profBackgroundList.remove(o);
+                }
+            ] as SubListModel;
+            
+            def addJointBorrowerProfessionalBackground(){
+                if(!selectedJointBorrower)throw new Exception("No Joint Borrower specified.");
+                return InvokerUtil.lookupOpener("loan:professionalBackground",[selectHandler:{ o ->
+                    selectedJointBorrower.profBackgroundList.add( o );
+                    jbProfBackgroundHandler.load();
+                }]);
+            }
+            
+            /*def removeJointBorrowerProfessionalBackground(){
+            
+            }*/
+            
+            //****  Employment Information  ****//
+            def jbEmployment;
+            def jbEmploymentHandler = [
+                getRows: { 12 },
+                getColumns: {
+                    return [
+                       new Column(name: 'employer', caption: 'Employer',          width: 110),
+                       new Column(name: 'telno',    caption: 'Tel No.',           width: 70),
+                       new Column(name: 'address',  caption: 'Address',           width: 100),
+                       new Column(name: 'position', caption: 'Job Desc/Position', width: 110),
+                       new Column(name: 'status',   caption: 'Status',            width: 90),
+                       new Column(name: 'years',    caption: 'Length of Svc',     width: 90),
+                       new Column(name: 'salary',   caption: 'Compensation',      width: 100, maxWidth:100),
+                       new Column(name: 'others',   caption: 'Others',            width: 100),
+                    ]
+                },
+                fetchList: { 
+                    if(selectedJointBorrower.employmentList==null)
+                        selectedJointBorrower.employmentList=[]; 
+                    return selectedJointBorrower.employmentList;
+                },
+                createItem:{ [:] },
+                
+                onAddItem:{o-> 
+                    selectedJointBorrower.employmentList.add(o);
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        selectedJointBorrower.employmentList.remove(o);
+                }
+            ] as SubListModel;
+            
+            def addJointBorrowerEmployment(){
+                if(!selectedJointBorrower)throw new Exception("No Joint Borrower specified.");
+                return InvokerUtil.lookupOpener("loan:employment",[selectHandler:{ o ->
+                    selectedJointBorrower.employmentList.add( o );
+                    jbEmploymentHandler.load();
+                }]);
+            }
+            
+            /*def removeJointBorrowerEmployment(){
+            
+            }*/
+            
+            //****  Siblings Information  ****//
+            def jbSiblings;
+            def jbSiblingsHandler = [
+                getRows: { 10 },
+                getColumns: {
+                    return [
+                       new Column(name: 'name',    caption: 'Name',    width: 110),                        
+                       new Column(name: 'age',     caption: 'Age',     width: 50, maxWidth:50, type:"integer", fieldType:Integer.class),
+                       new Column(name: 'address', caption: 'Address', width: 100),
+                    ]
+                },
+                fetchList: { 
+                    if(selectedJointBorrower.siblingsList==null)selectedJointBorrower.siblingsList=[]; 
+                    return selectedJointBorrower.siblingsList;
+                },
+                createItem:{ [:] },
+                
+                onAddItem:{o-> 
+                    selectedJointBorrower.siblingsList.add(o);
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        selectedJointBorrower.siblingsList.remove(o);
+                }
+            ] as SubListModel;
+            
+            def addJointBorrowerSiblings(){
+                if(!selectedJointBorrower)throw new Exception("No Joint Borrower specified.");
+                return InvokerUtil.lookupOpener("loan:siblings",[selectHandler:{ o ->
+                    selectedJointBorrower.siblingsList.add( o );
+                    jbSiblingsHandler.load();
+                }]);
+            }
+            
+            /*def removeJointBorrowerSiblings(){
+                if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                    selectedJointBorrower.siblingsList.remove(selected.jointBorrowerSiblingsList);
+            }*/
+            
+            //****  Spouse Siblings Information  ****//
+            def jbSpouseSiblings;
+            def jbSpouseSiblingsHandler = [
+                getRows: { 10 },
+                getColumns: {
+                    return [
+                       new Column(name: 'name',    caption: 'Name',    width: 110),                        
+                       new Column(name: 'age',     caption: 'Age',     width: 50, maxWidth:50, type:"integer", fieldType:Integer.class),
+                       new Column(name: 'address', caption: 'Address', width: 100),
+                    ]
+                },
+                fetchList: { 
+                    if(selectedJointBorrower.spouseSiblingsList==null)selectedJointBorrower.spouseSiblingsList=[]; 
+                    return selectedJointBorrower.spouseSiblingsList;
+                },
+                createItem:{ [:] },
+                
+                onAddItem:{o-> 
+                    selectedJointBorrower.spouseSiblingsList.add(o);
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        selectedJointBorrower.spouseSiblingsList.remove(o);
+                }
+            ] as SubListModel;
+            
+            def addJointBorrowerSpouseSiblings(){
+                if(!selectedJointBorrower)throw new Exception("No Joint Borrower specified.");
+                return InvokerUtil.lookupOpener("loan:siblings",[selectHandler:{ o ->
+                    selectedJointBorrower.spouseSiblingsList.add( o );
+                    jbSpouseSiblingsHandler.load();
+                }]);
+            }
+            
+            /*def removeJointBorrowerSpouseSiblings(){
+                if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                    selectedJointBorrower.spouseSiblingsList.remove(selected.jointBorrowerSpouseSiblingsList);
+            }*/
+            
+            //****  Saving(s) Account  ****//
+            def jbSavingsAccount;
+            def jbSavingsAccountHandler = [
+                getRows: { 10 },
+                getColumns: {
+                    return [
+                       new Column(name: 'bankName',    caption: 'Bank Name', width: 200),                        
+                       new Column(name: 'branch',      caption: 'Branch',    width: 120),
+                       new Column(name: 'status',      caption: 'Status',    width: 80),
+                       new Column(name: 'othersSpecs', caption: 'Others',    width: 200),
+                    ]
+                },
+                fetchList: { 
+                    if(selectedJointBorrower.savingsAccountsList==null)selectedJointBorrower.savingsAccountsList=[]; 
+                    return selectedJointBorrower.savingsAccountsList;
+                },
+                createItem:{ [:] },
+                
+                onAddItem:{o-> 
+                    selectedJointBorrower.savingsAccountsList.add(o);
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        selectedJointBorrower.savingsAccountsList.remove(o);
+                }
+            ] as SubListModel;
+            
+            def addJointBorrowerSavingsAccount(){
+                if(!selectedJointBorrower)throw new Exception("No Joint Borrower specified.");
+                return InvokerUtil.lookupOpener("loan:savings",[selectHandler:{ o ->
+                    selectedJointBorrower.savingsAccountsList.add( o );
+                    jbSavingsAccountHandler.load();
+                }]);
+            }
+            
+            /*def removeJointBorrowerSavingsAccount(){
+                if(!selectedJointBorrower)throw new Exception("No Joint Borrower specified.");
+                if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                selectedJointBorrower.savingsAccountsList.remove(selected.jointBorrowerSavingsAccountsList);
+            }*/
+            
+            //****  Checking(s) Account  ****//
+            def jbCheckingAccount;
+            def jbCheckingAccountHandler = [
+                getRows: { 10 },
+                getColumns: {
+                    return [
+                       new Column(name: 'bankName',    caption: 'Bank Name',     width: 200),                        
+                       new Column(name: 'branch',      caption: 'Branch',        width: 150),
+                       new Column(name: 'kindOfCheck', caption: 'Kind of Check', width: 80),
+                       new Column(name: 'status',      caption: 'Status',        width: 100),
+                       new Column(name: 'othersSpecs', caption: 'Others',        width: 150),
+                    ]
+                },
+                fetchList: { 
+                    if(selectedJointBorrower.checkingAccountsList==null)selectedJointBorrower.checkingAccountsList=[]; 
+                    return selectedJointBorrower.checkingAccountsList;
+                },
+                createItem:{ [:] },
+                
+                onAddItem:{o-> 
+                    selectedJointBorrower.checkingAccountsList.add(o);
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        selectedJointBorrower.checkingAccountsList.remove(o);
+                }
+            ] as SubListModel;
+            
+            def addJointBorrowerCheckingAccount(){
+                if(!selectedJointBorrower)throw new Exception("No Joint Borrower specified.");
+                return InvokerUtil.lookupOpener("loan:checking",[selectHandler:{ o ->
+                    selectedJointBorrower.checkingAccountsList.add( o );
+                    jbCheckingAccountHandler.load();
+                }]);
+            }
+            
+            /*def removeJointBorrowerCheckingAccount(){
+                if(!selectedJointBorrower)throw new Exception("No Joint Borrower specified.");
+                if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                selectedJointBorrower.checkingAccountsList.remove(selected.jointBorrowerCheckingAccountsList);
+            }*/
+            
+            //**************************************************************************************************//
+                                               /*        CO-MAKER           */                                        
+            //**************************************************************************************************//
+            //****  Main Source(s) of Income / Main Business  ****//  
+            def cmMainBusiness;
+            def cmMainBusinessHandler = [
+                getRows: { 14 },
+                getColumns: {
+                    return [
+                        new Column(name: 'tradename',        caption: 'Firm/Trade Name',     width: 150),
+                        new Column(name: 'telno',            caption: 'Tel. No.',            width: 70),
+                        new Column(name: 'address',          caption: 'Address',             width: 150),
+                        new Column(name: 'occupancy',        caption: 'Occupancy',           width: 100),
+                        new Column(name: 'ownership',        caption: 'Ownership',           width: 100),
+                        new Column(name: 'invested',         caption: 'Capital Invested',    width: 90),
+                        new Column(name: 'established',      caption: 'Established',         width: 90),
+                        new Column(name: 'status',           caption: 'Status',              width: 80),
+                        new Column(name: 'stallsize',        caption: 'Stall Size/P.O. Size',width: 90),
+                        new Column(name: 'avgsales',         caption: 'Avg Sales From',      width: 90),
+                    ]
+                },
+                fetchList: { 
+                    if(selectedCoMaker.mainBusinessList==null)
+                       selectedCoMaker.mainBusinessList=[]; 
+                    return selectedCoMaker.mainBusinessList.each{ it.avgsales = it.avgsales_from + '-' + it.avgsales_to};
+                },
+                createItem:{ [:] },
+                
+                onAddItem:{o-> 
+                    selectedCoMaker.mainBusinessList.add(o);
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        selectedCoMaker.mainBusinessList.remove(o);
+                }
+            ] as SubListModel;
+            
+            def addCoMakerMainSourcesOfIncome(){
+                if(!selectedCoMaker)throw new Exception("No CoMaker specified.");
+                return InvokerUtil.lookupOpener("loan:mainSourcesOfIncome",[selectHandler:{ o ->
+                    selectedCoMaker.mainBusinessList.add( o );
+                    cmMainBusinessHandler.load();
+                }]);
+            }
+            
+            /*def removeCoMakerMainSourcesOfIncome(){
+            
+            }*/
+            
+            //****  Other Sources Of Income Information  ****//
+            def cmOtherSourcesOfIncome;
+            def cmOtherSourcesOfIncomeHandler = [
+                getRows: { 15 },
+                getColumns: {
+                    return [
+                        new Column(name: 'kindOfBusiness',caption: 'Income Sources',    width: 150),
+                        new Column(name: 'grossNetIncome',caption: 'Gross/Net Income ', width: 150),
+                        new Column(name: 'remarks',       caption: 'Remarks',           width: 250),
+                    ]
+                },
+                fetchList: { 
+                      if(selectedCoMaker.otherSourcesOfIncomeList==null)selectedCoMaker.otherSourcesOfIncomeList=[]; 
+                            return selectedCoMaker.otherSourcesOfIncomeList;
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        selectedCoMaker.otherSourcesOfIncomeList.remove(o);
+                }
+            ] as SubListModel;
+            
+            def addCoMakerOtherSourcesOfIncome(){
+                if(!selectedCoMaker)throw new Exception("No CoMaker specified.");
+                return InvokerUtil.lookupOpener("loan:otherSourcesOfIncome",[selectHandler:{ o ->
+                    selectedCoMaker.otherSourcesOfIncomeList.add( o );
+                    cmOtherSourcesOfIncomeHandler.load();
+                }]);
+            }
+            
+            /*def removeCoMakerOtherSourcesOfIncome(){
+                if(!selectedCoMaker)throw new Exception("No CoMaker specified.");
+                if(selectedCoMaker.otherSourcesOfIncomeList==null)throw new Exception("No items to delete.");
+                if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                    selectedCoMaker.otherSourcesOfIncomeList.remove(selectedCoMaker.otherSourcesOfIncomeList);
+            }*/
+            
+            //****  Professional Background  ****//
+            def cmProfBackground;
+            def cmProfBackgroundHandler = [
+                getRows: { 12 },
+                getColumns: {
+                    return [
+                       new Column(name: 'schoolAttended',caption: 'School Attended', width: 200),                        
+                       new Column(name: 'profession',    caption: 'Profession',      width: 150),
+                       new Column(name: 'dateGraduated', caption: 'Date Graduated',  width: 100),
+                       new Column(name: 'othersSpecs',   caption: 'Others',          width: 150),
+                    ]
+                },
+                fetchList: { 
+                    if(selectedCoMaker.profBackgroundList==null)selectedCoMaker.profBackgroundList=[]; 
+                    return selectedCoMaker.profBackgroundList;
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        selectedCoMaker.profBackgroundList.remove(o);
+                }
+            ] as SubListModel;
+            
+            def addCoMakerProfessionalBackground(){
+                if(!selectedCoMaker)throw new Exception("No CoMaker specified.");
+                return InvokerUtil.lookupOpener("loan:professionalBackground",[selectHandler:{ o ->
+                    selectedCoMaker.profBackgroundList.add( o );
+                    cmProfBackgroundHandler.load();
+                }]);
+            }
+            
+            /*def removeCoMakerProfessionalBackground(){
+                if(!selectedCoMaker)throw new Exception("No CoMaker specified.");
+                if(selectedCoMaker.profBackgroundList==null)throw new Exception("No items to delete.");
+            }*/
+            
+            //****  Employment Information  ****//
+            def cmEmployment;
+            def cmEmploymentHandler = [
+                getRows: { 12 },
+                getColumns: {
+                    return [
+                       new Column(name: 'employer', caption: 'Employer',         width: 110),                        
+                       new Column(name: 'telno',    caption: 'Tel No.',          width: 70),
+                       new Column(name: 'address',  caption: 'Address',          width: 100),
+                       new Column(name: 'position', caption: 'Job Desc/Position',width: 110),
+                       new Column(name: 'status',   caption: 'Status',           width: 90, maxWidth:100),
+                       new Column(name: 'years',    caption: 'Length of Svc',    width: 90),
+                       new Column(name: 'salary',   caption: 'Compensation',     width: 100, maxWidth:100),
+                       new Column(name: 'others',   caption: 'Others',           width: 100),
+                    ]
+                },
+                fetchList: { 
+                    if(selectedCoMaker.employmentList==null)selectedCoMaker.employmentList=[]; 
+                    return selectedCoMaker.employmentList;
+                },
+                createItem:{ [:] },
+                
+                onAddItem:{o-> 
+                    selectedCoMaker.employmentList.add(o);
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        selectedCoMaker.employmentList.remove(o);
+                }
+            ] as SubListModel;
+            
+            def addCoMakerEmployment(){
+                if(!selectedCoMaker)throw new Exception("No CoMaker specified.");
+                return InvokerUtil.lookupOpener("loan:employment",[selectHandler:{ o ->
+                    selectedCoMaker.employmentList.add( o );
+                    cmEmploymentHandler.load();
+                }]);
+            }
+            
+            /*def removeCoMakerEmployment(){
+                if(!selectedJointBorrower)throw new Exception("No Joint Borrower specified.");
+            }*/
+           
+            @Close
+            boolean onClose(){
+                def diff = MapVersionControl.getInstance().diff(entity, oldEntity);
+                if( diff ){
+                    if(!MsgBox.confirm('Are you sure you want to exit?')) return false;
+
+                    if( mode == 'add' )
+                        AssetUtil.clearResources(entity.objid);
+                }
+                caller.mode='selected';
+                return true;
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="loan.ui.ApplicationForm"/>
+        <page name="page2" template="loan.ui.LoanAppReport"/>
+    </pages>
+</workunit>

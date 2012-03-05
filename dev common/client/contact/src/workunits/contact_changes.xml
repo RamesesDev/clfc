@@ -1,0 +1,74 @@
+<workunit>
+     <invokers>
+        <invoker type="contact:formActions" immediate="true" action="init" caption="Changes" index="10" target="popup" visibleWhen="#{mode=='read' and entity!=null}"/>
+ 
+        <invoker type="formActions" caption="Close" action="_close" />
+    </invokers>
+
+    <code>
+        <![CDATA[
+        
+            import com.rameses.rcp.common.*;
+            import com.rameses.rcp.annotations.*;
+            import com.rameses.util.*;
+            import com.rameses.osiris2.client.*;
+
+            public class ContactChangesController {
+            
+                @Binding
+                def binding;
+
+                @Service("ContactChangeService")
+                def svc;
+                
+                @Script("ContactDef")
+                def custDef;
+                
+                def cacheMap;
+                
+                def entity;
+                def entityHandler;
+                def formFields;
+                def htmlInfo;
+                
+                def selection;
+                
+                
+                public void init() {
+                    if(entityHandler==null)
+                        throw new Exception("Entity handler must be specified");
+                    entity = entityHandler();
+                    cacheMap = [ fetch: { id-> return svc.getInfo([objid:id]); }  ] as CacheMap;
+                }
+                
+                def listHandler = [
+                    getColumns:{
+                        return [
+                            new Column(name:"dtmodified", caption:"Date Modified", width:50, type:"date", format:"yyyy-MM-dd hh:mm:ss" ),
+                            new Column(name:"modifiedby", caption:"Modified By", width:50)
+                        ];
+                    },
+                    fetchList:{ o->
+                        o.contactid = entity.objid;
+                        return svc.getList( o );
+                    }
+                ] as PageListModel;
+                
+                                
+                void setSelection( o ) {
+                    this.selection = o;
+                    if( selection )
+                        htmlInfo = cacheMap[ selection.objid ];
+                    else
+                        htmlInfo = '';
+                }
+                                
+            }
+        ]]>
+    </code>
+    
+    <pages>
+        <page template="contact.ui.ContactChangesPage"/> 
+    </pages>
+    
+</workunit>

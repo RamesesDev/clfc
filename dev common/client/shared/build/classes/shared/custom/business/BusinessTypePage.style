@@ -1,0 +1,26 @@
+"context.nooftables" [context.type == 'CARENDERIA']  { visible: true; }
+"context.nooftables" [context.type != 'CARENDERIA'] { visible: false; }
+
+"context.stallsize" [context.type == 'SARI-SARI' || context.type == 'CARENDERIA']  { visible: true; }
+"context.stallsize" [context.type != 'SARI-SARI' && context.type != 'CARENDERIA'] { visible: false; }
+
+"context.noofchair" [context.type == 'CARENDERIA']  { visible: true; }
+"context.noofchair" [context.type != 'CARENDERIA'] { visible: false; }
+
+"context.noofcountertype" [context.type == 'CARENDERIA']  { visible: true; }
+"context.noofcountertype" [context.type != 'CARENDERIA'] { visible: false; }
+
+"context.kind" [context.type == 'CARENDERIA']  { visible: true; }
+"context.kind" [context.type != 'CARENDERIA'] { visible: false; }
+
+"context.noofunits" [context.type == 'OPERATOR']  { visible: true; }
+"context.noofunits" [context.type != 'OPERATOR'] { visible: false; }
+
+"context.seatingcap" [context.type == 'OPERATOR']  { visible: true; }
+"context.seatingcap" [context.type != 'OPERATOR'] { visible: false; }
+
+"context.boundaryfee" [context.type == 'OPERATOR']  { visible: true; }
+"context.boundaryfee" [context.type != 'OPERATOR'] { visible: false; }
+
+"context.remarks" [context.type == 'OTHERS']  { visible: true; }
+"context.remarks" [context.type != 'OTHERS'] { visible: false; }

@@ -1,0 +1,52 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+
+class BankAccountService
+{
+	@PersistenceContext('java:treasury')
+	def em;
+
+	@Service('DateService')
+	def datesvc;
+
+	@ProxyMethod
+	public def getList( param ) {
+		def sql = new StringBuffer('select * from bank_account');
+
+		def filter = new StringBuffer();
+		if( param.type ) addFilter( filter, 'type' );
+		if( param.groupid ) addFilter( filter, 'groupid' );
+		if( param.groupcode ) addFilter( filter, 'groupcode' );
+		if( param.groupname ) addFilter( filter, 'groupname' );
+		if( param.grouptype ) addFilter( filter, 'grouptype' );
+
+		if( filter.length() > 0 ) sql.append( ' where ' + filter );
+		return em.sqlContext.createQuery(sql+'').setParameters(param).resultList;
+	}
+
+	private def addFilter( buffer, field, param=null ) {
+		if( param == null ) param = field;
+		if( buffer.length() > 0 ) buffer.append(' and ');
+		buffer.append(field + '=$P{' + param + '}');
+	}
+
+	@ProxyMethod
+	public def create( o ) {
+		return em.create("bank_account",o);
+	}
+
+	@ProxyMethod
+	public def update( o ) {
+		return em.update("bank_account",o);
+	}
+
+	@ProxyMethod
+	public def read( param ) {
+		return em.read("bank_account",param);
+	}
+
+	@ProxyMethod
+	public removeData(def o){
+		em.delete("bank_account",o);
+	}
+}

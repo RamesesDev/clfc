@@ -1,0 +1,65 @@
+<workunit>
+    
+    <invokers> 
+        <invoker type="loader" caption="Home" index="9999" action="init" />
+    </invokers> 
+    
+    <code>
+        <![CDATA[        
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.util.*;
+        import com.rameses.rcp.framework.ClientContext;        
+        
+        public class HomeController 
+        {
+        
+            @Script("User")
+            def user;
+        
+            def homeMenu = InvokerUtil.lookupActions( "home:menu" );
+            
+            def getName() {
+                def env = user.env;
+                if( env.USERINFO ) {
+                    def info = env.USERINFO;
+                    def name = [];
+                    if( info.firstname ) name << info.firstname;
+                    if( info.lastname )  name << info.lastname;
+                    return name.join(' ');
+                }
+                return env.USER;
+            }
+            
+            void init() 
+            {
+                //load all sliding windows 
+                try
+                {
+                    def list = InvokerUtil.lookup("slidingwindow"); 
+                    if (!list) return;  
+
+                    for (inv in list) 
+                    {
+                        try 
+                        {
+                            String target = inv.properties.target;
+                            InvokerUtil.showWindow(inv, null, [windowmode:target]);  
+                        } 
+                        catch(e1) { 
+                            e1.printStackTrace(); 
+                        } 
+                    } 
+                } 
+                catch(e) { 
+                    e.printStackTrace(); 
+                }
+            } 
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="clfc.home.HomePage"/>
+    </pages>
+</workunit>

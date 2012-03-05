@@ -1,0 +1,68 @@
+<html>
+    <style>
+        
+        body{ font-family:arial;font-size:10px; }
+        th { text-align: left; padding-right: 5px; }
+        
+    </style>
+    <body>
+        <table>
+            <% if(data.subject) { %>
+            <tr>
+                <th>Subject:</th>
+                <td>${data.subject}</td>
+            </tr>
+            <% } %>
+            <tr>
+                <th>Make:</th>
+                <td>${data.make}</td>
+            </tr>
+            <tr>
+                <th>Model:</th>
+                <td>${data.model}</td>
+            </tr>
+            <tr>
+                <th>Type:</th>
+                <td>${data.type}</td>
+            </tr>
+            <tr>
+                <th>Chassis no.:</th>
+                <td>${data.chassisno}</td>
+            </tr>
+            <tr>
+                <th>Plate no.:</th>
+                <td>${data.plateno}</td>
+            </tr>
+            <tr>
+                <th>Registration no.:</th>
+                <td>${data.regno}</td>
+            </tr>
+            <tr>
+                <th>Engine no.:</th>
+                <td>${data.engineno}</td>
+            </tr>
+            <tr>
+                <th valign="top">Remarks:</th>
+                <td>${data.remarks}</td>
+            </tr>
+        </table>
+        <br><br>
+        
+        <style>
+            .attachments { font-size: 10pt; font-weight: bold; }
+            .attachments .title { border-bottom: solid 1px grey; }
+            .attachments .desc { 
+                font-weight: normal; font-size: 9pt; color: gray; 
+                font-style: italic;
+            }
+        </style>
+        <div class="attachments">
+            <div class="title">Attached Photos</div>
+            <br>
+            <div>
+                <div class="subj">Picture 1</div>
+                <div class="desc">Picture of the house in Balamban.</div>
+            </div>
+        </div>
+    </body>
+</html>

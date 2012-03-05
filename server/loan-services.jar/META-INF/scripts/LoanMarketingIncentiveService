@@ -1,0 +1,36 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+import com.rameses.util.*;
+
+
+class LoanMarketingIncentiveService
+{
+	@PersistenceContext('java:loan')
+	def em;
+	
+	@Service('DateService')
+	def datesvc;
+	
+	@Env
+    def env;
+	
+	@ProxyMethod
+	public def save(){
+	
+	
+		return em.save("loan_marketing_incentive", newApp);
+		//loan_marketing_officer
+	}	
+	
+	/* Loan Marketing Incentive Table
+		Per releases:
+		20,000             = P  20.00
+		20,000 - 49,999.99 = P  20.00
+		50,000 - 99,999.99 = P  50.00 
+		100,000.00 & above = P 100.00
+		
+		Every month end of the month.
+		Submitted to the head of SVP 
+		Finance.
+	*/
+}

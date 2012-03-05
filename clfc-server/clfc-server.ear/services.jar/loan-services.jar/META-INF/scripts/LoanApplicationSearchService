@@ -1,0 +1,163 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+import com.rameses.util.*;
+
+class LoanApplicationSearchService
+{
+	@PersistenceContext('java:loan')
+	def em;
+
+	@Service('DateService')
+	def datesvc;
+
+	@Service('LoanApplicationService')
+	def loanSvc;
+ 
+	@Env
+	def env;
+	
+	private static def num_format = new java.text.DecimalFormat('00000000');
+	
+  	@ProxyMethod
+	public def getList( param ){
+		return doSearch( param ).each {
+			if( it.borrower ) it.borrower = em.serializer.read( it.borrower );
+			if( it.ledger ) {
+				def ledger = em.serializer.read( it.remove('ledger') );
+				it.loanAmount = ledger.loanAmount;
+				it.dailyPayment = ledger.dailyPayment;
+				def lastPayment = ledger.lastDatePaid? ledger.lastDatePaid : DateUtil.add(parseDate(ledger.startDate), '-1d');
+				def daysDue = DateUtil.diff( parseDate(lastPayment),parseDate(datesvc.serverDate));
+				it.amountDue = ledger.dailyPayment * (daysDue > 0? daysDue : 0);
+			}
+			if( it.loaninfo ) {
+				def info = em.serializer.read( it.remove('loaninfo') );
+				it.loanAmount = info.amountapproved;
+				it.amountApplied = info.loanamount;
+			}
+		};
+	}
+	
+	private def doSearch( param ) {
+		if( param.searchText ) {
+			println "searching searchText $param.searchText";
+			def result;	
+			param.appno = param.searchText;
+			param.name = param.searchText;
+			if( (result = findByAppNo( param ) )) return result;
+			if( (result = findByName( param  ) )) return result;
+			return [];
+		}
+					
+		def filter = [];
+		if( param.state ) 
+			filter << 'state=$P{state}';
+		else if( param.allowedStates ) 
+			buildStatesFilter( filter, param );
+		else
+			return [];
+			
+		if( param.mode )  filter << 'mode=$P{mode}';
+			param.filter = filter.join(' and ');
+		
+		if( param.branchcode )
+			filter << 'branchcode=$P{branchcode}';
+	
+		if( param.mode )  filter << 'mode=$P{mode}';
+		
+		def qry = em.sqlContext.createNamedQuery('loan_app_search:find-app')
+		            .setVars([filter: filter.join(' and ')])
+		            .setParameters(param);
+		
+		//if( param._start ) qry.setFirstResult(param._start);
+		//if( param._limit ) qry.setMaxResults(param._limit)
+				         
+		if( param._start ) qry.setFirstResult(param._start);
+		if( param._limit ) 
+			qry.setMaxResults(param._limit);
+		else
+			qry.setMaxResults(100);
+			
+		return qry.resultList;
+	}
+	
+	private void buildStatesFilter( filter, param ) {
+		def items = [];
+		param.allowedStates.eachWithIndex { state, i ->
+			def key = 'state_' + i;
+			items << '$P{' + key + '}';
+			param[key] = state;
+		}
+		filter << 'state in (' + items.join(',') + ')';
+	}
+	
+	@ProxyMethod
+	public def findByAppNo( param ) {
+		if( !param.appno.trim().matches(/\d+/) ) return null;
+	
+		def filter = ['appno=$P{appno}'];
+		if( param.state ) 
+			filter << 'state=$P{state}';
+		else if( param.allowedStates ) 
+			buildStatesFilter( filter, param );
+
+		if( param.mode )       filter << 'mode=$P{mode}';
+		if( param.branchcode ) filter << 'branchcode=$P{branchcode}';
+				
+		if(param.appno.length() <= 8)
+			param.appno = env.CLIENTCODE + num_format.format(param.appno.toInteger());
+			
+		def qry = em.sqlContext.createNamedQuery('loan_app_search:find-app')
+		            .setVars([filter: filter.join(' and ')])
+		            .setParameters( param );
+		            
+		if( param._start ) qry.setFirstResult( param._start );
+		if( param._limit ) qry.setMaxResults( param._limit );
+		
+		return qry.resultList;
+	}
+	
+	@ProxyMethod
+	public def findByName( param ) {
+		def filter = [];
+		
+		if( param.state ) 
+			filter << 'state=$P{state}';
+		else if( param.allowedStates ) 
+			buildStatesFilter( filter, param );
+		
+		if( param.mode )       filter << 'mode=$P{mode}';
+		if( param.branchcode ) filter << 'branchcode=$P{branchcode}';
+		
+		if( param.principalOnly ) {
+			filter << 'borrowertype=$P{borrowertype}';
+			param.borrowertype = 'principal';
+		}
+				
+		param.name = param.name+'%';
+		def qry = em.sqlContext.createNamedQuery('loan_app_search:find-by-borrowername')
+		            .setVars([filter: filter? ' and ' + filter.join(' and ') : ''])
+		            .setParameters( param );
+		            
+		if( param._start ) qry.setFirstResult( param._start );
+		if( param._limit ) qry.setMaxResults( param._limit );
+		
+		return qry.resultList;
+	}
+	
+	@ProxyMethod
+	public def search( param ){
+		param.state = 'RELEASED';
+		param.searchText = param.borrowername;
+		param.principalOnly = true;
+
+		return getList( param );
+	}
+	
+	static def dt_formatter = new java.text.SimpleDateFormat('yyyy-MM-dd');
+	
+	private def parseDate( date ) {
+		def strDate = (date instanceof String)? date : dt_formatter.format( date );
+		return dt_formatter.parse( strDate );
+	}
+}

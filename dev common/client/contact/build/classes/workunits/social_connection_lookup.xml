@@ -1,0 +1,42 @@
+<workunit>
+     <invokers>
+         <invoker type="socialconnection:lookup" caption="Social Connection Lookup" action="init" target="_popup"/>
+         
+        <invoker type="formActions" caption="Select" action="doSelect" immediate="true" mnemonic="s"/>
+        <invoker type="formActions" caption="Cancel" action="_close" immediate="true" mnemonic="c"/>
+    </invokers>    
+    <code>
+        <![CDATA[
+            import com.rameses.rcp.common.*;
+            import com.rameses.osiris2.client.*;
+            
+            public class SocialConnectionLookupController {
+
+                def opener;
+                def selectHandler;
+                def principal;
+                def defaultFields;
+
+                boolean allowEdit = false;
+                boolean allowNew = false;
+                
+                public void init() {
+                    def p = [:];
+                    p.principal = principal;
+                    if(defaultFields) p.defaultFields = defaultFields;
+                    p.allowEdit = allowEdit;
+                    p.allowNew = allowNew;
+                    opener = InvokerUtil.lookupOpener( "socialconnection", p );
+                }
+            
+                public def doSelect() {
+                    if(!selectHandler) throw new Exception("Please provide a select handler");
+                    return selectHandler( opener.handle.selectedItem );
+                }
+            }
+        ]]>
+    </code>
+    <pages>
+        <page template="contact.ui.OpenerPopupPage"/>    
+    </pages>
+</workunit>

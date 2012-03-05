@@ -1,0 +1,39 @@
+<workunit>
+    <invokers>
+        <invoker type="loantariff:rules" caption="Rules" target="popup" action="previewRules" />
+                
+    </invokers>
+    
+    <code>
+    <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        import java.io.*;
+        import com.rameses.io.*;
+        
+        public class LoanTariffRuleController{
+            @Service("LoanTariffService")
+            def svc;
+            
+            @Binding
+            def binding;
+            
+            def entity;
+            def tariffRules;
+            
+            void previewRules(){
+                tariffRules = TemplateProvider.instance.getResult("loantariff/ui/LoanTariffRule.gtpl", 
+                    [dataRules:entity] );
+            }
+        }
+    ]]>
+    </code>
+    
+    <pages>
+        <page template="loan.charge.LoanTariffRulePage" />
+    </pages>
+</workunit>

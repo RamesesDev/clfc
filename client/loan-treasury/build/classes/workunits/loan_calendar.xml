@@ -1,0 +1,84 @@
+<workunit>
+    <invokers>
+        <invoker folderid="/menu/mgmt/loan" caption="Loan Holidays Calendar" target="window" permission="loan_calendar.view"/>
+
+        <invoker type="formActions" tooltip="Add New"     icon="images/new16.png"    mnemonic="a" caption="Add"    action="add"    visibleWhen="#{editmode=='read'}" permission="loan_calendar.create"/>
+        <invoker type="formActions" tooltip="Edit"        icon="images/edit16.png"   mnemonic="e" caption="Edit"   action="edit"   visibleWhen="#{editmode=='read' and !empty entity}" permission="loan_calendar.edit"/>
+        <invoker type="formActions" tooltip="Save"        icon="images/save16.png"   mnemonic="s" caption="Save"   action="save"   visibleWhen="#{editmode!='read'}"/>
+        <invoker type="formActions" tooltip="Delete"      icon="images/delete16.png" mnemonic="r" caption="Remove" action="delete" visibleWhen="#{editmode=='read' and !empty entity}" permission="loan_calendar.delete"/>
+        <invoker type="formActions" tooltip="Cancel Edit" icon="images/cancel16.png" mnemonic="c" caption="Close"  action="cancel" visibleWhen="#{editmode!='read'}" immediate="true"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        
+        class LoanHolidaysCalendarController{
+            @Service("LoanCalendarService")
+            def svc;
+            
+            @Binding
+            def binding;
+        
+            def oldEntity = [:];
+            def entity;
+            def editmode = 'read';
+            
+            void setEntity( e ) {
+                if( editmode == 'read' ) this.entity = e;
+            }
+            
+            void add() {
+                entity = [:];
+                editmode = 'create';
+            }
+            
+            void edit() {
+                editmode = 'edit';
+                oldEntity.clear();
+                oldEntity.putAll( entity );
+            }
+            
+            void save() {
+                if( editmode == 'create' )
+                    entity.putAll( svc.create(entity) );
+                else
+                    entity.putAll( svc.update(entity) );
+                    
+                editmode = 'read';
+            }
+            
+            void cancel() {
+                if( editmode == 'edit' )
+                    entity.putAll( oldEntity );
+                editmode = 'read';
+            }
+            
+            void delete() {
+                if( !MsgBox.confirm('Are you sure you want to delete this entry?') ) return;
+                svc.remove( entity );
+            }
+            
+            def listHandler=[
+               getColumns:{
+                    return [
+                        new Column(name:"date",        caption:"Date", minWidth: 120, maxWidth: 120),          
+                        new Column(name:"description", caption:"Description"),
+                    ];
+                },
+                fetchList:{o-> 
+                    def param = [:];
+                    println param;
+                    return svc.getList( param );
+                }
+           ]as PageListModel;      
+        }
+        ]]>
+    </code>
+    <pages>
+            <page template="loan.calendar.LoanCalendarPage"/>
+    </pages>
+</workunit>

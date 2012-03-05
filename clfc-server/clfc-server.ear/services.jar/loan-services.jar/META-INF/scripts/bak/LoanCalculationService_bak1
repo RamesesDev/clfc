@@ -1,0 +1,366 @@
+
+import com.rameses.annotations.*;
+import com.rameses.eserver.*;
+import com.rameses.rules.common.*;
+import com.rameses.util.*;
+
+
+class LoanCalculationService {
+   
+	@Resource("RuleService/local")
+    def ruleService;
+	
+	@Service("EmailService")
+	def email;
+	
+	private def dformat = new java.text.SimpleDateFormat("yyyy-MM-dd");
+
+	def holidays = [];
+	
+	@ProxyMethod(local=true)
+	public def loadSchedule(def param) {
+		def list = [];
+		def xdate = java.sql.Date.valueOf( param.startdate ) - 1;
+		def _pbalance = param.loanamount;
+		def _ibalance = param.loanamount * ( param.interestrate/100 ); 
+
+		def ledger = [:];
+		ledger.principal_value = NumberUtil.formatDecimal( _pbalance / param.term, "#0.00" );		
+		ledger.interest_value = NumberUtil.formatDecimal( _ibalance / param.term, "#0.00" );
+		ledger.surcharge_value =  (ledger.principal_value + ledger.interest_value ) * param.surchargerate;
+
+		for( int i = 0; i<param.term; i++ ) {
+			xdate = xdate + 1;
+			def entry = [ day : i+1, date: xdate, principal: ledger.principal_value, interest: ledger.interest_value ];
+			if( entry.day == param.term ) {
+				entry.principal = _pbalance;
+				entry.interest = _ibalance;
+			}
+			list.add ( entry );
+			_pbalance -= ledger.principal_value;
+			_ibalance -= ledger.interest_value;	
+		}
+		
+		ledger.loanamount =  param.loanamount;
+		ledger.loanbalance =  param.loanamount;
+		ledger.startdate = param.startdate;
+		ledger.nextbilldate = param.startdate;
+		ledger.enddate =  dformat.format( xdate );
+		
+		ledger.lastpayamount =  0;
+		ledger.lastpaydate =  null;
+		
+		//used for formula
+		ledger.principal_paid = 0;
+		ledger.interest_paid = 0;
+		ledger.surcharge_paid = 0;
+
+		//used for formula	
+		ledger.last_applied_paydate = null;
+		ledger.principal_partial_unpaid = 0;
+		ledger.principal_partial_paid = 0;
+		ledger.interest_partial_unpaid = 0;
+		ledger.interest_partial_paid = 0;
+		ledger.surcharge_partial_unpaid = 0;
+		ledger.surcharge_partial_paid = 0;
+		ledger.excess_paid = 0;
+
+		ledger.surchargerate = param.surchargerate;
+		ledger.interestrate = param.interestrate;
+		ledger.overduerate = param.overduerate;
+		
+		def result = [
+			ledger: ledger,
+			schedule: list
+		]
+	}
+   
+	private int getExemptBackDays( def _current, def _mindate ) {
+		int exemptedDays = 0;
+		def d = _current;
+		def cal = Calendar.instance;
+		while( d > _mindate ) {
+			d = d - 1;
+			cal.setTime(d);
+			if( cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY  || ( holidays.indexOf(d) >=0 ) ) {
+				exemptedDays ++;
+				continue;	
+			}
+			break;
+		} 
+		return exemptedDays;	
+	}
+   
+    @ProxyMethod(local=true)
+	public def calculateBill(def ledger, def billdate ) {
+		//check last paydate of the ledger. billdate must not be higher than this date.
+		//calculate first the difference between current date and last applied paydate
+		def _current = java.sql.Date.valueOf( billdate );
+		def _start = java.sql.Date.valueOf( ledger.startdate );
+		def _enddate = java.sql.Date.valueOf( ledger.enddate );
+		
+		if( ledger.last_applied_paydate ) _start = java.sql.Date.valueOf( ledger.last_applied_paydate );
+		
+		def _lastpaydate = null;
+		if(ledger.lastpaydate) _lastpaydate = java.sql.Date.valueOf( ledger.lastpaydate );
+		if( _lastpaydate && _lastpaydate > _current) 
+			throw new Exception("Billing date invalid. Bill date must not be higher than the last pay date");
+		
+		def entry = [:];
+		entry.billdate = billdate; 
+		entry.principal_due = 0;
+		entry.interest_due = 0;
+		entry.principal_pastdue = 0;
+		entry.interest_pastdue = 0;
+		entry.surcharge = 0;
+		entry.overduecharge = 0;
+		entry.amtdue = 0;
+		entry.payment = 0;
+		
+		//if the billdate is less than the applied pay date, billing should be zero.
+		if( _start > _current )
+			return entry;
+			
+		//we must ensure penalty is only calculated	not beyond its maturity date.
+		def _todate = (_current > _enddate) ? _enddate : _current;
+		
+		def daysdiff = DateUtil.diff( _start, _todate );
+		int daysExempted = getExemptBackDays( _todate, _start );
+		int daysPastDue = daysdiff - daysExempted;
+		boolean hasPastDues = ( daysPastDue > 0 );
+		boolean partialCurrent = false;
+		
+		int daysOverDue = DateUtil.diff( _enddate, _current );  
+		
+		//check first if there is partial. If there is partial, then for sure there are no other payments prior to this point.
+		//if there is partial and date is current, meaning no surcharges, it means the borrower has made several payments within the day.
+		//If partial is zero and last applied paydate != startdate, it means full payment up to this point or this is first payment.
+		if( ledger.principal_partial_unpaid > 0 ) {
+			if(hasPastDues) {
+				entry.principal_pastdue = ledger.principal_partial_unpaid - ledger.principal_partial_paid;
+				entry.interest_pastdue = ledger.interest_partial_unpaid - ledger.interest_partial_paid;
+				//if borrower made partial the previous days and surcharge was not applied yet, we have to recalculate
+				//the surcharge based on how much is left on principal and interest.	
+				if( ledger.surcharge_partial_unpaid > 0 ) {
+					entry.surcharge = ledger.surcharge_partial_unpaid - ledger.surcharge_partial_paid;
+				}
+				else {
+					entry.surcharge = (entry.principal_pastdue + entry.interest_pastdue) * ledger.surchargerate; 
+				}	
+			}
+			else {
+				partialCurrent = true;
+				entry.principal_due = ledger.principal_partial_unpaid - ledger.principal_partial_paid;
+				entry.interest_due = ledger.interest_partial_unpaid - ledger.interest_partial_paid;
+			}
+		}	
+		
+		if( hasPastDues ) {
+			if( ledger.principal_partial_unpaid > 0 ) daysPastDue -= 1;
+			def principal_pastdue = daysPastDue * ledger.principal_value;
+			def interest_pastdue = daysPastDue * ledger.interest_value;
+			entry.principal_pastdue += principal_pastdue ; 
+			entry.interest_pastdue += interest_pastdue ; 
+			entry.surcharge += ((principal_pastdue + interest_pastdue) * ledger.surchargerate);
+		}	
+			
+		if( daysExempted > 0 ) {
+			entry.principal_due +=  daysExempted * ledger.principal_value; 
+			entry.interest_due +=  daysExempted * ledger.interest_value; 
+		}
+		
+		//apply the current 
+		if(!partialCurrent) {
+			entry.principal_due +=  ledger.principal_value; 
+			entry.interest_due +=  ledger.interest_value; 
+		}	
+		
+		if(daysOverDue>0) { 
+			entry.overduecharge = daysOverDue * NumberUtil.formatDecimal(ledger.loanbalance * (ledger.overduerate/30),"#0.00" );
+		}
+		
+		//calculate the totals
+		entry.amtdue = entry.principal_due + entry.interest_due + entry.principal_pastdue + entry.interest_pastdue + entry.surcharge + entry.overduecharge;
+		entry.payment = entry.amtdue;
+		return entry;
+	}	
+    
+    @ProxyMethod(local=true)
+	public def applyPayment(def ledger, def payment) {
+		if( payment.payment <= 0 )
+			throw new Exception("Amt paid must not be zero");
+		
+		def details = [];
+		def p = distributePayment( ledger, payment.rctno, payment.billdate, payment.payment, details );
+		
+		//we must freeze the last payment date.
+		ledger.lastpaydate = payment.billdate;
+		ledger.lastpayamount = payment.payment;
+		ledger.loanbalance -= p.principal_paid;
+		ledger.principal_paid += p.principal_paid; 
+		ledger.interest_paid += p.interest_paid;
+		ledger.surcharge_paid += p.surcharge_paid;
+		
+		def result = [
+			ledger: ledger,
+			payment: p,
+			paymentlist: details
+		]
+		return result;
+	}
+
+	//returns a payment object where payment is distributed.
+	private def distributePayment( def ledger, def rctno, def paydate, def amount, def details ) {
+		def result = createPaymentItem(rctno, paydate);
+	
+		def currentdate = java.sql.Date.valueOf( paydate );
+		def txndate = java.sql.Date.valueOf( ledger.startdate );
+		def enddate = java.sql.Date.valueOf( ledger.enddate );
+
+		if( ledger.last_applied_paydate ) txndate = java.sql.Date.valueOf( ledger.last_applied_paydate );
+		
+		def daysdiff = DateUtil.diff( txndate, currentdate );
+		int daysExempted = getExemptBackDays( currentdate, txndate );
+		int daysPastDue = daysdiff - daysExempted;
+		boolean hasPastDues = ( daysPastDue > 0 );
+
+		def penaltyEndDate = currentdate - daysExempted;
+		
+		//amount paid should be consumed. If it becomes zero, we have to exit this procedure
+		def amtpaid = amount;
+
+		//check if ledger has partial payments. if there is, allocate that first.
+		//payment sequence should be pay surcharge balances, interest balances, principal balances.
+		if( ledger.principal_partial_unpaid > 0 ) {
+			def item = createPaymentItem(rctno, txndate);
+			ledger.last_applied_paydate = dformat.format(txndate);
+			
+			if(hasPastDues) {
+				if( ledger.surcharge_partial_unpaid == 0 ) {
+					ledger.surcharge_partial_unpaid = ((ledger.principal_partial_unpaid - ledger.principal_partial_paid) + 
+												   (ledger.interest_partial_unpaid - ledger.interest_partial_paid)) * ledger.surchargerate;
+					item.surcharge_paid = ( amtpaid > ledger.surcharge_partial_unpaid ) ? ledger.surcharge_partial_unpaid : amtpaid ;
+					ledger.surcharge_partial_paid = item.surcharge_paid;
+				}
+				else {
+					def surcharge_bal = ledger.surcharge_partial_unpaid - ledger.surcharge_partial_paid;
+					item.surcharge_paid = (amtpaid > surcharge_bal ) ? surcharge_bal : amtpaid;
+					ledger.surcharge_partial_paid += item.surcharge_paid;	
+				}	
+				amtpaid = amtpaid - item.surcharge_paid;
+			}
+			
+			//allocate the interest	
+			if(amtpaid > 0 ) {
+				def interest_bal = ledger.interest_partial_unpaid - ledger.interest_partial_paid;
+				item.interest_paid = (amtpaid > interest_bal) ? interest_bal : amtpaid;
+				ledger.interest_partial_paid += item.interest_paid;
+				amtpaid = amtpaid - item.interest_paid;
+			}
+			
+			//allocate the principal last
+			if(amtpaid > 0) {
+				def principal_bal = ledger.principal_partial_unpaid - ledger.principal_partial_paid;
+				item.principal_paid = (amtpaid > principal_bal ) ? principal_bal : amtpaid;
+				ledger.principal_partial_paid += item.principal_paid;
+				amtpaid = amtpaid - item.principal_paid;
+			}
+			
+			//we should zero out if total line is already zero.
+			if( (ledger.principal_partial_unpaid - ledger.principal_partial_paid) <= 0 ) {
+				ledger.principal_partial_unpaid = 0;
+				ledger.principal_partial_paid = 0;
+				ledger.interest_partial_unpaid = 0;
+				ledger.interest_partial_paid = 0;
+				ledger.surcharge_partial_unpaid = 0;
+				ledger.surcharge_partial_paid = 0;
+				//if balance already zeroed, move last paydate to next date.
+				ledger.last_applied_paydate = dformat.format(txndate+1);
+			}
+
+			totalItem( item, result );
+			details.add( item );
+			if(amtpaid <=0 ) {
+				return result;
+			}
+			txndate++;
+		}	
+		
+		
+		//allocate the full payments.
+		//def full_total = ledger.principal_value + ledger.interest_value;
+		//if( hasPastDues ) full_total += ((full_total) * ledger.surchargerate );
+		def full_total = 0;
+		
+		while( amtpaid > 0 ) {
+			full_total = ledger.principal_value + ledger.interest_value;
+			if( txndate < penaltyEndDate ) full_total += ((full_total) * ledger.surchargerate );
+			if(amtpaid < full_total) break;
+			if( txndate > enddate ) break;
+		
+			def item = createPaymentItem(rctno, txndate);
+			item.principal_paid = ledger.principal_value;
+			item.interest_paid = ledger.interest_value;
+			if(txndate < penaltyEndDate ) item.surcharge_paid = ledger.surcharge_value;
+			totalItem( item, result );
+			details.add( item );
+			ledger.last_applied_paydate = dformat.format(txndate);
+			amtpaid -= full_total;
+			txndate++;
+		}
+		
+		//if payment in excess
+		if( txndate > enddate ) {
+			def item = createPaymentItem(rctno, enddate);
+			item.excess_paid = amtpaid;
+			item.remarks = "Excess Payment";
+			ledger.excess_paid = amtpaid;
+			totalItem( item, result );
+			details.add( item );
+		}
+		else if(amtpaid > 0) {
+			//try to allocate the partial payment
+			def item = createPaymentItem(rctno, txndate);
+			ledger.last_applied_paydate = dformat.format(txndate);			
+			ledger.principal_partial_unpaid = ledger.principal_value;
+			ledger.interest_partial_unpaid = ledger.interest_value;
+					
+			if( txndate < penaltyEndDate ) {
+				ledger.surcharge_partial_unpaid = (ledger.principal_partial_unpaid + ledger.interest_partial_unpaid )*ledger.surchargerate;
+				item.surcharge_paid = (amtpaid > ledger.surcharge_partial_unpaid) ? ledger.surcharge_partial_unpaid : amtpaid;
+				amtpaid = amtpaid - item.surcharge_paid;
+				ledger.surcharge_partial_paid = item.surcharge_paid;
+			}
+			
+			if(amtpaid>0) {
+				item.interest_paid = (amtpaid > ledger.interest_partial_unpaid ) ? ledger.interest_partial_unpaid : amtpaid;
+				amtpaid = amtpaid - item.interest_paid;
+				ledger.interest_partial_paid = item.interest_paid;	
+			}
+			
+			if(amtpaid>0) {
+				item.principal_paid = (amtpaid>ledger.principal_partial_unpaid) ? ledger.principal_partial_unpaid : amtpaid;
+				amtpaid = amtpaid - item.principal_paid;
+				ledger.principal_partial_paid = item.principal_paid;
+			}
+			totalItem( item, result );
+			details.add( item );
+		}
+		
+		return result;
+	}	
+	
+	private def createPaymentItem( def rctno, def txndate ) {
+		return [rctno: rctno, txndate: txndate, principal_paid:0, interest_paid:0, surcharge_paid:0, excess_paid:0, totalpaid:0 ];
+    }	
+	
+	private void totalItem( def item, def summary ) {
+		item.totalpaid = item.principal_paid + item.interest_paid + item.surcharge_paid + item.excess_paid;
+		summary.principal_paid += item.principal_paid;
+		summary.interest_paid += item.interest_paid;
+		summary.surcharge_paid += item.surcharge_paid;
+		summary.excess_paid += item.excess_paid;
+		summary.totalpaid += item.totalpaid;
+	}
+	
+}

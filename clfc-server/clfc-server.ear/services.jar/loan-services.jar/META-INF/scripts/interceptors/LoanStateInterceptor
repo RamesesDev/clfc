@@ -1,0 +1,22 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+
+class LoanStateInterceptor
+{
+
+	@PersistenceContext('java:loan')
+	def em;
+
+
+	@After(pattern="LoanApplicationService.(approveApp|disapproveApp|resendApp|disqualifiedOutApp|canceledOutApp).*")
+	public void queueForDownload( evt ) {
+		def app = evt.result;
+
+		em.sqlContext.createExecutor('insert into loanapplication_for_download (appid,branchid,branchcode) values(?,?,?)')
+		  .setParameter(1, app.objid)
+		  .setParameter(2, app.branchid)
+		  .setParameter(3, app.branchcode)
+		  .execute();
+	}
+
+}

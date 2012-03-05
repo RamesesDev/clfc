@@ -1,0 +1,179 @@
+
+import com.rameses.annotations.*;
+import com.rameses.eserver.*;
+import com.rameses.rules.common.*;
+import com.rameses.util.*;
+
+
+class LoanCalculationService {
+   
+	@Resource("RuleService/local")
+    def ruleService;
+	
+	@Service("EmailService")
+	def email;
+	
+	private def dformat = new java.text.SimpleDateFormat("yyyy-MM-dd");
+
+	def holidays = []; //[  java.sql.Date.valueOf("2011-02-26") ]
+	
+	@ProxyMethod(local=true)
+	public def loadSchedule(def param) {
+		def list = [];
+		def xdate = java.sql.Date.valueOf( param.startdate ) - 1;
+		def _pbalance = param.loanamount;
+		def _ibalance = param.loanamount * ( param.interestrate/100 ); 
+		
+		def _pdaily = NumberUtil.formatDecimal( _pbalance / param.term, "#0.00" );		
+		def _idaily = NumberUtil.formatDecimal( _ibalance / param.term, "#0.00" );
+		
+		for( int i = 0; i<param.term; i++ ) {
+			xdate = xdate + 1;
+			def entry = [ day : i+1, date: xdate, principal: _pdaily, interest: _idaily ];
+			if( entry.day == param.term ) {
+				entry.principal = _pbalance;
+				entry.interest = _ibalance;
+			}
+			list.add ( entry );
+			_pbalance -= _pdaily;
+			_ibalance -= _idaily;	
+		}
+		
+		def ledger = [:];
+		ledger.loanamount =  param.loanamount;
+		ledger.loanbalance =  param.loanamount;
+		ledger.startdate = param.startdate;
+		ledger.penalty_startdate =  param.startdate;
+		ledger.partial_penalty = 0;
+		ledger.nextbilldate = param.startdate;
+		ledger.enddate =  dformat.format( xdate );
+		ledger.lastpayamount =  0;
+		ledger.lastpaydate =  null;
+		
+		ledger.principal_paid = 0;
+		ledger.interest_paid = 0;
+		ledger.penalty_paid = 0;
+		
+		ledger.surchargerate = param.surchargerate;
+		ledger.interestrate = param.interestrate;
+		
+		
+		ledger.principal =  _pdaily;
+		ledger.interest =  _idaily;
+		
+		def result = [
+			ledger: ledger,
+			schedule: list
+		]
+	}
+   
+    @ProxyMethod(local=true)
+	public def calculateBill(def ledger, def billdate ) {
+		def entry = [:];
+		entry.billdate = billdate;
+		def _current = java.sql.Date.valueOf( billdate );
+		int exemptedDays = 0;
+		def d = _current;
+
+		def cal = Calendar.instance;
+		while( true ) {
+			d = d - 1;
+			cal.setTime(d);
+			if( cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY  || ( holidays.indexOf(d) >=0 ) ) {
+				exemptedDays ++;
+				continue;	
+			}
+			break;
+		}  	
+		
+		/**
+		look back first on the previous dates and check how many days should be exempted. 
+		**/	
+		def _start = java.sql.Date.valueOf( ledger.startdate );
+		def _penaltystart = java.sql.Date.valueOf( ledger.penalty_startdate );
+		def daysdiff = DateUtil.diff( _start, _current );
+
+		entry.principal_due     = ledger.principal + (ledger.principal * exemptedDays);
+		entry.interest_due      = ledger.interest + (ledger.interest * exemptedDays);
+		
+		entry.principal_pastdue = ( (daysdiff - exemptedDays) * ledger.principal) - ledger.principal_paid;
+		entry.interest_pastdue = ( (daysdiff-exemptedDays) * ledger.interest) - ledger.interest_paid;
+		entry.penalty = (entry.principal_pastdue + entry.interest_pastdue)  * ledger.surchargerate; 
+		
+		if(entry.principal_pastdue<0) entry.principal_pastdue = 0;
+		if(entry.interest_pastdue<=0) entry.interest_pastdue = 0;
+		if(entry.penalty<=0) entry.penalty = 0;
+
+		entry.amtdue = entry.principal_due + entry.interest_due + entry.principal_pastdue + entry.interest_pastdue + entry.penalty;
+		entry.payment = entry.amtdue;
+		
+		return entry;
+	}	
+   
+    @ProxyMethod(local=true)
+	public def applyPayment(def ledger, def p) {
+		
+		if( !p.payment || p.payment<=0) 
+			throw new Exception("Payment must not be zero");
+			
+		def payment = [:]
+		payment.rctno = p.rctno;
+		payment.txndate = p.billdate;
+		
+		def pastduetotal = p.principal_pastdue + p.interest_pastdue +  p.penalty;
+		//pay first past due before paying the current dues
+		
+		//if underpayment - total payment does not cover past dues. we have to determine how to apply principal and interest
+		if(pastduetotal >= p.payment) {
+			def penalty = (ledger.principal + ledger.interest) * ledger.surchargerate;
+			def dailypastdue = ledger.principal + ledger.interest + penalty;
+			int fully_paid_pastdue_days = (int) p.payment / dailypastdue;
+			
+			def partial_principal = 0;
+			def partial_interest = 0;
+			def partial_penalty = 0;
+			
+			def partial_payment = p.payment.toDouble() % dailypastdue;
+			print "partial_payment is  " + partial_payment;
+			
+			if( partial_payment > 0 ) {
+				def intrate = (ledger.interestrate/100);
+				def factor = ( 1 + intrate + ledger.surchargerate + (intrate*ledger.surchargerate)  );
+				print "factor is " + factor;
+				partial_principal = NumberUtil.formatDecimal( partial_payment / factor, "#.##");
+				partial_interest = NumberUtil.formatDecimal( partial_principal * intrate, "#.##");
+				partial_penalty = NumberUtil.formatDecimal(partial_payment - (partial_principal + partial_interest), "#.##");
+			} 
+			
+			payment.principal_paid = ((fully_paid_pastdue_days)*ledger.principal) + partial_principal;			
+			payment.interest_paid = ((fully_paid_pastdue_days)*ledger.interest) + partial_interest;			
+			payment.penalty_paid = ((fully_paid_pastdue_days)*penalty) + partial_penalty;			
+		}
+		
+		//if exact full payment
+		else if( p.amtdue == p.payment ) {
+			payment.principal_paid = p.principal_due + p.principal_pastdue;
+			payment.interest_paid = p.interest_due + p.interest_pastdue;
+			payment.penalty_paid = (p.penalty) ? p.penalty : 0.0;
+		}
+		//if overpayment/excess payment
+		
+		
+		//prepare for packing.
+		ledger.principal_paid += payment.principal_paid;
+		ledger.interest_paid += payment.interest_paid;
+		ledger.penalty_paid += payment.penalty_paid;
+		ledger.lastpayamount =  p.payment;
+		ledger.lastpaydate =  p.billdate;
+		ledger.loanbalance -= payment.principal_paid;
+		payment.totalpaid = payment.principal_paid + payment.interest_paid + payment.penalty_paid;
+		ledger.nextbilldate = dformat.format( dformat.parse( p.billdate ) + 1);
+		
+		def result = [
+			ledger: ledger,
+			payment: payment
+		]
+		return result;
+	}
+   
+}

@@ -1,0 +1,40 @@
+<schema>
+	<element name="cash_receipt" tablename="cash_receipt">
+		<field name="objid" primary="true"/>
+		<field name="receiptno"/>
+		<field name="dtfiled"/>
+		<field name="payerid"/>
+		<field name="payername"/>
+		<field name="payertype"/>
+		<field name="collection_type"/>
+		<field name="amount"/>
+		<field name="currency"/>
+		<field name="collectorid"/>
+		<field name="collectorname"/>
+		<field name="collectedby"/>
+		<field name="remittanceid"/>
+		<field name="remittanceno"/>
+		<field name="remittancedate"/>
+		<field name="liquidationid"/>
+		<field name="liquidationno"/>
+		<field name="liquidationdate"/>
+		<field name="jvid"/>
+		<field name="particulars"/>
+		<field name="state"/>
+		<complex name="info" serializer="true"/>
+	</element>
+
+	<element name="detail" tablename="cash_receipt_detail">
+		<field name="objid" primary="true"/>
+		<field name="parentid"/>
+		<field name="acctid"/>
+		<field name="acctcode"/>
+		<field name="accttitle"/>
+		<field name="fund"/>
+		<field name="amount"/>
+		<field name="currency"/>
+		<complex name="particulars" serializer="true"/>
+		<complex name="info" serializer="true"/>
+	</element>
+</schema>
+

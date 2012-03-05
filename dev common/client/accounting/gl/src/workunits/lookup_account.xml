@@ -1,0 +1,52 @@
+<workunit>
+    
+    <invokers>
+        <invoker type="lookup:account" caption="Lookup Account" /> 
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class LookupAccountController {
+
+            @Service("GLService")
+            def service;
+        
+            def selectHandler;
+            def selected;
+            
+            def list = [
+                [code:"100", name:"Rent Expense", ledgerside:"dr" ],
+                [code:"101", name:"Electricity", ledgerside:"dr" ]
+            ];
+            
+            def listHandler = [
+                getColumns: {
+                    return [
+                        new Column(name:"item.code", caption:"Acct Code"),
+                        new Column(name:"item.name", caption:"Acct Name")
+                    ]
+                },
+                fetchList: { o->
+                    return list;
+                }
+            ] as PageListModel;
+
+            
+            public def select() {
+                selectHandler( selected.item );
+                return "_close";
+            }
+            
+        }
+        ]]>
+    </code>
+    
+    <pages>
+        <page template="gl.account.ui.LookupAccountPage"/>
+    </pages>    
+    
+</workunit>

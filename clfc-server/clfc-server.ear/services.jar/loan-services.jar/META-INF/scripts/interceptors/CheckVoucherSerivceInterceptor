@@ -1,0 +1,28 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+
+class CheckVoucherSerivceInterceptor
+{
+
+	@Service('DateService')
+	def datesvc;
+
+	@Service('LoanApplicationService')
+	def appSvc;
+
+	@After(pattern="CheckVoucherService.releaseCheck.*")
+	public void onCheckReleased( evt ) {
+		def voucher = evt.args[0];
+		if( voucher.reftype != 'loan' ) return;
+
+		def param = [
+			objid: voucher.refid, 
+			date: voucher.checkdate,
+			acctno : voucher.acctno,
+			checkno : voucher.checkno,
+			bankname : voucher.bankname,
+		];
+		appSvc.release( param );
+	}
+
+}

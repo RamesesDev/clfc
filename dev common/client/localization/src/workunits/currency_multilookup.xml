@@ -1,0 +1,35 @@
+<workunit extends="com/rameses/ui/templates/Lookup.xml">
+    <invokers>
+        <invoker type="multilookup:currency" caption="Lookup Currency" action="init" target="popup"/>
+    </invokers>    
+    
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class MultiCurrencyList extends com.rameses.ui.templates.SimpleMultiLookup {
+        
+            @Service("CurrencyService")
+            def svc;
+
+            def list;
+            
+            def formTitle = "Lookup Currency";
+            
+            public void init() {
+                list = svc.getList();
+            }
+            
+            public def getColumns() {
+                return [ new Column(name:"item.code", caption:"Code") ];
+            }
+            
+            public def fetchList( def o ) {
+                return list;
+            }
+        }
+        ]]>
+    </code>
+</workunit>

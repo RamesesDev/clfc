@@ -1,0 +1,63 @@
+<script type="text/javascript">
+    $put("useredit",
+        new function() {
+            var userSvc = ProxyService.lookup( 'UserAdminService' );
+			var userGroupSvc = ProxyService.lookup( 'UserGroupService' );
+            var roleAdminSvc = ProxyService.lookup( 'RoleAdminService' );
+            
+            this.entity = {};
+            this.typeList = [];
+            this.roleList = [];
+            
+            this.updateUser = function() {
+            	this.entity = userSvc.update( this.entity );
+            	notify('User record successfully updated.');
+            };
+            
+            this.updateRole = function() {
+            	this.entity = userSvc.updateRole( this.entity );
+            	notify('User role successfully updated.');
+            };
+            
+            this.updateLogin = function() {
+            	this.entity = userSvc.updateLogin( this.entity );
+            	notify('User login account successfully updated.');
+            };
+            
+            this.editRole = function() {
+                this.typeList = userGroupSvc.getOrgType();
+                this.roleList = roleAdminSvc.getRoleName();
+				return 'edit-role';
+			};
+			
+			this.editLogin = function() {
+				return 'edit-login';
+			};
+			
+			this.showParent = function(){			
+            	if(this.entity.type != null){					
+					return userGroupSvc.getOrgName({"type":this.entity.type});
+				}
+				else {
+					return [];
+				}
+			};
+			
+			var msgDiv;
+			
+			function notify( msg ) {
+				if( !msgDiv ) msgDiv = $('#useredit_msg');
+            	msgDiv.text(msg).prependTo('#useredit').show().delay(1500).fadeOut('slow');
+			}
+
+        },
+        {
+            "default": "modules/user/user_form_edit_init.html",
+            "edit-role": "modules/user/user_role_edit.html",
+            "edit-login": "modules/user/user_login_edit.html"
+        }
+    );
+</script>
+
+<div id="useredit_msg" style="color:green; font-weight:bold;"></div>
+<div id="useredit" controller="useredit"></div>

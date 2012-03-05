@@ -1,0 +1,46 @@
+<workunit>
+    
+   <invokers>
+        <invoker type="contact:lookup" caption="Contact Lookup" action="init" target="_popup"/>
+        <invoker type="formActions" caption="Select" action="doSelect" immediate="true" mnemonic="s"/>
+        <invoker type="formActions" caption="Cancel" action="_close" immediate="true" mnemonic="c"/>
+    </invokers>    
+    
+    <code>
+        <![CDATA[
+            import com.rameses.rcp.common.*;
+            import com.rameses.rcp.annotations.*;
+            import com.rameses.util.*;
+            import com.rameses.osiris2.client.*;
+
+            public class ContactLookupController {
+            
+                def opener;
+                def selectHandler;
+                def defaultFields;
+                def criteria;
+
+                public void init() {
+                    def p = [:];
+                    if(defaultFields) p.defaultFields = defaultFields;
+                    if(criteria) p.criteria = criteria;
+                    opener = InvokerUtil.lookupOpener( "contact:search" , p );
+                }
+
+                public def doSelect() {
+                    if(!selectHandler) throw new Exception("Please provide a select handler");
+                    if(opener.handle.mode != 'read')
+                        throw new Exception("Please save any changes first before selecting the selected contact.");
+                    if(!opener.handle.selectedItem)
+                        throw new Exception("No contact selected.");
+
+                    return selectHandler( opener.handle.selectedItem );
+                }
+                
+            }
+        ]]>
+    </code>
+    <pages>
+        <page template="contact.ui.OpenerPopupPage"/>    
+    </pages>
+</workunit>

@@ -1,0 +1,26 @@
+<workunit>
+    
+    
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class GLGroupController {
+            
+            def entity = [:];
+            def groupTypes = ["FUND", "ORGANIZATION"];
+            
+            @Binding
+            def binding;
+            
+        }
+        ]]>
+    </code>
+    
+    <pages>
+        <page template="gl.account.ui.GLGroupPage"/>
+    </pages>    
+    
+</workunit>

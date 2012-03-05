@@ -1,0 +1,57 @@
+package sample.test;
+
+import com.rameses.util.DateUtil;
+import java.util.*;
+
+declare Schedule 
+	id: String
+    subject: String
+	fromtime : int
+	totime: int
+	room: String
+end
+
+declare Result 
+	list: java.util.ArrayList	
+end
+
+rule "subjects"
+	salience 1000
+	when
+		s: Schedule() 
+	then
+		System.out.println( s );
+end
+
+rule "display line"
+	salience 50
+	when
+	then
+		System.out.println( "================================" );
+end
+
+rule "check conflict"
+	salience 0
+	when
+		r: Result()
+		s1: Schedule( $id: id, $room: room, $t1: fromtime, $t2: totime )
+		s2: (
+			Schedule( id !=$id, room == $room, fromtime <= $t1, totime >=$t1 ) or
+			Schedule( id !=$id, room == $room, fromtime <= $t2, totime >=$t2 )
+		) 
+	then 
+		Map map = new HashMap();
+		map.put( "subject", s1.getSubject() );
+		map.put( "room", s1.getRoom() );
+		map.put( "fromtime", s1.getFromtime() );
+		map.put( "totime", s1.getTotime() );
+		
+		Map map2 = new HashMap();
+		map2.put( "subject", s2.getSubject() );
+		map2.put( "room", s2.getRoom() );
+		map2.put( "fromtime", s2.getFromtime() );
+		map2.put( "totime", s2.getTotime() );
+		
+		r.getList().add( new Object[] {map, map2} );
+end
+

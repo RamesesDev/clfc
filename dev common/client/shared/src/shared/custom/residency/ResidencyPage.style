@@ -1,0 +1,2 @@
+"context.rent.*" [context.type == 'RENTED']  { visible: true; }
+"context.rent.*" [context.type != 'RENTED'] { visible: false; }

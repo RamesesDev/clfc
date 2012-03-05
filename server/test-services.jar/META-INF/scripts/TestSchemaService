@@ -1,0 +1,23 @@
+import com.rameses.annotations.*;
+
+class TestSchemaService {
+
+	@PersistenceContext("java:main")
+	def em;
+
+	@ProxyMethod(local=true)
+	public def read( def param ) {
+		return em.read( "testschema", param );
+	}
+	
+	@ProxyMethod(local=true)
+	public def create( def param ) {
+		return em.create( "testschema", param );
+	}
+	
+	@ProxyMethod(local=true)
+	public def update( def param ) {
+		return em.update( "testschema", param );
+	}
+
+}

@@ -1,0 +1,63 @@
+<workunit>
+    <invokers>
+        <invoker folderid="report/loan" caption="Summary of Loan Applications(Daily)" permission00="" index="2"/>
+            <!--permission00="application.createDailyAppReport"/>-->
+            
+        <invoker type="formPrintActions" caption="Back"  tooltip="Back" icon="images/back16.png" action="doBack" mnemonic="p"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import loan.reports.*;
+        import java.sql.Timestamp;
+
+        public class LoanAppReportController extends AbstractReportController
+        {
+            @Binding
+            def binding;
+            
+            @Script('AppReportSupport')
+            def support;
+            
+            @FormTitle
+            def formTitle = 'Summary of Daily Applications';
+            
+            @Service('LoanApplicationReportService')
+            def svc;
+            
+            def filter = [date: OsirisContext.env.LOCALE_TIME];
+            
+            def getReportName() {
+                return 'loan/reports/application/SummaryOfLoanApplicatons.jasper';
+            }
+            
+            def getParameters() {
+                def env = OsirisContext.env;
+                def title = '';
+                if( filter.state ) title = ' - ' + filter.state.caption;
+                
+                return [
+                    BRANCH_NAME: env.CLIENT.name,
+                    USER: "$env.USERINFO.firstname $env.USERINFO.lastname".toString(),
+                    PRINTDATE: new Date(),
+                    REPORT_TITLE: 'Summary of Loan Applications' + title,
+                ];
+            }
+
+            def getData() {
+                def p = new HashMap(filter);
+                if( p.state ) p.state = p.state.code;
+                return svc.buildReport( p );
+            }
+
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="loan.reports.application.InitPage"/>
+        <page name="print" template="loan.reports.PrintPage2"/>
+    </pages>
+</workunit>

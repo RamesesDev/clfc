@@ -1,0 +1,66 @@
+<workunit>
+    <invokers>
+        <invoker folderid="/menu/mgmt/loan" caption="Route Settings" target="window" permission="route.view"/>
+        <invoker type="route:list"  caption="Route Setup" target="popup" permission="route.view"/>
+        <invoker type="formActions" caption="Back" action="_close" tooltip="Back to Collection Page" icon="images/back16.png" mnemonic="b" immediate="true"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        
+        class RouteListController
+        {
+            @Service("RouteService")
+            def svc;
+            
+            @Binding
+            def binding;
+        
+            def selected;
+            def listMode = "read";
+            def routeHandler;
+            
+            def modeHandler = {o, x ->
+                listMode = o;
+                binding?.refresh("selected");
+                if(!x){
+                    listHandler.load();
+                    if( routeHandler ) routeHandler( selected?.item );
+                }
+            }
+            
+            def entryForm = InvokerUtil.lookupOpener("route:route_entry", [
+                entity:selected, formMode:listMode, modeHandler:modeHandler
+            ]);
+            
+            def listHandler=[
+                getRows: { return 20 },
+                getColumns:{
+                    return [
+                        new Column(name:"code",        caption:"Route Code"),          
+                        new Column(name:"description", caption:"Description", width:250),
+                        new Column(name:"area",        caption:"Area", width:200)
+                    ];
+                },
+                fetchList:{o-> 
+                    svc.getList();
+                }
+           ]as PageListModel;
+           
+           void setSelected(e){
+                if( listMode != 'read' ) return;
+                
+                this.selected = e;
+                entryForm?.handle?.entity = e;
+           }
+        }
+        ]]>
+    </code>
+    <pages>
+            <page template="route.ui.RouteListPage"/>
+    </pages>
+</workunit>

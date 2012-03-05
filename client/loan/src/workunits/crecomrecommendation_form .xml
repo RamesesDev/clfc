@@ -1,0 +1,42 @@
+<workunit>
+    <invokers>
+        <invoker type="application:crecom_recomendation" caption="Create Crecom Recommendation" 
+                 index="10" target="popup" permission="application.addCrecomRecommendation"/>
+                 
+        <!-- form action support -->
+        <invoker type="formActions" action="post"   caption="Post"   default="true"   mnemonic="p"/>
+        <invoker type="formActions" action="_close" caption="Cancel" immediate="true" mnemonic="c"/>
+    </invokers>
+    <code>
+        <![CDATA[   
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        
+        class CrecomRecomendationController {
+        
+            @Binding
+            def binding;
+            
+            @Service('LoanApplicationService')
+            def svc;
+
+            //-- passed by the caller
+            def application;
+            def selectHandler;
+            
+            def crecomrecommendation;
+            
+            def post(){
+                def param=[objid:application.objid, crecomrecommendation:crecomrecommendation];
+                application.crecomrecommendation=svc.saveCrecomRecommendation(param);
+                selectHandler(application);
+                return "_close";
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="loan.ui.CrecomRecommendationForm"/>
+    </pages>
+</workunit>

@@ -1,0 +1,34 @@
+<script>
+	$put(
+		"loan_comment", 
+		new function() {
+			
+			this.comment;
+			this.recommendationHandler;
+			
+			this.close = function() {
+				return '_close';
+			};
+
+			this.post = function(){
+				if (this.recommendationHandler) this.recommendationHandler(this.comment);
+				return "_close";
+			};
+		}
+	);
+	
+</script>
+
+Please specify remarks
+<br/>
+<textarea cols="60" rows="7" context="loan_comment" name="comment" required="true" caption="Comment"></textarea>
+<br/><br/>
+<div style="text-align: right">
+	<input type="button" context="loan_comment" name="post" value="Post" 
+	       onClick="confirm( 'You are about to submit this transaction for disapproval. Proceed?' )"/>
+	<input type="button" context="loan_comment" name="close" value="Cancel" immediate="true"/>
+</div>
+	
+
+
+

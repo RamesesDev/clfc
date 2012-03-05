@@ -1,0 +1,66 @@
+<workunit>
+    <invokers>
+        <invoker type="loan:assessment" action="init"/>
+        <!--
+        <invoker type="formActions" caption="Print" action="printData" icon="images/print16.png" mnemonic="p" tooltip="Print" visibleWhen="#{mode=='selected'}" permission="application.print"/>
+        <invoker type="formActions" caption="Submit for Inspection" action="forInspection" mnemonic="s" visibleWhen="#{entity.state=='PENDING'}" permission="application.submitForInspection"/>
+        <invoker type="formActions" caption="Submit for FLA" action="forFLA" mnemonic="s" visibleWhen="#{entity.state=='FOR_INSPECTION'}" permission="application.submitForFLA"/>
+        <invoker type="formActions" caption="Return to Pending" action="returnPending" mnemonic="r" visibleWhen="#{entity.state=='FOR_INSPECTION'}" permission="application.returnApp"/>
+        <invoker type="formActions" caption="Return For CI" action="returnForCI" mnemonic="r" visibleWhen="#{entity.state=='FOR_FLA' }" permission="application.returnAppForCI"/>
+        <invoker type="formActions" caption="Submit for Approval" action="forApproval" mnemonic="s" 
+                visibleWhen="#{entity.state=='FOR_FLA' or (entity.state=='PENDING' and (entity.loancount gt 1 or  mode == 'renew'))}" 
+                       permission="application.submitForApproval"/>  
+        <invoker type="formActions" caption="Approve Application" action="approveApplication" mnemonic="a" visibleWhen="#{entity.state=='isDataMigrated'}"/>
+        <invoker type="formActions" caption="Approve" action="approvedApplication" mnemonic="a"  visibleWhen="#{entity.state=='FOR_APPROVAL'}" permission="application.approve"/>
+        <invoker type="formActions" caption="Cancel Application" action="cancelApplication" mnemonic="c" visibleWhen="#{entity.state=='DISAPPROVED' || entity.state=='FOR_INSPECTION' || entity.state=='PENDING'}" permission="application.cancel"/>
+        <invoker type="formActions" caption="Back-Out Application" action="backOutApplication" mnemonic="b" visibleWhen="#{entity.state=='APPROVED' || entity.state=='FOR_RELEASE'}" permission="application.backout"/>
+        <invoker type="formActions" caption="Disqualify Application" action="disqualifyApplication" mnemonic="d" visibleWhen="#{entity.state=='DISAPPROVED' || entity.state=='FOR_INSPECTION' || entity.state=='PENDING'}" permission="application.disqualified"/>
+        <invoker type="formPrintActions" tooltip="Back" icon="images/back16.png" action="_default" mnemonic="p"/>
+        -->
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+
+        /*class ApplicationInfoController extends loan.ui.AbstractLoanAppController {*/
+        class ApprovalInfoController {
+            @Binding
+            def binding;      
+
+            //@Service( "LoanApplicationService" )
+            //def svc;
+            
+            def mode;
+            def selectHandler;
+            def approvalType;
+        
+        
+            //must override abstract method
+            
+            //def getService() { 
+                //return svc; 
+            //}
+        
+            void init(){
+                try {
+                    approvalType = TemplateProvider.instance.getResult("loan/ui/ApprovedAmountPage.gtpl",[:]);
+                }
+                catch(e) {
+                    e.printStackTrace();
+                    approvalType = '';
+                }
+                binding?.refresh("approvalType");
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="loan.assessment.ui.ApprovedAmountPage"/>
+        <!--<page name="page2" template="loan.ui.LoanAppReport"/>-->
+    </pages>
+</workunit>

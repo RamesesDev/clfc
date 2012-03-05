@@ -1,0 +1,105 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+import com.rameses.util.*;
+import java.util.*;
+
+
+class LoanBillingService
+{
+
+	@PersistenceContext('java:loan')
+	def em;
+
+	@Service('DateService')
+	def datesvc;
+
+	@Service('LoanLedgerService')
+	def ledgerSvc;
+	
+	@Service('LoanCalendarService')
+	def calSvc;
+
+	static final def dt_formatter = new java.text.SimpleDateFormat('yyyy-MM-dd');
+
+
+	@ProxyMethod
+	public def bill( def param ) {
+		assert param.ledger;
+		//assert param.unpaid (previous unpaid items)
+
+		def ledger = param.ledger;
+
+		def currDate = null;
+		if( param.billDate )
+			currDate = parseDate(param.billDate);
+		else
+			currDate = parseDate(datesvc.serverDate);
+
+		def lastBillDate = ledger.nextBillDate;
+		if( lastBillDate instanceof String ) lastBillDate = parseDate( lastBillDate );
+		
+		if( lastBillDate > currDate ) return null;
+		if( ledger.principalBalance <= 0.00 ) return null;
+
+		ledger.nextBillDate = dt_formatter.format( DateUtil.add(currDate, '1d') );
+		
+		def days_interval = DateUtil.diff(lastBillDate, currDate, Calendar.DATE) + 1;
+		def maturityDate = parseDate( ledger.maturityDate );
+		def prevItems = param.unpaid;
+		def items = [];
+
+		int lastAbsentIdx = -1;		
+		for(int i=0; i<days_interval; ++i) {
+			/* increment billing days */
+			ledger.days_count = ledger.days_count? ++ledger.days_count : 1;
+			def item = [date: lastBillDate, interest: ledger.dailyInt];
+			
+			//check if pastdue
+			if( lastBillDate > maturityDate ) {
+				if( !ledger.dailyPastdue ) 
+					ledger.dailyPastdue = fixDecimal( ledger.principalBalance * ledger.pastduerate / 30 );
+
+				item.pastdue = ledger.dailyPastdue;
+			}
+			else {
+				if( i+1 < days_interval && !calSvc.isExempted(lastBillDate) ) {
+					item.absent_penalty = fixDecimal( ledger.dailyPayment * ledger.absentrate );
+					lastAbsentIdx = i;
+				}
+			}
+
+			items << item;
+			lastBillDate = DateUtil.add( lastBillDate, '1d' );
+		}
+
+		def calcAbsent = { 
+			it.absent_penalty = fixDecimal( ledger.dailyPayment * ledger.absentrate ); 
+		};
+		if( lastAbsentIdx >= 0 ) {
+			for(int i=0; i<=lastAbsentIdx; ++i) { calcAbsent(items[i]); }
+			prevItems?.each( calcAbsent );
+		} else if ( prevItems ) {
+			boolean allAbsent = false;
+			for(int i=prevItems.size()-1; i>=0; --i) {
+				def o = prevItems[i];
+				if( !allAbsent && calSvc.isExempted( o.date ) ) continue;
+				allAbsent = true;
+				calcAbsent( o );
+			}
+		}
+		
+		if( prevItems ) items = prevItems + items;
+
+		return [ledger: ledger, items: items];
+	}
+
+	private def fixDecimal( value ) {
+		return NumberUtil.formatDecimal(value, '0.00');
+	}
+	
+	private def parseDate( date ) {
+		def strDate = date instanceof String? date : dt_formatter.format( date );
+		return dt_formatter.parse( strDate );
+	}
+
+}

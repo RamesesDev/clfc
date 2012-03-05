@@ -1,0 +1,26 @@
+<workunit extends="org/org_form.xml">
+    <invokers>
+        <invoker type="branch:form"/>
+        <invoker type="branch:create" action="create"/>
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        
+        import com.rameses.rcp.annotations.*;
+        
+        public class BranchFormController extends org.OrgForm  {
+        
+            @Service("BranchService")
+            def service;
+            
+            @Binding
+            def binding;
+            
+            String orgType = "branch";
+        }
+        
+        ]]>
+    </code>
+
+</workunit>

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.3" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <Properties>
+    <Property name="opaque" type="boolean" value="false"/>
+  </Properties>
+  <AuxValues>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="2"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Component id="formPanel1" alignment="0" max="32767" attributes="1"/>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Component id="formPanel1" min="-2" max="-2" attributes="1"/>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Container class="com.rameses.rcp.util.FormPanel" name="formPanel1">
+      <Properties>
+        <Property name="captionWidth" type="int" value="110"/>
+      </Properties>
+      <SubComponents>
+        <Component class="com.rameses.rcp.control.XComboBox" name="xComboBox1">
+          <Properties>
+            <Property name="allowNull" type="boolean" value="false"/>
+            <Property name="caption" type="java.lang.String" value="Type"/>
+            <Property name="emptyText" type="java.lang.String" value="Select Type"/>
+            <Property name="immediate" type="boolean" value="true"/>
+            <Property name="itemsObject" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new String[]{&quot;SARI-SARI&quot;, &quot;CARENDERIA&quot;, &quot;OPERATOR&quot;, &quot;OTHERS&quot;}" type="code"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="context.type"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[167, 22]"/>
+            </Property>
+            <Property name="required" type="boolean" value="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.rameses.rcp.control.XComboBox" name="xComboBox2">
+          <Properties>
+            <Property name="allowNull" type="boolean" value="false"/>
+            <Property name="caption" type="java.lang.String" value="Stall Size/P.O Size"/>
+            <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+              <StringArray count="1">
+                <StringItem index="0" value="context.type"/>
+              </StringArray>
+            </Property>
+            <Property name="emptyText" type="java.lang.String" value="Select Stall Size"/>
+            <Property name="immediate" type="boolean" value="true"/>
+            <Property name="itemsObject" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new String[]{&quot;0.5 x 0.5 = 3T&quot;, &quot;1 x 1 = 5T&quot;, &quot;1 x 0.5 = 3T-5T&quot;, &quot;1 0.5 x 1 = 5T-15T&quot; , &quot;1.5 x 1.5 = 15T-20T&quot;, &quot;1 x 2.5 = 15T-20T&quot;, &quot;2 x 1 = 5T-15T&quot;, &quot;2 x 1.5 = &apos;15T-20T&quot;, &quot;2 x 2 = 20T-25T&quot;, &quot;2.5 x 1.5 = 20T-40T&quot;, &quot;2.5 x 2 = 25T-30T&quot;, &quot;2.5 x 2.5 = 30-40T&quot;, &quot;3 x 1 = 30T-50T&quot;, &quot;3 x 2 = 40T-60T&quot;, &quot;3 x 3 = 60T-70T&quot;, &quot;3.5 x 3 = 70T-80T&quot;, &quot;3 x 4 = 75T-80T&quot;, &quot;4 x 1.5 = 50T-70T&quot;, &quot;4 x 4 = 50T-80T-100T&quot;, &quot;5 x 3 = 50T-80T-100T&quot;}" type="code"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="context.stallsize"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[167, 22]"/>
+            </Property>
+            <Property name="required" type="boolean" value="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.rameses.rcp.control.XNumberField" name="xNumberField1">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="No. of tables"/>
+            <Property name="caption" type="java.lang.String" value="# of. Tables"/>
+            <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+              <StringArray count="1">
+                <StringItem index="0" value="context.type"/>
+              </StringArray>
+            </Property>
+            <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="Integer.class" type="code"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="context.nooftables"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[167, 18]"/>
+            </Property>
+            <Property name="required" type="boolean" value="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.rameses.rcp.control.XNumberField" name="xNumberField3">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="No. of Chairs"/>
+            <Property name="caption" type="java.lang.String" value="# of. Chair"/>
+            <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+              <StringArray count="1">
+                <StringItem index="0" value="context.type"/>
+              </StringArray>
+            </Property>
+            <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="Integer.class" type="code"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="context.noofchair"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[167, 18]"/>
+            </Property>
+            <Property name="required" type="boolean" value="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.rameses.rcp.control.XNumberField" name="xNumberField4">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="No. of Counter Type"/>
+            <Property name="caption" type="java.lang.String" value="# of. Counter Type"/>
+            <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+              <StringArray count="1">
+                <StringItem index="0" value="context.type"/>
+              </StringArray>
+            </Property>
+            <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="Integer.class" type="code"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="context.noofcountertype"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[167, 18]"/>
+            </Property>
+            <Property name="required" type="boolean" value="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.rameses.rcp.control.XTextArea" name="xTextArea2">
+          <Properties>
+            <Property name="columns" type="int" value="20"/>
+            <Property name="rows" type="int" value="5"/>
+            <Property name="caption" type="java.lang.String" value="Kind/Size"/>
+            <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+              <StringArray count="1">
+                <StringItem index="0" value="context.type"/>
+              </StringArray>
+            </Property>
+            <Property name="hint" type="java.lang.String" value="Specify the kind/size plasticware used"/>
+            <Property name="name" type="java.lang.String" value="context.kind"/>
+            <Property name="required" type="boolean" value="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.rameses.rcp.control.XNumberField" name="xNumberField5">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="No. of Units"/>
+            <Property name="caption" type="java.lang.String" value="# of. Units"/>
+            <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+              <StringArray count="1">
+                <StringItem index="0" value="context.type"/>
+              </StringArray>
+            </Property>
+            <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="Integer.class" type="code"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="context.noofunits"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[167, 18]"/>
+            </Property>
+            <Property name="required" type="boolean" value="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.rameses.rcp.control.XNumberField" name="xNumberField7">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="No. of Seating Capacity"/>
+            <Property name="caption" type="java.lang.String" value="# of. Seating Cap."/>
+            <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+              <StringArray count="1">
+                <StringItem index="0" value="context.type"/>
+              </StringArray>
+            </Property>
+            <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="Integer.class" type="code"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="context.seatingcap"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[167, 18]"/>
+            </Property>
+            <Property name="required" type="boolean" value="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.rameses.rcp.control.XNumberField" name="xNumberField2">
+          <Properties>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="33" green="33" red="ff" type="rgb"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Boundary Fee"/>
+            <Property name="caption" type="java.lang.String" value="Boundary Fee"/>
+            <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+              <StringArray count="1">
+                <StringItem index="0" value="context.type"/>
+              </StringArray>
+            </Property>
+            <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="java.math.BigDecimal.class" type="code"/>
+            </Property>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Arial" size="11" style="1"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="context.boundaryfee"/>
+            <Property name="pattern" type="java.lang.String" value="#,##0.00"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[167, 18]"/>
+            </Property>
+            <Property name="required" type="boolean" value="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.rameses.rcp.control.XTextArea" name="xTextArea3">
+          <Properties>
+            <Property name="columns" type="int" value="20"/>
+            <Property name="rows" type="int" value="5"/>
+            <Property name="caption" type="java.lang.String" value="Remarks"/>
+            <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+              <StringArray count="1">
+                <StringItem index="0" value="context.type"/>
+              </StringArray>
+            </Property>
+            <Property name="hint" type="java.lang.String" value="Specify the kind/size plasticware used"/>
+            <Property name="name" type="java.lang.String" value="context.remarks"/>
+            <Property name="required" type="boolean" value="true"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+  </SubComponents>
+</Form>

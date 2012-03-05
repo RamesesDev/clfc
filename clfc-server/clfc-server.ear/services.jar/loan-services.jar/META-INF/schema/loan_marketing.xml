@@ -1,0 +1,31 @@
+<schema>
+	
+	<element name="loan_marketing" tablename="loan_marketing">
+       <field name="objid" primary="true"/>
+	   <field name="appid"/>
+       <field name="dtfiled"/>
+	   <field name="name"/>
+   </element>
+   
+   <element name="loan_marketing_incentive" tablename="loan_marketing_incentive">
+       <field name="objid" primary="true"/>
+       <field name="dtreleased"/>
+	   <field name="marketedby"/>
+	   <field name="marketedbyid"/>
+	   <field name="appid"/>
+	   <field name="appno"/>
+	   <field name="borrowername"/>
+	   <field name="business"/>
+	   <field name="amountreleased"/>
+	   <field name="incentive"/>
+	   <complex name="info" serializer="default" type="list"/>
+   </element>
+
+   <element name="loan_marketing_officer" tablename="loan_marketing_officer">
+       <field name="objid" primary="true"/>
+       <field name="userid"/>
+	   <field name="name"/>
+   </element>
+
+</schema>
+

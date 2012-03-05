@@ -1,0 +1,153 @@
+package clfc.loan.payment;
+
+import com.rameses.util.NumberUtil;
+import java.util.*;
+import java.math.*;
+
+global com.rameses.rules.common.RuleAction action;
+
+declare PaymentToken 
+	startDate: java.util.Date 
+    exemptedDate: java.util.Date
+	currentDate: java.util.Date
+    maturityDate: java.util.Date
+
+    date: java.util.Date
+	principal: java.math.BigDecimal
+	interest: java.math.BigDecimal
+	surcharge: java.math.BigDecimal
+	
+	principal_balance: java.math.BigDecimal
+	overduerate : java.math.BigDecimal
+	amount: java.math.BigDecimal
+end
+
+declare PartialBalance
+	date: java.util.Date
+	principal: java.math.BigDecimal
+	interest: java.math.BigDecimal
+	surcharge: java.math.BigDecimal
+	overduecharge: java.math.BigDecimal
+end
+
+
+rule "pay partial unpaid past due"
+	when
+		t: PaymentToken( amount>0.0,  $date: date < exemptedDate, date < currentDate,  date <= maturityDate  )
+		p: PartialBalance( date == $date, $principal: principal, $interest: interest, $surcharge: surcharge  ) 
+	then 
+		Map map = new HashMap();
+		map.put( "principal", $principal );
+		map.put( "interest", $interest );
+		map.put( "surcharge", $surcharge );
+		action.execute( "handler", new Object[]{ t, map } );
+		drools.update( t );
+		drools.retract( p );
+end
+
+rule "pay regular unpaid past due"
+	when
+		t: PaymentToken( amount>0.0, $date:date < exemptedDate, date < currentDate, date <= maturityDate, $principal: principal, $interest: interest, $surcharge: surcharge )
+		not PartialBalance() 
+	then 
+		Map map = new HashMap();
+		map.put( "principal", $principal );
+		map.put( "interest", $interest );
+		map.put( "surcharge", $surcharge );
+		action.execute( "handler", new Object[]{ t, map } );
+		drools.update( t );
+end
+
+rule "pay partial current due"
+	when
+		t: PaymentToken( amount >0.0, $date: date >= exemptedDate, date <= currentDate, date <= maturityDate )
+		p: PartialBalance( date == $date, $principal: principal, $interest: interest )
+	then 
+		Map map = new HashMap();
+		map.put( "principal", $principal );
+		map.put( "interest", $interest );
+		action.execute( "handler", new Object[]{ t, map } );
+		drools.update( t );
+		drools.retract( p );
+end
+
+rule "pay regular current due"
+	when
+		t: PaymentToken( amount >0.0, $date: date >= exemptedDate, date <= currentDate, date <= maturityDate, $principal: principal, $interest: interest )
+		not PartialBalance() 
+	then 
+		Map map = new HashMap();
+		map.put( "principal", $principal );
+		map.put( "interest", $interest );
+		action.execute( "handler", new Object[]{ t, map} );
+		drools.update( t );
+end
+
+#----------------------------------------------------------------------------------------------------------
+# person has already made an advance partial payment and wants to pay another advance again
+#----------------------------------------------------------------------------------------------------------
+rule "pay partial advance due"
+	when
+		t: PaymentToken( amount >0.0, $date: date > currentDate, date <= maturityDate )
+		p: PartialBalance( date == $date, $principal: principal, $interest: interest )
+	then 
+		Map map = new HashMap();
+		map.put( "principal", $principal );
+		map.put( "interest", $interest );
+		action.execute( "handler", new Object[]{ t, map } );
+		drools.update( t );
+		drools.retract( p );
+end
+
+#----------------------------------------------------------------------------------------------------------
+# person has already made a full advanced payment and wants to make another advanced payment
+#----------------------------------------------------------------------------------------------------------
+rule "pay regular advance due"
+	when
+		t: PaymentToken( amount >0.0, $date: date > currentDate, date <= maturityDate, $principal: principal, $interest: interest )
+		not PartialBalance() 
+	then 
+		Map map = new HashMap();
+		map.put( "principal", $principal );
+		map.put( "interest", $interest );
+		action.execute( "handler", new Object[]{ t, map} );
+		drools.update( t );
+end
+
+
+rule "pay partial unpaid over due"
+	when
+		t: PaymentToken(amount >0.0, $date: date > maturityDate, date <=currentDate )
+		p: PartialBalance( date == $date, $interest: interest, $overduecharge: overduecharge ) 
+	then 
+		Map map = new HashMap();
+		map.put( "interest", $interest );
+		map.put( "overduecharge", $overduecharge );
+		action.execute( "handler", new Object[]{ t, map } );
+		drools.update( t );
+		drools.retract( p );
+end
+
+rule "pay regular unpaid over due"
+	when
+		t: PaymentToken(amount >0.0, $date: date > maturityDate, date <=currentDate, $principal_balance: principal_balance, $overduerate: overduerate, $interest: interest )
+		not PartialBalance() 
+	then 
+		double bal = $principal_balance.doubleValue();
+		double r = $overduerate.doubleValue();
+		BigDecimal overdue = NumberUtil.formatDecimal((bal * r/100), "#0.00");
+		Map map = new HashMap();
+		map.put( "interest", $interest );
+		map.put( "overduecharge", overdue );
+		action.execute( "handler", new Object[]{ t, map } );
+		drools.update( t );
+end
+
+rule "last payment principal balance"
+	when
+		t: PaymentToken( $amount: amount >0.0, date > maturityDate, date > currentDate, $principal_balance: principal_balance )
+	then
+		Map map = new HashMap();
+		map.put("principal", $principal_balance);
+		action.execute( "excess-handler", new Object[]{ t, map } );
+end

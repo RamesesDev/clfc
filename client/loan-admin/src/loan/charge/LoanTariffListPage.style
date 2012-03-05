@@ -1,0 +1,3 @@
+
+"selectedItem" [mode=='edit'] { enabled: false; }
+"selectedItem" [mode!='edit'] { enabled: true; }

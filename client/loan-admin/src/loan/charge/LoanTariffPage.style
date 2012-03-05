@@ -1,0 +1,42 @@
+/*--- table entry styles -----*/
+
+'add' [editmode=='read' || itemmode=='last'] { visible: false; }
+'add' [editmode!='read' && itemmode!='last'] { visible: true; }
+
+'remove.*' [editmode=='read' || itemmode=='first'] { visible: false; }
+'remove.*' [editmode!='read' && itemmode!='first'] { visible: true; }
+
+'amt.*' [itemmode != 'last'] { readonly: false; }
+'amt.*' [itemmode == 'last'] { readonly: true; }
+
+
+/*---- entity styles ----------*/
+
+'(amt|entity).*|appType|selected' [editmode=='read'] { readonly: true; }
+'(amt|entity).*|appType|selected' [editmode!='read'] { readonly: false; }
+
+'entity.(fromtimes|totimes)' [editmode!='read' && appType=='renew'] { readonly: false; }
+'entity.(fromtimes|totimes)' [editmode!='read' && appType!='renew'] { readonly: true; }
+
+
+/*----- actionbar styles -----*/
+
+'create|edit' [editmode!='read'] { visible: false; }
+'create|edit' [editmode=='read'] { visible: true; }
+
+'edit' [entity.state == 'DEPLOYED'] { visible: false; }
+
+'save|cancel' [editmode=='read'] { visible: false; }
+'save|cancel' [editmode!='read'] { visible: true; }
+
+'deploy|delete' [entity.state != 'DEPLOYED' && editmode=='read'] { visible: true; }
+'deploy|delete' [entity.state == 'DEPLOYED' || editmode!='read'] { visible: false; }
+
+'undeploy' [entity.state == 'DEPLOYED' && editmode=='read'] { visible: true; }
+'undeploy' [entity.state != 'DEPLOYED' || editmode!='read'] { visible: false; }
+
+/*--- hide all buttons when the entity is null -----*/
+
+'edit|deploy|undeploy|delete|add|remove.*' [empty (entity)] { visible: false; }
+
+

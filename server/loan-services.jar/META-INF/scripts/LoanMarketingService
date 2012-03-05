@@ -1,0 +1,30 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+import com.rameses.util.*;
+
+
+class LoanMarketingService
+{
+	@PersistenceContext('java:loan')
+	def em;
+	
+	@Service('DateService')
+	def datesvc;
+	
+	@Service('UserService')
+	def userSvc;
+	
+	@Env
+    def env;
+	
+	@ProxyMethod
+	public def save(entity){
+		//dtfiled = datesvc.serverDate;
+		if(!param.date)  param.dtfiled = datesvc.serverDate;
+		
+		//entity=[appid:application.objid, objid:entity.marketedbyid, name:entity.marketedby];
+		param=[appid:entity.objid, objid:entity.marketedbyid, name:entity.marketedby];		
+
+		return em.save("loan_marketing_incentive", param);
+	}	
+}

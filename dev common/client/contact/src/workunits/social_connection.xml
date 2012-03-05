@@ -1,0 +1,146 @@
+<workunit>
+    <invokers>
+        <invoker type="socialconnection" action="init"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.util.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class SocialConnectionController {
+            @Service("ContactSearchService")
+            def svc;
+        
+            @Service("ContactService")
+            def formSvc;
+            
+            def cacheMap;
+            
+            def principal;
+            def list;
+            def searchText;
+            def _selection;
+            def contactForm;
+            def defaultFields;
+            def selectHandler;
+            
+            def mode = "read";
+            
+            @Binding 
+            def binding;
+            
+            boolean allowNew = false;
+            boolean allowEdit = false;
+            
+            public void init() {
+                if( !principal) 
+                    throw new Exception("Principal must be provided");
+                contactForm = InvokerUtil.lookupOpener( "contact:form", 
+                            [
+                                defaultFields:defaultFields, 
+                                saveHandler: saveHandler,
+                                editHandler: editHandler,
+                                cancelHandler: cancelHandler,
+                                allowNew: allowNew,
+                                allowEdit: allowEdit
+                            ] 
+                    );  
+                cacheMap = [ fetch: { id->return formSvc.open([objid:id]); } ] as CacheMap;    
+                loadList();  
+            }
+            
+            public void setSelection( o ) {
+                if(mode!='read') return;
+                _selection = o;
+                contactForm.handle.data = (o?.item) ? cacheMap[o.item.objid] : null ;
+            }
+            
+            public def getSelection() {
+                return _selection;
+            }
+            
+            public def getSelectedItem() {
+                if( _selection?.item == null )
+                        throw new Exception( "Please make a selection");
+                if(mode != 'read' )
+                    throw new Exception("The record is currently being edited");
+                return cacheMap[ _selection?.item?.objid ];
+            }
+            
+            private void loadList() {
+                list = svc.findConnections( [principal:principal.objid ] );
+            }
+            
+           def listHandler = [
+                getColumns:{
+                    return [
+                        new Column(name:"item.name", caption:"Name", width: 190),
+                        new Column(name:"item.relationship", caption:"Relationship")
+                    ];
+                },
+                fetchList:{
+                    return list;
+                },
+                onOpenItem:{ item, colName->
+                    editRelation();
+                }
+            ] as PageListModel;
+            
+            public def editRelation() {
+                if(! selection?.item) return null;
+                InvokerUtil.lookupOpener("socialconnection:edit", [principal:principal, 
+                    relation: selection.item.relationship, 
+                    relater: selection.item,
+                    afterSaveHandler:{
+                        loadList(); 
+                        listHandler.load();
+                    }
+                ]);
+            }
+            
+            def addConnectionHandler = { o->
+                def opener = InvokerUtil.lookupOpener( "socialconnection:add", [principal:principal, relater:o, 
+                    afterSaveHandler: {
+                        mode = "read";
+                        loadList(); 
+                        listHandler.load();
+                    }]);
+                binding.fireNavigation( opener );
+                return "_close";
+            }
+            
+            public def addConnection() {
+                def opener = InvokerUtil.lookupOpener("contact:lookup", [selectHandler:addConnectionHandler] );
+                opener.id = "socialconnection:contact:lookup:"+principal.objid;
+                return opener;
+            }
+            
+             //check first the parameter passed, if null then saving was cancelled.
+             def editHandler = { o, isNew ->
+                mode = (isNew) ? "create" : "edit"; 
+                binding.refresh("addConnection");
+             }
+                
+             def saveHandler = { e, isNew ->
+                if(isNew) {
+                    e = cacheMap.find( e.objid );
+                    addConnectionHandler( e );
+                }    
+             }
+
+             def cancelHandler = { o, isNew ->
+                def x = cacheMap.removeCache( o.objid );
+                mode = "read";
+                setSelection( listHandler.selectedItem );
+                binding.refresh("addConnection");
+             }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="contact.ui.SocialConnectionPage"/> 
+    </pages>
+</workunit>

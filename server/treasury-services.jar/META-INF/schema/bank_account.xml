@@ -1,0 +1,18 @@
+<schema>
+	<element name="bank_account" tablename="bank_account">
+		<field name="objid" primary="true"/>
+		<field name="accountno" />
+		<field name="bankname"/>
+		<field name="checkno"/>
+		<field name="checkno_format"/>
+		<field name="printformat"/>
+		<field name="glid"/>
+		<field name="glacctno"/>
+		<field name="type"/>
+		<field name="groupid"/>
+		<field name="groupcode"/>
+		<field name="groupname"/>
+		<field name="grouptype"/>
+	</element>
+</schema>
+

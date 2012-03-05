@@ -1,0 +1,19 @@
+<workunit>
+    <invokers>
+        <invoker type="disbursement:type" caption="Loan Disbursement" action="open"
+                 permission="disbursement.create"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        
+        class LoanDisbursementController{
+            def open() {
+                return InvokerUtil.lookupOpener('check_voucher:list', [type: 'loan']);
+            }
+        }
+        ]]>
+    </code>
+</workunit>

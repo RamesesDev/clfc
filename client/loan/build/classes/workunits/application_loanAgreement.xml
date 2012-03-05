@@ -1,0 +1,78 @@
+<workunit> 
+    <invokers>         
+        <invoker type="loan:agreement" caption="Loan Agreement" target="popup"/>
+        
+        <invoker type="formActions" caption="Ok" mnemonic="o" action="doOk" />
+        <invoker type="formActions" caption="Cancel" mnemonic="c" action="_close" />
+    </invokers>
+    <code>
+        <![CDATA[   
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        
+        class ApplicationLoanAgreementController {
+
+            def selectHandler;
+            def report;
+            def selected;
+
+            def appinfoList = [
+                [caption:'Had undergo initial and extensive interview'],
+                [caption:'Had been properly investigated & Passed credit committee standard'],
+		[caption:'Thoroughly discussed & recommended by the branch credit committee members'],
+		[caption:'Reviewed & approved by the assigned EAO'],
+		[caption:'Submitted duly accomplished loan forms & requirements asked'],
+		[caption:'Attended loan policy seminar']   
+            ]
+            
+            def listHandler = [
+                getRows: { 10 },
+                getColumns: {
+                    return [
+                        new Column(name: 'checked', caption: ' ', minWidth: 50, maxWidth: 50, editable: true, type: 'checkbox'),
+                        new Column(name: 'caption', caption: 'Information', width:330),
+                        new Column(name: 'remarks', caption: 'Remarks', editable: true),
+                    ]
+                },
+                fetchList: { appinfoList }
+            ] as SubListModel;
+            
+            def doOk(){
+                appinfoList.each {
+                    if( !it.checked ) throw new Exception('Please comply all information.');
+                }
+                
+                if (selectHandler) selectHandler( appinfoList );
+                return "_close";
+                //return "print";
+            }
+            /*
+            def print(){
+                report.viewReport();
+                return "page2";
+              }
+              def report=[
+                    getReportName:{
+                        return "loan/printout/LoanDisclosureStatement.jasper";
+                    },
+                    getReportData:{
+                        def data=[:]
+                        data.putAll(entity);
+                        return data;
+                    },
+                    getParameters:{ 
+                        return [ BRANCH_NAME: OsirisContext.env.CLIENT.name ,
+                                 PRINTDATE: new Date(), 
+                                 User: OsirisContext.env.USERINFO.firstname+ ' '+ OsirisContext.env.USERINFO.lastname]
+                    }
+                ] as ReportModel;
+             */            
+         }
+         ]]>
+    </code>
+    <pages>
+        <page template="loan.assessment.ui.LoanAgreementPage"/>
+        <page name="page2" template="loan.ui.LoanAppReport.java"/>
+    </pages>
+</workunit>

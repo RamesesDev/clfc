@@ -1,0 +1,54 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+
+class LoanDisbursementOrderService
+{
+	@PersistenceContext('java:loan')
+	def em;
+
+	@Service('DateService')
+	def datesvc;
+
+
+	@ProxyMethod
+	public def read(def param){
+		return em.read("loandisbursement:disbursement_order",param);
+	}
+
+	@ProxyMethod
+	public def create(def param) {
+		em.create("loandisbursement:disbursement_order",param);
+		return param;
+	}
+
+	@ProxyMethod
+	public def getList(def param){
+		def result;
+		if( param.searchText ) {
+			if( (result=findByAppNo(param)) ) return result;
+			if( (result=findByName(param))  ) return result;
+			return [];
+		}
+		return em.sqlContext.createQuery("select * from loan_disbursement_order")
+		         .setFirstResult(param._start)
+		         .setMaxResults(param._limit)
+		         .resultList;
+	}
+
+	private def findByAppNo(def param){
+		return em.sqlContext.createQuery('select * from loan_disbursement_order where appno = ?')
+		         .setParameter(1, param.searchText)
+		         .setFirstResult(param._start)
+		         .setMaxResults(param._limit)
+		         .resultList;
+	}
+
+	private def findByName(def param){
+		return em.sqlContext.createQuery('select * from loan_disbursement_order where payee_name like ?')
+		         .setParameter(1, param.searchText + '%')
+		         .setFirstResult(param._start)
+		         .setMaxResults(param._limit)
+		         .resultList;
+	}
+
+}

@@ -1,0 +1,71 @@
+<workunit>
+    <invokers>
+        <invoker folderid="menu/services/loan" caption="Pending Collection Sheet" permission="collection_sheet.view"/>
+        
+        <invoker type="formActions" mnemonic="c" caption="Close" action="_close"/>
+        <invoker type="formActions" mnemonic="p" caption="Reprint" icon="images/print16.png" action="print" permission="collection_sheet.reprint" visibleWhen="#{! empty selected}"/>
+        
+        <invoker type="formReportActions" mnemonic="b" caption="Back" icon="images/back16.png" action="_default"/>
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        
+        public class LoanCollectionSheetController {
+            @Service('LoanCollectionSheetService')
+            def svc;
+
+            def selected;
+            def report;
+            
+            def listHandler =[
+                getRows:{ return 20; },
+                getColumns :{ 
+                    return[
+                        new Column(name:"collectionno", caption:"Collection Sheet #", width:100),
+                        new Column(name:"date", caption:"Date", width:100),
+                        new Column(name:"routecode", caption:"Route", width:100),
+                        new Column(name:"routedescription", caption:"Description", width:100),
+                        new Column(name:"collector", caption:"Collector")
+                    ]  
+                },
+                fetchList: {o->
+                    return svc.list;
+                }
+            ]as SubListModel;
+            
+            def print() {
+                report = [   
+                    getReportName:{ return 'loantreasury/printout/CollectionSheet.jasper'; },
+                    getReportData:{ return selected.list; },
+                    getParameters:{ 
+                        return [
+                            COLLECTION_NO: selected.collectionno,    
+                            DATE: selected.date,
+                            COLLECTOR: selected.collector,
+                            ROUTE_NO:  selected.routecode,
+                            ROUTE_DES: selected.routedescription,
+                            BRANCH_NAME: OsirisContext.env.CLIENT.name ,
+                            PRINTDATE: new Date(), 
+                            User: OsirisContext.env.USERINFO.firstname+ ' '+ OsirisContext.env.USERINFO.lastname
+                        ]; 
+                    }
+                ] as ReportModel;
+                report.viewReport();
+                return 'print';
+            }
+        }
+        ]]>
+    </code>
+    
+    <pages>
+        <page template="loantreasury.collectionsheet.PendingCollectionSheetPage" />
+        <page name="print" template="loantreasury.collectionsheet.CollectionSheetPrintPage" />
+    </pages>
+</workunit>

@@ -1,0 +1,2 @@
+"state|searchText" [busy] { readonly: true; }
+"state|searchText" [!busy] { readonly: false; }

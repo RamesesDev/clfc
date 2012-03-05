@@ -1,0 +1,214 @@
+<workunit>
+    <invokers>
+        <invoker type="tarrif:form" caption="Loan Tariff"/>
+        
+        <invoker type="formActions" tooltip="New" action="create" icon="images/new16.png" permission="loan_charge.create"/>
+        <invoker type="formActions" tooltip="Save" action="save" icon="images/save16.png"/>
+        <invoker type="formActions" tooltip="Edit" action="edit" icon="images/edit16.png" permission="loan_charge.edit"/>
+        <invoker type="formActions" tooltip="Cancel" action="cancel" icon="images/cancel16.png" immediate="true"/>
+        <invoker type="formActions" tooltip="Delete" action="delete" icon="images/delete16.png" permission="loan_charge.delete"/>
+        <invoker type="formActions" caption="Deploy" action="deploy" permission="loan_charge.deploy"/>
+        <invoker type="formActions" caption="Undeploy" action="undeploy" permission="loan_charge.undeploy"/>
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        import classes.Rules;
+        
+        public class LoanTariffController
+        {
+        
+            @Service("LoanTariffService")
+            def svc;
+        
+            @Binding
+            def binding;
+            
+            def browse;
+            def entity;
+            def oldEntity = [:];
+            
+            def itemmode;
+            def editmode = 'read';
+            
+            def amt;
+            def tmp_frm;
+            def tmp_amt;
+            
+            def selected;
+            
+            def onUpdate;
+            
+            def listType = ["FIXED", "FORMULA"];
+            
+            void setData( d ) {
+                entity = d;
+                initAmount();
+                itemmode = '';
+                listHandler.load();
+                binding?.refresh();
+            }
+            
+            def getAppType() { return entity.appType; }
+            
+            void setAppType( type ) {
+                entity.appType = type;
+                if( type == 'new' ) 
+                    entity.fromtimes = entity.totimes = null;
+            }
+            
+            void create() {
+                entity = [ objid: "LC-" + new java.rmi.server.UID(), account:[:] ];
+                entity.appType = 'new';
+                entity.list = [];
+                listHandler.load();
+                initAmount();
+                editmode = 'create';
+            }
+            
+            void edit() {
+                entity.putAll( svc.read(entity) );
+                oldEntity.clear();
+                oldEntity.putAll( entity );
+                initAmount();
+                editmode = 'edit';
+                if( onUpdate ) onUpdate( null, 'edit' );
+            }
+            
+            void save() {
+                entity = svc.save( entity );
+                editmode = 'read';
+                if( onUpdate ) onUpdate( entity );
+            }
+            
+            void cancel() {
+                entity.clear();
+                entity.putAll( oldEntity );
+                editmode = 'read';
+                if( onUpdate ) onUpdate();
+            }
+            
+            void delete() {
+                svc.delete( entity );
+                if( onUpdate ) onUpdate();
+            }
+            
+            void deploy() {
+                entity = svc.deploy( entity );
+                if( onUpdate ) onUpdate();
+            }
+            
+            void undeploy() {
+                entity = svc.undeploy( entity );
+                if( onUpdate ) onUpdate();
+            }
+            
+            void setSelected(o){
+                this.selected = o;
+                def pos = entity?.list?.indexOf(selected?.item);
+                if(pos && pos!=-1) tmp_amt = entity?.list?.amount[pos];
+            }
+                        
+            def selectHandler = {o->
+                if(o) entity.account = o;
+                binding?.refresh("entity.account.title");
+            }
+            
+            def accounts(){
+                return InvokerUtil.lookupOpener("revenueaccounts:lookup", [selectHandler:selectHandler]);
+            }
+            
+            def listHandler = [
+                getColumns:{
+                    return[
+                        new Column(name:"item.from", caption:"From", type:"decimal"),
+                        new Column(name:"item.to", caption:"To", type:"decimal"),
+                        new Column(name:"item.amount", caption:"Amount", editable:true, alignment: 'right'),
+                        new Column(name:"item.type", caption:"Type", type:"combo", editable:true, items:"root.listType")
+                    ]
+                },
+                fetchList:{o->
+                    return entity?.list;
+                },
+                onUpdateItem:{o->
+                    if(!o?.amount){
+                        MsgBox.alert("AMOUNT: value required.");
+                        o?.amount = tmp_amt;
+                    }
+                    tmp_amt = o?.amount;
+                }
+            ] as SubListModel;
+            
+            
+            void initAmount() {
+                amt = [from: 0.00, type:''];
+                itemmode = '';
+                if( !entity ) return;
+                
+                if( entity.list ) {
+                    if( entity.list[-1].to ) {
+                        amt.from = entity.list[-1].to;
+                        itemmode = 'hasItems';
+                    }
+                    else {
+                        itemmode = 'last';
+                    }
+                }
+                else {
+                    itemmode = 'first';
+                }
+            }
+            
+            void add(){
+                if(amt.to != null && amt.to <= amt.from){
+                    MsgBox.alert("To value must be higher to from value.");
+                    binding.focus("amt.to");
+                }
+                else  if(!amt.amount){
+                    MsgBox.alert("Amount value is required.");
+                    binding?.focus("amt.amount");
+                }
+                else{
+                    itemmode = "hasItems";
+                    if(!amt.to) itemmode = "last";
+                    entity.list.add(amt);
+                    amt = [:];
+                    amt.from = entity.list[-1].to;
+                    listHandler.load();
+                    binding?.focus("amt.to");
+                }
+            }
+            
+            void removeLast(){
+                def size = entity.list.size();
+                amt = [:];
+                if(size > 1) amt.from = entity.list[-1].to;
+                entity.list.remove(size - 1);
+
+                if( !entity.list ){ 
+                    itemmode = 'first';
+                    binding?.focus("amt.from");
+                }
+                else {
+                    itemmode = 'hasItems';
+                    binding?.focus("amt.to");
+                }
+                initAmount();
+                listHandler.load();
+            }
+            
+        }
+    ]]>
+    </code>
+    
+    <pages>
+        <page template="loan.charge.LoanTariffPage" />
+        
+    </pages>
+</workunit>

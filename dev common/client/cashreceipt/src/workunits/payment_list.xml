@@ -1,0 +1,60 @@
+<workunit>
+    
+    <invokers>
+        <invoker type="cashreceipt:payment" action="init"/>
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class PaymentListController  {
+            
+            def amtdue = 1250.0;
+            def balance;
+            def list = [];
+            
+            public void init() {
+                balance = amtdue;
+            }
+            
+            def handler = { o->
+                balance -= o.amount;
+                list.add( o );    
+                listHandler.refresh();
+            }
+
+            def formActions = InvokerUtil.lookupActions( "payment:option",
+                 {o-> [unpaid:balance, paymentList:list,  actionHandler: handler] } as InvokerParameter 
+             );
+            
+            def listHandler = [
+               getColumns:{
+                    return[ new Column(name:"type", caption:"Type", maxWidth:80),
+                            new Column(name:"particulars", caption:"Particulars"),
+                            new Column(name:"amount", caption:"Amount", type:"decimal", maxWidth:120)
+                    ]
+                },
+                fetchList:{o->
+                    return list;
+                }
+            ] as SubListModel;
+            
+            public def clearAll() {
+                list.clear();
+                balance = amtdue;
+                listHandler.refresh();
+            }
+            
+        }
+        ]]>
+    </code>
+
+    <pages>
+        <page template="cashreceipt.ui.PaymentListPage"/>
+    </pages>
+    
+</workunit>

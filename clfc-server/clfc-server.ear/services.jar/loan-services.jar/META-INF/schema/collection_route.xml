@@ -1,0 +1,10 @@
+<schema>
+
+	<element name="collection_route" tablename="route">
+        <field name="code" primary="true" />
+        <field name="description"/>
+		<field name="area"/>
+	</element>
+
+</schema>
+

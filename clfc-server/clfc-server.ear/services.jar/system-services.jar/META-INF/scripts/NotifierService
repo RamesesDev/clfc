@@ -1,0 +1,54 @@
+import com.rameses.annotations.*;
+import java.io.*;
+import com.rameses.io.FileTransfer;
+import java.util.concurrent.*;
+
+class NotifierService {
+
+	private static def queue = new ArrayBlockingQueue(100);
+
+	@PersistenceContext("system")
+	def em;
+	
+	@ProxyMethod
+	public void checkMessages(def o) {
+		int counter = 0;
+		String receiverid = o.receiverid;
+		int delay = 2000;
+		def results = null;
+		while(true) {
+			results = em.sqlContext.createQuery('select * from sys_inbox where receiverid=?').setParameters(1, receiverid).resultList;	
+			if(!results) {
+				//check first if it is in queue. sleep then continue until counter is max
+				if( queue.contains( receiverid ) ) {
+					counter++;
+					if(counter > 5) {
+						queue.remove( receiverid );
+						print "released";
+						break;
+					}
+					else {
+						Thread.sleep(delay);
+					}
+				}	
+				else {
+					//attempt to place in queue
+					try {
+						queue.add( o.receiverid );
+						counter = 0;
+						Thread.sleep(delay);
+					}
+					catch(e) {
+						break;
+					}	
+				}
+			}
+			else {
+				break;
+			}
+		}	
+		return results;
+	}
+	
+	
+}

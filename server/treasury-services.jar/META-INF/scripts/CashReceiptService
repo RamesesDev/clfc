@@ -1,0 +1,37 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+
+class CashReceiptService
+{
+	@PersistenceContext('java:treasury')
+	def em;
+
+	@Service('DateService')
+	def datesvc;
+
+	@Service('TreasuryDocNoService')
+	def docSvc;
+
+	@Env
+	def env;
+
+
+	@ProxyMethod
+	public def post( receipt ) {
+		if( !receipt.objid )      receipt.objid = 'RCT-' + new java.rmi.server.UID();
+		if( !receipt.receiptno )  receipt.receiptno = docSvc.getFormattedNextNo('cash_receipt', '00000000');
+		if( !receipt.dtfiled )    receipt.dtfiled = datesvc.serverDate;
+		if( !receipt.collectedby )receipt.collectedby = env.USER;
+
+		def details = receipt.remove('details');
+		em.create('cash_receipt', receipt);
+		details?.each {
+			if( !it.objid )    it.objid = 'RCTD-' + new java.rmi.server.UID();
+			if( !it.parentid ) it.parentid = receipt.objid;
+			em.create('cash_receipt:detail', it);
+		};
+		receipt.details = details;
+		return receipt;
+	}
+
+}

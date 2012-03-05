@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workunit>
+    <!--<invoker type="loan:routeLookup" caption="Select Route" target="popup"/>-->
+    <invoker folderid="menu/services/loan" caption="Select Route" permission="application.create"/>
+    <code lang="groovy">
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class routeLookupController {
+            @Service('RouteService')
+            def svc;
+            
+            def selected;
+            def searchText;
+            def selectHandler;
+            
+            def select(){
+                if(selectHandler)selectHandler(selected);
+                    return "_close";
+            }
+            def listHandler=[
+                    getColumns:{
+                    return[ new Column(name:'code',     caption:"Code", width:180),          
+                            new Column(name:'area',     caption:"Area", width:350),
+                            new Column(name:'fromtime', caption:"From Time", width:350),
+                            new Column(name:'totime',   caption:"To Time", width:350)
+                     ]
+                },
+                fetchList:{o-> 
+                    //if(searchText)o.routecode=searchText;
+                    //return svc.search(o);
+                    return svc.getList();
+                },
+            ]as SubListModel;
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="loantreasury.collection.ui.RouteLookup"/>
+    </pages>
+</workunit>

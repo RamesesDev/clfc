@@ -1,0 +1,62 @@
+<workunit>
+    <invokers>        
+        <invoker type="collection:shortagePayment" caption="Shortage Payment Form" target="popup"/>         
+        
+        <invoker type="formActions" action="Ok"     caption="Ok and continue" mnemonic="o" tooltip="Ok and Continue"/>
+        <invoker type="formActions" action="_close" caption="Cancel" mnemonic="c" tooltip="Cancel" immediate="true"/>
+        
+    </invokers>
+    <code> 
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        
+        class LoanRemittanceShortagePaymentController{
+            @Service("LoanRemittanceService")
+            def svc;
+            
+            @Service("LoanCollectionSheetService")
+            def colSheetSvc;
+
+            @Service( "LoanApplicationSearchService" )
+            def searchSvc;
+            
+            def selectHandler;
+            def searchPayee;
+            
+            def filter = [date: OsirisContext.env.LOCALE_TIME];
+            
+            def Ok(){
+                return "_close";
+            }
+            
+            /*
+            def find(){
+                
+                if( !selected )
+                    throw new Exception('No item selected.');
+                    
+                if(selectHandler)selectHandler(selected);
+                return "_close";
+               
+                if( searchText==null || !searchText){
+                    MsgBox.alert("Nothing to Find");
+                    return;
+                }else return "_close";
+            }
+            
+            def searchPayee(){
+                if( searchText==null || !searchText){
+                    MsgBox.alert("Nothing to Find");
+                    return;
+                }else return "_close";
+            }
+            */
+        }    
+        ]]>
+    </code>
+    <pages>
+        <page template="loantreasury.remittance.field.LoanRemittance_ShortageOverPaymentPage"/>
+    </pages>    
+</workunit>

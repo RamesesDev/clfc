@@ -1,0 +1,37 @@
+<workunit>
+     <invokers>
+        <!--
+        <invoker type="contact:formActions" immediate="true" action="init" caption="Transactions" index="30" target="popup" visibleWhen="#{mode=='read' and entity!=null}"/>
+        -->
+        <invoker type="formActions" caption="Close" immediate="true"  action="_close" />
+    </invokers>
+    <code>
+        <![CDATA[        
+            import com.rameses.rcp.common.*;
+            import com.rameses.rcp.annotations.*;
+            import com.rameses.util.*;
+            import com.rameses.osiris2.client.*;
+
+            public class ContactTransactionsController {
+                @Binding
+                def binding;
+            
+                def entityHandler;
+                def entity;
+                def txn;
+                def txnTypes;
+                
+                public void init() {
+                    entity = entityHandler();
+                    txnTypes = InvokerUtil.lookupOpeners( "contact:transaction", [entity: entity] );
+                    if( txnTypes ) {
+                        txn = txnTypes[0];
+                    }
+                }
+            }
+        ]]>
+    </code>
+    <pages>
+        <page template="contact.ui.ContactTransactionsPage"/> 
+    </pages>
+</workunit>

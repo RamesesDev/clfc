@@ -1,0 +1,106 @@
+<workunit>
+    <invokers>
+        <invoker type="check_voucher:form" caption="Check Disbursement" action="init"/>
+        
+        <invoker type="formActions" caption="Save" icon="images/save16.png" action="saveAndPrint"
+                 visibleWhen="#{entity.state=='PENDING'}" mnemonic="s" />
+        <invoker type="formActions" caption="Print" icon="images/print16.png"  action="print" 
+                 visibleWhen="#{entity.state == 'CHECK_ISSUED'}" mnemonic="p"/>
+        <!--
+        <invoker type="formActions" caption="Release Check" action="release" mnemonic="r"/>
+        -->
+        <invoker type="formActions" caption="Close" action="_close" mnemonic="c" immediate="true"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        import groovy.text.*;
+        
+        class CheckVoucherController{
+            @Binding
+            def binding;
+            
+            @Service("CheckVoucherService")
+            def svc;
+            
+            @Service("BankAccountService")
+            def acctSvc;
+            
+            @Script('CheckPrintScript')
+            def printSupport;
+                       
+            def entity=[:];
+            def acctList=[];
+            def printFormat;
+
+                        
+            void init(){
+                acctList = acctSvc.getList([type: 'checking']);
+                entity = svc.openForRelease( entity );
+            }
+            
+            def listHandler = [
+                getColumns:{
+                    return[
+                        new Column(name:"acctcode",caption:"Account", width: 60),
+                        new Column(name:"accttitle",caption:"Title", width: 200),
+                        new Column(name:"amount",caption:"Amount", format: "#,##0.00;(#,##0.00)")
+                    ]
+                },
+                fetchList:{o->
+                   return entity.details;
+                }
+            ]as SubListModel;
+            
+            void release() {
+                entity = svc.releaseCheck( entity );
+            }
+            
+            void save() {
+                entity.bankname = entity.bankacct.bankname;
+                entity.acctno = entity.bankacct.accountno;
+                entity.checkno = entity.bankacct.checkno;
+                entity = svc.issueCheck( entity );
+            }
+            
+            void saveAndPrint() {
+                if( !MsgBox.confirm("You are about to print the check.\nPlease prepare the printer. Proceed?") ) return;
+                save();
+                print();
+            }
+            
+            static def dt_formatter = new java.text.SimpleDateFormat('yyyy-MM-dd');
+            
+            def print(){
+                def p=[
+                    checkno:   entity.checkno,
+                    amount:    entity.amount,
+                    payee:     entity.payeename,
+                    checkdate: entity.checkdate,
+                    format:    entity.bankacct.printformat,
+                ];
+                if( p.checkdate instanceof String )
+                    p.checkdate = dt_formatter.parse( p.checkdate );
+				
+                try {
+                    if( printSupport.print(p) ) {
+                        release();
+                    }
+                }
+                catch(e) {
+                    e.printStackTrace();
+                    MsgBox.alert('Failed to print the check. Please verify your printer settings.');
+                }
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="treasury.voucher.CheckVoucherPage"/>
+    </pages>
+</workunit>

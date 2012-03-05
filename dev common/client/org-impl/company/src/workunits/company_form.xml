@@ -1,0 +1,26 @@
+<workunit extends="org/org_form.xml">
+    <invokers>
+        <invoker type="company:form"/>
+        <invoker type="company:create" action="create"/>
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        
+        import com.rameses.rcp.annotations.*;
+        
+        public class CompanyFormController extends org.OrgForm  {
+        
+            @Service("CompanyService")
+            def service;
+            
+            @Binding
+            def binding;
+            
+            String orgType = "company";
+        }
+        
+        ]]>
+    </code>
+
+</workunit>

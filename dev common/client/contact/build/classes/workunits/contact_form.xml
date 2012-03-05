@@ -1,0 +1,173 @@
+<workunit>
+     <invokers>
+        <invoker type="contact:form" />
+        <invoker type="contact:form_edit_popup" action="editPopup" target="popup"/>
+        
+        <invoker type="formActions" tooltip="New"       action="addNew"     icon="images/new16.png"    caption="New"    mnemonic="n" visibleWhen="#{mode=='read' and allowNew==true}" immediate="true"/> 
+        <invoker type="formActions" tooltip="Edit"      action="edit"       icon="images/edit16.png"   caption="Edit"   mnemonic="e" visibleWhen="#{mode=='read' and entity!=null and allowEdit==true}" immediate="true"/> 
+        <invoker type="formActions" tooltip="Save"      action="saveNew"    icon="images/save16.png"   caption="Save"   mnemonic="s" visibleWhen="#{mode=='create'}"/> 
+        <invoker type="formActions" tooltip="Save"      action="update"     icon="images/save16.png"   caption="Save"   mnemonic="s" visibleWhen="#{mode=='edit'}"/> 
+        <invoker type="formActions" tooltip="Cancel"    action="cancelEdit" icon="images/cancel16.png" caption="Cancel" mnemonic="c"   visibleWhen="#{mode!='read'}" immediate="true"/> 
+        <invoker type="formActions" caption="Customize" action="addCustomFields" immediate="true" tooltip="Add custom fields" mnemonic="a" visibleWhen="#{mode!='read'}"/>        
+    </invokers>
+    <code>
+        <![CDATA[
+        
+            import com.rameses.rcp.common.*;
+            import com.rameses.rcp.annotations.*;
+            import com.rameses.util.*;
+            import com.rameses.osiris2.client.*;
+            import com.rameses.rcp.control.camera.*;
+            
+
+            public class ContactFormController {
+            
+                @Binding
+                def binding;
+
+                @Service("ContactService")
+                def svc;
+
+                @Script("ContactDef")
+                def custMetaInfo;
+
+                /************************************************************
+                * closures for communicating with 
+                * the caller. each closure receives two
+                * parameters, the entity object and boolean 
+                * true=create false=edit 
+                ************************************************************/
+                def saveHandler;
+                def editHandler;
+                def cancelHandler;
+                
+                /************************************************************
+                * option for hiding showing buttons
+                ************************************************************/
+                boolean allowNew = true;
+                boolean allowEdit = true;
+                
+                def customFields;
+                def defaultFields = [];
+                
+                def entity;
+                def mode = "read";   //mode choices are read,edit,create 
+                boolean popupMode = false;
+                
+                def formActions = InvokerUtil.lookupActions( "contact.formActions", [entityHandler: {return entity}] );
+                def customFieldsModel = [ getFormControls: { return customFields } ] as FormPanelModel;
+
+
+                public void initOpen() {
+                    if(entity==null) 
+                        throw new Exception("Please provide an entity when calling the open method");
+                    entity = svc.open( entity );    
+                }
+                
+                public def editPopup() {
+                    mode = "edit";
+                    popupMode = true;
+                    setData( svc.open( entity ) );
+                    return "edit_popup";
+                }
+                
+                public void setData(def o) {
+                    entity = o;
+                    if( o == null )
+                        customFields = [];
+                    else {   
+                        customFields = custMetaInfo.getFormFields(entity, "entity");
+                    }
+                    binding?.refresh();
+                }
+                
+                public void addNew() {
+                    entity = custMetaInfo.createModel( defaultFields );
+                    customFields = custMetaInfo.getFormFields(entity, "entity" );
+                    if(editHandler) editHandler( entity, true );
+                    mode = "create";
+                }
+                
+                public void edit() {
+                    def model = custMetaInfo.createModel( defaultFields );
+                    model.putAll( entity );
+                    customFields = custMetaInfo.getFormFields(model, "entity" );
+                    if(editHandler) editHandler( entity, false );
+                    mode = "edit";
+                }
+                
+                public void cancelEdit() {
+                    if( MsgBox.confirm( "Discard changes?") ) {
+                        mode = "read";
+                        if(cancelHandler) cancelHandler( entity, mode=="create" );
+                        if(mode=="create") entity = [:];
+                    }    
+                }
+
+                void saveNew( boolean validate ) {
+                    entity = svc.saveNew( entity, [validate: validate] );
+                    mode = "read";
+                    MsgBox.alert( "Contact No. ${entity.contactno} is created" );
+                    if(saveHandler) saveHandler(entity,true);
+                }
+
+                public def saveNew() {
+                    if(MsgBox.confirm("Your are about to save this record. Continue?")) {
+                        try {
+                            saveNew( true );
+                        }
+                        catch(Warning w) {
+                            def opener = InvokerUtil.lookupOpener( w.message, 
+                                [   info: w.info, 
+                                    entity: entity, 
+                                    saveHandler: { saveNew(false); }
+                                ] ); 
+                            opener.target = "_popup";
+                            return opener;
+                        }    
+                    }
+                }
+                
+                public def update() {
+                    return InvokerUtil.lookupOpener( "message:popup", 
+                        [
+                            label: "You are about to save this record. Please provide a reason for this change", 
+                            actionHandler: { msg->
+                                entity = svc.updateContact( entity, [validate: true, reason: msg ] );
+                                mode = "read";
+                                if(saveHandler) saveHandler(entity, false);
+                                
+                                if( popupMode )
+                                    binding.fireNavigation('_close');
+                                else
+                                    binding.refresh();
+                            }
+                        ]);
+                }
+
+                
+                /***************************************************************
+                * CUSTOM FIELDS HANDLING
+                ***************************************************************/
+                def customFieldHandler = { o->
+                    setData( o );
+                    boolean updatable = (mode=="edit") ? false : true;
+                    binding.refresh();
+                }
+                
+                public def addCustomFields() {
+                    return InvokerUtil.lookupOpener("custom_fields_lookup", 
+                        [
+                            fields:custMetaInfo.allFields, metaName: 'contact',
+                            entity: entity, updateHandler: customFieldHandler, caption:"Contact" 
+                        ] 
+                    );
+                }
+            }
+        ]]>
+    </code>   
+    <pages>
+        <page template="contact.ui.ContactFormPage"/>
+        <page name="edit_popup" template="contact.ui.ContactFormEditPopupPage" />
+    </pages>
+</workunit>

@@ -1,0 +1,70 @@
+<workunit>
+    <invokers>
+        <invoker type="listActions" icon="images/add16.png" tooltip="Add  Currency" action="addCurrency"/>
+        <invoker type="listActions" icon="images/remove16.png" tooltip="Remove  Currency" action="removeCurrency"/>
+        <invoker type="formActions" caption="Close" action="close"/>
+    </invokers>    
+    
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class AllowedCurrencyList  {
+            
+            @Service("CurrencyService")
+            def svc;
+        
+            @Binding
+            def binding;
+            
+            def parent;
+            def currency;
+            def rowSelector;
+            
+            def getFormTitle() {
+                if(!parent?.code) return "";
+                return parent.code + " Accepted Currencies";
+            }
+            
+            public void init() {
+                if(!parent)
+                    throw new Exception("Parent must be defined");
+            }
+
+            public def getCurrencyList() {
+                return svc.getAllowedList( [parentid: parent.objid] )*.code;
+            }
+            
+            def close() {
+                return "_close";
+            }
+            
+            public def addCurrency() {
+                return InvokerUtil.lookupOpener( "multilookup:currency", [selectHandler: selectHandler ] );
+            }
+            
+            public void removeCurrency() {
+                if(!currency) throw new Exception("Please select a currency to remove");
+                if(MsgBox.confirm("You are about to remove this currency. Proceed?")) {
+                    svc.removeCurrency( [currency:currency, parentid:parent.objid]);
+                }
+            }
+            
+            def selectHandler = {o->
+                o.each {
+                    svc.addCurrency( [currency:it.code, parentid:parent.objid, parenttype: parent.type]);
+                }
+                binding.refresh();
+            }
+            
+        }
+        ]]>
+    </code>
+    
+    <pages>
+        <page template="localization.ui.AllowedCurrencyListPage"/>
+    </pages>
+    
+</workunit>

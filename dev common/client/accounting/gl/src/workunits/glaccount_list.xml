@@ -1,0 +1,51 @@
+<workunit>
+    
+    <invokers>
+        <invoker folderid="menu/management/accounts" caption="General Ledger Account ListXXX" index="-1" /> 
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class GLAccountController {
+            
+            @Service("GLService")
+            def service;
+            
+            def queryOpener;
+            def selected;
+        
+            def listHandler = [
+            
+                getColumns : { 
+                    return [
+                        new Column(name:"objid", primary: true, visible: false ),
+                        new Column(name:"code", caption:"Acct Code"),
+                        new Column(name:"name", caption:"Acct Name"),
+                    ];
+                },
+                
+                fetchList: { o->
+                    return service.getList( o );
+                },
+                
+                fetchChildren: { o->
+                    return service.getList( [parentid: o.objid] );
+                }
+            ] as TreeTableModel;
+            
+            public def createFormOpener() {
+                return InvokerUtil.lookupOpener("glaccount:form", [:]);
+            }
+        }
+        ]]>
+    </code>
+    
+    <pages>
+        <page template="gl.account.ui.GLAccountListFormPage"/>
+    </pages>    
+    
+</workunit>

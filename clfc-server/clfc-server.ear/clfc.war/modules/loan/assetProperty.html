@@ -1,0 +1,80 @@
+<script>
+	$put(
+		"assetProperty", 
+		new function() {
+			
+			this.application;
+			this.assetProperty;
+			this.onload = function() {
+				setTimeout( function(){ $('.asset a').lightBox({fixedNavigation:true}); }, 100 );
+			};
+
+			this.close = function() {
+				return '_close';
+			};
+		}
+	);
+</script>
+<style>
+   body{font-family:arial;font-size:8px;}
+   h3.white { color: #ffffff; }
+</style>
+<div>
+	<body>        
+		<table model="listModel" border="0" width="100%" cellspacing="0" class="grid">
+			<tr><td width=130>Subject :</td>
+			<td><label context="assetProperty"><b>#{assetProperty.subject}</b></label></td></tr>
+			<tr><td>Name :</td>
+			<td><label context="assetProperty"><b>#{assetProperty.rpu}</b></label></td></tr>
+			<tr><td></label> Type :</td>
+			<td><label context="assetProperty"><b>#{assetProperty.classification}</b></label></td></tr>			
+			<tr><td>Location :</td>
+			<td><label context="assetProperty"><b>#{assetProperty.location}</b></label></td></tr>			
+			<tr><td>Area :</td>
+			<td><label context="assetProperty"><b class="maroon">#{assetProperty.area.formatDecimal()}</b> <b>#{assetProperty.uom}</b></label></td></tr>
+			<tr><td>Zonal Value :</td>
+			        <td>
+			            <label context="assetProperty" visibleWhen="#{assetProperty.zonalvalue}">
+			                <b>Php</b> <b class="teal">#{assetProperty.zonalvalue.formatDecimal()}</b>
+			            </label>
+			            <label context="assetProperty" visibleWhen="#{!assetProperty.zonalvalue}">
+			                <b>Php</b> <b class="teal">#{assetProperty.zonalvalue.formatDecimal()}</b>
+			            </label>
+			        </td>
+			</tr>
+			<tr><td>Registered Name :</td>
+			<td><label context="assetProperty"><b>#{assetProperty.registeredName}</b></label></td></tr>
+			<tr><td>Mode Of Acquisition:</td>
+			<td><label context="assetProperty"><b>#{assetProperty.modeOfAcquisition}</b></label></td></tr>
+			<tr><td>Appraised Value :</td>
+				<td>
+					<label context="assetProperty" visibleWhen="#{assetProperty.appraisedvalue}">
+					    <b>Php</b><b class="teal"> #{assetProperty.appraisedvalue.formatDecimal()}</b>
+					</label>
+					<label context="assetProperty" visibleWhen="#{!assetProperty.appraisedvalue}">
+					    <b>Php</b> <b class="teal">0.00</b>
+					</label>
+				</td>
+			</tr>
+			<tr><td>Remarks :</td>
+			<td><label context="assetProperty"><b>#{assetProperty.remarks}</b></label></td></tr>
+		</table>	
+		<hr/>
+		Photo(s) :<br/>
+		<div style="text-align: center" context="assetProperty" visibleWhen="#{!assetProperty.photos}">
+			<i><b class="maroon">No Photo at present.</b></i>
+		</div>	
+		<div class="asset-box">
+			<nobr>
+				<ul class="asset" context="assetProperty" items="assetProperty.photos" varName="item">		
+					<li style="display: inline">
+						<a href="/clfc-photos/?b=#{application.branchcode}&a=#{application.objid}&id=#{item.objid}"
+						   title="#{item.name? item.name : ''}">
+							<img src="/clfc-photos/?b=#{application.branchcode}&a=#{application.objid}&id=#{item.objid}" height="100"/>
+						</a>
+					</li>
+				</ul>
+			</nobr>
+		</div>
+	</body>
+</div>

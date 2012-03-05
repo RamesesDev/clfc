@@ -1,0 +1,2 @@
+/*"entity.*" [mode=='create'] {enabled:true;}
+"entity.*" [mode!='read'] {enabled:false;}*/

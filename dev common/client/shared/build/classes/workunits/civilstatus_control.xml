@@ -1,0 +1,50 @@
+<workunit>
+    <invokers>
+        <invoker type="control:civilstatus"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class CivilStatusController extends SubControlModel {
+        
+            public void onInit() {
+                
+            }
+            
+            public void onRefresh() {
+
+            }
+            
+            public def createContext() {
+                return [:];
+            }
+            
+            public String getHtmlFormat() {
+                def buffer = new StringBuffer();
+                buffer << '<table>';
+                buffer << "<tr><td><b>Type: </b></td><td>${context.type}</td></tr>";
+                if( context.type == 'MARRIED' || context.type == 'COUPLE' || context.type == 'WIDOW' || context.type == 'SEPARATED' ){
+                    buffer << "<tr><td><b>Year(s): </b></td><td>${context.year}</td></tr>";
+                    buffer << "<tr><td><b>Remarks/Others: </b></td><td>${context.remarks}</td></tr>";
+                }
+                if( context.type == 'OTHERS' ) {
+                    buffer << "<tr><td><b>Remarks: </b></td><td>${context.remarks}</td></tr>";
+                }
+                //if( context.remarks )
+                   //buffer << "<tr><td><b>Remarks: </b></td><td>${context.remarks}</td></tr>";    
+                
+                   
+                buffer << '</table>';
+
+                return buffer.toString();
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="shared.custom.civilstatus.CivilStatusPage"/>
+    </pages>
+</workunit>

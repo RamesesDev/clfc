@@ -1,0 +1,67 @@
+<workunit>
+    
+    <invokers>
+        <invoker type="payment:option" caption="Check - F2"  shortcut="F2" target="popup" action="init"/>
+        <invoker type="formActions" caption="OK" action="save" default="true"/>
+        <invoker type="formActions" caption="Cancel" action="_close" immediate="true"/>
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.util.*;
+        
+        public class CheckPaymentOptionController  {
+        
+            def unpaid = 0.0;
+            def amount = 0.0;
+            def paymentList;
+            def actionHandler;
+            
+            def bank;
+            def checkno;
+            def checkdate;
+            
+            public void init() {
+                if(unpaid <=0) 
+                    throw new Exception("Amount unpaid must be greater than 0");
+            }
+            
+            public def save() {
+                if(amount <=0) 
+                    throw new Exception("Check amount must be greater than 0");
+                if(amount > unpaid)
+                    throw new Exception("Check amount must be less than or equal to amount unpaid");
+                def now = new java.util.Date();
+                def dt = java.sql.Date.valueOf( checkdate );
+                
+                if( dt.after( now ))
+                    throw new Exception( "Post dated checks are not allowed" );
+                    
+                int stalecheck = 90;    
+                if( DateUtil.diff(dt, now ) > stalecheck )
+                    throw new Exception( "Stale checks are not allowed" );
+                    
+                if(actionHandler) {
+                    def map = [type:"CHECK"];
+                    map.bank = bank;
+                    map.amount = amount;
+                    map.checkno = checkno;
+                    map.checkdate = checkdate;
+                    map.particulars = bank + " check no: " + checkno + " issued on " + checkdate; 
+                    actionHandler( map );
+                 }   
+                return "_close";
+            }
+        }
+        ]]>
+    </code>
+    
+    <pages>
+        <page template="cashreceipt.ui.CheckPaymentOptionPage"/>
+    </pages>
+    
+</workunit>

@@ -1,0 +1,45 @@
+<workunit extends="loan/ui/asset/asset-form.xml">
+    <invokers>
+        <invoker type="asset:vehicle"      target="popup" caption="Vehicles Entry Form" action="init"/>
+        <invoker type="asset:vehicle_open" target="popup" caption="Vehicles Entry Form" action="view"/>
+  </invokers>
+    <code>
+        <![CDATA[
+        //import com.rameses.rcp.annotations.*;
+        //import com.rameses.rcp.common.*;
+        
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.common.*;
+        import java.io.*;
+        import com.rameses.io.*;
+        import loan.ui.asset.util.*;
+        import javax.swing.*;
+        
+        class VehiclesFormController extends loan.ui.asset.AbstractAssetFormController {
+        
+            @Binding
+            def binding;
+
+            def objid;   
+            //def asset;
+            
+            //def selectHandler;
+            //def orcrSelectHandler;
+            
+            def vehicleList=["FOR HIRE", "PRIVATE"];
+            def subjectList=["MOTORCYLE", "AUV", "LCV", "TRUCK", "OTHERS"];
+            
+            //def addORCR() {
+                //return InvokerUtil.lookupOpener("loan:orcrLookup",[selectHandler:orcrSelectHandler]);
+           // }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="loan.ui.asset.VehiclesForm"/>
+        <page name="page2" template="loan.ui.asset.PhotoPage"/>
+    </pages>
+</workunit>

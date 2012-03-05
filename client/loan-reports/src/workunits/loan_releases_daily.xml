@@ -1,0 +1,92 @@
+<workunit>
+    <invokers>
+        <invoker folderid="report/loan" caption="Summary of Loan Releases(Daily)" permission00="" index="3"/>
+        <!--permission="application.createDailyReleaseReport"/>-->
+        <invoker type="formPrintActions" caption="Back"  tooltip="Back" icon="images/back16.png" action="doBack" mnemonic="p"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import loan.reports.*;
+        import java.sql.Timestamp;
+        
+        public class LoanReleasesReportController extends AbstractReportController
+        {
+            @Binding
+            def binding;
+            
+            @FormTitle
+            def formTitle = 'Summary of Daily Releases Report';
+            
+            @Service('LoanReleaseReportService')
+            def svc;
+            
+            def filter = [date: OsirisContext.env.LOCALE_TIME];
+            /*
+            def report;
+            def itemReport=["Summary of Loan Releases", "Daily Releases"];
+            def _printOut;
+            def entity;
+            def mode;
+            
+            def getApplicationType() {
+                def lc = (entity.loancount)? entity.loancount : 1;
+                if( mode == "renew" ) lc++;
+
+                return lc == 1 ? 'New Application' : 'Renewal ' + (lc-1);
+            }
+            
+            void reportView() {
+                report = new ApplicationReportModel(printOut: printOut, entity: entity);
+            }
+
+            def printData(){
+                printOut="Summary of Loan Releases";
+                report.viewReport();
+                return "page2";
+            }
+
+            void setPrintOut(e){
+                _printOut=e;
+                if (!printOut) return;
+                reportView();
+                report.viewReport();
+            }
+
+            def getPrintOut(){
+                return _printOut;
+            }
+            */
+            def getReportName() {
+                return 'loan/reports/release/SummaryOfLoanReleases_Daily.jasper';
+                //return 'loan/reports/release/Loan_Releases.jasper';
+                
+                //if(printOut=='Summary of Loan Releases')
+                    //return "loan/reports/release/SummaryOfLoanReleases_Daily.jasper"; 
+                //else if(printOut=='Daily Releases')    
+                    //return "loan/reports/release/Loan_Releases.jasper";    
+            }
+            
+            def getParameters() {
+                def env = OsirisContext.env;
+                return [
+                    BRANCH_NAME: env.CLIENT.name,
+                    USER: "$env.USERINFO.firstname $env.USERINFO.lastname".toString(),
+                    PRINTDATE: Timestamp.valueOf( filter.date + ' 00:00:00')
+                ];
+            }
+
+            def getData() {
+                return svc.buildReport( filter );
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="loan.reports.release.InitPage"/>
+        <page name="print" template="loan.reports.PrintPage"/>
+    </pages>
+</workunit>

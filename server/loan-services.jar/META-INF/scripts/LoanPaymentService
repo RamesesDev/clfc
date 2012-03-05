@@ -1,0 +1,134 @@
+import com.rameses.annotations.*;
+import com.rameses.eserver.*;
+import com.rameses.rules.common.*;
+import com.rameses.util.*;
+
+
+class LoanPaymentService
+{
+
+    @PersistenceContext('java:loan')
+	def em;
+
+	@Service('DateService')
+	def dateSvc;
+
+	@Service('CashReceiptService')
+	def receiptSvc;
+
+	@Service('LoanDocNoService')
+	def docSvc;
+	
+	@Service('LoanLedgerService')
+	def ledgerSvc;
+
+	@Service('Var')
+	def vars;
+	
+	@Invoker
+	def svcInvoker;
+	
+	@Env
+	def env;
+	
+	static final def postingHandlers = [
+		'regular' : 'loan_posting/RegularPostingService',
+		'over'    : 'loan_posting/OverPaymentPostingService',
+		'fixed'   : 'loan_posting/FixRatePostingService',
+	];
+
+
+	@ProxyMethod
+	public def post( def param ){
+		assert param.appid;
+		assert param.amount;
+		//assert param.currency;
+		assert param.borrower;
+
+		if( !param.billno )
+			param.billno = docSvc.getFormattedNextNo('loan_payment', '00000000');
+
+		def items_paid = postPayment( param );
+
+		def receipt = [:];
+		receipt.receiptno = param.billno;
+		receipt.payerid = param.borrower.objid;
+		receipt.payername = getName( param.borrower );
+		receipt.payertype = param.borrower.type;
+		receipt.collection_type = 'loan_collection';
+		receipt.collectorid = env.USERID;
+		receipt.collectorname = env.USER;
+		receipt.collectedby = env.USER;
+		receipt.particulars = 'Loan Payment';
+		receipt.amount = param.amount;
+		receipt.currency = param.currency;
+		receipt.info = [refid: param.appid, refno: param.appno, reftype: 'loan_payment'];
+
+		receipt.details = createReceiptDetails(items_paid, param.currency);
+
+		return receiptSvc.post( receipt );
+	}
+
+	private def getName( cust ) {
+		return cust.lastname + ', ' + cust.firstname + (cust.middlename? ' ' + cust.middlename : '');
+	}
+
+	private def createReceiptDetails( paid, currency ) {
+		def list = [];
+		def settings = vars.loan_settings;
+		if( !settings ) throw new Exception('Loan Settings is not defined.');
+
+		if( paid.principal > 0 ) {
+			if( !settings.curr_principal_acct ) throw new Exception('Loan Principal Account is not defined.');
+			list << createReceiptItem( settings.curr_principal_acct, paid.principal, currency, 'principal' );
+		}
+		if( paid.interest > 0 ) {
+			if( !settings.interest_acct ) throw new Exception('Loan Interest Account is not defined.');
+			list << createReceiptItem( settings.interest_acct, paid.interest, currency, 'interest' );
+		}
+		if( paid.surcharge > 0 ) {
+			if( !settings.surcharge_acct ) throw new Exception('Loan Surcharge Account is not defined.');
+			list << createReceiptItem( settings.surcharge_acct, paid.surcharge, currency, 'penalty' );
+		}
+		if( paid.pastdue > 0 ) {
+			if( !settings.past_due_interest_acct ) throw new Exception('Loan Past Due Account is not defined.');
+			list << createReceiptItem( settings.past_due_interest_acct, paid.pastdue, currency, 'pastdue' );
+		}
+
+		return list;
+	}
+
+	private def createReceiptItem( acct, amount, currency, type ) {
+		return [
+			acctid: acct.objid,
+			acctcode: acct.code,
+			accttitle: acct.title,
+			amount: amount,
+			currency: currency,
+			info: [type: type]
+		];
+	}
+
+	@ProxyMethod
+	public def postPayment( param ) {
+		assert param.appid;
+		assert param.amount;
+		assert param.billno;
+
+		try {
+			param.ledger = ledgerSvc.read([objid: param.appid]);
+			def mode = 'regular';
+			if( param.ledger.mode ) mode = param.ledger.mode;
+			
+			def svc = svcInvoker.create( postingHandlers[mode] );
+			if( !svc ) throw new Exception("No posting handler found for ledger mode ${mode}.");
+
+			return svc.postPayment( param );
+		}
+		catch(e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+}

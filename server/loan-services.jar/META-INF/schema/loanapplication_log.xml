@@ -1,0 +1,15 @@
+<schema>
+
+	<element name="loanapplication_log" tablename="loanapplication_log">
+		<field name="objid" primary="true"/>
+		<field name="appid" />
+		<field name="action" />
+		<field name="dtfiled" />
+		<field name="date" />
+		<field name="userid" />
+		<field name="username" />
+		<complex name="extended" serializer="default" merge="true"/>
+	</element>
+
+</schema>
+

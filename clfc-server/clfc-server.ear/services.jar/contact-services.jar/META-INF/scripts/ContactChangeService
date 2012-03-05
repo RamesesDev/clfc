@@ -1,0 +1,52 @@
+import com.rameses.annotations.*;
+import com.rameses.util.*;
+
+class ContactChangeService {
+
+	@PersistenceContext("java:contact")
+	def em;
+	
+	@Service("CustomFieldService")
+	def customFieldSvc;
+
+	
+	@ProxyMethod	
+	public def getList( param ) {
+		return em.sqlContext.createNamedQuery('contact:getChangeHistoryList')
+			.setParameters(param).setFirstResult( param._start ).setMaxResults( param._limit ).resultList;
+	}	
+
+	@ProxyMethod	
+	public def getInfo( param ) {
+		def o = em.sqlContext.createNamedQuery('contact:getChangeHistoryInfo').setParameters(param).singleResult;
+		
+		def x  = em.serializer.read( o.info );
+		def changes = em.serializer.read( o.changeinfo );
+		def fieldsDef = customFieldSvc.getFields("contact").fields;
+		
+		changes.each {
+			def s = it.key+"";
+			def v = it.value;			
+			String f = s.substring(s.lastIndexOf(".")+1);
+			if( !f.startsWith("_") && !f.endsWith("_") && v.action == "update" ) {
+				StringBuffer sb = new StringBuffer();
+				sb.append( "[" );
+				if( v.oldValue ) sb.append( '<strike><font color=red>' + v.oldValue + '</font></strike>&nbsp;&nbsp;' );
+				if( v.newValue ) sb.append( '<font color=blue><b>' + v.newValue + '</b></font>');
+				sb.append( "]" );
+				MapBeanUtils.setProperty( x, s, sb.toString() );
+			}
+		}
+		
+		def htmlMap = [:];
+		fieldsDef.each { fld ->
+			if( fld.name != 'objid' && x[fld.name] != null ) {
+				htmlMap[fld.caption] = x[fld.name];
+			}
+		}		
+		
+		htmlMap."Reason for Change" = '<font color="red"><i>' + o.reason + '</i></font>';
+		return HTMLBuilder.toString( htmlMap );	
+	}	
+		
+}

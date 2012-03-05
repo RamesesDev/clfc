@@ -1,0 +1,94 @@
+<workunit>
+    <invokers>
+        <invoker type="route:route_entry" target="popup"/>
+        <invoker type="formActions" tooltip="Add New Route"  mnemonic="a" icon="images/add16.png"     action="addRoute"       visibleWhen="#{formMode=='read' || formMode=='canAdd'}" />
+        <invoker type="formActions" tooltip="Edit Route"     mnemonic="e" icon="images/edit16.png"    action="editRoute"      visibleWhen="#{formMode=='read'}" />
+        <invoker type="formActions" tooltip="Delete Route"   mnemonic="d" icon="images/delete16.png"  action="deleteRoute"    visibleWhen="#{formMode=='read'}" />
+        <invoker type="formActions" tooltip="Update Route"   mnemonic="u" icon="images/save16.png"    action="updateRoute"    visibleWhen="#{formMode=='edit'}" />
+        <invoker type="formActions" tooltip="Save New Route" mnemonic="s" icon="images/save16.png"    action="saveRoute"      visibleWhen="#{formMode=='add'}" />
+        <invoker type="formActions" tooltip="Cancel"         mnemonic="c" icon="images/cancel16.png"  action="cancel"         visibleWhen="#{formMode=='add' || formMode=='edit'}"  immediate="true"/>
+    </invokers>
+    <code>
+    <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        
+        class RouteFormController{
+            
+            @Service("RouteService")
+            def svc;
+            
+            @Binding
+            def binding;
+            
+            def entity=[:];
+            def tmp;
+            def modeHandler;
+            def formMode;
+            
+            def fromTime=["7:30 AM", "8:30 AM", "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM",
+                           "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", "4:00 PM", "4:30 PM", "5:00 PM", "5:30 PM", "6:00 PM",
+                           "6:30 PM", "7:00 PM", "7:30 PM", "8:00 PM", "8:30 PM"];
+            def toTime=["7:30 AM", "8:30 AM", "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM",
+                           "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", "4:00 PM", "4:30 PM", "5:00 PM", "5:30 PM", "6:00 PM",
+                           "6:30 PM", "7:00 PM", "7:30 PM", "8:00 PM", "8:30 PM"];
+        
+            void setEntity(o){
+                entity = o;
+                binding?.refresh();
+            }
+           
+            void setFormMode(o){
+                formMode = o;
+                binding?.refresh();
+            }
+            
+            void addRoute(){
+                formMode="add";
+                modeHandler(formMode, "add");
+                tmp = entity;
+                entity=[:];
+                binding?.focus("entity.code");
+            }
+            
+            void saveRoute(){
+                svc.createData(entity);
+                formMode="read";
+                modeHandler(formMode, null);
+            }
+            
+            void editRoute(){
+                formMode="edit";
+                tmp = entity;
+                modeHandler(formMode, "edit");
+            }
+            
+            void updateRoute(){
+                svc.updateData(entity);
+                formMode="read";
+                modeHandler(formMode, null);
+            }
+            
+            void deleteRoute(){
+                svc.deleteData(entity);
+                formMode="read";
+                entity=[:];
+                modeHandler(formMode, null);
+            }
+            
+            def cancel(){
+                entity = tmp;
+                if(entity) formMode="read";
+                else    formMode="canAdd";
+                modeHandler(formMode, "cancel");
+            }
+        }
+    ]]> 
+    </code>
+    <pages>
+        <page template="route.ui.RouteForm"/>
+    </pages>
+</workunit>

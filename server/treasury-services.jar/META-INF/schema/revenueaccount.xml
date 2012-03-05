@@ -1,0 +1,12 @@
+<schema>
+    
+    <element name="revenueaccount" tablename="revenue_account">
+        <field name="objid" primary="true"/>
+        <field name="code"/>
+        <field name="title"/>
+        <field name="category"/>
+	</element>
+	
+</schema>
+
+

@@ -1,0 +1,39 @@
+<workunit>
+    <invoker type="loan:mainSourcesOfIncome" caption="Main Business Form" target="popup" action="init"/>
+    
+    <invoker type="formActions" caption="Add" mnemonic="a" action="add"/>
+    <invoker type="formActions" caption="Cancel" mnemonic="c" action="_close" immediate="true"/>
+    <code lang="groovy">        
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class MainBusinessController{
+            @Service('LoanApplicationService')
+            def svc;
+            
+            @Script('BusinessInfoDef')
+            def busInfoDef;
+        
+            def entity=[:];
+            def businessInfoControls;
+            def mode="read";
+            def selectHandler;
+            
+            void init(){
+                if( !entity.business ) entity.business = busInfoDef.createModel();
+                businessInfoControls = busInfoDef.getFormFields( entity.business, 'entity.business' );
+            }
+            
+            def add(){
+                if( selectHandler ) selectHandler( entity.business );
+                return "_close";
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="loan.ui.MainBusiness"/>
+    </pages>
+</workunit>

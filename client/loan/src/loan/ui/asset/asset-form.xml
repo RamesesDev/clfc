@@ -1,0 +1,13 @@
+<workunit>
+    <invoker>
+        <invoker type="formActions" caption="Add"    action="addContinue" tooltip="Add"    mnemonic="a" visibleWhen="#{view=='entry'||view=='exclude' and editmode!='read'}"/>
+        <invoker type="formActions" caption="Update" action="addClose"    tooltip="Update" mnemonic="u" visibleWhen="#{view=='edit'}"/>
+        <invoker type="formActions" caption="Cancel" action="cancel"      tooltip="Cancel" mnemonic="c" visibleWhen="#{view=='entry'||view=='edit'||view=='exclude'||view=='editFam'}" immediate="true"/>
+
+        <invoker type="leftActions" caption="Photo" action="viewPhoto" immediate="true" mnemonic="p" visibleWhen="#{view!='photo'}"/>
+        <invoker type="leftActions" tooltip="Back"  action="back"      immediate="true" mnemonic="b" visibleWhen="#{view=='photo'}" icon="images/back16.png" caption="Back"/>
+        
+        <invoker type="leftActions" tooltip="Add Photo"    icon="images/add16.png"    action="addPhoto"    caption="Add"    mnemonic="a" visibleWhen="#{editmode=='read' and view=='photo'}"/>
+        <invoker type="leftActions" tooltip="Delete Photo" icon="images/delete16.png" action="deletePhoto" caption="Delete" mnemonic="d" visibleWhen="#{editmode=='read' and view=='photo'}"/>
+    </invoker>
+</workunit>

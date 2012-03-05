@@ -1,0 +1,46 @@
+import com.rameses.rcp.annotations.*;
+import com.rameses.osiris2.client.*;
+import com.rameses.rcp.common.*;
+import com.rameses.util.*;
+
+/**
+* This is a generic helper for finding and caching objects
+*/
+class ViewHelper {
+
+    def handler;
+
+    def cache = [:];
+
+    void clear() {
+        cache.clear();
+    }
+
+    void addCache(String id, def o) {
+        cache.put( id, o );
+    }
+
+    def removeCache(String id) {
+        return cache.remove( id );
+    }
+
+    int getCacheSize() {
+        return cache.size();
+    }
+
+    def find( String id ) {
+        if(!handler)
+            throw new Exception("List handler not set");
+        def entity = null;
+        if( id ) {
+            if(!cache.containsKey(id)) {
+                entity = handler( id );
+                cache.put( id, entity );
+            }
+            entity = cache.get(id);
+        }
+        return entity;
+    }
+
+
+}

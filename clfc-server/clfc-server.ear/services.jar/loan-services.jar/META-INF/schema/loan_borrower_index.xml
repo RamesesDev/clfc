@@ -1,0 +1,15 @@
+<schema>
+   <element name="loan_borrower_index" tablename="loan_borrower_index">
+       <field name="custid" primary="true"/>
+       <field name="appid"  primary="true"/>
+	   <field name="contactno"/>
+	   <field name="appno"/>
+	   <field name="name"/>
+	   <field name="firstname"/>
+	   <field name="lastname"/>
+	   <field name="middlename"/>
+	   <field name="borrowertype"/>
+	   <complex name="extended" serializer="default" merge="true"/>
+   </element>
+</schema>
+

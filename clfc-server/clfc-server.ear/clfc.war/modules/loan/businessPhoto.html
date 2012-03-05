@@ -1,0 +1,49 @@
+<script>
+	$put(
+		"businessPhoto", 
+		new function() {
+			
+			this.businessPhoto;
+			
+			this.close = function() {
+				return '_close';
+			};
+			
+			//this.viewPhoto = function() {
+				//return '_close';
+			//};
+		}
+	);
+</script>
+<style>
+   body{font-family:arial;font-size:8px;}
+   h3.white { color: #ffffff; }
+</style>
+<div>
+	<hr/>
+	<body>        		
+		<table>					
+			<tr><td width=100>Name :</td><td><label context="businessPhoto">
+				<b>#{Photo.objid} #{Photo.name} #{Photo.file}</b></label></td></tr>
+		</table>
+		<hr/>
+		<table width="100%" context="businessPhoto" items="Photo.comments">
+			<thead>
+				<tr><td>Comments :</td></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<b><td name="message"></td></b>
+				</tr>
+			</tbody>
+		</table>	
+		<hr/>	
+		<table>
+			<tr>
+				<td align="right">
+					<input type="button" context="businessPhoto" name="close" value="Close"/>
+				</td>
+			</tr>
+		</table> 
+	</body>
+</div>

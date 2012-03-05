@@ -1,0 +1,138 @@
+<script>
+	$put(
+		"business",
+		new function() {
+
+			this.business;
+		}
+	);
+</script>
+
+<style>
+   body{font-family:arial;font-size:8px;}
+   h3.white { color: #ffffff; }
+</style>
+
+<table model="listModel" border="0" width="100%" cellspacing="0" class="grid">
+	<tr>
+		<td width=130>Business Name :</td>
+		<td>
+			<label context="business"><b>#{business.tradename}</b></label>
+		</td>
+	</tr>
+	<tr>
+		<td>Tel. No. :</td>
+		<td>
+			<label context="business"><b>#{business.telno}</b></label>
+		</td>
+	</tr>
+	<tr>
+		<td>Address :</td>
+		<td>
+			<label context="business"><b>#{business.address}</b></label>
+		</td>
+	</tr>
+	<tr>
+		<td>Occupancy</td>
+		<td valign="top"><b class="listInfo2">Type :</b> <label context="business"><b class="black">#{business.occupancy.type? business.occupancy.type: '-'}</b></label><br>
+				<b class="listInfo2">Rent Type :</b> <label context="business"><b class="black">#{business.occupancy.renttype? business.occupancy.renttype: '-'}</b></label><br>
+				<b class="listInfo2">Rental Fee : <label context="business"><b class="black2">Php</b> <b class="red">#{business.occupancy.rentamount.formatDecimal()? business.occupancy.rentamount.formatDecimal(): '-'}</b></label><br>
+				<b class="listInfo2">Since : <label context="business"><b class="black">#{business.occupancy.since? business.occupancy.since: '-'}</b></label><br>
+				<b class="listInfo2">Remarks : <label context="business"><b class="black">#{business.occupancy.remarks? business.occupancy.remarks: '-'}</b></label>
+		</td>
+	</tr>
+	<tr>
+		<td>Ownership :</td>
+		<td>
+			<label context="business"><b>#{business.ownership}</b></label>
+		</td>
+	</tr>
+	<tr>
+		<td>Type of Business</td>
+		<td valign="top"><b class="listInfo2">Type :</b> <label context="business"><b class="black">#{business.businesstype.type? business.businesstype.type: '-'}</b></label><br>
+			<b class="listInfo2">Stall Size/P.O Size : <label context="business"><b class="black">#{business.businesstype.stallsize? business.businesstype.stallsize: '-'}</b></label><br>
+			<b class="listInfo2"># of table(s) : <label context="business"><b class="black">#{business.businesstype.nooftables? business.businesstype.nooftables: '-'}</b></label><br>
+			<b class="listInfo2"># of chair(s) : <label context="business"><b class="black">#{business.businesstype.noofchair? business.businesstype.noofchair: '-'}</b></label><br>
+			<b class="listInfo2"># of CounterType Tables : <label context="business"><b class="black">#{business.businesstype.noofcountertype? business.businesstype.noofcountertype: '-'}</b></label><br>
+			<b class="listInfo2">Kind/Size : <label context="business"><b class="black">#{business.businesstype.kind? business.businesstype.kind: '-'}</b></label><br>
+			<b class="listInfo2"># of Units : <label context="business"><b class="black">#{business.businesstype.noofunits? business.businesstype.noofunits: '-'}</b></label><br>
+			<b class="listInfo2">Seating Cap. : <label context="business"><b class="black">#{business.businesstype.seatingcap? business.businesstype.seatingcap: '-'}</b></label><br>
+			<b class="listInfo2">Boundary Fee/Each : <label context="business"><b class="black"><b>Php</b> #{business.businesstype.boundaryfee.formatDecimal()? business.businesstype.boundaryfee: '-'}</b></label><br>
+			<b class="listInfo2">Remarks : <label context="business"><b class="black">#{business.businesstype.remarks? business.businesstype.remarks: '-'}</b></label>
+		</td>
+	</tr>
+	<tr>
+		<td>Capital invested :</td>
+		<td>
+			<!--<label context="business"><b>Php</b> <b class="green">#{business.invested.formatDecimal()? business.invested: '0.00'}</b></label>-->
+			<label context="business"><b>Php</b> <b class="teal">#{business.invested? business.invested: '0.00'}</b></label>
+		</td>
+	</tr>
+	<!--<tr>
+		<td>Established since :</td><td><label context="business"><b>#{business.established}</b></label></td></tr>
+	<tr>-->
+		<td>Business Hours :</td><td><label context="business"><b>#{business.businessHours.businessHoursFrom? business.businessHours.businessHoursFrom: '-'} - #{business.businessHours.businessHoursTo? business.businessHours.businessHoursTo: '-'}</b></label></label></td></tr>
+	<tr>
+		<td>Days Open :</td>
+		<td>
+			<label context="business"><b>#{business.businessHours.daysOpen? business.businessHours.daysOpen: '-'}</b></label></label>
+		</td>
+	</tr>
+	<tr>
+		<td>Est. daily sales :</td>
+		<td>
+			<label context="business"><b>Php</b> <b class="navy">#{business.avgsales_from} - #{business.avgsales_to}</b><label>
+		</td>
+	</tr>
+</table>
+<b context="business" visibleWhen="#{business.cicashCountDate && business.cicashCountTime && business.cicashCountAmount}">	
+	<hr/>
+</b>
+<table model="listModel" border="0" width="100%" cellspacing="0" class="grid">
+	<tr context="business" visibleWhen="#{business.businessEvaluation && business.ciPhysicalOutlook}"> 
+		<td valign="top" class="teal">Credit Investigation  Report</td>
+		<td valign="top">	
+			<label context="business">	
+				<j class="listInfo2">Business Evaluation:</j> <b class="black">#{business.businessEvaluation? business.businessEvaluation: ''}</b><br/>
+				<j class="listInfo2">Physical Outlook:</j> <b class="black">#{business.ciPhysicalOutlook? business.ciPhysicalOutlook: ''}</b>
+			</label>	
+		</td>
+	</tr>
+	<tr context="business" visibleWhen="#{business.cicashCountDate && business.cicashCountTime && business.cicashCountAmount}"> 
+		<td valign="top" class="teal">Cash Count</td>
+		<td valign="top">
+			<label context="business">
+				<j class="listInfo2">Date:</j> <b class="black">#{business.cicashCountDate? business.cicashCountDate: 'Not specified.'}</b><br/>	
+				<j class="listInfo2">Time:</j> <b class="black">#{business.cicashCountTime? ' ' + business.cicashCountTime: '-'}</b><br/>
+				<j class="listInfo2">Amount:</j> <b class="black">#{business.cicashCountAmount.formatDecimal()? 'Php' +' '+ business.cicashCountAmount.formatDecimal() : ''}</b><br/><br/>
+				<j class="listInfo2">CI Date:</j> <b class="black">#{business.ciDate? business.ciDate: ''}</b><br/>
+				<j class="listInfo2">CI By:</j> <b class="black">#{business.ciBy? business.ciBy: ''}</b><br/>
+			</label>
+		</td>
+	</tr>
+</table>
+<!--
+<hr/>
+<table>
+	<tr>
+		<td valign="top">Photo(s) :</td>
+		<tr>
+			<label context="business"><i class="maroon">#{name? name : ' '}</i><label>
+			<td valign="top" visibleWhen="#{!business.photo}"><td><i class="red">No Photo(s) Attached</i></td>
+		</tr>
+	</tr>
+	<div class="asset-box">
+		<nobr>
+			<ul class="asset" context="business" items="business.photos" varName="item">		
+				<li style="display: inline">
+					<a href="/clfc-photos/?b=#{application.branchcode}&a=#{application.objid}&id=#{item.objid}"
+					   title="#{item.name? item.name : ''}">
+						<img src="/clfc-photos/?b=#{application.branchcode}&a=#{application.objid}&id=#{item.objid}" height="100"/>
+					</a>
+				</li>
+			</ul>
+		</nobr>
+	</div>
+</div>
+</table>
+-->

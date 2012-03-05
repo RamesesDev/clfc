@@ -1,0 +1,24 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+import com.rameses.util.*;
+
+
+class LoanApplicationLogService
+{
+	@PersistenceContext('java:loan')
+	def em;
+
+	@Service('DateService')
+	def datesvc;
+	
+	@Service('UserService')
+	def userSvc;
+	
+	@Env
+    def env;
+	
+	@ProxyMethod
+	def getAppLog(){
+		return em.sqlContext.createQuery('select * from loanapplication_log').resultList;
+	}
+}	

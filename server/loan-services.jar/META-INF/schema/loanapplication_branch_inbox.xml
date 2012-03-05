@@ -1,0 +1,10 @@
+<schema>
+   <element name="loanapplication" tablename="loanapplication">
+       <field name="objid" primary="true"/>
+       <field name="appid" primary="true"/> 
+       <field name="fullborrowername"/>	   
+	   <field name="downloaddate"/>	
+	   <field name="state"/>
+   </element>	
+</schema>
+

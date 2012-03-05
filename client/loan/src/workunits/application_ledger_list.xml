@@ -1,0 +1,100 @@
+<workunit>
+    <invokers>
+        <invoker folderid="menu/services/loan" caption="Loan Ledgers" action="init" 
+                 permission="application.viewLedgerList" index="0"/>        
+        <invoker type="home:menu" caption="Loan Ledgers" action="init" icon="images/applications32.png"
+                 permission="application.viewLedgerList" index="0" target="window"/>
+        
+        <invoker type="formActions" caption="Close" mnemonic="c" action="_close" index="-10" icon="images/cancel16.png"/>
+        
+        <!-- state codes -->
+        <invoker type="ledger:state-list" caption="Pending"        name="PENDING"        permission="application.viewPendingList"/>  
+        <invoker type="ledger:state-list" caption="For Inspection" name="FOR_INSPECTION" permission="application.viewForInspectionList"/>
+        <invoker type="ledger:state-list" caption="Disapproved"    name="DISAPPROVED"    permission="application.viewDisapprovedList"/>
+        <invoker type="ledger:state-list" caption="For Approval"   name="FOR_APPROVAL"   permission="application.viewForApprovalList"/>
+        <invoker type="ledger:state-list" caption="Approved"       name="APPROVED"       permission="application.viewApprovedList"/>
+        <invoker type="ledger:state-list" caption="For Release"    name="FOR_RELEASE"    permission="application.viewForReleaseList"/>
+        <invoker type="ledger:state-list" caption="Released"       name="RELEASED"       permission="application.viewReleasedList"/>
+        <invoker type="ledger:state-list" caption="Closed"         name="CLOSED"         permission="application.viewClosedList"/>
+        <invoker type="ledger:state-list" caption="Canceled-Out"   name="CANCELED"       permission="application.viewCanceledList"/>
+        <invoker type="ledger:state-list" caption="Back-Out"       name="BACK_OUT"       permission="application.viewBackOutList"/>
+        <invoker type="ledger:state-list" caption="Disqualified-Out" name="DISQUALIFIED_OUT" permission="application.viewDisqualifiedOutList"/>    
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        
+        class LoanLedgerListController{
+            @Service('LoanLedgerService')
+            def svc;
+            
+            @Service('LoanApplicationSearchService')
+            def searchSvc;
+            
+            @Service('LoanApplicationService')
+            def loanAppSvc;
+            
+            @Binding
+            def binding;
+            
+            def selected;
+            def state;
+            def searchText;
+            boolean busy;
+            
+            def itemStatus = InvokerUtil.lookup("ledger:state-list");
+            def loadedStatusList = [];
+            
+            def formActions = InvokerUtil.lookupActions('ledger:formActions', {
+                [entity: selected]
+            } as InvokerParameter );
+            
+            void init(){                
+                loadedStatusList.clear();
+                if( itemStatus ) {
+                    setState( itemStatus[0].properties.name );
+                    itemStatus.each { loadedStatusList << it.properties.name }
+                }
+            }
+            
+            void setState( s ) {
+                this.state = s;
+                searchText = '';
+                listHandler.load();
+            }
+            
+            def listHandler = [
+                getColumns: {
+                    return [
+                        new Column(name:"appno",           caption:"Application no.",width:70),
+                        new Column(name:"fullborrowername",caption:"Borrower name",  width:300),
+                        new Column(name:"state",           caption:"State",          width:90),
+                        new Column(name:"routedescription",caption:"Route",          width:40)
+                    ]
+                },
+                fetchList:{o->
+                   o.state = state;
+                   o.allowedStates = loadedStatusList;
+                   o.searchText = searchText;
+                   return searchSvc.getList(o);
+                },
+                getRows:{
+                    return 18;
+                }
+            ]as PageListModel;
+           
+            void refreshList(){
+                listHandler.load();
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="loan.ui.ledger.LedgerList"/>
+    </pages>
+</workunit>

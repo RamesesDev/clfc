@@ -1,0 +1,119 @@
+<workunit>
+    
+    <invokers>
+        <invoker type="host_form" action="init"/>
+        <invoker type="host_form:add" action="initAdd"/>
+        <invoker type="admininfo:host" action="init" caption="View Info"  />
+        
+        <invoker type="formActions" action="_close" icon="images/back16.png" tooltip="Back" immediate="true"  visibleWhen="#{mode=='read'}"/>
+
+        <invoker type="formActions" action="addNew" icon="images/new16.png" tooltip="Add New" immediate="true"  visibleWhen="#{mode=='read'}" permission="host.create"/>
+        <invoker type="formActions" action="edit"  icon="images/edit16.png" tooltip="Edit"  immediate="true" visibleWhen="#{mode=='read' and entity.objid!=null}" permission="host.edit"/>
+        <invoker type="formActions" action="saveNew" icon="images/save16.png" tooltip="Save"  visibleWhen="#{mode=='create'}"/>
+        <invoker type="formActions" action="saveUpdate" icon="images/save16.png" tooltip="Save"  visibleWhen="#{mode=='edit'}"/>
+        <invoker type="formActions" action="cancelEdit" icon="images/cancel16.png" tooltip="Cancel" immediate="true"  visibleWhen="#{mode!='read'}"/>
+        
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class HostFormController  {
+        
+            @Service("HostService")
+            def svc;
+            
+            @Script("TimeZones")
+            def timeZoneScript;
+            
+            @Caller
+            def caller;
+            
+            @Binding
+            def binding;
+
+            def entity;
+            
+            def mode = "read";
+            
+            def editHandler;
+            def saveHandler;
+            def cancelHandler;
+            def rowSelector = [handler:null];
+            
+            def formActions = InvokerUtil.lookupActions( "host:formActions", 
+                    { return [
+                            entity:entity, 
+                            rowSelector: rowSelector,
+                            cancelHandler: cancelHandler,
+                            saveHandler: saveHandler,
+                            editHandler: editHandler
+                        ]
+                    } as InvokerParameter  );
+            
+                    
+            public def getTimezoneList() {
+                if( !entity.address?.country ) return [];
+                return timeZoneScript.getList( entity.address.country.toLowerCase() );
+            }
+            
+            public void init() {
+                if(entity?.objid) {
+                    entity = svc.open( [objid: entity.objid] );
+                    mode = "read";
+                }
+            }
+            
+            public void initAdd() {
+                mode = "create";
+                entity = [:];
+                entity.address = [:];
+                entity.contact = [phone:null, mobile:null, email:null];
+            }
+            
+            def addNew() {
+                initAdd();
+                if(editHandler) return editHandler(entity, mode);
+                return null;
+            }
+            
+            def edit() {
+                mode = "edit";
+                if(editHandler) return editHandler(entity, mode);
+            }
+            
+            def saveNew() {
+                if(MsgBox.confirm("You are about to save this record. Continue?")) {
+                    entity = svc.create(entity);
+                    mode = "read";
+                    if(saveHandler) return saveHandler(entity, "create");
+                }
+            }
+            
+            def saveUpdate() {
+                if(MsgBox.confirm("You are about to save this record. Continue?")) {
+                    entity = svc.update(entity);
+                    mode = "read";
+                    if(saveHandler) return saveHandler(entity, "update");
+                }    
+            }
+            
+            def cancelEdit() {
+                if(MsgBox.confirm("Changes will be discarded. Continue?")) {
+                    mode = "read";
+                    if(cancelHandler) return cancelHandler();
+                }
+            }
+
+        }
+        
+        ]]>
+    </code>
+    <pages>
+        <page template="host.ui.HostFormPage"/>
+    </pages>
+</workunit>

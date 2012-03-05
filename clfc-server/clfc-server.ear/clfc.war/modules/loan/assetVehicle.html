@@ -1,0 +1,96 @@
+<script>
+	$put(
+		"assetVehicle", 
+		new function() {
+			
+			this.assetVehicle;
+			this.onload = function() {
+				setTimeout( function(){ $('.asset a').lightBox({fixedNavigation:true}); }, 100 );
+			};
+
+			this.close = function() {
+				return '_close';
+			};
+		}
+	);
+</script>
+<style>
+   body{font-family:arial;font-size:8px;}
+   h3.white { color: #ffffff; }
+</style>
+<div>
+	<body>        		
+		<table model="listModel" border="0" width="100%" cellspacing="0" class="grid">
+			<tr><td width=130>Name :</td>
+			<td><label context="assetVehicle"><b>#{assetVehicle.subject}</b></label></td></tr>
+			<tr><td>Model :</td>
+			<td><label context="assetVehicle"><b>#{assetVehicle.model}</b></label></td></tr>
+			<tr><td>Make :</td>
+			<td><label context="assetVehicle"><b>#{assetVehicle.make}</b></label></td></tr>
+			<tr><td>Type :</td>
+			<td><label context="assetVehicle"><b>#{assetVehicle.type}</b></label></td></tr>
+			<tr><td>Use :</td>
+			<td><label context="assetVehicle"><b>#{assetVehicle.use}</b></label></td></tr>
+			<tr><td>Chassis No. :</td>
+			<td><label context="assetVehicle"><b>#{assetVehicle.chassisno}</b></label></td></tr>
+			<tr><td>Plate No. :</td>
+			<td><label context="assetVehicle"><b>#{assetVehicle.plateno}</b></label></label></td></tr>
+			<tr><td>Reg No. :</td>
+			<td><label context="assetVehicle"><b>#{assetVehicle.regno}</b></label></label></td></tr>
+			<tr><td>Engine No :</td>
+			<td><label context="assetVehicle"><b>#{assetVehicle.engineno}</b></label></label></td></tr>
+			<tr><td>Registered Name :</td>
+			<td><label context="assetVehicle"><b class="navy">#{assetVehicle.registeredName}</b></label></label></td></tr>
+			<tr>
+				<td>With OR/CR</td>
+				<td context="assetVehicle" visibleWhen="#{!assetVehicle.crno && !assetVehicle.fuel && !assetVehicle.denomination
+					&& !assetVehicle.series && !assetVehicle.pistondisplacement && !assetVehicle.noofcylinders && !assetVehicle.netwt 
+					&& !assetVehicle.grosswt && !assetVehicle.netcap && !assetVehicle.shipwt}">
+					<i class="maroon">Not Specified at present.</i>
+				</td>
+				<td context="assetVehicle" visibleWhen="#{assetVehicle.crno || assetVehicle.fuel || assetVehicle.denomination
+					|| assetVehicle.series || assetVehicle.pistondisplacement || assetVehicle.noofcylinders || assetVehicle.netwt 
+					|| assetVehicle.grosswt || assetVehicle.netcap || assetVehicle.shipwt}">						
+					<b class="listInfo2">Fuel : <label context="assetVehicle"><b class="black">#{assetVehicle.fuel? assetVehicle.fuel: '-'}</b></label><br>
+					<b class="listInfo2">Denomination : <label context="assetVehicle"><b class="black">#{assetVehicle.denomination? assetVehicle.denomination: '-'}</b></label><br>
+					<b class="listInfo2">Series : <label context="assetVehicle"><b class="black">#{assetVehicle.series? assetVehicle.series: '-'}</b></label><br>
+					<b class="listInfo2">Piston Displacement : <label context="assetVehicle"><b class="black">#{assetVehicle.pistondisplacement? assetVehicle.pistondisplacement: '-'}</b></label><br>
+					<b class="listInfo2">No. of Cylinders : <label context="assetVehicle"><b class="black">#{assetVehicle.noofcylinders? assetVehicle.noofcylinders: '-'}</b></label><br>
+					<b class="listInfo2">Net Wt. : <label context="assetVehicle"><b class="black">#{assetVehicle.netwt? assetVehicle.netwt: '-'}</b></label><br>
+					<b class="listInfo2">Gross Wt. : <label context="assetVehicle"><b class="black">#{assetVehicle.grosswt? assetVehicle.grosswt: '-'}</b></label><br>
+					<b class="listInfo2">Net Cap. : <label context="assetVehicle"><b class="black"><b>Php</b> #{assetVehicle.netcap.formatDecimal()? assetVehicle.netcap: '-'}</b></label><br>
+					<b class="listInfo2">Ship Wt. : <label context="assetVehicle"><b class="black">#{assetVehicle.shipwt? assetVehicle.shipwt: '-'}</b></label>
+				</td>
+			</tr>
+			<tr><td>Date Acquired :</td>
+			<td><label context="assetVehicle"><b>#{assetVehicle.dateAcquired}</b></label></label></td></tr>
+			<tr context="assetVehicle" visibleWhen="#{assetVehicle.appraisedvalue}"><td>Appraised Value :</td>
+				<td>
+					<label context="assetVehicle" visibleWhen="#{assetVehicle.appraisedvalue}"><b>Php</b>
+					<b class="teal"> #{assetVehicle.appraisedvalue.formatDecimal()}</b></label>
+				</td>
+			</tr>
+			<tr><td>Remarks :</td>
+			<td><label context="assetVehicle"><b>#{assetVehicle.remarks}</b></label></label></td></tr>
+		</table>
+		<hr/>
+		<table>
+			Photo(s):<br/>
+			<div style="text-align: center" context="assetVehicle" visibleWhen="#{!assetVehicle.photos}">
+				<i><b class="maroon">No Photo at present.</b></i>
+			</div>
+			<div class="asset-box">
+				<nobr>
+					<ul class="asset" context="assetVehicle" items="assetVehicle.photos" varName="item">		
+						<li style="display: inline">
+							<a href="/clfc-photos/?b=#{application.branchcode}&a=#{application.objid}&id=#{item.objid}"
+							   title="#{item.name? item.name : ''}">
+								<img src="/clfc-photos/?b=#{application.branchcode}&a=#{application.objid}&id=#{item.objid}" height="100"/>
+							</a>
+						</li>
+					</ul>
+				</nobr>
+			</div>
+		</table>
+	</body>
+</div>

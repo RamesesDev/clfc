@@ -1,0 +1,1236 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="loanApplicationReport"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="595"
+		 pageHeight="842"
+		 columnWidth="535"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="COLLATERAL_PROPERTY" isForPrompting="false" class="java.lang.Object"/>
+	<parameter name="SUBREPORT_BUSINESS" isForPrompting="false" class="java.lang.Object"/>
+	<parameter name="SUBREPORT_EMPLOYMENT" isForPrompting="false" class="java.lang.Object"/>
+
+	<field name="tradename" class="java.lang.String"/>
+	<field name="telno" class="java.lang.String"/>
+	<field name="address" class="java.lang.String"/>
+	<field name="ownership" class="java.lang.String"/>
+	<field name="businesstype" class="java.lang.String"/>
+	<field name="invested" class="java.math.BigDecimal"/>
+	<field name="established" class="java.lang.String"/>
+	<field name="stallsize" class="java.lang.String"/>
+	<field name="superiorname" class="java.lang.String"/>
+	<field name="cashiername" class="java.lang.String"/>
+	<field name="propertylist" class="java.lang.Object"/>
+	<field name="borrower.firstname" class="java.lang.String"/>
+	<field name="borrower.lastname" class="java.lang.String"/>
+	<field name="borrower.middlename" class="java.lang.String"/>
+	<field name="amountapproved" class="java.math.BigDecimal"/>
+	<field name="term" class="java.lang.String"/>
+	<field name="purpose" class="java.lang.String"/>
+	<field name="loaninfo.amountapproved" class="java.math.BigDecimal"/>
+	<field name="loaninfo.producttype.term" class="java.math.BigDecimal"/>
+	<field name="loaninfo.loanpurpose" class="java.lang.String"/>
+	<field name="MainBorrowerAge" class="java.lang.Integer"/>
+	<field name="borrower.birthdate" class="java.lang.String"/>
+	<field name="borrower.phone" class="java.lang.String"/>
+	<field name="borrower.citizenship" class="java.lang.String"/>
+	<field name="borrower.address.address1" class="java.lang.String"/>
+	<field name="borrower.address.address2" class="java.lang.String"/>
+	<field name="borrower.civilstat" class="java.lang.String"/>
+	<field name="spouse.firstname" class="java.lang.String"/>
+	<field name="spouse.lastname" class="java.lang.String"/>
+	<field name="spouse.middlename" class="java.lang.String"/>
+	<field name="spouse.birthdate" class="java.lang.String"/>
+	<field name="spouse.citizenship" class="java.lang.String"/>
+	<field name="principalMainBusinessList" class="java.lang.Object"/>
+	<field name="principalEmploymentList" class="java.lang.Object"/>
+	<field name="spouse.address.address1" class="java.lang.String"/>
+	<field name="spouse.address.address2" class="java.lang.String"/>
+	<field name="spouseName" class="java.lang.String"/>
+	<field name="spouse" class="java.lang.Object"/>
+
+
+		<group  name="InformationProperty" >
+			<groupExpression><![CDATA[]]></groupExpression>
+			<groupHeader>
+			<band height="307"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="0"
+						y="161"
+						width="263"
+						height="19"
+						key="staticText-131"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font fontName="Times New Roman" pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
+					</textElement>
+				<text><![CDATA[IF EMPLOYED]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="262"
+						y="161"
+						width="263"
+						height="19"
+						key="staticText-132"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font fontName="Times New Roman" pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
+					</textElement>
+				<text><![CDATA[IF IN BUSINESS FOR SELF]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="177"
+						width="535"
+						height="1"
+						forecolor="#999999"
+						key="line-150"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="159"
+						width="535"
+						height="1"
+						key="line-152"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="535"
+						height="19"
+						key="staticText-147"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="14" isBold="true"/>
+					</textElement>
+				<text><![CDATA[LOAN APPLICATION]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="2"
+						y="25"
+						width="74"
+						height="11"
+						key="staticText-148"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Amount Approved :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="2"
+						y="42"
+						width="59"
+						height="11"
+						key="staticText-149"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" pdfFontName="Helvetica" size="8" isBold="false"/>
+					</textElement>
+				<text><![CDATA[PURPOSE :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="313"
+						y="25"
+						width="28"
+						height="11"
+						key="staticText-150"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Term :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="65"
+						width="535"
+						height="18"
+						key="staticText-151"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font fontName="Times New Roman" pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
+					</textElement>
+				<text><![CDATA[INFORMATION OF APPLICANT]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="83"
+						width="535"
+						height="1"
+						forecolor="#999999"
+						key="line-157"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="2"
+						y="86"
+						width="35"
+						height="16"
+						key="staticText-152"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Name :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="2"
+						y="99"
+						width="40"
+						height="11"
+						key="staticText-153"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Birthdate :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="2"
+						y="112"
+						width="46"
+						height="11"
+						key="staticText-154"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Address 1 :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="2"
+						y="126"
+						width="53"
+						height="11"
+						key="staticText-155"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Address 2 :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="2"
+						y="141"
+						width="80"
+						height="11"
+						key="staticText-156"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Name of Spouse :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="306"
+						y="86"
+						width="56"
+						height="11"
+						key="staticText-157"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Civil Status :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="461"
+						y="86"
+						width="30"
+						height="11"
+						key="staticText-158"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Age :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="237"
+						y="99"
+						width="53"
+						height="11"
+						key="staticText-159"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Place of Birth :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="237"
+						y="112"
+						width="53"
+						height="11"
+						key="staticText-160"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[ACR No. :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="415"
+						y="111"
+						width="39"
+						height="11"
+						key="staticText-161"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Tel. No. :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="335"
+						y="141"
+						width="53"
+						height="11"
+						key="staticText-162"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Dependents :]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="388"
+						y="151"
+						width="137"
+						height="1"
+						forecolor="#999999"
+						key="line-168"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="63"
+						width="535"
+						height="1"
+						key="line-169"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="341"
+						y="25"
+						width="21"
+						height="11"
+						key="textField"/>
+					<box>					<bottomPen lineWidth="0.5"/>
+</box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{loaninfo.producttype.term}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="361"
+						y="25"
+						width="24"
+						height="11"
+						key="staticText-163"/>
+					<box>					<bottomPen lineWidth="0.5"/>
+</box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[days]]></text>
+				</staticText>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="267"
+						y="178"
+						width="258"
+						height="127"
+						key="subreport-5"
+						isRemoveLineWhenBlank="true"
+						isPrintWhenDetailOverflows="true"/>
+					<dataSourceExpression><![CDATA[$F{principalMainBusinessList}]]></dataSourceExpression>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{SUBREPORT_BUSINESS}]]></subreportExpression>
+				</subreport>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="1"
+						y="177"
+						width="262"
+						height="128"
+						key="subreport-6"
+						isRemoveLineWhenBlank="true"
+						isPrintWhenDetailOverflows="true"/>
+					<dataSourceExpression><![CDATA[$F{principalEmploymentList}]]></dataSourceExpression>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{SUBREPORT_EMPLOYMENT}]]></subreportExpression>
+				</subreport>
+				<line direction="TopDown">
+					<reportElement
+						x="29"
+						y="94"
+						width="276"
+						height="1"
+						key="line-171"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="38"
+						y="107"
+						width="197"
+						height="1"
+						key="line-172"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="40"
+						y="120"
+						width="195"
+						height="1"
+						key="line-173"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="42"
+						y="135"
+						width="483"
+						height="1"
+						key="line-174"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="63"
+						y="150"
+						width="272"
+						height="1"
+						key="line-175"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="71"
+						y="34"
+						width="235"
+						height="1"
+						key="line-176"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="45"
+						y="51"
+						width="480"
+						height="1"
+						key="line-177"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="350"
+						y="94"
+						width="104"
+						height="1"
+						key="line-178"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="482"
+						y="94"
+						width="43"
+						height="1"
+						key="line-179"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="290"
+						y="107"
+						width="235"
+						height="1"
+						key="line-180"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="450"
+						y="120"
+						width="75"
+						height="1"
+						key="line-181"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="277"
+						y="121"
+						width="136"
+						height="0"
+						key="line-182"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="propertylist" >
+			<groupExpression><![CDATA[]]></groupExpression>
+			<groupHeader>
+			<band height="76"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="0"
+						y="31"
+						width="535"
+						height="19"
+						key="staticText-33"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font fontName="Times New Roman" pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
+					</textElement>
+				<text><![CDATA[PROPERTY HOLDINGS]]></text>
+				</staticText>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="1"
+						y="52"
+						width="525"
+						height="24"
+						key="subreport-4"/>
+					<dataSourceExpression><![CDATA[$F{propertylist}]]></dataSourceExpression>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{COLLATERAL_PROPERTY}]]></subreportExpression>
+				</subreport>
+				<line direction="TopDown">
+					<reportElement
+						x="87"
+						y="26"
+						width="448"
+						height="1"
+						key="line-113"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="2"
+						y="3"
+						width="85"
+						height="11"
+						key="staticText-143"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Name/Title of Superior :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="2"
+						y="15"
+						width="80"
+						height="11"
+						key="staticText-144"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Name of Cashier :]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="87"
+						y="14"
+						width="448"
+						height="1"
+						key="line-170"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="spouseinfo" >
+			<groupExpression><![CDATA[]]></groupExpression>
+			<groupHeader>
+			<band height="144"  isSplitAllowed="true" >
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="2"
+						width="535"
+						height="1"
+						forecolor="#999999"
+						key="line-35"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="0"
+						y="2"
+						width="535"
+						height="19"
+						key="staticText-109"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font fontName="Times New Roman" pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
+					</textElement>
+				<text><![CDATA[INFORMATION OF SPOUSE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="22"
+						width="263"
+						height="19"
+						key="staticText-110"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font fontName="Times New Roman" pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
+					</textElement>
+				<text><![CDATA[IF EMPLOYED]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="262"
+						y="22"
+						width="263"
+						height="19"
+						key="staticText-111"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font fontName="Times New Roman" pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
+					</textElement>
+				<text><![CDATA[IF IN BUSINESS FOR SELF]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="2"
+						y="42"
+						width="46"
+						height="11"
+						key="staticText-112"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Employer :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="2"
+						y="55"
+						width="53"
+						height="11"
+						key="staticText-113"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Date of Birth :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="2"
+						y="68"
+						width="53"
+						height="11"
+						key="staticText-114"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Citizenship :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="2"
+						y="81"
+						width="53"
+						height="11"
+						key="staticText-115"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Address :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="237"
+						y="42"
+						width="68"
+						height="11"
+						key="staticText-116"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Firm/Trade Name : ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="237"
+						y="55"
+						width="53"
+						height="11"
+						key="staticText-117"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Tel. No. :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="237"
+						y="68"
+						width="68"
+						height="11"
+						key="staticText-118"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Type of Business :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="237"
+						y="81"
+						width="113"
+						height="11"
+						key="staticText-119"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Sole Owner/Parner/Corporation :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="2"
+						y="94"
+						width="59"
+						height="11"
+						key="staticText-120"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Monthly Salary :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="2"
+						y="107"
+						width="69"
+						height="11"
+						key="staticText-121"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Length of Service :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="2"
+						y="120"
+						width="85"
+						height="11"
+						key="staticText-122"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Name/Title of Superi9or :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="2"
+						y="133"
+						width="80"
+						height="11"
+						key="staticText-123"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Name of Cashier :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="237"
+						y="94"
+						width="61"
+						height="11"
+						key="staticText-124"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Capital Invested :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="237"
+						y="107"
+						width="68"
+						height="11"
+						key="staticText-125"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Stablished Since :]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="21"
+						width="535"
+						height="1"
+						forecolor="#999999"
+						key="line-128"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="2"
+						width="535"
+						height="1"
+						forecolor="#000000"
+						backcolor="#000000"
+						key="line-136"
+						stretchType="RelativeToTallestObject"/>
+					<graphicElement stretchType="RelativeToTallestObject"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="40"
+						y="51"
+						width="195"
+						height="1"
+						key="line-183"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="52"
+						y="64"
+						width="183"
+						height="1"
+						key="line-184"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="43"
+						y="77"
+						width="192"
+						height="1"
+						key="line-185"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="37"
+						y="90"
+						width="198"
+						height="1"
+						key="line-186"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="304"
+						y="51"
+						width="221"
+						height="1"
+						key="line-187"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="277"
+						y="65"
+						width="248"
+						height="1"
+						key="line-188"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="300"
+						y="78"
+						width="225"
+						height="1"
+						key="line-189"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="350"
+						y="92"
+						width="175"
+						height="1"
+						key="line-190"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="298"
+						y="103"
+						width="227"
+						height="1"
+						key="line-191"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="296"
+						y="117"
+						width="229"
+						height="1"
+						key="line-192"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="87"
+						y="130"
+						width="438"
+						height="1"
+						key="line-193"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="67"
+						y="142"
+						width="458"
+						height="1"
+						key="line-194"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="59"
+						y="103"
+						width="176"
+						height="1"
+						key="line-195"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="69"
+						y="116"
+						width="166"
+						height="1"
+						key="line-196"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="otherinfo" >
+			<groupExpression><![CDATA[]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="59"  isSplitAllowed="true" >
+				<line direction="TopDown">
+					<reportElement
+						x="141"
+						y="19"
+						width="256"
+						height="1"
+						key="line-59"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="141"
+						y="37"
+						width="256"
+						height="1"
+						key="line-60"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="169"  isSplitAllowed="true" >
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="1"
+						width="535"
+						height="1"
+						forecolor="#000000"
+						backcolor="#000000"
+						key="line-114"
+						stretchType="RelativeToTallestObject"/>
+					<graphicElement stretchType="RelativeToTallestObject"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="1"
+						width="535"
+						height="1"
+						forecolor="#000000"
+						backcolor="#000000"
+						key="line-130"
+						stretchType="RelativeToTallestObject"/>
+					<graphicElement stretchType="RelativeToTallestObject"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="0"
+						y="2"
+						width="535"
+						height="19"
+						key="staticText-126"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font fontName="Times New Roman" pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
+					</textElement>
+				<text><![CDATA[OTHER INFORMATION]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="21"
+						width="535"
+						height="1"
+						forecolor="#999999"
+						key="line-131"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="2"
+						y="23"
+						width="80"
+						height="11"
+						key="staticText-127"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Comm. Tax Cert. No. :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="2"
+						y="37"
+						width="18"
+						height="10"
+						key="staticText-128"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[on ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="311"
+						y="23"
+						width="39"
+						height="11"
+						key="staticText-129"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[Issued at :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="237"
+						y="37"
+						width="25"
+						height="10"
+						key="staticText-130"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="8"/>
+					</textElement>
+				<text><![CDATA[TIN :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="65"
+						width="534"
+						height="55"
+						key="staticText-56"/>
+					<box></box>
+					<textElement textAlignment="Justified">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+				<text><![CDATA[             The undersigned authorizes CAPITAL AND LEVERAGE FINANCE CORPORATION to obtain such information  as  may  be required concerning this application  and  agrees  that  such information shall remain the CAPITAL AND LEVERAGE FINANCE CORPORATION'S property whether or not the loan is granted.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="119"
+						width="535"
+						height="16"
+						key="staticText-57"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+				<text><![CDATA[            I hereby certify that all information herein and herewith furnished are in all respect true and correct.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="290"
+						y="153"
+						width="184"
+						height="15"
+						key="staticText-58"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+				<text><![CDATA[Signature of Applicant]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="290"
+						y="153"
+						width="184"
+						height="1"
+						forecolor="#999999"
+						key="line-61"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="346"
+						y="32"
+						width="179"
+						height="1"
+						key="line-197"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="260"
+						y="46"
+						width="265"
+						height="1"
+						key="line-198"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="14"
+						y="46"
+						width="221"
+						height="1"
+						key="line-199"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="77"
+						y="32"
+						width="229"
+						height="1"
+						key="line-200"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

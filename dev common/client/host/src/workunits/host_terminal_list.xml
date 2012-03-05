@@ -1,0 +1,5 @@
+<workunit extends="workunits/terminal_list.xml">
+    <invokers>
+         <invoker type="host:formActions" caption="Terminals" action="init" index="20" immediate="true" visibleWhen="#{mode=='read' and entity.objid!=null}" />
+    </invokers>
+</workunit>

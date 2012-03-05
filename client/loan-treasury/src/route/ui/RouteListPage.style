@@ -1,0 +1,2 @@
+"selected" [listMode=="read"] { enabled:true; }
+"selected" [listMode!="read"] { enabled:false; }

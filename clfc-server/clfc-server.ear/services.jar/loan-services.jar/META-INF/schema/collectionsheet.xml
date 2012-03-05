@@ -1,0 +1,11 @@
+<schema>
+    <element name="collectionsheet" tablename="collection_sheet">
+        <field name="objid" primary="true" />
+        <field name="collectionno"/>
+		<field name="routecode" />
+		<field name="routedescription" />
+        <field name="collector" />
+		<field name="date" />
+        <complex name="list" serializer="default" />
+	</element>
+</schema>

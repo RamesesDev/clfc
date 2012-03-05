@@ -1,0 +1,40 @@
+<workunit>
+    
+    <invokers>
+        <invoker folderid="menu/management/accounts" caption="General Ledger Account List" index="-1" /> 
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class GLAccountController extends shared.crud.CrudList {
+            
+            @Service("GLService")
+            def service;
+        
+            public List getColumns() {
+                return [
+                    new Column(name:"code", caption:"Acct Code"),
+                    new Column(name:"name", caption:"Acct Name"),
+                ];
+            }
+            
+            public List fetchList( def o ) {
+                return service.getList( o );
+            }
+            
+            public def createFormOpener() {
+                return InvokerUtil.lookupOpener("glaccount:form", [:]);
+            }
+        }
+        ]]>
+    </code>
+    
+    <pages>
+        <page template="shared.crud.CrudListFormPage"/>
+    </pages>    
+    
+</workunit>

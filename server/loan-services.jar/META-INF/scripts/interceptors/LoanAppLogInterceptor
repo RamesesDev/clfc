@@ -1,0 +1,156 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+import com.rameses.util.*;
+
+
+class LoanAppLogInterceptor
+{
+
+	@PersistenceContext('java:loan')
+	def em;
+
+	@Service('DateService')
+	def datesvc;
+	
+	@Env
+	def env;
+	
+	@Before(pattern="LoanApplicationService.save.*")
+	public void beforeSave( evt ) 
+	{
+		def app = evt.args[0];
+		if( !app.appno ) env.__isNew = true;
+	}
+	
+	@After(pattern="LoanApplicationService.save.*")
+	public void afterSave( evt ) {
+		def app = evt.result;
+		def log = [
+			appid: app.objid, appno: app.appno, 
+			date: datesvc.serverDate,
+			userid: env.USERID, username: env.USER
+		];
+		
+		if( env.__isNew ) {
+			log.action = 'CREATE';
+			log.dtfiled = app.dtfiled;
+		}
+		else {
+			log.action = 'UPDATE';
+		}
+
+		em.create('loanapplication_log', log);
+	}
+	
+	@After(pattern="LoanApplicationService.submitForInspection.*")
+	public void submitForInspection( evt ) {
+		def app = evt.result;
+		def log = [
+			appid: app.objid, appno: app.appno, 
+			action: 'SUBMIT_FOR_INSPECTION', date: datesvc.serverDate,
+			userid: env.USERID, username: env.USER
+		];
+		em.create('loanapplication_log', log);
+	}
+	
+	@After(pattern="LoanApplicationService.returnApp.*")
+	public void returnApp( evt ) {
+		def app = evt.result;
+		def log = [
+			appid: app.objid, appno: app.appno, 
+			action: 'RETURN', date: datesvc.serverDate,
+			userid: env.USERID, username: env.USER
+		];
+		em.create('loanapplication_log', log);
+	}
+	
+	@After(pattern="LoanApplicationService.returnAppForCI.*")
+	public void returnAppForCI( evt ) {
+		def app = evt.result;
+		def log = [
+			appid: app.objid, appno: app.appno, 
+			action: 'RETURN', date: datesvc.serverDate,
+			userid: env.USERID, username: env.USER
+		];
+		em.create('loanapplication_log', log);
+	}
+
+	@After(pattern="LoanApplicationService.cancelApp.*")
+	public void cancelApp( evt ) {
+		def app = evt.result;
+		def log = [
+			appid: app.objid, appno: app.appno, 
+			action: 'CANCEL', date: datesvc.serverDate,
+			userid: env.USERID, username: env.USER
+		];
+		em.create('loanapplication_log', log);
+	}
+	
+	@After(pattern="LoanApplicationService.backOutApp.*")
+	public void backOutApp( evt ) {
+		def app = evt.result;
+		def log = [
+			appid: app.objid, appno: app.appno, 
+			action: 'BACK_OUT', date: datesvc.serverDate,
+			userid: env.USERID, username: env.USER
+		];
+		em.create('loanapplication_log', log);
+	}
+	
+	@After(pattern="LoanApplicationService.disqualifyApp.*")
+	public void disqualifyApp( evt ) {
+		def app = evt.result;
+		def log = [
+			appid: app.objid, appno: app.appno, 
+			action: 'DISQUALIFY', date: datesvc.serverDate,
+			userid: env.USERID, username: env.USER
+		];
+		em.create('loanapplication_log', log);
+	}
+	
+	@After(pattern="LoanApplicationService.submitForApproval.*")
+	public void submitForApproval( evt ) {
+		def app = evt.result;
+		def log = [
+			appid: app.objid, appno: app.appno, 
+			action: 'SUBMIT_FOR_APPROVAL', date: datesvc.serverDate,
+			userid: env.USERID, username: env.USER
+		];
+		em.create('loanapplication_log', log);
+	}
+	
+	@After(pattern="LoanApplicationService.approveApp.*")
+	public void approveApp( evt ) {
+		def app = evt.result;
+		def log = [
+			appid: app.objid, appno: app.appno, 
+			action: 'APPROVE', date: datesvc.serverDate,
+			userid: env.USERID, username: env.USER
+		];
+		em.create('loanapplication_log', log);
+	}
+	
+	@After(pattern="LoanApplicationService.submitForRelease.*")
+	public void submitForRelease( evt ) {
+		def app = evt.result;
+		def log = [
+			appid: app.objid, appno: app.appno, 
+			action: 'SUBMIT_FOR_RELEASE', date: datesvc.serverDate,
+			userid: env.USERID, username: env.USER
+		];
+		em.create('loanapplication_log', log);
+	}
+	
+	@After(pattern="LoanApplicationService.release.*")
+	public void release( evt ) {
+		def app = evt.result;
+		def log = [
+			appid: app.objid, appno: app.appno, 
+			action: 'RELEASE', date: datesvc.serverDate,
+			userid: env.USERID, username: env.USER
+		];
+		em.create('loanapplication_log', log);
+	}
+	
+
+}

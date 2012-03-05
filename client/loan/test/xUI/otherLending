@@ -1,0 +1,47 @@
+<!--<br>
+            <div class="source">
+                <table valign="top">
+                    <%if (!data.otherLendingCompany && !data.otherLendingLoanAmount && !data.otherLendingModeofPayment && !otherLendingPayment && !data.otherLendingMaturityDate && !data.otherLendingRemarks){%>
+                        <tr>
+                            <th><b>OTHER LENDING INFORMATION</b></th><br>
+                            <tr><font color="red"><i>Not Specified at present</i></font></tr>
+                        </tr>   
+                    <%}%>
+                    <%if (data.otherLendingCompany) {%>   
+                        <tr>
+                            <th>Name of Lending inst.:</th>
+                            <td>${data.otherLendingCompany}</td>
+                        </tr>
+                     <%}%>
+                     <%if (data.otherLendingLoanAmount) {%>   
+                        <tr>
+                            <th>Amount Granted:</th>
+                            <td>${data.otherLendingLoanAmount}</td>
+                        </tr>
+                     <%}%>
+                     <%if (data.otherLendingModeofPayment) {%>   
+                        <tr>
+                            <th>Mode of Payment:</th>
+                            <td>${data.otherLendingModeofPayment}</td>
+                        </tr>
+                     <%}%>
+                     <%if (data.otherLendingPayment) {%>   
+                        <tr>
+                            <th>Loan Payment:</th>
+                            <td>${format(data.otherLendingPayment)}</td>
+                        </tr>
+                     <%}%>
+                     <%if (data.otherLendingMaturityDate) {%>   
+                        <tr>
+                            <th>Maturity Date:</th>
+                            <td>${data.otherLendingMaturityDate}</td>
+                        </tr>
+                     <%}%>
+                     <%if (data.otherLendingRemarks) {%>   
+                        <tr>
+                            <th>Remarks:</th>
+                            <td>${data.otherLendingRemarks}</td>
+                        </tr>
+                     <%}%>
+                </table>
+            </div>-->

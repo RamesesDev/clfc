@@ -1,0 +1,17 @@
+<schema>
+
+   <element name="loanapp_attachment" tablename="loanapp_attachment">
+       <field name="objid" primary="true"/>
+       <field name="size"/>
+       <field name="item_count"/>
+   </element>
+
+   <element name="detail" tablename="loanapp_attachment_detail">
+       <field name="objid" primary="true"/>
+       <field name="parentid"/>
+       <field name="part"/>
+       <field name="content"/>
+   </element>
+
+</schema>
+

@@ -1,0 +1,13 @@
+<schema>
+	<element name="remittance" tablename="remittance">
+		<field name="objid" primary="true"/>
+		<field name="remittanceno"/>
+		<field name="type"/>
+		<field name="dtfiled"/>
+		<field name="amount"/>
+		<field name="remittedbyid"/>
+		<field name="remittedbyname"/>
+		<complex name="extended" serializer="default" merge="true"/>
+	</element>
+</schema>
+

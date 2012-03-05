@@ -1,0 +1,49 @@
+<script>
+	$put(
+		"assetAttachments", 
+		new function() {
+			
+			this.application;
+			this.assetAttachments;
+			
+			
+			this.onload = function() {
+				setTimeout( function(){ $('.asset a').lightBox({fixedNavigation:true}); }, 100 );
+			};
+		}
+	);
+</script>
+<style>
+   body{font-family:arial;font-size:8px;}
+   h3.white { color: #ffffff; }
+</style>
+<div>
+	<body>
+		<table model="listModel" border="0" width="100%" cellspacing="0" class="grid">
+			<tr><td width=130>Subject :</td>
+			<td><label context="assetAttachments"><b>#{assetAttachments.subject}</b></label></td></tr>
+			<tr><td>Type :</td>
+			<td><label context="assetAttachments"><b>#{assetAttachments.type}</b></label></td></tr>
+			<tr><td>Remarks :</td>
+			<td><label context="assetAttachments"><b>#{assetAttachments.remarks}</b></label></td></tr>
+		</table>
+		<hr/>
+		
+		Photo(s):<br/>
+		<div style="text-align: center" context="assetAttachments" visibleWhen="#{!assetAttachments.photos}">
+			<i><b class="maroon">No Photo at present.</b></i>
+		</div>	
+		<div class="asset-box">
+			<nobr>
+				<ul class="asset" context="assetAttachments" items="assetAttachments.photos" varName="item">		
+					<li style="display: inline">
+						<a href="/clfc-photos/?b=#{application.branchcode}&a=#{application.objid}&id=#{item.objid}"
+						   title="#{item.name? item.name : ''}">
+							<img src="/clfc-photos/?b=#{application.branchcode}&a=#{application.objid}&id=#{item.objid}" height="100"/>
+						</a>
+					</li>
+				</ul>
+			</nobr>
+		</div>
+	</body>
+</div>

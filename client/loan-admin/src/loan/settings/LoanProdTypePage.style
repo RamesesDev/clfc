@@ -1,0 +1,13 @@
+'entity.*' [editmode=='read'] { readonly: true; }
+'entity.*' [editmode!='read'] { readonly: false; }
+
+'entity.code' [editmode=='create'] { readonly: false; }
+'entity.code' [editmode!='create'] { readonly: true; }
+
+'save|cancel' [editmode=='read'] { visible: false; }
+'save|cancel' [editmode!='read'] { visible: true; }
+
+'create|edit' [editmode=='read'] { visible: true; }
+'create|edit' [editmode!='read'] { visible: false; }
+
+'edit' [empty (entity)] { visible: false; }

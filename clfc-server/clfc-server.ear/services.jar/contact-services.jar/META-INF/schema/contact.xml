@@ -1,0 +1,51 @@
+<schema>
+
+    <element name="contact">
+		<field name="objid" />
+		<field name="contactno"/>
+		<field name="firstname" required="true"/>
+		<field name="lastname" required="true"/>
+	</element>
+
+    <element name="contactfile" tablename="contact">
+		<field name="objid" primary="true"/>
+		<field name="contactno" />
+		<field name="dtfiled" />
+		<field name="schemaname" />
+		<field name="version" />
+		<field name="state" />
+		<field name="docowner" />
+		<field name="info" serializer="default" />
+		<field name="dtmodified" />
+		<field name="modifiedby" />
+    </element>
+
+	<element name="contact_change_history" tablename="contact_change_hist">
+		<field name="objid" primary="true"/>
+		<field name="contactid" />
+		<field name="lastname" />
+		<field name="firstname" />
+		<field name="middlename" />
+		<field name="info" serializer="default" />
+		<field name="changeinfo" serializer="default" />
+		<field name="dtmodified" />
+		<field name="modifiedby" />
+		<field name="reason" />
+	</element>
+	
+	<element name="connection" tablename="social_connection">
+		<field name="principal" primary="true"/>
+		<field name="relater" primary="true"/>
+		<field name="relationship"/>
+	</element>
+
+	<element name="name_index" tablename="contact_name_index" indexfor="contact">
+		<field name="objid" primary="true"/>
+		<field name="contactno"  primary="true" />
+		<field name="firstname" />
+		<field name="lastname" />
+		<field name="middlename" />
+		<field name="birthdate" />
+	</element>
+
+</schema>

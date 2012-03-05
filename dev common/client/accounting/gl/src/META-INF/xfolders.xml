@@ -1,0 +1,9 @@
+<folders>
+    
+    <folder id="menu">
+        <folder id="management" caption="Management">
+            <folder id="accounts" caption="Accounts"/>
+        </folder>
+    </folder>
+    
+</folders>

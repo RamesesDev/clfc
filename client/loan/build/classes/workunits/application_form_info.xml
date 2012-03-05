@@ -1,0 +1,223 @@
+<workunit>
+    <invokers>
+        <invoker type="loan:info" action="init"/>
+
+        <invoker type="formActions" caption="Print" action="printData" icon="images/print16.png" mnemonic="p" tooltip="Print" visibleWhen="#{mode=='selected'}" permission="application.print"/>
+        <invoker type="formActions" caption="Submit for Inspection" action="forInspection" icon="images/sending16.png" mnemonic="s" visibleWhen="#{entity.state=='PENDING'}" permission="application.submitForInspection"/>
+        <invoker type="formActions" caption="Submit for FLA" action="forFLA" icon="images/sending16.png" mnemonic="s" visibleWhen="#{entity.state=='FOR_INSPECTION'}" permission="application.submitForFLA"/>
+        <invoker type="formActions" caption="Return to Pending" action="returnPending" icon="images/undo16.png" mnemonic="r" visibleWhen="#{entity.state=='FOR_INSPECTION'}" permission="application.returnApp"/>
+        <invoker type="formActions" caption="Return For CI" action="returnForCI" icon="images/undo16.png" mnemonic="r" visibleWhen="#{entity.state=='FOR_FLA' }" permission="application.returnAppForCI"/>
+        <invoker type="formActions" caption="Submit for Approval" icon="images/sending16.png" action="forApproval" mnemonic="s" 
+                visibleWhen="#{entity.state=='FOR_FLA' or (entity.state=='PENDING' and (entity.loancount gt 1 or  mode == 'renew'))}" 
+                       permission="application.submitForApproval"/>  
+        <invoker type="formActions" caption="Approve Application" action="approveApplication" mnemonic="a" visibleWhen="#{entity.state=='isDataMigrated'}"/>
+        <invoker type="formActions" caption="Approve" action="approvedApplication" mnemonic="a"  visibleWhen="#{entity.state=='FOR_APPROVAL'}" permission="application.approve"/>
+        <invoker type="formActions" caption="Cancel Application" action="cancelApplication" icon="images/backout16.png" mnemonic="c" visibleWhen="#{entity.state=='DISAPPROVED' || entity.state=='FOR_INSPECTION' || entity.state=='PENDING'}" permission="application.cancel"/>
+        <invoker type="formActions" caption="Back-Out Application" action="backOutApplication" icon="images/backout16.png" mnemonic="b" visibleWhen="#{entity.state=='APPROVED' || entity.state=='FOR_RELEASE'}" permission="application.backout"/>
+        <invoker type="formActions" caption="Disqualify Application" action="disqualifyApplication" mnemonic="d" visibleWhen="#{entity.state=='DISAPPROVED' || entity.state=='FOR_INSPECTION' || entity.state=='PENDING'}" permission="application.disqualified"/>
+        <invoker type="formPrintActions" tooltip="Back" icon="images/back16.png" action="_default" mnemonic="p"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+
+        class ApplicationInfoController extends loan.ui.AbstractLoanAppController {
+            @Binding
+            def binding;      
+
+            @Service( "LoanApplicationService" )
+            def svc;
+
+            def formActions = InvokerUtil.lookupActions("application:formActions", 
+            {
+                return [
+                    entity: entity,
+                    selectHandler:{o->
+                        entity=o;
+                        init();
+                        selectHandler(entity); //this is from the list view
+                    }
+                ];
+            } as InvokerParameter );
+                        
+            def getFormActions() {
+                def state = entity?.state?.toLowerCase();
+                return formActions + InvokerUtil.lookupActions("application:${state}_action", {
+                    return [application: entity, selectHandler: selectHandler]
+                } as InvokerParameter);
+            }
+            
+            def mode;
+            def selectHandler;
+            def borrowerInformation;
+        
+        
+            //must override abstract method
+            def getService() { 
+                return svc; 
+            }
+        
+            void init(){
+                try {
+                    borrowerInformation = TemplateProvider.instance.getResult("loan/ui/ApplicationInfoForm.gtpl",[data:entity]);
+                }
+                catch(e) {
+                    e.printStackTrace();
+                    borrowerInformation = '';
+                }
+                binding?.refresh("borrowerInformation");
+            }
+        
+            def lookupApplicationForm(){
+                return InvokerUtil.lookupOpener("loan:applicationform",[
+                    entity:entity,mode:mode,
+                    selectHandler:{o->
+                        entity=o;
+                        init();
+                        selectHandler(entity);
+                    }
+                ]);
+            }
+        
+            void deleteMember(){
+                if(!MsgBox.confirm('are you sure you want to delete this record?'))
+                    return null;
+                    
+                svc.removeData(entity);
+                selectHandler([:]);
+                initEntity();
+            }
+        
+            def comment(){
+                return InvokerUtil.lookupOpener("loan:comment",[
+                    selectHandler:{o->
+                        addCommentInfo(o);
+                    }
+                ]);
+            }
+            
+            void addCommentInfo(def msg){
+                def p = [objid: entity.objid, comment: msg];
+                entity.comments = service.addComment( p );
+                init();
+            }
+            
+            def recommendation(){
+                return InvokerUtil.lookupOpener("application:ci_recomendation",[
+                    application: entity,
+                    selectHandler:{ app ->
+                        entity.putAll( app )
+                        init();
+                    }
+                ]);
+            }
+            
+            def crecomrecommendation(){
+                return InvokerUtil.lookupOpener("application:crecom_recomendation",[
+                    application: entity,
+                    selectHandler:{ app ->
+                        entity.putAll( app )
+                        init();
+                    }
+                ]);
+            }
+            
+            /*
+            def annotation(){
+                return InvokerUtil.lookupOpener("loan:annotation",[
+                    selectHandler:{ msg ->
+                        def p = [objid: entity.objid, annotation: msg];
+                        entity.annotations = service.saveAnnotation( p );
+                        init();
+                    }
+                ]);
+            }
+            def notes(){
+                return InvokerUtil.lookupOpener("application:notes",[
+                    application: entity,
+                    selectHandler:{ app ->
+                        entity.putAll( app );
+                        init();
+                    }
+                ]);
+            }
+            */            
+            
+            def viewEmployment(){
+                return InvokerUtil.lookupOpener("loan:appInfo",[entity:entity,gtplName:"Borrower_PBEmployment"]);
+            }
+        
+            def viewBusiness(){
+                return InvokerUtil.lookupOpener("loan:appInfo",[entity:entity,gtplName:"Borrower_PBBusiness"]);
+            }
+            
+            def viewOtherIncome(){
+                return InvokerUtil.lookupOpener("loan:pbOtherSrcInfo",[entity:entity,gtplName:"Borrower_PBOtherIncome"]);
+            }
+            
+            def viewProfBGround(){
+                return InvokerUtil.lookupOpener("loan:pbProfPBGround",[entity:entity,gtplName:"Borrower_PBProfBGround"]);
+            }
+            
+            def viewSavingsAcct(){
+                return InvokerUtil.lookupOpener("loan:bankAccntInfo",[entity:entity,gtplName:"Borrower_PBBankSavings"]);
+            }
+            
+            def viewCheckingAcct(){
+                return InvokerUtil.lookupOpener("loan:bankAccntInfo",[entity:entity,gtplName:"Borrower_PBBankChecking"]);
+            }
+            
+            def viewFamilyInfo(){
+                return InvokerUtil.lookupOpener("loan:familyInfo",[entity:entity,gtplName:"Borrower_PBFamilyInfo"]);
+            }
+            
+            def viewOtherLending(){
+                return InvokerUtil.lookupOpener("loan:lendingInfo",[entity:entity,gtplName:"OtherLendingPage"]);
+            }    
+        
+            def viewPBInfo(){
+                return InvokerUtil.lookupOpener("loan:PBInfo",[entity:entity,gtplName:"Borrower_PBInfo"]);
+            }
+            
+            def viewSpouseInfo(){
+                return InvokerUtil.lookupOpener("loan:pbSpouseInfo",[entity:entity,gtplName:"Borrower_PBSpouseInfo"]);
+            }
+            
+            def viewJBInfo(){
+                return InvokerUtil.lookupOpener("loan:JBInfo",[entity:entity,gtplName:"Borrower_JBInfo"]);
+            }
+            
+            def viewJBSpouseInfo(){
+                return InvokerUtil.lookupOpener("loan:JBInfo",[entity:entity,gtplName:"Borrower_JBSpouseInfo"]);
+            }
+            
+            def viewCMInfo(){
+                return InvokerUtil.lookupOpener("loan:CMInfo",[entity:entity,gtplName:"Borrower_CMInfo"]);
+            }
+            
+            def viewCMSpouseInfo(){
+                return InvokerUtil.lookupOpener("loan:CMInfo",[entity:entity,gtplName:"Borrower_CMSpouseInfo"]);
+            }
+            
+            def viewAsset( param ) {
+                def ss = param.split(',');
+                def obj;
+                def listKey = ss[0]+'list';
+                if( entity[listKey] ) {
+                    obj = entity[listKey][ ss[1].toInteger() ];
+                }
+                return InvokerUtil.lookupOpener("loan:asset_info_popup",[entity: obj, type: ss[0], appid: entity.objid]);
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="loan.ui.ApplicationInfoForm"/>
+        <page name="page2" template="loan.ui.LoanAppReport"/>
+    </pages>
+</workunit>

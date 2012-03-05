@@ -1,0 +1,39 @@
+<workunit>
+    <invoker type="loan:otherLending" caption="Other Lending Information" target="popup"/>
+    
+    <invoker type="formActions" caption="Add" mnemonic="a" action="add" />
+    <invoker type="formActions" caption="Cancel" mnemonic="c" action="_close" immediate="true"/>
+    <code lang="groovy">
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class OtherLendingPageController {
+            @Service('LoanApplicationService')
+            def svc;
+            
+            @Service('LoanOtherlendingService')
+            def loanOtherLendingSvc;	
+            
+            def entity=[:];
+            def info;
+            def selectHandler;
+			
+            //void init(){
+                //otherPaymentList=loanOtherLendingSvc.getPaymentTypeList();
+            //}
+            
+            def otherPaymentList = ["DAILY","WEEKLY","MONTHLY"];
+            
+            def add(){
+                if( selectHandler ) selectHandler( entity );
+                return "_close";
+            } 
+        }
+        ]]>
+     </code>
+     <pages>
+         <page template="loan.ui.OtherLendingPage"/>
+     </pages>
+ </workunit>   

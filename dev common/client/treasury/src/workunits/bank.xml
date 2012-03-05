@@ -1,0 +1,25 @@
+<workunit>
+    <invokers>
+
+    </invokers>
+    <code>
+        <![CDATA[
+        
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        import groovy.text.*;
+        
+        public class BankController{
+            def entity;
+            
+            public void init(){
+            
+            } 
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="revacct.ui.RevAcctFormPage"/>
+    </pages>
+</workunit>

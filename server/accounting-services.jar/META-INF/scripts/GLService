@@ -1,0 +1,61 @@
+import com.rameses.annotations.*;
+
+class GLService {
+
+	@PersistenceContext("java:treasury")
+	def em;	
+
+	def entityName = "glaccount";	
+	
+	@ProxyMethod
+	public def save( def entity ) {
+		if(!entity.objid) entity.objid = "GLSVC"+new java.rmi.server.UID();
+		return em.save( entityName, entity );
+	}
+   
+	@ProxyMethod
+	public def create( def entity ) {
+		if(!entity.objid) entity.objid = "GLSVC"+new java.rmi.server.UID();
+		return em.save( entityName, entity );
+	}
+   
+	@ProxyMethod
+	public def update( def entity ) {
+		return em.save( entityName, entity );
+	}
+   
+    @ProxyMethod
+	public def read( def param ) {
+		print param;
+		return em.read( entityName, param );
+	}
+   
+	@ProxyMethod
+	public def getList( def param ) {
+		StringBuffer sb = new StringBuffer();
+		if( param.parentid ) {
+			sb.append( 'parentid = $P{parentid}'); 
+		} else {
+			sb.append( 'parentid is null'); 
+		}
+		if( sb.length() > 0 ) sb.insert( 0,  " where " );
+		sb.insert(0, "select * from glaccount" );
+		sb.append( " order by code asc");
+		return em.sqlContext.createQuery( sb.toString() ).setParameters( param ).resultList; 
+	}
+
+	@ProxyMethod
+	public def getSubCategories( def param ) {
+		StringBuffer sb = new StringBuffer();
+		if( param.parentid ) {
+			sb.append( 'parentid = $P{parentid}'); 
+		}	
+		if( param.acctclass ) {
+			if(sb.length() > 0) sb.append( " and  ");
+			sb.append( 'acctclass = $P{acctclass}'); 
+		}	
+		if( sb.length() > 0 ) sb.insert( 0,  " where " );
+		return em.sqlContext.createNamedQuery("glaccount:list").setVars( [condition:sb.toString()]).setParameters( param ).resultList;
+	}
+	
+}

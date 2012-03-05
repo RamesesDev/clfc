@@ -1,0 +1,50 @@
+<workunit>
+    <invokers>
+        <invoker type="loan:calculate" caption="Advance Payment" target="popup" actin="init"/>
+        <invoker type="formActions" action="accept" caption="Ok" mnemonic="o"  tooltip="OK"/>
+        <invoker type="formActions" action="cancel" caption="Close" mnemonic="c" tooltip="Close"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+  
+        class calculateController{
+            @Service('LoanApplicationService')
+            def loanSvc;
+            
+            @Service('LoanPaymentService')
+            def loanpaymentSvc;
+            
+            @Service('LoanBillingService')
+            def billSvc;
+            
+            @Binding
+            def binding;
+            def entity=[:];
+            def amountChangeHandler;
+            def temp;
+
+            void init(){
+                temp=entity.amountDue;
+            }
+            
+            def accept(){
+                if(!entity.amountDue)throw new Exception("Amount due is invalid, must not be less than or equal to zero(0)");                    
+                if(temp > entity.totalBalance)throw new Exception("New Amount Due has already exceeded its Total Balance");
+                amountChangeHandler(entity);
+                binding.refresh();
+                return "_close";
+            }
+            def cancel(){
+                entity=[:];
+                return "_close";
+            }
+        }
+       ]]> 
+     </code>
+     <pages>
+        <page template="loantreasury.collection.ui.CalculatePopup"/>
+     </pages>
+</workunit>

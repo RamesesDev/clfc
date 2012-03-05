@@ -1,0 +1,44 @@
+<script>
+	$put(
+		"loan_suggestions", 
+		new function() {
+			
+			this.confirmMsg;
+			this.suggestions;
+			this.suggestionsHandler;
+			
+			this.close = function() {
+				return '_close';
+			};
+
+			this.post = function(){
+				var msg = this.confirmMsg? this.confirmMsg : 'You are about to post this message. Proceed?';
+				if (!confirm(msg)) return;
+				
+				if (this.suggestionsHandler) this.suggestionsHandler(this.suggestions);
+				return "_close";
+			};
+
+			this.cancel = function(){
+				if ( suggestions != null )
+					suggestions = " ";
+			}
+		}
+	);
+	
+</script>
+
+Leave your comments and suggestions here 
+<br/>
+<textarea cols="60" rows="10" context="loan_suggestions" name="suggestions" 
+	required="true" caption="Comment & Suggestions" placeholder="Add a comment..."></textarea>
+
+<div class="dialog-buttons" alignment="right" style="padding-right: 15px;">
+	<input type="button" context="loan_suggestions" name="post" value="Submit Comment/Suggestions"
+	       onClick="confirm( 'You are about to submit this suggestions. Continue?' )"/>
+	<!--<input type="button" context="loan_suggestions" name="close" value="Cancel" immediate="true"/>-->
+</div>
+	
+
+
+

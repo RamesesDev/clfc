@@ -1,0 +1,15 @@
+<schema>
+    <element name="glaccount" tablename="glaccount">
+        <field name="objid" primary="true"/>
+		<field name="name" />
+        <field name="accttype" />
+        <field name="acctclass" />
+        <field name="slobject" />
+        <field name="parentid" />
+        <field name="parent" />
+        <field name="org" />
+        <field name="chartid" />
+    </element>
+</schema>
+
+

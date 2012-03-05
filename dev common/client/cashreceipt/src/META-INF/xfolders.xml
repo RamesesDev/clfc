@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<folders>
+    <folder id="menu">
+        <folder id="treasury" caption="Treasury" >
+            <folder id="master" caption="Master Data"/>
+            <folder id="collection" caption="Collection"/>
+        </folder>    
+    </folder>
+</folders>

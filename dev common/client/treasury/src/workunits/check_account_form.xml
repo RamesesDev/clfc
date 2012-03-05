@@ -1,0 +1,98 @@
+<workunit>
+    <invokers>
+        <invoker type="disbursement:check" caption="Check Account Entry" />
+        
+        <invoker type="formActions" tooltip="Add Check Account"    icon="images/add16.png"  action="create" visibleWhen="#{mode=='read'}" caption="Add" permission="check_account.create"/>
+        <invoker type="formActions" tooltip="Edit Check Account"   icon="images/edit16.png" action="edit"   visibleWhen="#{mode=='read' and !empty entity}" caption="Edit" permission="check_account.edit"/>
+        
+        <invoker type="formActions" tooltip="Save Check Account"   icon="images/save16.png"   action="save"   caption="Save"   visibleWhen="#{mode!='read'}"/>
+        <invoker type="formActions" tooltip="Cancel"               icon="images/cancel16.png" action="cancel" caption="Cancel" visibleWhen="#{mode!='read'}"/>
+        
+        <invoker type="formActions" tooltip="Delete Check Account" icon="images/delete16.png" action="delete" caption="Delete" visibleWhen="#{mode=='read' and !empty entity}" permission="check_account.delete"/>
+        <invoker type="formActions" tooltip="print a Test Page"    caption="Test Print" action="testPrint" visibleWhen="#{! empty entity}"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        import groovy.text.*;
+        
+        class CheckAccountFormController{
+            @Binding
+            def binding;
+            
+            @Service("BankAccountService")
+            def svc;
+            
+            @Script('CheckPrintScript')
+            def printSupport;
+            
+            def mode = 'read';
+            def entity=[:];
+            def selectHandler;
+            def printFormat;
+            
+            void setData(d) {
+                entity = d;
+                mode = 'read';
+                binding?.refresh();
+            }
+                        
+            void save() {
+                if( !entity.type ) entity.type = 'checking';
+                if( mode == 'create' )
+                    entity = svc.create(entity);
+                else
+                    entity = svc.update(entity);
+
+                selectHandler(entity);
+                mode='read';
+            }
+            
+            void create() {
+                mode='create';
+                entity = [
+                    objid: "K" + new java.rmi.server.UID(),
+                    printformat: '${checkno} ${checkdate} ${payee} ${amt_words} ${amount}'
+                ];
+            }
+            
+            void edit() { 
+                mode='edit'; 
+            }
+            
+            void delete(){
+                if( MsgBox.confirm('Are you sure you want to delete the selected item?') )
+                {
+                    svc.delete(entity);
+                    entity = null;
+                }
+            }
+            
+            void testPrint(){
+                def p=[
+                    checkno:   '100001',
+                    amount:    999999.99,
+                    payee:     'Juan De La Cruz',
+                    checkdate:  new Date(),
+                    format:    entity.printformat,
+                ];
+                
+                printSupport.print( p );
+            }
+            
+            void cancel(){
+                mode='read';
+                entity = null;
+            }           
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="treasury.check.CheckAccountForm"/>
+    </pages>
+</workunit>

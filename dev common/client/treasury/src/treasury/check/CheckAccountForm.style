@@ -1,0 +1,5 @@
+"entity.*" [mode=='read'] { readonly: true; }
+"entity.*" [mode!='read'] { readonly: false; }
+
+"entity.printformat" [mode=='read'] { readonly: false; enabled: false; }
+"entity.printformat" [mode!='read'] { readonly: false; enabled: true; }

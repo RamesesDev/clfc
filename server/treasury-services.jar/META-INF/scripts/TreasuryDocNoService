@@ -1,0 +1,33 @@
+import com.rameses.annotations.*;
+
+class TreasuryDocNoService
+{
+
+	@PersistenceContext("java:treasury")
+	def em;
+
+
+	private def getSqlCtx() { return em.sqlContext; }
+
+	@ProxyMethod
+	public def getNextNo( id ) {
+		def result = sqlCtx.createQuery('select value from docno where id=?').setParameter(1, id).singleResult;
+		if( !result ) {
+			sqlCtx.createExecutor('insert into docno (id,value) values (?,?)')
+			      .setParameter(1, id).setParameter(2, 1).execute();
+			return 1;
+		}
+		else {
+			sqlCtx.createExecutor('update docno set value=? where id=?')
+				  .setParameter(1, ++result.value).setParameter(2, id).execute();
+			return result.value;
+		}
+	}
+
+	@ProxyMethod
+	public def getFormattedNextNo( id, format ) {
+		def df = new java.text.DecimalFormat(format);
+		return df.format( getNextNo( id ) );
+	}
+
+}

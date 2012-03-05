@@ -1,0 +1,639 @@
+<workunit>
+    <invokers>
+        <invoker type="application:formActions" tooltip="New Application" icon="images/new16.png" action="create" mnemonic="n" caption="New" target="window" permission="application.create"/>
+        <invoker type="application:formActions" tooltip="Edit Application" icon="images/edit16.png" action="edit" mnemonic="e" caption="Edit" target="window" permission="application.edit" visibleWhen="#{entity.state=='PENDING' or entity.state=='FOR_INSPECTION' or entity.state=='DISAPPROVED' or entity.state=='CANCELED'}"/>
+        <invoker type="application:formActions" tooltip="Renew Application" action="renew" mnemonic="r" caption="Renew" target="window" permission="application.renew" visibleWhen="#{entity.state=='CLOSED'}"/>
+        
+        <invoker type="application:createDataCapture" tooltip="Edit Application" icon="images/edit16.png" mnemonic="e" action="createDataCapture"/>
+        
+        <invoker type="formActions" caption="Save" action="saveData" icon="images/save16.png" mnemonic="s" visibleWhen="#{mode != 'read'}"/>
+
+        <invoker type="formActions" caption="Edit" action="editData" icon="images/edit16.png" visibleWhen="#{mode == 'read' and entity.state=='PENDING' and entity.state=='DISAPPROVED'}"/>
+        <invoker type="formActions" caption="Submit for Approval" action="forApproval" mnemonic="s" visibleWhen="#{mode == 'read' and (entity.state=='FOR_INSPECTION' or (entity.state=='PENDING' and (entity.loancount gt 1 or mode == 'renew')))}" permission="application.submitForApproval"/> 
+        <invoker type="formActions" caption="Submit for Inspection" action="forInspection"  immediate="true" visibleWhen="#{mode != 'read' or entity.state=='CANCELED' or entity.state=='PENDING' or entity.loancount==1}"/>
+        <invoker type="formActions" caption="Print" tooltip="Print" icon="images/print16.png"  action="printData" immediate="true" visibleWhen="#{mode!='add'}"  permission="application.print"/>
+        
+        <invoker type="formActions" caption="Close" action="_exit" icon="images/cancel16.png" mnemonic="c" immediate="true" visibleWhen="#{mode!='edit'}"/>
+        <invoker type="formActions" caption="Cancel" action="cancel" icon="images/cancel16.png" immediate="true" mnemonic="p" visibleWhen="#{mode=='edit'}"/>
+        <invoker type="formPrintActions" caption="Back" tooltip="Back" icon="images/back16.png" action="_default" mnemonic="p"/>
+        
+        <invoker type="jointBorrowerActions" action="addJointBorrower"  icon="images/add16.png" caption="Add"  mnemonic="j" immediate="true" tooltip="Add JointBorrower" visibleWhen="#{mode!='read' and entity.state=='PENDING' || entity.state=='DISAPPROVED' || entity.state=='FOR_INSPECTION' || mode=='add' || mode=='renew' }"/>
+        <invoker type="jointBorrowerActions" action="removeJointBorrower" icon="images/remove16.png" caption="Remove" mnemonic="r" immediate="true" tooltip="Remove JointBorrower" visibleWhen="#{mode!='read' and entity.state=='PENDING' || entity.state=='DISAPPROVED' || entity.state=='FOR_INSPECTION' || mode=='add' || mode=='renew' }"/>
+        
+        <invoker type="coMakerActions" action="addCoMaker"    caption="Add"    icon="images/add16.png" immediate="true"  mnemonic="c" tooltip="Add Co-Maker" visibleWhen="#{mode!='read' and entity.state=='PENDING' || entity.state=='DISAPPROVED' || entity.state=='FOR_INSPECTION' || mode=='add' || mode=='renew' }"/>
+        <invoker type="coMakerActions" action="removeCoMaker" caption="Remove" icon="images/remove16.png" immediate="true" mnemonic="r" tooltip="Remove Co-Maker" visibleWhen="#{mode!='read' and entity.state=='PENDING' || entity.state=='DISAPPROVED'|| entity.state=='FOR_INSPECTION' ||mode=='add' || mode=='renew' }"/>
+        
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        import java.io.*;
+        import com.rameses.io.*;
+        import loan.ui.asset.util.*;
+        
+        class ApplicationFormController extends loan.ui.AbstractLoanAppController {
+            @FormTitle
+            def formTitle;
+        
+            @Binding
+            def binding;
+            
+            @Script('ContactDef')
+            def contactDef;
+            
+            @Script('EmploymentInfoDef')
+            def empInfoDef;
+            
+            @Script('BusinessInfoDef')
+            def busInfoDef;
+            
+            @Service( "LoanApplicationService" )
+            def svc;
+            
+            @Service( "RouteService" )
+            def routeSvc;
+            
+            @Service('LoanBorrowerService')    
+            def loanBorrowerSvc;
+            
+            @Service('Var')
+            def vars;
+            
+            @Service('LoanProductTypeService')
+            def prodTypeSvc;
+            
+            @Caller
+            def caller;
+            
+            def itemBusinessStatus=["Full of Stocks","Plenty of Stocks","Average","Below Average"];
+            def itemOwnership=["Sole Propreitorship","Corporation","Partnership","Cooperative"];
+            
+            def productTypeList; // = ["DAILY","MONTHLY"];
+
+            def oldEntity;
+            
+            def assettype;
+            def borrowerInfo;
+            def comments;
+            def cirecommendation;
+            def translog;
+            def annotations;
+            
+            def attachmentOpener;
+            def attachmentsList;
+            def selectedAttachment;
+            
+            def selectedLoanHistory;
+            def selectedAsset;
+            def assetsList;
+            def photonum;
+            
+            def selectHandler;
+            
+            def employmentInfoControls;
+            def businessInfoControls;
+            
+            //must override abstract method
+            def getService() { 
+                return svc; 
+            }
+            
+            def getProductTypeList() {
+                return prodTypeSvc.list;
+            }
+            
+            def getFormActions() {
+                def state = entity?.state?.toLowerCase();
+                return InvokerUtil.lookupActions("application:${state}_action", {
+                    return [application: entity, selectHandler: selectHandler]
+                } as InvokerParameter);
+            }
+
+            def routeSelectHandler={o->
+                entity.routecode=o.code 
+                entity.routedescription=o.description;
+                binding.refresh("entity.routecode");
+            };
+            
+            def lookupRoute() {
+                return InvokerUtil.lookupOpener("loan:routeLookup",[selectHandler:routeSelectHandler]);
+            }
+            
+            //--Photo Details
+            def photo;
+            def handler;
+            
+            def browsePic(){
+                //return InvokerUtil.lookupOpener("loan:asset_photo_lookup",[handler:photo]);
+                MsgBox.alert("Photo browsing is not available at this time");
+            }
+            
+            //return photo.file;
+            def capturePic(){
+                MsgBox.alert("No Camera connected");
+            }
+
+            void init(){
+                oldEntity = new HashMap(entity);
+                entity = [:];
+                
+                photo = [:];
+                photo.objid = "PHOTO-" + new java.rmi.server.UID();
+                photo.name = "New Photo";
+                
+                entity.putAll(oldEntity);
+                if(mode=='add') 
+                {
+                    entity.objid="LAPP-" + new java.rmi.server.UID();
+                }
+                else
+                {
+                    if(entity.jointBorrowerList==null)
+                        entity.jointBorrowerList=[];
+                    if(entity.coMakerList==null)
+                        entity.coMakerList=[];
+                    borrowerControls = contactDef.getFormFields( entity.borrower, 'entity.borrower' );
+                    connectionControls = !entity.spouse? [] : contactDef.getFormFields( entity.spouse, 'entity.spouse' );
+                    jointBorrowerControls = !entity.jointBorrower? [] : contactDef.getFormFields( entity.jointBorrower, 'entity.jointBorrower' );
+                    comakerControls = !entity.coMaker? [] : contactDef.getFormFields( entity.coMaker, 'entity.coMaker' );
+                    comments=TemplateProvider.instance.getResult("loan/ui/CommentForm.gtpl",[data:entity]);
+                    if(entity.annotations)                    
+                        annotations=TemplateProvider.instance.getResult("loan/ui/AnnotationForm.gtpl",[data:entity]);
+                    
+                    if(entity.cirecommendation)                    
+                        cirecommendation=TemplateProvider.instance.getResult("loan/ui/CIRecommendationForm.gtpl",[data:entity]);    
+                }
+                
+                setAssettype("property");
+                
+                if( !entity.employment ) entity.employment = empInfoDef.createModel();
+                employmentInfoControls = empInfoDef.getFormFields( entity.employment, 'entity.employment' );
+                
+                if( !entity.business ) entity.business = busInfoDef.createModel();
+                businessInfoControls = busInfoDef.getFormFields( entity.business, 'entity.business' );
+            }
+    
+            
+            def captureInfo;
+            
+            void createDataCapture(){
+                create();
+                if( captureInfo ) entity.putAll( captureInfo );
+                entity.mode = "CAPTURE";
+            }
+            
+            void create(){
+                formTitle = 'New Application';
+                initEntity();                
+                def settings = vars.loan_settings;
+                if( !settings )
+                    throw new Exception('Loan Settings is not defined.');
+                mode='add';
+                init();
+            }
+
+            void edit(){
+                editData();
+                formTitle = entity.appno;
+                init();
+            }
+            
+            void renew() {
+                entity.putAll(svc.readByAppNo([appno:entity.appno]));
+                entity.state=null;
+                entity.dtfiled=null;
+                entity.approvedate=null;
+                entity.amountapproved=null;
+                entity.loaninfo=[interestrate:20];
+                entity.comments=[];
+                entity.tempObjid="APP"+new java.rmi.server.UID();
+
+                clearAssetComments("propertylist");
+                clearAssetComments("appliancelist");
+                clearAssetComments("vehiclelist");
+                
+                mode = "renew";
+                init();
+            }
+            
+            def addBusinessPhoto(){
+                return InvokerUtil.lookupOpener("loan:asset_photo_lookup",[handler:photo]);
+            }
+            void clearAssetComments(def o){
+                entity[o].each(){
+                    if (it.comments.size()>0) it.comments=[];
+                }
+            }
+
+            void cancel(){
+                mode='read';
+            }
+
+            void editData(){
+                mode = 'edit';
+                binding?.refresh();
+            }
+            
+            void saveData(){
+                def o=[:];
+                if(!entity.borrower)throw new Exception("Please specify the borrower");
+                //if(!entity.propertylist || !entity.coMakerList)throw new Exception("Please specify a CoMaker of the borrower");
+                if(!entity.loaninfo.loanamount) throw new Exception("Please specify Loan Amount");
+                if(!entity.state) entity.state="PENDING";
+                if(mode=='renew'){
+                    o=svc.createRenewal(entity);
+                    MsgBox.alert('Renewal request was successfully save');
+                }
+                else{                    
+                    entity=svc.save(entity);                    
+                    if(mode=='add') MsgBox.alert('Application no. '+ entity.appno +' was successfully save');
+                    else if(mode!='add') MsgBox.alert('Application was successfully updated');
+                }
+
+                uploadAssets();
+                
+                if( selectHandler ) selectHandler(o);
+                if( mode == 'add' ) binding.title = entity.appno;
+                mode='read';
+                binding.refresh("entity.*");
+                oldEntity.putAll( entity );
+            }
+            
+            void uploadAssets() {
+                def uploader = PhotoUploader.instance;
+                def items = [];
+                entity.propertylist.each{ items.addAll( it.photos ) }
+                if( items ) uploader.addAll( entity.objid, items );
+                
+                items = [];
+                entity.vehiclelist.each{ items.addAll( it.photos ) }
+                if( items ) uploader.addAll( entity.objid, items );
+                
+                items = [];
+                entity.appliancelist.each{ items.addAll( it.photos ) }
+                if( items ) uploader.addAll( entity.objid, items );
+                
+                if( uploader.processList ) {
+                    def inv = InvokerUtil.lookup("application:filemgr");
+                    if( inv ) InvokerUtil.invoke( inv[0] );
+                }
+            }
+            
+            //def viewLoanHistory(){
+              //  return InvokerUtil.lookupOpener('loan:history', [:]);
+            //}    
+            
+            def listLoanHistory=[
+                getColumns:{
+                    return[new Column(name:"item.loancount",caption:"Loan Count",width:30),
+                           new Column(name:"item.approvedate",caption:"Date Approved"),
+                           new Column(name:"item.amountapproved",caption:"Amount")
+                    ]      
+                },
+                getRows:{
+                    return 23;
+                },
+                fetchList:{o->
+                   return svc.readHistory([appno:entity.appno]);
+                }
+            ]as SubListModel;
+
+            def _assetOpener;
+            
+            def getAssetOpener(){               
+            
+                if( !_assetOpener ) {
+                    _assetOpener = InvokerUtil.lookupOpener('loan:asset_info', [
+                        appid:entity.objid, entity:selectedAsset, mode:mode, type:assettype,
+                        selectHandler:{ setSelectedAsset(it) }
+                    ]);
+                }
+                return _assetOpener;
+            }
+            
+            void setSelectedAsset( asst ) {
+                this.selectedAsset = asst;
+                if( assetOpener.handle ) {
+                    assetOpener.handle.refresh([
+                        appid: entity.objid, entity:asst, mode:mode, type:assettype
+                    ]);
+                }
+                else{
+                    assetOpener.params = [
+                        appid: entity.objid, entity:asst, mode:mode, type:assettype
+                    ];
+                }
+            }
+           
+            void setAssettype( type ) {
+                this.assettype = type;
+                assetsList = entity[ type+'list' ];                
+                if( assetsList ) {
+                    setSelectedAsset( assetsList[0] );
+                }
+                else{
+                    assetsList=null;
+                    setSelectedAsset( null );
+                }
+            }
+            
+            def addAsset(){
+                return InvokerUtil.lookupOpener("asset:"+assettype,[
+                    appid: entity.objid,
+                    selectHandler:{o->
+                        assetsList = entity[ assettype+'list' ];
+                        assetsList.add(o);
+                        setSelectedAsset(o);
+                        binding.refresh('selectedAsset');
+                     }
+                ]);
+            }
+
+            void removeAsset(){
+                if( selectedAsset ) {
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?")){    
+                        assetsList.remove(selectedAsset)
+                        if( assetsList ) {
+                            setSelectedAsset( assetsList[-1] );
+                        }
+                        else {
+                            setSelectedAsset( null );
+                        }
+                    }    
+                }
+            }
+
+            def addAttachments(){
+            
+            }
+            
+            def removeAttachments(){
+            
+            }
+            
+            def addComment(){
+                return InvokerUtil.lookupOpener("loan:comment",[
+                    selectHandler:{o->
+                        addCommentForm(o);
+                    }
+               ]);
+            }
+
+            void addCommentForm(def msg){
+                if(!entity.appno) return;
+                def p = [objid: entity.objid, comment: msg];
+                entity.comments = service.addComment( p );
+                comments=TemplateProvider.instance.getResult("loan/ui/CommentForm.gtpl",[data:entity]);
+                binding.refresh("comments");
+            }
+            
+            def addAnnotation(){
+                return InvokerUtil.lookupOpener("loan:annotation",[
+                    selectHandler:{o->
+                        addAnnotationForm(o);
+                    }
+               ]);
+            }
+            
+            void addAnnotationForm(def msg){
+                if(!entity.appno) return;
+                def p = [objid: entity.objid, annotation: msg];
+                entity.annotations = service.saveAnnotation( p );
+                annotations=TemplateProvider.instance.getResult("loan/ui/AnnotationForm.gtpl",[data:entity]);
+                binding.refresh("annotations");
+            }
+            
+            def addRecommendation(){
+                return InvokerUtil.lookupOpener("application:ci_recomendation",[
+                    application:entity,
+                    selectHandler:{msg->
+                        cirecommendation=TemplateProvider.instance.getResult("loan/ui/CIRecommendationForm.gtpl",[data:entity]);    
+                        binding.refresh("cirecommendation");
+                    }
+               ]);
+            }
+            void viewAllComments(){
+                if(entity.loancount==1) throw new Exception ("No previous comments available in this application" );
+                def prevComment=[];
+                def commentList=[];
+                prevComment=svc.readHistory(entity);
+                prevComment.each(){it.comments.each(){commentList.add(it)}}
+                comments=TemplateProvider.instance.getResult("loan/ui/CommentForm.gtpl",[data:[comments:commentList]]);
+                binding.refresh("comments");
+            }
+            
+            void viewAllAnnotations(){
+                if(entity.loancount==1) throw new Exception ("No previous annotations available in this application" );
+                def prevAnnotation=[];
+                def annotationList=[];
+                prevAnnotation=svc.readHistory(entity);
+                prevAnnotation.each(){it.cirecommendation.each(){recommendationList.add(it)}}
+                annotations=TemplateProvider.instance.getResult("loan/ui/AnnotationForm.gtpl",[data:[annotations:annotationList]]);
+                binding.refresh("annotations");
+            }
+            
+            void viewAllRecommendations(){
+                if(entity.loancount==1) throw new Exception ("No previous recommendations available in this application" );
+                def prevRecommendation=[];
+                def recommendationList=[];
+                prevRecommendation=svc.readHistory(entity);
+                prevRecommendation.each(){it.cirecommendation.each(){recommendationList.add(it)}}
+                cirecommendation=TemplateProvider.instance.getResult("loan/ui/CIRecommendationForm.gtpl",[data:[cirecommendation:recommendationList]]);
+                binding.refresh("cirecommendation");
+            }
+                              
+            //--- Borrower Related Fields
+            def borrowerControls;
+            def connectionControls;
+            def jointBorrowerControls;
+            def comakerControls;
+            def selectedJointBorrower;
+            def selectedCoMaker;        
+            def tempBorrower;
+            
+            def clearBorrower(){
+                entity.jointBorrowerList=[];
+                entity.coMakerList=[];
+                entity.spouse.borrower=[];
+            }
+            
+            void verifyContact(o){
+                //--Spouse connection to Principal
+                if(o.contactno==entity.borrower.contactno)   
+                    throw new Exception("Contact is the Principal Borrower");
+                    
+                //--Joint Borrower & CoMaker
+                if(entity.jointBorrowerList.contains(o))
+                    throw new Exception("Contact is already in the Joint Borrowers List");
+                if(entity.coMakerList.contains(o))
+                    throw new Exception("Contact is already in the CoMakers List");
+            }
+            
+            def lookupBorrower(){
+                return InvokerUtil.lookupOpener("contact:lookup",[
+                    selectHandler:{o->
+                        svc.checkBorrower(o);
+                        entity.borrower=o;
+                        tempBorrower=entity.borrower;
+                        borrowerControls = contactDef.getFormFields( o, 'entity.borrower' );
+                        binding.refresh("borrowerControls");
+                        return "_close";
+                    }
+                ]);
+            }
+            
+            def addConnection(){
+                return InvokerUtil.lookupOpener("socialconnection:lookup",[
+                    selectHandler:{o->
+                        verifyContact(o);
+                        entity.spouse=o;
+                        connectionControls = contactDef.getFormFields( entity.spouse, 'entity.spouse' );
+                        binding.refresh("connectionControls");
+                        return "_close";
+                    },
+                    principal:entity.borrower
+                ]);
+            }
+            
+            /*
+            def removeConnection(){
+                connectionControls = contactDef.getFormFields( entity.spouse, 'entity.spouse' );
+                binding.refresh("connectionControls");
+                //return "_close";
+            }
+            */
+            
+            def showWarning(){
+                return InvokerUtil.lookupOpener("loan:warning",[:]);
+            }
+
+            def addJointBorrower(){
+                return InvokerUtil.lookupOpener("socialconnection:lookup",[
+                    selectHandler:{o->
+                        verifyContact(o);
+                        entity.jointBorrowerList.add(o);
+                        setSelectedJointBorrower(o);
+                        binding.refresh("selectedJointBorrower");
+                        return "_close";
+                        
+                    },
+                    principal:entity.borrower
+                ]);
+            }
+            void setSelectedJointBorrower(e){
+                selectedJointBorrower=e;
+                jointBorrowerControls = contactDef.getFormFields( selectedJointBorrower, 'selectedJointBorrower' );
+                binding.refresh("jointBorrowerControls");
+            }
+           
+            def getSelected(){
+                return _selectedJointBorrower;
+            }
+            
+            void removeJointBorrower(){
+                if(!selectedJointBorrower) return;
+                if(MsgBox.confirm("Are you sure you want to remove the selected item?")){
+                    entity.jointBorrowerList.remove(selectedJointBorrower);
+                    selectedJointBorrower=null;
+                    jointBorrowerControls=[];
+                    binding.refresh("selectedJointBorrower");
+                }
+            }
+            
+            def addCoMaker(){
+                return InvokerUtil.lookupOpener("socialconnection:lookup",[
+                    selectHandler:{o->
+                        if(entity.jointBorrowerList.contains(o)=="")
+                            throw new Exception("Please specify joint borrower first");
+                        verifyContact(o);
+                        entity.coMakerList.add(o);
+                        selectedCoMaker=o;
+                        comakerControls = contactDef.getFormFields( selectedCoMaker, 'selectedCoMaker' );
+                        binding.refresh("comakerControls|selectedCoMaker");
+                        return "_close";
+                    },
+                    principal:entity.borrower
+                ]);
+            }
+            void setSelectedCoMaker(e){
+                selectedCoMaker=e;
+                comakerControls = contactDef.getFormFields( selectedCoMaker, 'selectedCoMaker' );
+                binding.refresh("comakerControls");
+            }
+           
+            def getSelectedCoMaker(){
+                return selectedCoMaker;
+            }
+            void removeCoMaker(){
+                if(!selectedCoMaker) return;
+                if(MsgBox.confirm("Are you sure you want to remove the selected item?")){
+                    entity.coMakerList.remove(selectedCoMaker);
+                    selectedCoMaker=null;
+                    comakerControls=[];
+                    binding.refresh("selectedCoMaker");
+                }
+            }
+            
+            def childrenHandler = [
+                getRows: { 11 },
+                getColumns: {
+                    return [
+                        new Column(name: 'name', caption: 'Name', width:120, editable: true, required:true),
+                        new Column(name: 'age', caption: 'Age ', minWidth: 30, maxWidth: 50, editable: true, required:true, type:"integer", fieldType:Integer.class),
+                        new Column(name: 'year', caption: 'Grade/Year', width:90, editable: true, required:true),
+                        new Column(name: 'school', caption: 'School', width:300,editable: true, required:true),
+                        new Column(name: 'course', caption: 'Course', width:300,editable: true, required:true),
+                        new Column(name: 'status', caption: 'Status/Remarks', width:130,editable: true, required:true),
+                    ]
+                },
+                fetchList: { 
+                    if(entity.childrenList==null)entity.childrenList=[]; 
+                    return entity.childrenList;
+                },
+                createItem:{ [:] },
+                
+                onAddItem:{o-> 
+                    entity.childrenList.add(o);
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        entity.childrenList.remove(o);
+                }
+            ] as SubListModel;
+            
+            //other business info
+            def entityavailTimeFrom = ["8:00 am","9:00 am","10:00 am","11:00 am","12:00 pm",
+                                       "1:00 pm", "2:00 pm", "3:00 pm", "4:00 pm", "5:00 pm"
+                                      ];  
+            def entityavailTimeTo = [ "1:00 pm", "2:00 pm", "3:00 pm", "4:00 pm", "5:00 pm",
+                                      "6:00 pm", "7:00 pm", "8:00 pm", "9:00 pm", "10:00 pm",
+                                      "11:00 pm", "12:00 am"
+                                    ];                          
+            //oher Lending info                        
+            def otherPaymentList = ["DAILY","WEEKLY","MONTHLY"];
+            
+            @Close
+            boolean onClose(){
+                def diff = MapVersionControl.getInstance().diff(entity, oldEntity);
+                if( diff ){
+                    if(!MsgBox.confirm('Are you sure you want to exit?')) return false;
+                    
+                    if( mode == 'add' )
+                        AssetUtil.clearResources(entity.objid);
+                }
+                caller.mode='selected';
+                return true;
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="loan.ui.ApplicationForm"/>
+        <page name="page2" template="loan.ui.LoanAppReport"/>
+    </pages>
+</workunit>

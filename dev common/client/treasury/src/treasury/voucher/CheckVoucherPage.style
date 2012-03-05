@@ -1,0 +1,4 @@
+
+'entity.*' [entity.state=='PENDING'] { readonly: false; }
+'entity.*' [entity.state!='PENDING'] { readonly: true; }
+'entity.(voucherno|bankacct.bankname)' [true] { readonly: true; }

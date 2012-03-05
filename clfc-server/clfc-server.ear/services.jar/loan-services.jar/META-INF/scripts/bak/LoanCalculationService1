@@ -1,0 +1,124 @@
+
+import com.rameses.annotations.*;
+import com.rameses.eserver.*;
+import com.rameses.rules.common.*;
+import com.rameses.util.*;
+
+
+class LoanCalculationService {
+   
+	@Resource("RuleService/local")
+    def ruleService;
+	
+	@Service("EmailService")
+	def email;
+	
+	@ProxyMethod(local=true)
+	public def loadSchedule(def param) {
+		def list = [];
+		def xdate = java.sql.Date.valueOf( param.startdate ) - 1;
+		def _pbalance = param.loanamount;
+		def _ibalance = param.loanamount * ( param.interestrate/100 ); 
+		
+		def _pdaily = NumberUtil.formatDecimal( _pbalance / param.term, "#0.00" );		
+		def _idaily = NumberUtil.formatDecimal( _ibalance / param.term, "#0.00" );
+		
+		for( int i = 0; i<param.term; i++ ) {
+			xdate = xdate + 1;
+			def entry = [ day : i+1, date: xdate, principal: _pdaily, interest: _idaily ];
+			if( entry.day == param.term ) {
+				entry.principal = _pbalance;
+				entry.interest = _ibalance;
+			}
+			list.add ( entry );
+			_pbalance -= _pdaily;
+			_ibalance -= _idaily;	
+		}
+		
+		def ledger = [:];
+		ledger.loanamount =  param.loanamount;
+		ledger.loanbalance =  param.loanamount;
+		ledger.nextbilldate =  param.startdate;
+		ledger.enddate =  xdate;
+		ledger.principal_unpaid =  0;
+		ledger.interest_unpaid =  0;
+		ledger.penalty_unpaid =  0;
+		ledger.lastpayamount =  0;
+		ledger.lastpaydate =  null;
+		
+		ledger.principal_recurring =  _pdaily;
+		ledger.interest_recurring =  _idaily;
+
+		def result = [
+			ledger: ledger,
+			schedule: list
+		]
+		
+		//def ruleset = "loan_fees";
+		//def fact = ruleService.createFact( ruleset, "clfc.loan.fees.LoanApplication", param );
+		//def cmd = ruleService.createRuleAction();
+		//cmd.addCommand( "add-fees", new FeeHandler() );
+		//ruleService.execute( ruleset, [fact], cmd );
+	}
+   
+    @ProxyMethod(local=true)
+	public def calculateBill(def ledger) {
+		def entry = [:];
+		entry.billdate = ledger.nextbilldate;
+		entry.principal_due = ledger.principal_recurring;
+		entry.interest_due = ledger.interest_recurring;
+		
+		entry.principal_unpaid = ledger.principal_unpaid;
+		entry.interest_unpaid = ledger.interest_unpaid;
+		entry.penalty_unpaid = ledger.penalty_unpaid;
+		
+		entry.totaldue = entry.principal_due + entry.interest_due + 
+			entry.principal_unpaid + entry.interest_unpaid + entry.penalty_unpaid;
+			
+		entry.payment = entry.totaldue;	
+		return entry;
+	}	
+   
+    @ProxyMethod(local=true)
+	public def applyPayment(def ledger, def payment) {
+		if( payment.billdate instanceof String )
+			payment.billdate = java.sql.Date.valueOf( payment.billdate );
+	
+		def p = [:]
+		p.rctno = payment.rctno;
+		p.txndate = payment.billdate;
+		p.principal_paid = payment.principal_due;
+		p.interest_paid = payment.interest_due;
+		p.penalty_paid = 0;
+		p.totalpaid = payment.payment;
+		p.remarks = "NORMAL";
+		
+		ledger.principal_paid = (ledger.principal_paid ? ledger.principal_paid : 0 ) + p.principal_paid;
+		ledger.interest_paid = (ledger.interest_paid ? ledger.interest_paid : 0 ) + p.interest_paid;
+		ledger.penalty_paid = (ledger.penalty_paid ? ledger.penalty_paid : 0 ) + p.penalty_paid;
+		ledger.loanbalance = ledger.loanbalance - p.principal_paid;
+		ledger.lastpayamount = p.totalpaid;
+		ledger.lastpaydate = payment.billdate;
+		
+		if( ledger.nextbilldate instanceof String )
+			ledger.nextbilldate = java.sql.Date.valueOf( ledger.nextbilldate );
+			
+		def dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd");	
+		ledger.nextbilldate = dateFormat.format( DateUtil.add( ledger.nextbilldate, "1d"));
+		
+		def result = [
+			ledger: ledger,
+			payment: p
+		]
+		return result;
+	}
+   
+}
+
+class FeeHandler implements RuleActionHandler {
+
+	public void execute( Object o, Object args ) {	
+		print o;
+		print " args " + args;
+	}
+}

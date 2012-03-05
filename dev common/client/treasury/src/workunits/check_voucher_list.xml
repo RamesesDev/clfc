@@ -1,0 +1,64 @@
+<workunit>
+    <invokers>
+        <invoker type="check_voucher:list" caption="Check Voucher List"/>
+        
+        <invoker type="formActions" tooltip="Next" action="nextPage" caption="Next" icon="images/next16.png" mnemonic="n"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        import groovy.text.*;
+        
+        class CheckVoucherListController{
+            @Binding
+            def binding;
+            
+            @Service("CheckVoucherService")
+            def svc;
+            
+            def mode="main";
+            def searchText;
+            def selectedItem;
+            def entity=[accounts:[]];
+            
+            def type;
+            
+
+            def listHandler = [
+                getColumns:{
+                    return [
+                        new Column(name:"voucherno",caption:"Voucher No.", width: 60),
+                        new Column(name:"refno",caption:"Ref. No.", width: 60),
+                        new Column(name:"payeename",caption:"Payee", width: 300),
+                        new Column(name:"amount",caption:"Amount", width: 90),
+                        new Column(name:"state",caption:"State", width: 80),
+                    ]
+                },
+                fetchList:{o->
+                    if( searchText ) o.searchText = searchText;
+                    o.type = type;
+                    return svc.getList( o );
+                }
+            ]as PageListModel;
+            
+            void doSearch() {
+                listHandler.load();
+            }
+                        
+            def nextPage(){
+                if( !selectedItem ) throw new Exception("Please select an item from the list.");
+                def voucher = svc.read( [objid: selectedItem.objid] );
+                return InvokerUtil.lookupOpener("check_voucher:form",[entity: voucher]);
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="treasury.voucher.CheckVoucherListPage"/>
+    </pages>
+</workunit>

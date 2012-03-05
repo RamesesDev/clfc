@@ -1,0 +1,54 @@
+<workunit>
+    <invokers>
+        <invoker folderid="/menu/treasury/master" caption="Revenue Accounts" permission="revenue_account.view"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        import groovy.text.*;
+        
+        public class RevenueAccountListController{
+            @Service('RevenueAccountService')
+            def svc;
+            
+            @Binding
+            def binding;
+            
+            def selection;
+            boolean editing;
+            
+            def opener = InvokerUtil.lookupOpener('revenueaccount:form', [onUpdate:{ e ->
+                editing = e;
+                binding.refresh('selection');
+            }]);
+            
+            def listHandler = [
+                getRows: { return 20; },
+                getColumns:{
+                    return[ new Column(name:"code", caption:"Acct Code", maxWidth:80),
+                            new Column(name:"title", caption:"Acct Title")
+                    ]
+                },
+                fetchList:{o->
+                    return svc.getList( o );
+                }
+            ] as PageListModel;
+            
+            void setSelection( s ) {
+                this.selection = s;
+                if( editing ) return;
+                if( opener.handle )
+                    opener.handle.data = s;
+                else
+                    opener.params.data = s;
+            }
+            
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="revacct.ui.RevAcctListPage"/>
+    </pages>
+</workunit>

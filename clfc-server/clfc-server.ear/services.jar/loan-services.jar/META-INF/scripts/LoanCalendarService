@@ -1,0 +1,61 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+
+
+class LoanCalendarService {
+
+	@PersistenceContext('java:loan')
+	def em;
+	
+	static final def dt_formatter = new java.text.SimpleDateFormat('yyyy-MM-dd');
+		
+
+	@ProxyMethod
+	public def create( holiday ) {
+		assert holiday.date;
+		assert holiday.description;
+		
+		holiday.year = holiday.date[0..3].toInteger();
+		holiday.month = holiday.date[4..5].toInteger();
+		
+		em.create('loan_calendar', holiday);
+		
+		return holiday;
+	}
+	
+	@ProxyMethod
+	public def update( holiday ) {
+		return em.update('loan_calendar', holiday);
+	}
+	
+	@ProxyMethod
+	public void remove( holiday ) {
+		em.delete('loan_calendar', holiday);
+	}
+	
+	@ProxyMethod
+	public def getList( param ) {
+		def filter = [];
+		if( param.year ) filter << 'year=$P{year}';
+		if( param.month ) filter << 'month=$P{month}';
+		if( param.date ) filter << 'date=$P{date}';
+		
+		def qry = em.sqlContext.createQuery('select * from loan_calendar ' + (filter? ' where ' + filter.join(' and ') : ''));
+		if( filter ) qry.setParameters( param );
+		return qry.resultList;
+	}
+	
+	@ProxyMethod
+	public boolean isExempted( d ) {
+		if( d instanceof String ) d = dt_formatter.parse( d );
+		def cal = Calendar.instance;
+		cal.setTime(d);
+		
+		def holiday = em.sqlContext.createQuery('select date from loan_calendar where date=?')
+		                .setParameter(1, d)
+						.singleResult;
+		
+		return cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY  || holiday != null;
+	}
+	
+}

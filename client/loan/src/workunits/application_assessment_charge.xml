@@ -1,0 +1,44 @@
+<workunit>
+    <invokers>
+        <invoker type="application:assessment_charge" caption="Add Charge" target="popup"/>
+        
+        <invoker type="formActions" caption="Add" action="add" mnemonic="a" default="true"/>
+        <invoker type="formActions" caption="Cancel" action="_close" mnemonic="c" immediate="true"/>
+    </invokers>
+    <code>
+        <![CDATA[   
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        
+        class ApplicationForReleaseController {
+        
+            @Binding
+            def binding;
+        
+            def entity = [:];
+            def account;
+            def selectHandler;
+            
+            def lookupAccount() {
+                return InvokerUtil.lookupOpener("revenueaccounts:lookup", [
+                    selectHandler: { o ->
+                        entity.account = o;
+                        account = o.title;
+                        binding.refresh("account");
+                    }
+                ]);
+            }
+            
+            def add() {
+                if( selectHandler ) selectHandler( entity );
+                return '_close';
+            }
+        
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="loan.assessment.ui.LoanChargePage"/>
+    </pages>
+</workunit>

@@ -1,0 +1,39 @@
+<workunit>
+    
+    <invokers>
+        <invoker folderid="menu/treasury/disbursement" caption="Check Disbursement" action="init"
+                 permission="check_disbursement.perform"/>
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class DisbursementController  {
+        
+            def types;
+            def selection;
+            
+            public void init() {
+                try {
+                    types = InvokerUtil.lookupOpeners("disbursement:type");
+                }
+                catch(e){;}
+            }
+
+            public def next() {
+                return selection;
+            }
+        }
+        
+        ]]>
+    </code>
+    
+    <pages>
+        <page template="disbursement.ui.CheckDisbursementInitialPage"/>
+    </pages>
+    
+</workunit>

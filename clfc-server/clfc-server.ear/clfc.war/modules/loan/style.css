@@ -1,0 +1,133 @@
+th  { text-align: left; padding-right: 20px; }
+
+pre { 
+	padding-left: 5px; overflow: auto; 
+	white-space: pre-wrap;                 /* CSS3 browsers  */
+	white-space: -moz-pre-wrap !important; /* 1999+ Mozilla  */
+	white-space: -pre-wrap;                /* Opera 4 thru 6 */
+	white-space: -o-pre-wrap;              /* Opera 7 and up */
+	word-wrap: break-word;                 /* IE 5.5+ and up */
+	overflow-x: auto;                /* Firefox 2 only */
+}
+
+.box { 
+	display: block; font-weight: bold;
+	background: gray; color: white;
+	padding: 2px 5px 2px 5px; margin: 3px 0px 3px 0px;
+	-moz-border-radius: 3px; -webkit-border-radius: 3px;
+}
+
+/*-- tab design ---*/
+.tab-header { margin-bottom: 0px; }
+.tab-header a {
+	margin-top: 4px;
+	padding: 3px 20px; color: #fff; font-weight: bold;
+	position: relative;
+	-moz-border-radius-topleft: 4px; -moz-border-radius-topright: 4px; 
+	-webkit-border-top-left-radius: 4px; -webkit-border-top-right-radius: 4px;
+}
+
+.tab-header a:hover { color: #ddd; }
+.tab-header a:active { color: #ccc; }
+
+.tab-header a.selected {
+	background: #fff; color: #000;
+	bottom: -2px;
+}
+
+.tab-content {
+	padding: 10px;
+	min-height: 150px;
+	border: solid 1px #ccc;
+	border-top: none;
+	-moz-box-shadow: 0px 3px 5px #bbb; -webkit-box-shadow: 0px 3px 5px #bbb; box-shadow: 0px 3px 5px #bbb;
+}
+
+.sender { color: gray; font-size: 9pt; }
+.listInfo { color: black; font-size: 8pt; }
+.listInfo2 { color: green; font-size: 8pt; }
+.personalInfo { font-size: 9pt; color: maroon;}
+.borrowerInfo { font-size: 10pt; color: navy;}
+.relInfo{ font-size: 9pt; color: black;}
+.relInfo2{ font-size: 8pt; color: black;}
+.lendingInfo{font-size: 8pt; color: green}
+.lendingInfo2{font-size: 8pt; color: red}
+.purple{font-size: 8pt; color: MediumPurple}
+.dgold{font-size: 8pt; color: DarkGoldenRod}
+.maroon{ color: maroon; }
+.maroon2{ color: maroon; font-size: 8pt; }
+.fuchsia{ color: fuchsia; font-size: 8pt; }
+.green{ color: green; }
+.green2{ color: green; font-size: 8pt; }
+.red{ color: red; }
+.red2{ color: red; font-size: 8pt;}
+.black{ color: black; font-size: 8pt; }
+.black2{ color: black; font-size: 10pt; }
+.navy{ color: navy; }
+.gray{ color: gray;}
+.gray2{ color: gray;  font-size: 8pt;}
+.dKhaki { color: DarkKhaki; font-weight: bold; }
+.dKhaki2 { color: DarkKhaki; font-size: 8pt; font-weight: bold;}
+.teal { color: teal; font-weight:bold; }
+.teal2 { color: teal; }
+.olive { color: olive; }
+.magenta { color: magenta; }
+
+.doc-title { display: block; clear: both; overflow: hidden; }
+.doc-title2 { display: block; overflow: hidden; }
+.toolbar   { clear: both; }
+
+img.profile {
+	border: solid 1px lightgrey;
+	-moz-box-shadow: 0px 3px 10px #bbb;
+	-webkit-box-shadow: 0px 3px 10px #bbb;
+}
+
+.profilePic a img {
+	border: solid 1px gray;
+	margin: 5px;
+	-moz-box-shadow: 0px 3px 5px #ccc;
+	-webkit-box-shadow: 0px 3px 5px #ccc;
+}
+
+.profilePic a:hover img {
+	border: solid 1px navy;
+	-moz-box-shadow: 0px 3px 5px #336699;
+	-webkit-box-shadow: 0px 3px 5px #336699;
+}
+
+.asset a img {
+	border: solid 1px gray;
+	margin: 5px;
+	-moz-box-shadow: 0px 3px 5px #ccc;
+	-webkit-box-shadow: 0px 3px 5px #ccc;
+}	
+.asset a:hover img {
+	border: solid 1px navy;
+	-moz-box-shadow: 0px 3px 5px #336699;
+	-webkit-box-shadow: 0px 3px 5px #336699;
+}
+.asset-box {
+	overflow: auto;	
+}
+				
+.list { padding: 0px; margin: 0px; }
+.list li { list-style: none; }
+.list .info { font-size: 0.75em; color: #333; }
+.list th.info { text-indent: 10px; }
+
+<!-- tool tip -->
+.tooltip {
+	background-color:#000;
+	border:1px solid #fff;
+	padding:10px 15px;
+	width:200px;
+	display:none;
+	color:#fff;
+	text-align:left;
+	font-size:12px;
+
+	/* outline radius for mozilla/firefox only */
+	-moz-box-shadow:0 0 10px #000;
+	-webkit-box-shadow:0 0 10px #000;
+}

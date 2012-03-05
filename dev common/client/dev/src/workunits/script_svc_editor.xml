@@ -1,0 +1,59 @@
+<workunit>
+    <invokers>
+        <invoker type="script_svc:open" action="open" target="window"/>
+        <invoker type="script_svc:create" action="create" target="window"/> <!--permission="application.removePayment"/>-->
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class ScriptSvcExplorerController{
+            @Service('DEVScriptExplorer')
+            def svc;
+            
+            @Binding
+            def binding;
+            
+            @FormId
+            def formId;
+            
+            @FormTitle
+            def title;
+        
+            def service;
+            
+            void open() {
+                if( service.name ) service = svc.open( service.name );
+                title = formId = service.name;
+            }
+            
+            void create() {
+                title = 'New Script';
+                formId = "ID" + new java.rmi.server.UID();
+                service = [:];
+            }
+            
+            void save() {
+                if( !service.name ) {
+                    service.name = MsgBox.prompt("Service Name:");
+                    if( !service.name?.trim() ) return;
+                }
+
+                service = svc.save( service );
+                
+                binding.title = service.name;
+            }
+            
+            void flush() {
+                svc.flush( service.name );
+            }
+            
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="dev.ui.ScriptSvcEditorPage"/>
+    </pages>
+</workunit>

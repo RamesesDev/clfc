@@ -1,0 +1,38 @@
+<workunit>
+    <invokers>        
+        <invoker type="application:removePaymentDate" caption="Search Payment Date" permission="application.removePayment" target="popup"/>
+    </invokers>
+    <code> 
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        
+        class LoanLedgerRemovePaymentDateController{
+            @Service('LoanLedgerService')
+            def svc;
+            
+            @Binding
+            def binding;
+            
+            def selectHandler;
+            //def filter=[:];
+            
+            def filter = [date: OsirisContext.env.LOCALE_TIME];
+            
+            def remove(){
+                if(!filter.date){
+                    MsgBox.alert("Date is required");
+                    return;
+                }else
+                    MsgBox.alert("Payment Date has been successfully removed.");
+                    binding.refresh();
+                    return "_close";
+            }
+        }    
+        ]]>
+    </code>
+    <pages>
+        <page template="loan.ui.ledger.LedgerRemovePaymentDate"/>
+    </pages>    
+</workunit>

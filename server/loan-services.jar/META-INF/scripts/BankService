@@ -1,0 +1,29 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+
+class BankService {
+
+	@PersistenceContext('java:loan')
+	def em;
+		
+	@ProxyMethod
+	def getList(){
+		return em.sqlContext.createQuery('select * from bank').resultList;
+	}
+	
+	@ProxyMethod
+	def createData(def o){
+		o.objid = "x" + new java.rmi.server.UID();
+		return em.create("collectionsheet:bank", o);			
+	}
+	
+	@ProxyMethod
+	def updateData(def o){
+		return em.update("collectionsheet:bank", o);			
+	}
+	
+	@ProxyMethod
+	def deleteData(def o){
+		return em.delete("collectionsheet:bank", o);
+	}
+}

@@ -1,0 +1,53 @@
+<workunit>
+    <invokers>
+        <invoker folderid="report/loan" caption="Releases for the Day" permission00="" index="1"/>
+        <!--permission="application.createDailyReleaseReport"/>-->
+    
+        <invoker type="formPrintActions" caption="Back"  tooltip="Back" icon="images/back16.png" action="doBack" mnemonic="p"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import loan.reports.*;
+        import java.sql.Timestamp;
+
+        public class LoanReleasesForTheDayReportController extends AbstractReportController
+        {
+            @Binding
+            def binding;
+            
+            @FormTitle
+            def formTitle = 'Daily Releases Report';
+            
+            @Service('LoanReleaseReportService')
+            def svc;
+            
+            def filter = [date: OsirisContext.env.LOCALE_TIME];
+            
+            def getReportName() {
+                return 'loan/reports/release/Loan_Releases.jasper';
+            }
+            
+            def getParameters() {
+                def env = OsirisContext.env;
+                return [
+                    BRANCH_NAME: env.CLIENT.name,
+                    USER: "$env.USERINFO.firstname $env.USERINFO.lastname".toString(),
+                    PRINTDATE: Timestamp.valueOf( filter.date + ' 00:00:00')
+                ];
+            }
+            
+            def getData() {
+                return svc.buildReport( filter );
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="loan.reports.release.InitPage"/>
+        <page name="print" template="loan.reports.PrintPage"/>
+    </pages>
+</workunit>

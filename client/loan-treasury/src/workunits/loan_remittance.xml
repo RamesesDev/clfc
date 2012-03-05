@@ -1,0 +1,84 @@
+<workunit>
+    <invokers>
+        <invoker folderid="menu/services/loan" caption="Loan Remittance(Office Collection)" action="init"
+                 permission="office_collection_remittance.create"/>
+        <invoker type="formActions" action="next"   caption="Next"   mnemonic="n" icon="images/next16.png"   tooltip="Show Remittance" visibleWhen="#{mode=='init'}" default="true"/>
+        <invoker type="formActions" action="save"   caption="Save"   mnemonic="s" icon="images/save16.png"   tooltip="Save"   visibleWhen="#{mode=='create'}" immediate="true"/>
+        <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" icon="images/cancel16.png" tooltip="Cancel" visibleWhen="#{mode=='create'}" immediate="true"/>
+        <invoker type="formActions" action="print"  caption="Print"  mnemonic="p" icon="images/print16.png"  tooltip="Print"  visibleWhen="#{mode=='print'}"  immediate="true"/>
+        <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" icon="images/cancel16.png" tooltip="Cancel" visibleWhen="#{mode=='print'}"  immediate="true"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.util.*;
+        
+        class loan_remittanceController{   
+            @Service('LoanRemittanceService')
+            def svc;
+            
+            @Binding
+            def binding;
+            
+            def entity;
+            def mode="create";
+            def selected;
+            def breakdownOpener;
+            
+            void init(){
+                mode="init";
+                entity=[:];
+            }            
+            def next(){
+                mode="create";
+                entity=svc.buildRemittance(entity);
+                breakdownOpener=InvokerUtil.lookupOpener("cashreceipt:breakdown",[totalAmount:entity.amount]);
+                return "page2";
+            }
+            void save(){
+                def totalBreakdown=breakdownOpener.handle.totalBreakdown;
+                if(totalBreakdown!=entity.amount)
+                    throw new Exception("Total Amount and Total Breakdown is not equal.");
+                svc.post(entity);
+                MsgBox.alert("Payment has been successfully collected");
+                mode="print";
+            }
+            
+            def print(){
+                report.viewReport();
+                return "page3";
+            }
+            def report=[
+                getReportName:{
+                    return "loantreasury.collection.ui.LoanRemittanceReport.jasper";
+                },
+                getReportData:{
+                    return null;
+                    /*return COLLECTION_NO: collection.billno,    
+                                    DATE: collection.date,
+                                    NAME: collection.name,
+                                  AMOUNT: collection.amount,
+                               COLLECTOR: collection.collector*/
+                }
+            ] as ReportModel;
+            
+            def cancel(){
+                mode="init";
+                return "default";
+            }
+            /*
+            def find(){
+            
+            }*/
+        }
+      ]]>  
+    </code> 
+    <pages>
+        <page template="loantreasury.collection.ui.LoanRemittanceInit"/>
+        <page name="page2" template="loantreasury.collection.ui.LoanRemittance"/>
+        <page name="page3" template="loantreasury.collection.ui.CollectionRemitReport"/>
+     </pages>
+</workunit>

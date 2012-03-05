@@ -1,0 +1,109 @@
+import com.rameses.annotations.*;
+
+class UserAdminService {
+	
+    @PersistenceContext("main")
+    def em;
+    
+
+
+    @ProxyMethod
+    public def createNewUser( entity ) {
+        if( !entity.objid ) entity.objid="USER"+new java.rmi.server.UID();
+        entity = create(entity); //create user
+        
+        entity.usergroup = entity.usergroupName;
+		entity.userid = entity.objid;
+		entity = createRole(entity); //create entity
+		
+		entity.usertype = 'user';
+		entity = createLogin(entity); //create login acct
+		
+		return entity;
+    }
+	
+    @ProxyMethod
+    public def create(o) {
+        o.objid="USER"+new java.rmi.server.UID();
+        return em.create("user", o);
+    }    
+	
+	@ProxyMethod
+    public def read(o) {
+        return em.read("user", o);
+    }
+    
+    @ProxyMethod
+    public def update(o) {
+		def old = read( o );
+		old.putAll( o );
+        return em.update("user", old);
+    }
+
+    @ProxyMethod
+    public def remove(o) {
+        return em.delete("user", o);
+    }
+    
+    @ProxyMethod
+    public def getList(param) {
+    	print param;
+    	def s = 'select * from user';
+    	if(param.search) {
+    		s += ' where username like $P{search}';
+    	}
+    	
+    	return em.sqlContext.createQuery(s).setFirstResult(param._start).setMaxResults(param._limit).setParameters(param).resultList;
+    }
+    
+    
+    
+    @ProxyMethod
+    public def createLogin( o ) {
+    	if( !o.objid ) o.objid = "LOGIN" + new java.rmi.server.UID();
+    	return em.create("login", o);
+    }
+    
+    @ProxyMethod
+    public def updateLogin( o ) {
+		update(o);
+		return em.update("login", o);
+    }
+    
+    @ProxyMethod
+    public def readLogin( o ) {
+    	return em.read("login", o);
+    }
+    
+    
+    // role methods
+    @ProxyMethod
+    public def createRole( o ) {
+		if( !o.objid ) o.objid = "UR" + new java.rmi.server.UID();
+        
+        def role = getRoleId( o );
+        o.role = role.objid;
+        
+        return em.create( "userrole", o );
+    }
+    
+    @ProxyMethod
+    public def updateRole( o ) {
+		update(o);
+    	return em.update( "userrole", o );
+    }
+    
+    
+    @ProxyMethod
+    public def getRoleId( o ) {
+        return em.sqlContext.createQuery('SELECT objid FROM role WHERE name=?').setParameter(1,o.rolename).singleResult;;
+    }
+    
+    
+    @ProxyMethod
+    public def searchSuggest( param ) {
+    	param.type += '%';
+    	return em.sqlContext.createQuery('select * from user where username like $P{type}').setMaxResults(5).setParameters(param).resultList*.username;
+    }
+}
+

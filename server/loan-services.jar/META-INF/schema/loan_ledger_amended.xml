@@ -1,0 +1,8 @@
+<schema>
+	<element name="loan_ledger_amended" tablename="loan_ledger_amended">
+		<field name="objid" primary="true"/>
+		<field name="appid" />
+		<field name="version" />
+		<complex name="info" serializer="default"/>
+	</element>
+</schema>

@@ -1,0 +1,34 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+
+class LoanStateInterceptor
+{
+
+	@PersistenceContext('java:loan')
+	def em;
+
+
+	@After(pattern="LoanApplicationService.submitForApproval.*")
+	public void queueForUpload( evt ) {
+		def app = evt.result;
+
+		insertQueue( ['appid'], [app.objid] );
+
+		def hist = em.sqlContext.createQuery('select * from loan_history where appno = $P{appno} order by indexno desc')
+		             .setParameters(app)
+					 .setFirstResult(0)
+					 .setMaxResults(1)
+					 .resultList;
+
+		if( hist ) {
+			insertQueue( ['appid', 'info'], [hist[0].objid, '[type:"history"]']);
+		}
+	}
+	
+	private void insertQueue( flds, params ) {
+		def sql = 'insert into loanapplication_for_upload (' +flds.join(',')+ ') values(' +flds.collect{ '?' }.join(',')+ ')';
+		def qry = em.sqlContext.createExecutor(sql)		
+		params.eachWithIndex { o,i -> qry.setParameter(i+1, o); }		
+		qry.execute();
+	}
+}

@@ -1,0 +1,71 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+import com.rameses.util.*;
+
+
+class LoanAttachmentsService
+{
+	@PersistenceContext('java:loan')
+	def em;
+
+	@Service('DateService')
+	def datesvc;
+
+    @Env
+    def env;
+
+	@ProxyMethod
+	public def saveByBlock( param ) {
+		assert param.objid;
+		assert param.content;
+
+		def info;
+		if( !param.nextItem ) {
+			info = [objid: param.objid, size: 0, item_count: 0 ];
+			em.create('loanapp_attachment', info);
+			param.nextItem = 1;
+		}
+		else {
+			info = em.read('loanapp_attachment', param);
+		}
+
+		info.item_count = param.nextItem;
+		info.size += param.content.length;
+
+		def item = [
+			objid: param.objid + '-' + info.item_count,
+			parentid: param.objid,
+			index: info.item_count,
+			content: param.content
+		];
+
+		em.update('loanapp_attachment', info);
+
+		em.sqlContext.createExecutor('insert into loanapp_attachment_detail values(?,?,?,?)')
+		  .setParameter(1, item.objid)
+		  .setParameter(2, item.parentid)
+		  .setParameter(3, item.index)
+		  .setParameter(4, item.content)
+		  .execute();
+
+		return [objid: param.objid, nextItem: param.nextItem+1];
+	}
+
+	@ProxyMethod
+	public def readByBlock( param ) {
+		assert param.objid;
+
+		if( !param.nextItem ) {
+			param.nextItem = 1;
+		}
+
+		def result = em.sqlContext.createQuery('select content from loanapp_attachment_detail where parentid=? and part=?')
+		               .setParameter(1, param.objid).setParameter(2, param.nextItem)
+		               .singleResult;
+
+		if( !result ) return null;
+
+		return [objid: param.objid, nextItem: param.nextItem+1, content: result.content];
+	}
+
+}

@@ -1,0 +1,17 @@
+package clfc.loan.fees.rule4;
+
+import clfc.loan.fees.LoanApplication;
+import java.util.*;
+import java.math.*;
+
+global java.util.List result;
+
+rule "rule1"
+   when
+      LoanApplication( renewalcount >= 2.5, renewalcount <= 5.90,$amount: amount > 0.00, amount <= 1.00 )
+   then
+      Map map = new HashMap();
+      map.put( "accttitle", "null" );
+      map.put( "amount", new BigDecimal(2) );
+      result.add(map);
+end

@@ -1,0 +1,55 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+import java.math.BigDecimal;
+
+
+class LoanApplicationReportService 
+{
+
+	@PersistenceContext('loan')
+	def em;
+	
+	@Service('CheckVoucherService')
+	def checkSvc;
+	
+
+	@ProxyMethod
+	def buildReport( param ) {
+		param.dtfrom = param.date + ' 00:00:00';
+		param.dtto = param.date + ' 23:59:59';
+		param.newcount = 1;
+		
+		def filter = [];
+		if( !param.type ) {}
+		else if( param.type == 'NEW' )   filter << 'loancount = $P{newcount}';
+		else if( param.type == 'RENEW' ) filter << 'loancount > $P{newcount}';
+		
+		if( param.state ) filter << 'state = $P{state}';
+		
+		filter = filter? ' and ' + filter.join(' and ') : '';
+		
+		def list = em.sqlContext.createNamedQuery('loan_app_report.sql').setVars([filter:filter]).setParameters(param).resultList;
+		if( !list ) throw new Exception("No applications found for the specified criteria.");
+		
+		def report = [];
+		list.each {
+			def item = [
+				appno:   it.appno, 
+				loanno:  it.appno, 
+				dtfiled: it.dtfiled? ('' + it.dtfiled)[0..9] : '',
+				borrowername: it.borrowername,
+			];
+			
+			def info = em.serializer.read( it.loaninfo );
+			item.amtapplied = info.loanamount as BigDecimal;
+			item.purpose = info.loanpurpose? info.loanpurpose : ' - ';
+			item.route = (it.routecode? it.routecode + ' - ' : '') + (it.routedescription? it.routedescription : '');
+			if( !item.route ) item.route = ' - ';
+						
+			report << item;
+		};
+		
+		return report;
+	}
+	
+}

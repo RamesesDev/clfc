@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<folders>
+    <folder id="menu">
+        <folder id="system" caption="System" index="-1"/>
+        <folder id="file" caption="File">
+            <folder id="settings" caption="Settings">
+                <folder id="userpref" caption="User Preferences"/>
+                <folder id="editorpref" caption="Editor Preferences"/>
+                <folder id="printingpref" caption="Printing Preferences"/>
+            </folder>
+        </folder>
+    </folder>
+</folders>

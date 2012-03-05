@@ -1,0 +1,105 @@
+<workunit>
+    
+    <invokers>
+        <invoker folderid="menu/management/accounts" caption="General Ledger Accounts" index="-1" /> 
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class GLAccountController {
+            
+            @Service("GLService")
+            def service;
+        
+            def entity = [:];
+            def acctClasses = ["CONTROL", "ACCT_GRP", "SUB_ACCT"];
+            def parentInfo;
+            
+            @Script("GLAccountUtil")
+            def glmodel;
+            
+            @Binding
+            def binding;
+            
+            boolean editing;
+            
+            public def getControlTypes() {
+                if(!entity.accttype && !entity.acctclass) return [];
+                String _type = "GL:"+entity.acctclass;
+                return InvokerUtil.lookup( _type ).findAll{ it.properties.class && entity.accttype.matches(it.properties.class) }.collect{ [code:it.properties.code, caption:it.caption]  };  
+            }
+            
+            public void save() {
+                entity = service.save( entity );
+                MsgBox.alert( "record saved");
+                editing = false;
+                glmodel.reloadParent( entity.parent );
+            }
+            
+            public def lookupParent() {
+                return new PopupOpener( name:"lookup_category", params: [selectHandler: selectAccount ] );
+            }
+            
+            void initParentInfo( def accttype, def c  ) {
+                if( c ) {
+                    parentInfo = "("+c.code+") " + c.name;
+                }
+                else {
+                    parentInfo = null;
+                }
+            }
+            
+            def selectAccount = { o->
+                if( o.code ) {
+                    entity.parent = [objid:o.objid, code:o.code, name:o.name];
+                }
+                initParentInfo( o.accttype, o );
+                entity.accttype = o.accttype;
+                entity.parentid = o.objid;
+                binding.refresh( "parentInfo" );
+            }
+            
+            public void addNew() {
+                entity = [parent:[]];
+                parentInfo = null;
+                editing = true;
+                binding.refresh();
+            }
+            
+            public def getHandler() {
+                glmodel.categoryOnly = false;
+                return glmodel.treeHandler;
+            }
+            
+            def _selected;
+            public void setSelected( def o ) {
+                if(editing) return;
+                if(o.item) entity = o.item;
+                else entity = [:];
+                parentInfo = null;
+                initParentInfo(  entity.accttype, entity.parent ); 
+                binding.refresh( "parentInfo" );
+                _selected = o;
+            }
+            
+            public def getSelected() {
+                return _selected;
+            }
+
+            public void cancelEdit() {
+                editing = false;
+            }
+            
+        }
+        ]]>
+    </code>
+    
+    <pages>
+        <page template="gl.account.ui.GLAccountPage"/>
+    </pages>    
+    
+</workunit>

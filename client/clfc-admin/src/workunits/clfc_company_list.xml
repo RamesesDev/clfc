@@ -1,0 +1,6 @@
+<workunit extends="workunits/company_list.xml">
+    <invokers>
+        <invoker type="adminpanel:admin" action="init"  permission="admin:company.list"  
+            caption="Companies" target="window" icon="images/folder32.png"/>
+    </invokers>
+</workunit>

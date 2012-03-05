@@ -1,0 +1,51 @@
+<workunit>
+    
+    <invokers>
+        <invoker type="payment:option" caption="Cash - F1" shortcut="F1" target="popup" action="init"/>
+        <invoker type="formActions" caption="OK" action="save" default="true"/>
+        <invoker type="formActions" caption="Cancel" action="_close"/>
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class CashPaymentOptionController  {
+        
+            def unpaid = 0.0;
+            def amount = 0.0;
+            def actionHandler;
+            def paymentList;
+            
+            public void init() {
+                if(unpaid <=0) 
+                    throw new Exception("Amount unpaid must be greater than 0");
+                    
+                if(paymentList) {    
+                    if( paymentList.find{ it.type == "CASH" } ) throw new Exception("Cash is already added" );                    
+                }
+            }
+            
+            public def save() {
+                if(amount <=0) 
+                    throw new Exception("Please indicate amount paid");
+                def amtpaid = (amount > unpaid) ? unpaid : amount;
+                if(actionHandler) actionHandler( [ type:"CASH", amount: amtpaid, change: change ] );
+                return "_close";
+            }
+            
+            public def getChange() {
+                return (amount > unpaid) ? amount - unpaid : 0.0; 
+            }
+        }
+        ]]>
+    </code>
+
+    <pages>
+        <page template="cashreceipt.ui.CashPaymentOptionPage"/>
+    </pages>
+    
+</workunit>

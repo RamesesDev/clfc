@@ -1,0 +1,162 @@
+WEB
+	-->Approving officer warning/confirmation message before submit.
+	View Previous Ledger(past loans)	
+	Last loan appears first	
+	released date	
+	check Details	
+	view ledger(active loan)	
+	ledger Evaluation.
+	main source of income
+	-->comaker
+	-->client contact no.
+	-->no. of children	
+=================================
+	             CLIENT INFORMATION
+Loan Application
+	 Client Middle Name
+		 -->Main borrower
+			Joint
+			CoMaker
+	 Client Status
+	 Session Timeout
+	 Add REMOVE spouse connection
+	-->other sources of income
+	-->Add Search By Route(ok na)	
+	-->CAO anottation(ok na)
+	if mode==read, di mo.appear ang annotation.
+	-->Check Info before Submitting for release(Check List) (ok na)
+	-->CoMaker	(pwede ma.principal borrower) (ok na)
+	 Loan History	
+	 -->Joint Borrower/Co-Maker
+	 -->enable button on FOR INSPECTION, RENEWAL
+	 Assets
+	 -->put warning message before removing assets
+	 Ledger
+		Rename Principal Balance to Oustanding Balance(ok na)
+			Formula: 
+				Actual/principal balance=no.of days(120)- no. of total days payed * interest + outstanding balance
+		Put Outstanding Balance & Actual Balance sa ledger Info...
+		Print Ledger(Mother/Baby Ledger)
+	Pop-up Message sa client once approved na	-->Loan Agreement Form	(ok na)	
+		1) Had undergo initial & extensive interview 
+		2) Had been properly investigated & Passed credit committee standard 
+		3) Thoroughly discussed & recommended by the branch credit committee members 
+		4) Reviewed & approved by the assigned EAO 
+		5) Submitted duly accomplished loan forms & requirements asked 
+		6) Attended loan policy seminar 
+		7) Ready for Released	
+	 -->
+    -->Other Business:
+		Types					Remarks			
+		Other business			______________________
+		Allotment				______________________
+		Pension					______________________
+		Others not specified	______________________
+    -->
+	--> Added Canceled State 
+Loan Treasury
+	Collection sheet(Put Search on names to pay/ Search By Name)...
+
+Reports
+	CLient Information
+		-->Branch/Sub Office
+		-->USER
+		Profile Pic:
+		-->Middle Name 
+		Age:		
+		Connection:		
+		--># of children 	Age		Grade 		Grade/Year 		School
+		-->Purposes of Application: ADDITIONAL CAPITAL
+		-->Existing Lending: _______________
+		-->Amount Loaned: __________________		in paragraph form	
+     	-->CAO:__________ changed to CAO/CI:__________________(automatic print)	
+        -->estimated sales: from____to_____
+		-->CI recommendation
+		-->Annotation
+		
+		Added Loan Disclosure
+		New Releases 
+			(Client) 1.) 2 copies Cash Voucher(CV)
+					 2.) 1 copy	 Loan Release Voucher (LRV)
+				     3.) 1 copy Disclosure Statement
+			         4.) check
+		Renewal Client
+				     1.) 1 copy Loan Release Voucher(LRV)
+				     2.) 1 copy Disclosure Statement
+					 3.) check
+======================================================================================
+NOTE:
+	birthdate in client is required
+		if bithdate exist
+			else remove 
+things to update:
+	clfc_main:PERMISSIONSET
+	     Loan Services: Canceled Accounts
+		[action:'application.viewCanceledList',  title:'View Canceled List'],
+		[action:'application.cancel',  title:'Cancel Application'],
+		========Added New========
+		[action:'application.removePayment',  title:'Remove Payment'],
+	
+	clfc_system:res_custom_schema
+		contact:add mode:"fixed"
+		[name:"children", caption: "No of children", required:false, index:6, preferredSize:"150,19", category:"contact", mode:"fixed", type:"number", fieldType:int.class]
+		[name:"birthdate", caption: "Birthdate", required:false, type:"date", preferredSize:"80,19",index:4, category:"personal", mode:"fixed"],
+		
+		business:
+		[name:"stallsize", caption: "Stall Size/P.O. Size", type:"text", required:true, preferredSize:"200,19", mode:"fixed",],		
+		[name:"businessHoursFrom", caption: "From", type:"text", required:true, preferredSize:"200,19", mode:"fixed", category: 'businesshours',],
+		[name:"businessHoursTo", caption: "To", type:"text", required:true, preferredSize:"200,19", mode:"fixed", category: 'businesshours',],		
+		[name:"daysOpen", caption: "To", type:"text", required:true, preferredSize:"150,19", mode:"fixed", category: 'businesshours',],
+		   category:
+		   [name:'businesshours', caption: 'Business Hours', foreground: java.awt.Color.BLACK]
+		
+	clfc_loan:
+		add annotation table
+		update schema()
+		=======New Added(as of july 30,2011)======
+		loan_collector
+			objid				varchar		50
+			collectorsName		varchar		50
+			
+	clc_server_loan	:
+		add annotation table
+		update schema()
+		
+	things to do tomorrow:
+		create a new entry then
+		try to save data at a time
+========================================================================================
+In addition to Stephen's method, Datedif will give you more than just
+round years if required
+With 1/1/03 in A1, and 1/7/05 in B1
+Try
+=DATEDIF(A1,B1,"y")&" years "&DATEDIF(A1,B1,"ym")&" months
+"&DATEDIF(A1,B1,"md")&" days"
+which will return
+2 years 6 months 0 days
+or in decimal format
+=(DATEDIF(A21,B21,"y")+DATEDIF(A21,B21,"ym")/12)
+which will return 2.5
+========================================================================================
+Hi!
+Here's the basic idea:
+$F{ORDERS_SHIPPEDDATE}.getTime() - $F{ORDERS_ORDERDATE}.getTime()
+So what we get is an integer value of the number of milliseconds between the two dates,
+ then we can divide that integer by /1000 to seconds, /60 to get minutes and again /60 to get hours:
+So just put something like this into an integer variable like you said: 
+($F{ORDERS_SHIPPEDDATE}.getTime() - $F{ORDERS_ORDERDATE}.getTime())/1000/60/60
+
+$F{borrower.birthdate}.getTime() - $F{dtfiled}.getTime()
+========================================================================================
+//def currentDate = new Date();
+def birthdate = new java.text.SimpleDateFormat("yyyy-MM-dd").parse("1988-01-02");
+
+def parseDate = { obj, format ->
+    if( obj instanceof Date ) return obj;
+    return new java.text.SimpleDateFormat( format ).parse( obj.toString() );
+}
+
+def yearFt = new java.text.SimpleDateFormat("yyyy");
+
+def cYear = Integer.parseInt( yearFt.format( new Date() ) );
+def age = cYear - ( Integer.parseInt( yearFt.format( parseDate( "1988-01-02", "yyyy-MM-dd" ) ) ) );

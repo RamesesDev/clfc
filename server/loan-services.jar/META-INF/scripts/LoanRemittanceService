@@ -1,0 +1,57 @@
+import com.rameses.annotations.*;
+
+
+class LoanRemittanceService {
+
+    @PersistenceContext('java:loan')
+	def em;
+
+	@Service('LoanPaymentService')
+	def paymentSvc;
+
+	@Service('RemittanceService')
+	def remittanceSvc;
+
+	@ProxyMethod
+	public void remitCollectionSheet( colSheet ) {
+		def rmDetails = [];
+		colSheet.list.each {
+			if( it.amountpaid > 0 ) {
+				def param = [
+					acceptEvenFullyPaid: true,
+					appid: it.appid, appno: it.appno,
+					billno: it.billno, date: colSheet.date,
+					amount: it.amountpaid, borrower: it.borrower
+				];
+				def rct = paymentSvc.post( param );
+				rmDetails << [objid: rct.objid];
+			}
+		};
+
+		def remittance = [
+			type: 'loan_collection',
+			amount: colSheet.total,
+			breakdown: colSheet.breakdown,
+			details: rmDetails,
+			collectionno: colSheet.collectionno,
+			collectiondate: colSheet.date,
+			collector: colSheet.collector
+		];
+
+		remittance = remittanceSvc.post( remittance );
+
+		em.delete("collectionsheet", colSheet);
+	}
+
+	@ProxyMethod
+	public def post( remittance ) {
+		return remittanceSvc.post( remittance );
+	}
+
+	@ProxyMethod
+	public def buildRemittance( param ) {
+		param.collection_type = 'loan_collection';
+		return remittanceSvc.buildRemittance( param );
+	}
+
+}

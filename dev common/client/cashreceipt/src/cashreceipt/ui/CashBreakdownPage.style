@@ -1,0 +1,3 @@
+
+"selection" [mode=='read'] { enabled: false; }
+"selection" [mode!='read'] { enabled: true; }

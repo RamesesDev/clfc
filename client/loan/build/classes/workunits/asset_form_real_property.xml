@@ -1,0 +1,27 @@
+<workunit extends="loan/ui/asset/asset-form.xml">
+    <invokers>
+        <invoker type="asset:property"      target="popup" caption="Real Property Entry Form" action="init"/>
+        <invoker type="asset:property_open" target="popup" caption="Real Property Entry Form" action="view"/>
+   </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        
+        class RealPropertyFormController extends loan.ui.asset.AbstractAssetFormController {
+            
+            @Binding
+            def binding;
+            
+            def objid;
+            def itemUM=["sqm","hectares"];
+            def modeOfAcquisition=["INHERETED","SALE","DONATION"];
+            def classification=["RESIDENTIAL","AGRICULTURAL","COMMERCIAL"];
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="loan.ui.asset.RealPropertyForm"/>
+        <page name="page2" template="loan.ui.asset.PhotoPage"/>
+    </pages>
+</workunit>

@@ -1,0 +1,133 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+
+class CheckVoucherService
+{
+	@PersistenceContext('java:treasury')
+	def em;
+
+	@Service('DateService')
+	def datesvc;
+
+	@Service('TreasuryDocNoService')
+	def docSvc;
+	
+	static def dt_formatter = new java.text.SimpleDateFormat('yyyy-MM-dd');
+
+
+	@ProxyMethod
+	public def post( voucher ) {
+		if( !voucher.objid )     voucher.objid = "CHKVCHR-" + new java.rmi.server.UID();
+		if( !voucher.dtfiled )   voucher.dtfiled = datesvc.serverDate;
+		if( !voucher.voucherno ) voucher.voucherno = docSvc.getNextNo('check_voucher');
+		if( !voucher.state )     voucher.state = 'PENDING';
+
+		def items = voucher.remove('details');
+		em.create('check_voucher', voucher);
+		items?.each {
+			if( !it.objid )    it.objid = "CHKVCHRITM-" + new java.rmi.server.UID();
+			if( !it.parentid ) it.parentid = voucher.objid;
+			em.create('check_voucher:detail', it);
+		};
+		voucher.details = items;
+		return voucher;
+	}
+	
+	@ProxyMethod
+	public def read( param ) {
+		def voucher = em.read('check_voucher', param);
+		if( !voucher ) throw new Exception('No voucher record found.');
+
+		def items = em.sqlContext.createNamedQuery('check_voucher:get-details')
+		              .setParameter(1, voucher.objid)
+		              .resultList;
+
+		voucher.details = [];
+		if( items ) {
+			items.sort {a,b -> -(a.amount-b.amount) };
+			voucher.details.addAll(items.each {
+				if( it.extended )
+					it.putAll( em.serializer.read( it.remove('extended') ) );
+			});
+		}
+		return voucher;
+	}
+	
+	@ProxyMethod
+	public def openByRefid( param ) {
+		assert param.refid;
+		
+		def item = em.sqlContext.createNamedQuery('check_voucher:get-by-refid').setParameters(param).singleResult;
+		return item? read( item ) : null;
+	}
+	
+	@ProxyMethod
+	public def openForRelease( param ) {
+		def obj = read( param );
+		if( !obj.checkdate ) 
+			obj.checkdate = dt_formatter.format( datesvc.serverDate );
+		return obj;
+	}
+
+	@ProxyMethod
+	public def issueCheck( voucher ) {
+		def items = voucher.remove('details');
+		voucher.state = 'CHECK_ISSUED';
+		em.update('check_voucher', voucher);
+		if( items ) voucher.details = items;
+		return voucher;
+	}
+
+	@ProxyMethod
+	public def releaseCheck( voucher ) {
+		def items = voucher.remove('details');
+		voucher.state = 'CHECK_RELEASED';
+		em.update('check_voucher', voucher);
+		if( items ) voucher.details = items;
+		return voucher;
+	}
+
+	@ProxyMethod
+	public def getList( param ) {
+		param.excludeState = 'CHECK_RELEASED';
+		if( param.searchText ) {
+			def result;
+			if( (result = findByRefNo(param)) ) return result;
+			if( (result = findByName(param)) ) return result;
+			return [];
+		}
+
+		def sql = new StringBuffer('select * from check_voucher');
+		if( param.type ) sql.append(' where reftype = $P{type} and state != $P{excludeState}');
+		else             sql.append(' where state != $P{excludeState}');
+
+		def qry =  em.sqlContext.createQuery(sql+'').setParameters(param);
+		if( param._start ) qry.setFirstResult(param._start);
+		if( param._limit ) qry.setMaxResults(param._limit);
+		return qry.resultList;
+	}
+
+	private def findByRefNo( param ) {
+		def sql = new StringBuffer('select * from check_voucher where refno=$P{searchText}');
+		if( param.type ) sql.append(' and reftype = $P{type}');
+		if( param.excludeState ) sql.append(' and state != $P{excludeState}');
+
+		def qry =  em.sqlContext.createQuery(sql+'').setParameters(param);
+		if( param._start ) qry.setFirstResult(param._start);
+		if( param._limit ) qry.setMaxResults(param._limit);
+		return qry.resultList;
+	}
+
+	private def findByName( param ) {
+		param.searchText = param.searchText + '%';
+		def sql = new StringBuffer('select * from check_voucher where payeename like $P{searchText}');
+		if( param.type ) sql.append(' and reftype = $P{type}');
+		if( param.excludeState ) sql.append(' and state != $P{excludeState}');
+
+		def qry =  em.sqlContext.createQuery(sql+'').setParameters(param);
+		if( param._start ) qry.setFirstResult(param._start);
+		if( param._limit ) qry.setMaxResults(param._limit);
+		return qry.resultList;
+	}
+
+}

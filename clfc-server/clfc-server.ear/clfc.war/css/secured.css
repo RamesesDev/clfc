@@ -1,0 +1,302 @@
+/*
+ * @author jaycverg 
+ */
+ 
+body {
+	background-color:#eee;
+}
+
+body, table, div, span, 
+label, input, select, textarea, a, pre
+{
+	font: 10pt/160% 'Arial', 'Tahoma';
+}
+
+ul, ol {
+	margin: 0px; padding: 0px;
+}
+
+li { list-style: inside; padding: auto 3px; }
+
+hr {
+	border: none;
+	border-top: 1px solid lightgrey;
+}
+
+h1,h2,h3,h4,h5,h6 { margin: 10px 0px; }
+
+fieldset {
+	border: solid 1px lightgrey;
+	-webkit-border-radius:4px;
+	-moz-border-radius:4px;
+	border-radius:4px;
+	margin: 5px 0px;
+}
+
+legend { color: #333; font-weight: bold; }
+
+
+/*-- link styles ---*/
+a {
+	text-decoration:none;
+	color: navy;
+	cursor: pointer;
+}
+
+a:hover {
+	color: blue;
+}
+
+a:link, a:active, a:hover, a:visited {
+	text-decoration:none;
+	border:0;
+}
+
+.secured-link{
+	text-decoration:none;
+	color:white;
+}
+
+
+/*-- input styles --*/
+
+input[type="text"],
+input[type="password"],
+select 
+{
+	border: solid 1px lightgrey; margin: 1px;
+	padding: 3px; background: #fff;
+}
+
+input[type="text"]:hover, input[type="text"]:focus,
+input[type="password"]:hover, input[type="password"]:focus,
+select:hover, select:focus
+{
+	border: solid 1px #bbb;
+}
+
+
+
+/*-- layout styles --*/
+
+.header{
+	background: #090909 -webkit-gradient(linear, left top, left bottom, from(#525352), to(#090909));
+	background: #090909 -moz-linear-gradient(top,  #525352,  #090909);  
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#525352', endColorstr='#090909');
+	border-bottom: solid 2px #ccc;
+	color: #fff;
+}
+
+.header table { color: #ffffff; }
+
+.header a { color: #ffffbb;  }
+.header a:hover { color: #ddff77; }
+
+.header .user-role { color: #ddffbb; }
+
+.footer{
+	padding:20px 0; 
+	text-align: center;
+}
+
+.content{
+	padding: 10px 20px;
+	-webkit-border-radius:5px;
+	-moz-border-radius:5px;
+	border-radius: 5px;
+	background:white; 
+	border:1px solid lightgrey;
+	-moz-box-shadow: 5px 5px 5px #ccc;
+	-webkit-box-shadow: 5px 5px 5px #ccc;
+	box-shadow: 5px 5px 5px #ccc;
+}
+
+#middle-width {
+	width: 980px;	
+}
+
+
+/*-- grid styles ---*/
+.grid {
+	border: solid 1px gray;
+	-moz-box-shadow: 0px 3px 5px #bbb; -webkit-box-shadow: 0px 3px 5px #bbb; box-shadow: 0px 3px 5px #bbb;
+	margin-bottom: 20px;
+	font-size: 9pt;
+}
+
+.grid th,
+.grid td { 
+	padding: 5px; border-bottom: solid 1px #d3d3d3; 
+}
+
+.grid th,
+.grid thead td
+{
+	font-weight: bold;
+	background: -moz-linear-gradient(top,  #fff,  #ddd);
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ddd));
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dddddd');
+}
+
+.grid .even { /*background: #f7f7f7;*/ }
+.grid .odd { /*background: #f7f7f7;*/ }
+
+.grid .selectable td {
+	cursor: pointer;
+}
+
+.grid .selectable tr.hover td { 
+	background: #E1E3F3;
+}
+
+.grid .control {
+	background: -moz-linear-gradient(top,  #eee,  #ccc);
+	background: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#ccc));
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#cccccc');
+}
+
+
+/*-- form-panel styles ---*/
+.form-panel {
+	padding: 10px;
+	border: solid 1px gray;
+	-moz-box-shadow: 0px 3px 5px #bbb; -webkit-box-shadow: 0px 3px 5px #bbb; box-shadow: 0px 3px 5px #bbb;
+	margin-bottom: 20px;
+	font-size: 9pt;
+}
+
+
+
+
+/*-- toolbar styles ---*/
+
+.toolbar {
+	margin-bottom: 5px;
+	padding: 2px 10px; border-bottom: solid 1px lightgrey;
+	-moz-box-shadow: 0px 2px 3px #ccc; -webkit-box-shadow: 0px 2px 3px #ccc; box-shadow: 0px 2px 3px #ccc;
+	-moz-border-radius:2px; -webkit-border-radius:2px;
+	border: solid 1px #e3e3e3;
+	background: #ddd -moz-linear-gradient(top,  #fff,  #ddd);
+	background: #ddd -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ddd));
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dddddd');
+}
+
+.toolbar a { 
+	font-weight: bold;
+	padding: 3px 10px;
+}
+
+.toolbar input,
+.toolbar button
+{
+	padding: 3px 15px;
+	border: solid 1px #bbbbbb;
+	-moz-box-shadow: 0px 1px 1px #bbb; -webkit-box-shadow: 0px 1px 1px #bbb; box-shadow: 0px 1px 1px #bbb;
+	margin-left: 0px; margin-right: 0px;
+	background: #ddd -moz-linear-gradient(top,  #fff,  #ddd);
+	background: #ddd -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ddd));
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dddddd');
+	-moz-border-radius:3px; -webkit-border-radius:3px; border-radius:3px;
+}
+
+.toolbar input:hover,
+.toolbar button:hover
+{
+	border: solid 1px #888;
+	-moz-box-shadow: 0px 0px 8px #ccc; -webkit-box-shadow: 0px 0px 8px #ccc; box-shadow: 0px 0px 8px #ccc;
+}
+
+.toolbar input:active,
+.toolbar button:active
+{
+	border: solid 1px #bbb;
+	-moz-box-shadow: 0px 0px 8px #ccc; -webkit-box-shadow: 0px 0px 8px #ccc; box-shadow: 0px 0px 8px #ccc;
+	background: #eee -moz-linear-gradient(top,  #ccc,  #eee);
+	background: #eee -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#eee));
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#cccccc', endColorstr='#eeeeee');
+}
+
+
+
+/*-- header styles --*/
+
+.doc-title { 
+	font-weight: bold; font-size:20px; color:darkslateblue; 
+	padding-top: 3px; padding-bottom: 3px;
+	margin-bottom: 10px; 
+	border-bottom: solid 1px lightgrey; 
+	display: block;
+}
+
+.doc-title * {
+	font-weight: bold; font-size:20px; color:darkslateblue; 
+}
+
+
+/*-- UI Dialog styles --*/
+
+.ui-dialog { 
+	padding: 0px;
+	padding-bottom: 35px;
+	border: solid 1px #bbb;
+	-moz-box-shadow: 0px 2px 20px #333; -webkit-box-shadow: 0px 2px 20px #333; box-shadow: 0px 2px 20px #333;
+}
+
+.ui-dialog-titlebar {
+	border: none;
+	background: #264d73 -moz-linear-gradient(top, #264d73, #336699);
+	background: #264d73 -webkit-gradient(linear, left top, left bottom, from(#264d73), to(#336699));
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#264d73', endColorstr='#336699');
+}
+
+.ui-dialog-title {
+	font-weight: bold;
+}
+
+.ui-dialog .ui-dialog-content { 
+	position: static; background: #fefefe; border-bottom: outset 1px #eee;
+	padding-bottom: 30px;
+}
+
+.ui-dialog .dialog-buttons,
+.ui-dialog .dialog-buttons-left,
+.ui-dialog .dialog-buttons-right {
+	position: absolute;
+	right: 20px; bottom: 5px;
+	text-align: right;
+	height: 30px;
+}
+
+.ui-dialog .dialog-buttons-left {
+	left: 20px;
+	text-align: left;
+}
+
+.ui-widget-overlay {
+	background: #fff;
+}
+
+/*-- usermenu is the main nav at the left side --*/
+
+.usermenu td { 
+	cursor: pointer; font-size: 12px; font-family:arial; padding:5px;
+	-moz-border-radius-bottomleft: 4px; -moz-border-radius-topleft: 4px; 
+	-webkit-border-bottom-left-radius: 4px; -webkit-border-top-left-radius: 4px;
+}
+.usermenu tr.category td { 
+	cursor: default; padding-left: 0px;
+	font-weight: bold;
+	border-bottom: solid 1px gray;
+	-mox-border-radius: 0px; -webkit-border-radius: 0px;
+}
+.usermenu tr.selected td { 
+	background: -moz-linear-gradient(top,  #336699,  #264d73);
+	background: -webkit-gradient(linear, left top, left bottom, from(#336699), to(#264d73));
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#336699', endColorstr='#264d73');
+	color: #fff; font-weight: bold;
+}
+.usermenu td.hover { 
+	background: -moz-linear-gradient(top,  #e2e2e2,  #ccc);
+	background: -webkit-gradient(linear, left top, left bottom, from(#e2e2e2), to(#ccc));
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e2e2e2', endColorstr='#cccccc');
+}

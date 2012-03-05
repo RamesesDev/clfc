@@ -1,0 +1,126 @@
+<workunit>
+    <invokers>
+        <invoker type="cashreceipt:type" caption="Loan Payment" action="create" permission="payment.create"/>
+        
+        <invoker type="formActions" action="create" icon="images/new16.png" tooltip="Add New" mnemonic="a" visibleWhen="#{mode=='read'}"/>
+        <invoker type="formActions" action="print"  icon="images/print16.png" tooltip="Print" mnemonic="p" visibleWhen="#{mode=='read'}"/>
+        <invoker type="formActions" action="save"   icon="images/save16.png" tooltip="Save" mnemonic="s" visibleWhen="#{mode!='read'}"/>
+        <invoker type="formActions" action="cancel" icon="images/remove16.png" tooltip="Cancel" mnemonic="c" visibleWhen="#{mode!='read'}" immediate="true"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.util.*;
+  
+        class loan_collectionController{
+            @Service('LoanApplicationService')
+            def loanSvc;
+            
+            @Service('LoanPaymentService')
+            def loanpaymentSvc;
+            
+            @Binding
+            def binding;
+
+            def entity;
+            def opener;
+            def borrower;
+            def mode="create";
+            def temp;
+            
+            void create(){
+                mode="create";
+                entity=[:];
+                entity.amountDue=0.00;
+                entity.amountTendered=0.00;
+                entity.amount=0.00;
+                entity.change=0.00;
+                binding?.focus("entity.borrowername");
+            }
+            
+            def lookup(){
+                return InvokerUtil.lookupOpener("loan_app:lookup",[searchText:entity.borrowername,selectHandler:sHandler]);
+            }           
+            
+            def sHandler = {o->
+                entity.appid=o.objid;
+                entity.appno=o.appno;
+                entity.borrower=o.borrower;
+                entity.amountDue=o.dailyPayment;
+                entity.borrowername=o.borrowername;
+                binding.refresh();
+            };
+            
+            if (entity.amount <= 0.00) {
+            throw new Exception("Amount unpaid must be greater than 0");
+            }
+            else{
+                def paymentOptions=InvokerUtil.lookupActions("payment:option",{
+                    return [unpaid:entity.amountDue, actionHandler:payHandler]
+                } as InvokerParameter)
+            }
+            def payHandler={o->
+                o.amount=temp;
+                entity.amountTendered=temp;
+                entity.change=o.change? o.change : 0.00;
+                binding.refresh();
+            };
+            
+            void save(){
+                loanpaymentSvc.post(entity);
+                MsgBox.alert("Payment has been saved.");
+                mode="read";
+            }
+            
+            def cancel(){
+                //entity=[:];
+                //mode!="read";
+                create();
+                return "_close";
+            }
+            
+            def print(){
+            
+            }
+            /*def print(){
+                report.viewReport();
+                return "page2";
+            }
+            def report=[
+                getReportName:{
+                    return "loantreasury.collection.ui.LoanCollectionReport.jasper";
+                },
+                getReportData:{
+                    //return ;
+                }
+            ] as ReportModel;*/
+            
+            
+            
+            /*def valueHolder(){
+                temp=o.amountDue;
+                if(temp!=o.amountDue)
+                    return valueHolder;
+            }
+            def amountChangeHandler={o->
+                entity.dailyPayment=o.dailyPayment;
+                entity.amount=0.00;
+                entity.change=0.00;
+                binding.refresh();
+            };
+            
+            def changeAmount(){
+                if(!entity.amountDue)throw new Exception("No Amount to Change");
+                    return InvokerUtil.lookupOpener("loan:calculate",[entity:entity,amountChangeHandler:amountChangeHandler]);
+            }*/
+        }
+      ]]> 
+    </code>
+    <pages>
+	<page template="loantreasury.collection.ui.LoanCollection"/>
+        <page name="page2" template="loantreasury.collection.ui.CollectionRemitReport"/>
+    </pages>    
+</workunit>

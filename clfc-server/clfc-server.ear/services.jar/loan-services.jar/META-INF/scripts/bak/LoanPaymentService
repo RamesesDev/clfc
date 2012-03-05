@@ -1,0 +1,224 @@
+import com.rameses.annotations.*;
+
+
+class LoanPaymentService
+{
+
+    @PersistenceContext('java:loan')
+	def em;
+
+	@Service('LoanApplicationService')
+	def loanSvc;
+
+	@Service('LoanBillingService')
+	def billingSvc;
+
+	@Service('CashReceiptService')
+	def receiptSvc;
+
+	@Service('TreasuryDocNoService')
+	def docSvc;
+
+	@Service('Var')
+	def vars;
+
+
+	@Env
+	def env;
+
+	static final def dt_formatter = new java.text.SimpleDateFormat('yyyy-MM-dd');
+
+
+	@ProxyMethod
+	public def post( def param ){
+		assert param.appid;
+		assert param.amount;
+		//assert param.currency;
+		assert param.borrower;
+
+		if( !param.billno )
+			param.billno = 'LP-' + docSvc.getNextNo('loan_payment');
+
+		def items_paid = postPayment( param );
+
+		def receipt = [:];
+		receipt.receiptno = param.billno;
+		receipt.payerid = param.borrower.objid;
+		receipt.payername = getName( param.borrower );
+		receipt.payertype = param.borrower.type;
+		receipt.collection_type = 'loan_collection';
+		receipt.collectorid = env.USERID;
+		receipt.collectorname = env.USER;
+		receipt.collectedby = env.USER;
+		receipt.particulars = 'Loan Payment';
+		receipt.amount = param.amount;
+		receipt.currency = param.currency;
+		receipt.info = [refid: param.appid, reftype: 'loan_payment'];
+
+		receipt.details = createReceiptDetails(items_paid, param.currency);
+
+		return receiptSvc.post( receipt );
+	}
+
+	private def getName( cust ) {
+		return cust.lastname + ', ' + cust.firstname + (cust.middlename? ' ' + cust.middlename : '');
+	}
+
+	private def createReceiptDetails( paid, currency ) {
+		def list = [];
+		def settings = vars.loan_settings;
+		if( !settings ) throw new Exception('Loan Settings is not defined.');
+
+		if( paid.principal > 0 ) {
+			if( !settings.curr_principal_acct ) throw new Exception('Loan Principal Account is not defined.');
+			list << createItem( settings.curr_principal_acct, paid.principal, currency );
+		}
+		if( paid.interest > 0 ) {
+			if( !settings.interest_acct ) throw new Exception('Loan Interest Account is not defined.');
+			list << createItem( settings.interest_acct, paid.interest, currency );
+		}
+		if( paid.surcharge > 0 ) {
+			if( !settings.surcharge_acct ) throw new Exception('Loan Surcharge Account is not defined.');
+			list << createItem( settings.surcharge_acct, paid.surcharge, currency );
+		}
+		if( paid.pastdue > 0 ) {
+			if( !settings.past_due_interest_acct ) throw new Exception('Loan Past Due Account is not defined.');
+			list << createItem( settings.past_due_interest_acct, paid.pastdue, currency );
+		}
+
+		return list;
+	}
+
+	private def createItem( acct, amount, currency ) {
+		return [
+			acctid: acct.objid,
+			acctcode: acct.code,
+			accttitle: acct.title,
+			amount: amount,
+			currency: currency
+		];
+	}
+
+	private def postPayment( param ) {
+		def items_paid = [principal: 0.00, interest: 0.00, surcharge: 0.00, pastdue: 0.00];
+
+		def amount = param.amount;
+		def item = null;
+
+		/* apply amount paid to pastdue or unpaid ledger items  */
+		while( (item=getLastItem(param)) != null && amount > 0 ) {
+			amount = payPrevious( amount, param, item, items_paid );
+		}
+
+		def ledger = loanSvc.getLedger( [objid: param.appid] );
+
+		/* apply amount paid to current */
+		if( amount > 0 ) {
+			amount = payCurrent( amount, ledger, param, items_paid );
+		}
+
+		ledger.totalPaid += param.amount;
+		loanSvc.updateLedger( [objid: param.appid, ledger: ledger] );
+
+		return items_paid;
+	}
+
+	private def payPrevious( amount, param, item, items_paid ) {
+		def log = [receiptno: param.billno];
+
+		def bal = item.surcharge_unpaid - item.surcharge_paid;
+		bal = (amount > bal)? bal : amount;
+		item.surcharge_paid += bal;
+		amount -= bal;
+		log.surcharge = bal;
+		items_paid.surcharge += bal;
+
+		bal = item.interest_unpaid - item.interest_paid;
+		bal = (amount > bal)? bal : amount;
+		item.interest_paid += bal;
+		amount -= bal;
+		log.interest = bal;
+		if( item.type == 'unpaid' )
+			items_paid.interest += bal;
+		else
+			items_paid.pastdue += bal;
+
+		bal = item.principal_unpaid - item.principal_paid;
+		bal = (amount > bal)? bal : amount;
+		item.principal_paid += bal;
+		amount -= bal;
+		log.principal = bal;
+		items_paid.principal += bal;
+
+		updateItem( item, log );
+
+		return amount;
+	}
+
+	private def payCurrent( amount, ledger, param, items_paid ) {
+		def log = [receiptno: param.billno];
+		def bal = ledger.interest_current - ledger.interest_current_paid;
+		bal = (amount > bal)? bal : amount;
+		ledger.interest_current_paid += bal;
+		amount -= bal;
+		log.interest = bal;
+		items_paid.interest += bal;
+
+		bal = ledger.principal_current - ledger.principal_current_paid;
+		bal = (amount > bal)? bal : amount;
+		ledger.principal_current_paid += bal;
+		amount -= bal;
+		log.principal = bal;
+		items_paid.principal += bal;
+
+		if( ledger.current_log == null ) ledger.current_log = [];
+		ledger.current_log << log;
+
+		/* apply extra amount */
+		if( amount > 0 ) {
+			if( ledger.principal_balance > 0 ) {
+				def billParam = [
+					appid: param.appid,
+					ledger: ledger,
+					billDate: ledger.next_bill_date
+				];
+				if( billParam.billDate instanceof String )
+					billParam.billDate = dt_formatter.parse( billParam.billDate );
+
+				def updLgr = billingSvc.bill( billParam );
+				if( updLgr ) {
+					ledger.putAll( updLgr );
+					amount = payCurrent( amount, ledger, param, items_paid );
+				}
+			}
+			else {
+				ledger.over_paid = amount;
+			}
+		}
+
+		return amount;
+	}
+
+	private def getLastItem( param ) {
+		return em.sqlContext.createNamedQuery('loan_payment:get-last-unpaid')
+		         .setParameter(1, param.appid )
+		         .singleResult;
+	}
+
+	private def updateItem( item, log ) {
+		item.log = item.log[0..-2] + em.serializer.write( log ) + ',]';
+		if( isFullyPaid( item ) ) item.state = 'CLOSED';
+		em.sqlContext.createNamedExecutor('loan_payment:update-ledger-item')
+		.setParameters( item )
+		.execute();
+	}
+
+	private boolean isFullyPaid( item ) {
+		return (
+			item.principal_unpaid - item.principal_paid +
+			item.interest_unpaid - item.interest_paid +
+			item.surcharge_unpaid - item.surcharge_paid
+		) == 0;
+	}
+
+}

@@ -1,0 +1,142 @@
+<workunit>
+    <invokers>
+        <!--
+        <invoker type="home:menu" caption="Loan Outbox/Sent Items" action="init" icon="images/sentItems32.png" tooltip="Loan outbox/sent items application(s)"
+                 permission="application.viewList" index="4" target="window"/>
+        
+        <invoker folderid="menu/services/loan" caption="Loan Outbox/Sent Items" permission="application.viewList" index="4"/>  
+        -->
+        <invoker type="refreshAction" icon="images/refresh16.png" tooltip="Refresh" action="refreshList"/>
+        
+        <!--Application Form Actions -->
+        <invoker type="formActions" caption="Close" action="_exit" icon="images/cancel16.png" mnemonic="c" visibleWhen="#{mode == 'read'}"/>
+        <invoker type="formActions" caption="Open" action="open" icon="images/open16.png" mnemonic="o" visibleWhen="#{mode == 'read'}"/>
+        <invoker type="formActions" caption="Back" icon="images/back16.png" mnemonic="b" action="back" visibleWhen="#{view!='main'}"/>
+        
+        <!-- Allowed State Codes -->
+        <invoker type="application:state-list" caption="For FLA"      name="FOR_FLA"      permission="application.viewForFLAList"/>
+        <invoker type="application:state-list" caption="For Approval" name="FOR_APPROVAL" permission="application.viewForApprovalList"/>
+    </invokers>    
+    <code>
+        <![CDATA[        
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        
+        class LoanApplicationViewOutboxSentItemsListController{
+            @Binding
+            def binding;
+            
+            @Service( "LoanApplicationSearchService" )
+            def searchSvc;
+            
+            @Service( "LoanApplicationService" )
+            def svc;
+            
+            def entity=[:];
+            def selected;
+            def selection;
+            def searchText;
+            def opener;
+            def mode;
+            boolean busy;
+            
+            def itemStatus = InvokerUtil.lookup("application:state-list");
+            def loadedStatusList = [];
+            
+            void init(){
+                openLoanOpener();
+                
+                loadedStatusList.clear();
+                if( itemStatus ) {
+                    selection = itemStatus[0].properties.name;
+                    itemStatus.each { loadedStatusList << it.properties.name }
+                }
+            }
+            
+            def listHandler = [
+                getColumns: {
+                    return [
+                        new Column(name:"appno",caption:"Application no.",width:85),
+                        new Column(name:"fullborrowername",caption:"Borrower name",width:222),
+                        new Column(name:"state",caption:"State", width: 107),
+                        new Column(name:"routedescription",caption:"Route", width: 45)
+                    ]
+                },
+                fetchList:{o->
+                   o.state = selection;
+                   o.allowedStates = loadedStatusList;
+                   o.searchText = searchText;
+                   return searchSvc.getList(o);
+                },
+                getRows:{
+                    return 29;
+                }
+            ]as PageListModel;
+           
+            void setSelection(e){
+                this.selection = e;
+                searchText = '';
+                listHandler.load();
+            }
+            
+            void setSelected(e){
+                this.selected=e;
+                openLoanOpener();
+            }
+            
+            def view = 'main';
+            def back() {
+                //loadLedgerInfo();
+                return (view = 'main');
+            }
+            
+            def open(){
+                return "page2";
+                //openLoanOpener();
+            }
+            
+            void openLoanOpener(){
+                initEntity();
+                if( !selected ) {
+                    mode='read';
+                }
+                else{
+                    entity=svc.read(selected);
+                    mode='selected';
+                }
+                opener=InvokerUtil.lookupOpener("loan:info",[
+                    entity:entity,
+                    mode:mode,
+                    selectHandler:{o->
+                        listHandler.load();
+                    }
+                ]);
+            }
+            
+            void refreshList(){
+                listHandler.load();
+            }
+
+            void initEntity(){
+               entity=[
+                    loaninfo:[interestrate:20],
+                    propertylist:[],
+                    vehiclelist:[],
+                    appliancelist:[],
+                    attachmentslist:[],
+                    otherslist:[],
+                    comments:[]
+                ];
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page name="main"  template="loan.ui.ApplicationListView_OutboxSentItems"/>
+        <page name="page2" template="loan.ui.AppInfoPage"/>
+    </pages>
+</workunit>

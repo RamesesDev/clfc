@@ -1,0 +1,175 @@
+<workunit>
+    <invokers>
+        <invoker id="col_sheet" folderid="menu/services/loan" caption="Create New Collection Sheet" action="init" permission="collection_sheet.create"/>
+        
+        <invoker id="col_sheet" type="home:menu" caption="New Collection Sheet" action="init" permission="collection_sheet.create"
+                 target="window" icon="images/new-doc32.png"/>
+        
+        <invoker type="formMainActions"   mnemonic="n" caption="Next"   tooltip="Next" icon="images/next16.png" action="next"/>
+        <invoker type="formListActions"   mnemonic="s" caption="Save"   tooltip="Generate Collection No." icon="images/save16.png" action="generateCollectionNo"/>
+        <invoker type="formListActions"   mnemonic="c" caption="Cancel" tooltip="Cancel" icon="images/cancel16.png" action="cancel"/>
+        <invoker type="formReportActions" mnemonic="c" caption="Close"  tooltip="Close" icon="images/exit16.png" action="cancel"/>
+    </invokers>    
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        
+        public class LoanCollectionSheetController 
+        {
+                    
+            @Service('LoanCollectionSheetService')
+            def svc;
+            
+            @Service('DateService')
+            def dtSvc;
+            
+            @Service('RouteService')
+            def routeSvc;
+            
+            @Script('User')
+            def user;
+            
+            @Binding
+            def binding;
+            
+            def filter;
+            def collectionSheet;
+            
+            def selected;
+            boolean selectedIsFirst = true;
+            boolean selectedIsLast = true;
+            def selectedIdx;
+            
+            def dt_formatter = new java.text.SimpleDateFormat('yyyy-MM-dd');
+
+            def isReordered = false;
+ 
+            void init() {
+                filter = [route:[:]];
+                if( user.env.CLIENT.timezone )
+                    filter.date = dtSvc.getLocaleTime(user.env.CLIENT.timezone);
+                else
+                    filter.date = dt_formatter.format(dtSvc.serverDate);
+            }
+            
+            def cancel() {
+                filter = [route:[:],date: filter.date];
+                return "default";
+            }
+            
+            def getRouteList() {
+                return routeSvc.getList();
+            }
+            
+            def routeHandler = { o ->
+                binding?.refresh("filter.route");
+            }
+            
+            def createRoute() {
+                return InvokerUtil.lookupOpener("route:list", [routeHandler:routeHandler]);
+            }
+            
+            def next() {
+                filter.routecode = filter.route.code;
+                filter.routedescription = filter.route.description;
+                collectionSheet = svc.build( filter );
+                listHandler.load();
+                return "list";
+            }
+            
+            def listHandler =[
+                getRows:{ return 20; },
+                getColumns :{ 
+                    return[
+                        new Column(name:"appno",        caption:"App. No.", width:100),
+                        new Column(name:"name",         caption:"Name", width:300),
+                        new Column(name:"loanAmount",   caption:"Loan Amount", type:"decimal", width: 100),
+                        new Column(name:"dailyPayment", caption:"Daily", type:"decimal"),
+                        new Column(name:"totalDaysDue", caption:"Days Due", type:"integer"),
+                        new Column(name:"totalDue",     caption:"Total Due", type:"decimal")
+                    ]  
+                },
+                fetchList: {o->
+                    collectionSheet.list;
+                }
+            ]as SubListModel;
+            
+            void setSelected(o){
+                this.selected = o;
+                selectedIsFirst = selectedIsLast = false;
+                if( this.selected ) {
+                    selectedIdx = collectionSheet.list.indexOf(selected);
+                    def listSize = collectionSheet.list.size();
+
+                    if( selectedIdx <= 0 )           selectedIsFirst = true;
+                    if( selectedIdx == listSize-1 )  selectedIsLast = true;
+                }
+                else {
+                    selectedIsFirst = selectedIsLast = true;
+                }
+            }
+                        
+            void updateLedger(src, dest){
+                def tmp_billno = dest.billno;
+                def tmp_indexno = dest.indexno;
+                dest.billno = src.billno;
+                dest.indexno = src.indexno;
+                src.billno = tmp_billno
+                src.indexno = tmp_indexno;
+            }
+            
+            void moveUp(){
+                if(!isReordered) isReordered = true;
+                def src = collectionSheet.list.remove(selectedIdx);
+                def dest = collectionSheet.list[selectedIdx -1];
+                collectionSheet.list.add(selectedIdx -1, src);
+                listHandler.setSelectedItem(selectedIdx -1);
+                listHandler.refresh();
+            }
+            
+            void moveDown(){
+                if(!isReordered) isReordered = true;
+                def src = collectionSheet.list.remove(selectedIdx);
+                def dest = collectionSheet.list[selectedIdx];
+                collectionSheet.list.add(selectedIdx +1, src);
+                listHandler.setSelectedItem(selectedIdx +1);
+                listHandler.refresh();
+            }
+            
+            def generateCollectionNo(){
+                collectionSheet = svc.post( collectionSheet, isReordered );
+                MsgBox.alert("Collection No. " + collectionSheet.collectionno + " Generated.");
+                report.viewReport();
+                return "print";
+            }
+            
+            def report = [   
+                getReportName:{ return 'loantreasury/printout/CollectionSheet.jasper'; },
+                getReportData:{ return collectionSheet.list; },
+                getParameters:{ 
+                    return [
+                        COLLECTION_NO: collectionSheet.collectionno,    
+                        DATE: collectionSheet.date,
+                        COLLECTOR: collectionSheet.collector,
+                        ROUTE_NO:  collectionSheet.routecode, 
+                        ROUTE_DES: collectionSheet.routedescription,
+                        BRANCH_NAME: OsirisContext.env.CLIENT.name ,
+                        PRINTDATE: new Date(), 
+                        User: OsirisContext.env.USERINFO.firstname+ ' '+ OsirisContext.env.USERINFO.lastname
+                    ];  
+                }
+            ] as ReportModel;
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="loantreasury.collectionsheet.CollectionSheetInitPage" />
+        <page name="list" template="loantreasury.collectionsheet.CollectionSheetPage" />
+        <page name="print" template="loantreasury.collectionsheet.CollectionSheetPrintPage" />
+    </pages>
+</workunit>

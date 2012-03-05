@@ -1,0 +1,5 @@
+<workunit extends="workunits/user_list.xml">
+    <invokers>
+        <invoker type="admin:host" action="init" caption="Host Users" target="window" icon="images/admin/user32.png"/>
+    </invokers>
+</workunit>

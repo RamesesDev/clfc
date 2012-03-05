@@ -1,0 +1,89 @@
+import com.rameses.annotations.*;
+
+class RemittanceService
+{
+
+	@PersistenceContext('java:treasury')
+	def em;
+
+	@Service('DateService')
+	def datesvc;
+
+	@Service('TreasuryDocNoService')
+	def docSvc;
+
+	@Env
+	def env;
+
+
+	@ProxyMethod
+	public def post( remittance ) {
+		if( !remittance.objid )        remittance.objid = 'RM-' + new java.rmi.server.UID();
+		if( !remittance.remittanceno ) remittance.remittanceno = docSvc.getFormattedNextNo('remittance', '00000000');
+		if( !remittance.dtfiled )      remittance.dtfiled = datesvc.serverDate;
+
+		remittance.remittedbyid = env.USERID;
+		remittance.remittedbyname = env.USER;
+
+		def details = remittance.remove('details');
+
+		em.create('remittance', remittance);
+
+		/*--- update receipts remitted ---*/
+		def param = [ rem_id: remittance.objid, rem_no: remittance.remittanceno, rem_date: remittance.dtfiled ];
+		def sql = '''
+			update cash_receipt set remittanceid=$P{rem_id}, remittanceno=$P{rem_no}, remittancedate=$P{rem_date}
+			where objid=$P{receipt_id}
+		''';
+		details.each {
+			param.receipt_id = it.objid;
+			em.sqlContext.createExecutor(sql).setParameters( param ).execute();
+		}
+
+		remittance.details = details;
+		return remittance;
+	}
+
+	@ProxyMethod
+	public def buildRemittance( param ) {
+		if( !param.date )      param.date = datesvc.serverDate;
+		if( !param.collector ) param.collector = env.USERID;
+
+		def date = param.date;
+		if( date instanceof String && date.matches(/\d{4}-\d{2}-\d{2}/) )
+			date = param.date + ' 23:59:59';
+
+		def filter = [];
+		filter << 'dtfiled <= $P{date}';
+		filter << 'remittanceid is null';
+		filter << 'collectorid = $P{collector}';
+
+		if( param.collection_type ) filter << 'collection_type = $P{collection_type}';
+
+		def p = new HashMap( param );
+		p.date = date;
+		def sql = 'select objid, amount from cash_receipt where ' + filter.join(' and ');
+		def items = em.sqlContext.createQuery(sql).setParameters(p).resultList;
+
+		if( !items ) throw new Exception('No open receipts to remit.');
+
+		return [
+			objid: 'RM-' + new java.rmi.server.UID(),
+			dtcreated: param.date,
+			remittedbyid: env.USERID,
+			remittedbyname: env.USER,
+			amount: items*.amount.sum(),
+			details: items,
+ 		];
+	}
+
+	@ProxyMethod
+	public def update( remittance ) {
+		def old = em.read('remittance', remittance);
+		old.putAll( remittance );
+		em.update('remittance', old);
+
+		return old;
+	}
+
+}

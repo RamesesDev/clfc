@@ -1,0 +1,29 @@
+<workunit>
+    
+    <invokers>
+        <invoker type="check_issuance" action="init" />
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class CheckIssuanceController  {
+        
+            def check;
+            
+            public void init() {
+            }
+        }
+        
+        ]]>
+    </code>
+
+    <pages>
+        <page template="disbursement.ui.CheckIssuancePage"/>
+    </pages>
+
+</workunit>

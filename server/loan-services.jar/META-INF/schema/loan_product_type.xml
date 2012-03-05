@@ -1,0 +1,8 @@
+<schema>
+
+   <element name="loan_product_type" tablename="loan_product_type">
+       <field name="code" primary="true"/>
+       <complex name="extended" serializer="true" merge="true"/>
+   </element>
+</schema>
+

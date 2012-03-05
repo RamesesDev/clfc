@@ -1,0 +1,39 @@
+<workunit>
+    <invoker type="loan:employment" caption="Add Employment Record" target="popup" action="init"/>
+    
+    <invoker type="formActions" caption="Add" mnemonic="a" action="add" />
+    <invoker type="formActions" caption="Cancel" mnemonic="c" action="_close" immediate="true"/>
+    <code lang="groovy">        
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class EmploymentController {
+            @Service('LoanApplicationService')
+            def svc;
+            
+            @Script('EmploymentInfoDef')
+            def empInfoDef;
+        
+            def entity=[:];
+            def selectHandler;
+            def employmentInfoControls;
+            def mode="read";
+            
+            void init(){
+                if( !entity.employment ) entity.employment = empInfoDef.createModel();
+                employmentInfoControls = empInfoDef.getFormFields( entity.employment, 'entity.employment' );
+            }
+            
+            def add(){
+                if( selectHandler ) selectHandler( entity.employment );
+                return "_close";
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="loan.ui.EmploymentPage"/>
+    </pages>
+</workunit>

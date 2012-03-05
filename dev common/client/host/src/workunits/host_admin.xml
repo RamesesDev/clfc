@@ -1,0 +1,55 @@
+<workunit>
+    
+    <invokers>
+        <invoker type="admin:root" caption="Host Administration" action="init" target="_popup" icon="host/images/host32.png"/>
+        
+        <invoker type="formActions" caption="OK" action="doSelect"/>
+        <invoker type="formActions" caption="Cancel" action="_close"/>
+
+        <invoker type="leftFormActions" icon="images/new16.png" tooltip="Add New Host" action="addNew" />
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class SelectHostMgmtController  {
+        
+            @Service("HostService")
+            def svc;
+        
+            def selected;
+            def parent;
+            def orgList;
+            
+            @Binding
+            def binding;
+            
+            public void init() {
+                orgList = svc.getList([:]);
+            }
+
+            public def addNew() {
+                return InvokerUtil.lookupOpener( "host_form:add", [
+                        cancelHandler: { return "_close" },
+                        saveHandler: { o,mode-> init(); return "_close"; }
+                    ] 
+                );
+            }
+            
+            public def doSelect() {
+                def opener = InvokerUtil.lookupOpener( "admin:subpanel", [context:selected] );
+                binding.fireNavigation( opener );
+                return "_close";
+            }
+        }
+        
+        ]]>
+    </code>
+    <pages>
+        <page template="host.ui.SelectHostMgmtPage"/>
+    </pages>
+</workunit>

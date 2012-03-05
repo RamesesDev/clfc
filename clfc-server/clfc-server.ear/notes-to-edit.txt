@@ -1,0 +1,12 @@
+
+META-INF
+ - application.xml
+ - clfc-server-ds.xml
+ - clfc-server-service.xml
+ - jboss-app.xml
+
+clfc.war/WEB-INF
+ - web.xml
+ 
+async-impl.jar/META-INF
+ - ejb-jar.xml

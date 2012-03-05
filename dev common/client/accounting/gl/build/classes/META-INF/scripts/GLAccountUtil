@@ -1,0 +1,29 @@
+import com.rameses.rcp.common.*;
+import com.rameses.rcp.annotations.*;
+
+public class GLTreeModel {
+
+    @Service("GLService")
+    def service;
+
+    boolean categoryOnly = true;
+
+    def treeHandler = [
+        fetchNodes: { o->
+            def param = [parentid:null];
+            if(o.id!='root') param.parentid = o.item.objid;  
+            if(categoryOnly) param.acctclass = "ACCT_GRP";
+            return service.getSubCategories( param ).collect{ new Node(id:it.objid, caption:it.code + " " + it.name, item: it )  };
+        }
+    ] as TreeNodeModel;
+
+
+    public void reloadParent(def parent ) {
+        def p = treeHandler.findNode( { o->
+                if(o.item) return o.item.objid == parent.objid;
+                return false;
+            } as NodeFilter ); 
+        if(p) p.reload();
+    }
+
+}

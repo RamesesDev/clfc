@@ -1,0 +1,60 @@
+<workunit>
+    <invokers>
+        <invoker type="socialconnection:add" action="init" immediate="true" caption="Add Connection" target="_popup"/>
+        <invoker type="socialconnection:edit" action="edit" immediate="true"  caption="Edit Relationship"  target="_popup"/>
+    </invokers>    
+    <code>
+        <![CDATA[
+            import com.rameses.rcp.common.*;
+            import com.rameses.rcp.annotations.*;
+            import com.rameses.util.*;
+            import com.rameses.osiris2.client.*;
+
+            public class SocialConnectionAddController {
+                @Service("ContactService")
+                def svc;
+            
+                def principal;
+                def relater;
+                def relation;
+                def afterSaveHandler;
+                
+                private boolean editing;
+                
+                public void init() {
+                }
+                
+                public def edit() {
+                    editing = true;
+                    return "relation";
+                }
+                
+                public String getRelaterName() {
+                    if(relater.name!=null)
+                        return relater.name;
+                    else
+                        return relater.lastname + ', ' + relater.firstname;
+                }
+                
+                public def save() {
+                    def param = [:]
+                    param.principal = principal.objid;
+                    param.relater = relater.objid;
+                    param.relationship = relation;
+                        
+                    if(!editing) {
+                        svc.saveConnection(param);
+                    }
+                    else {
+                        svc.updateConnection(param);
+                    }
+                    if( afterSaveHandler ) afterSaveHandler();
+                    return "_close"; 
+                }
+            }
+        ]]>
+    </code>
+    <pages>
+        <page template="contact.ui.SocialConnectionRelationPage"/>
+    </pages>
+</workunit>

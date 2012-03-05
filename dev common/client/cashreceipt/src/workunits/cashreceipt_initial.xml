@@ -1,0 +1,39 @@
+<workunit>
+    
+    <invokers>
+        <invoker folderid="menu/treasury/collection" caption="Cash Receipts" action="init" 
+                 permission="cashreceipt.perform"/>
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class CashReceiptController  {
+        
+            def types;
+            def selection;
+            
+            public void init() {
+                try {
+                    types = InvokerUtil.lookupOpeners("cashreceipt:type");
+                }
+                catch(e){;}
+            }
+
+            public def next() {
+                return selection;
+            }
+        }
+        
+        ]]>
+    </code>
+    
+    <pages>
+        <page template="cashreceipt.ui.CashReceiptInitialPage"/>
+    </pages>
+    
+</workunit>

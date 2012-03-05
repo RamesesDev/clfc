@@ -1,0 +1,37 @@
+import com.rameses.annotations.*;
+import com.rameses.eserver.*;
+import com.rameses.rules.common.*;
+import com.rameses.util.*;
+
+class RuleTestService {
+   
+	@Resource("RuleService/local")
+    def ruleService;
+	
+	private def createSchedule( id, subject, fromtime, totime, room ) {
+		def d = ruleService.createFact( "loan", "sample.test.Schedule");
+		d.id = id;
+		d.subject = subject;
+		d.fromtime = fromtime;
+		d.totime = totime;
+		d.room = room;
+		return d;
+	}
+	
+	@ProxyMethod(local=true)
+	public def test() {
+		def result = ruleService.createFact( "loan", "sample.test.Result");
+		result.list = [];
+	
+		def list = [];
+		list.add( result );
+		list.add( createSchedule(  "S1", "MATH 101", 730, 830, "1A" ) );
+		list.add( createSchedule( "S2", "CHEM 105", 930, 1030, "1A" ) );
+		list.add( createSchedule( "S3", "ENGLISH", 1130, 1230, "1A" ) );
+		list.add( createSchedule( "S4", "SPANISH", 700, 730, "1A" ) );
+		list.add( createSchedule( "S5", "ENGINEERING", 900, 1100, "1A" ) );
+		ruleService.execute( "loan", list );
+		return result.list;
+	}
+	
+}

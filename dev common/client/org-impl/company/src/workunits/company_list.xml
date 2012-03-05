@@ -1,0 +1,29 @@
+<workunit extends="org/org_list.xml">
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        
+        public class CompanyListController extends org.OrgList {
+
+            @Service("CompanyService")
+            def service;
+            
+            @Binding
+            def binding;
+
+            @FormTitle
+            String formTitle;
+            
+            @FormId
+            String formId;
+            
+            String orgType = "company";
+            
+        }
+        
+        ]]>
+    </code>
+
+</workunit>
+
+

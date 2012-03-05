@@ -1,0 +1,67 @@
+<workunit>
+    <invokers>
+        <invoker folderid="/menu/mgmt/loan" caption="Loan Product Types" permission="loan_product_type.view"/>
+        
+        <invoker type="formActions" tooltip="New" action="create" icon="images/new16.png" permission="loan_product_type.create"/>
+        <invoker type="formActions" tooltip="Edit" action="edit" icon="images/edit16.png" permission="loan_product_type.edit"/>
+        <invoker type="formActions" tooltip="Save" action="save" icon="images/save16.png"/>
+        <invoker type="formActions" tooltip="Cancel" action="cancel" icon="images/cancel16.png" immediate="true"/>
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        
+
+        public class LoanProdTypeController {
+            
+            @Service('LoanProductTypeService')
+            def svc;
+            
+            def entity;
+            def editmode = 'read';
+            
+            
+            void create() {
+                entity = [:];
+                editmode = 'create';
+            }
+            
+            void edit() {
+                editmode = 'edit';
+            }
+            
+            void save() {
+                if( editmode == 'create' )
+                    svc.create( entity );
+                else
+                    svc.update( entity );
+                    
+                editmode = 'read';
+            }
+            
+            void cancel() {
+                entity = null;
+                editmode = 'read';
+            }
+            
+            def getProdTypeList() {
+                def list = svc.list;
+                if( list && entity == null )
+                    entity = list[0];
+
+                return list;
+            }
+            
+        }
+        
+        ]]>
+    </code>
+    
+    <pages>
+        <page template="loan.settings.LoanProdTypePage" />
+    </pages>
+</workunit>

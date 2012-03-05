@@ -1,0 +1,33 @@
+package clfc.loan.schedule;
+
+import com.rameses.util.DateUtil;
+import java.util.*;
+
+declare Counter
+	counter: int
+	date: java.util.Date
+	term: int
+	principal: java.math.BigDecimal
+	interest: java.math.BigDecimal
+	result: java.util.List	
+end
+
+#--------------------------------------------------------------------- 
+# These rules build the loan structure
+#---------------------------------------------------------------------
+rule "build schedule"
+	when
+		c: Counter( $count: counter < term, $date:date, $principal: principal, $interest: interest )
+	then
+		java.text.SimpleDateFormat dformat = new java.text.SimpleDateFormat("yyyy-MM-dd");
+		Map map = new HashMap();
+		map.put("payment", $count + 1 );
+		map.put("date", dformat.format($date) );
+		map.put("principal", $principal );
+		map.put("interest",  $interest );
+		c.getResult().add( map );
+		c.setDate( DateUtil.add( $date, "1d" ) );
+		c.setCounter( $count + 1 );
+		drools.update( c );
+end
+

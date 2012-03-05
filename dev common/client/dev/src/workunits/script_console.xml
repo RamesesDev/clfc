@@ -1,0 +1,19 @@
+<workunit>
+    <invokers>
+        <invoker folderid="menu/dev" caption="Script Shell Console" target="_process" 
+            action="showConsole"/> <!--permission="application.removePayment"/>-->
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class ScriptShell{
+            void showConsole() {
+                groovy.ui.Console.main([] as String[]);
+            }
+        }
+        ]]>
+    </code>
+</workunit>

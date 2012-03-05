@@ -1,0 +1,33 @@
+import com.rameses.annotations.*;
+
+class LoanDocNoService
+{
+
+	@PersistenceContext("java:loan")
+	def em;
+
+
+	private def getSqlCtx() { return em.sqlContext; }
+
+	@ProxyMethod
+	public def getNextNo( id ) {
+		def result = sqlCtx.createQuery('select value from loan_docno where id=?').setParameter(1, id).singleResult;
+		if( !result ) {
+			sqlCtx.createExecutor('insert into loan_docno (id,value) values (?,?)')
+			      .setParameter(1, id).setParameter(2, 1).execute();
+			return 1;
+		}
+		else {
+			sqlCtx.createExecutor('update loan_docno set value=? where id=?')
+				  .setParameter(1, ++result.value).setParameter(2, id).execute();
+			return result.value;
+		}
+	}
+
+	@ProxyMethod
+	public def getFormattedNextNo( id, format ) {
+		def df = new java.text.DecimalFormat(format);
+		return df.format( getNextNo( id ) );
+	}
+
+}

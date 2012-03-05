@@ -1,0 +1,77 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+import com.rameses.util.*;
+import com.rameses.io.*;
+import java.io.*;
+
+
+class LoanApplicationWSService
+{
+	@PersistenceContext('java:loan')
+	def em;
+	
+	@Service('LoanApplicationService')
+	def appSvc;
+	
+	static def UPLOAD_DIR = System.getProperty("jboss.server.home.dir") + "/apps/clfc-photos.war";
+	
+
+	@ProxyMethod
+	public void uploadApp( app ) {
+		appSvc.save( app );
+	}
+	
+	@ProxyMethod
+	public void uploadAppHistory( app ) {
+		em.save("loanapplication:loanhistory", app)
+		em.delete("loanapplication", app);
+	}
+	
+	@ProxyMethod
+	public void uploadAttrachment( data ) {
+		assert data.branchcode;
+		assert data.appid;
+		assert data.objid;
+		assert data.count;
+		
+		try {
+			def file = new File(UPLOAD_DIR + '/' + data.branchcode + '/' + data.appid.hashCode() + '/' + data.objid.hashCode());
+			if( data.count == 1 ) {
+				if( !file.parentFile.exists() ) file.parentFile.mkdirs();
+				file.delete();
+			}
+			
+			def foh = new FileTransfer.FileOutputHandler(file);
+			foh.write( data.content );
+			foh.close();
+		}
+		catch(e) {
+			e.printStackTrace();
+			throw e;	
+		}
+	}
+	
+	@ProxyMethod
+	public def downloadApp( branch ) {
+		def app = em.sqlContext.createQuery('select * from loanapplication_for_download where branchcode=? order by indexno')
+		            .setParameter(1, branch.code)
+		            .setFirstResult(0)
+		            .setMaxResults(1)
+		            .resultList;
+		            
+		if( !app ) return [:];
+		
+		app = appSvc.read( [objid: app[0].appid] );
+		return [app: app];
+	}
+
+	@ProxyMethod
+	public void downloadCompleted( app ) {
+		em.sqlContext.createExecutor('delete from loanapplication_for_download where appid=? and branchid=?')
+		  .setParameter(1, app.objid)
+		  .setParameter(2, app.branchid)
+		  .execute();
+		            
+	}
+
+}

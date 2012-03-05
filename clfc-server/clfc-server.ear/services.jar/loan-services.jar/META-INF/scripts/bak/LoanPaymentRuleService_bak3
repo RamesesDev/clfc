@@ -1,0 +1,139 @@
+import com.rameses.annotations.*;
+import com.rameses.eserver.*;
+import com.rameses.rules.common.*;
+import com.rameses.util.*;
+
+class LoanPaymentRuleService {
+   
+	@Resource("RuleService/local")
+    def ruleService;
+	
+	private def dformat = new java.text.SimpleDateFormat("yyyy-MM-dd");
+
+	def holidays = [];
+	
+	private int getExemptBackDays( def _current, def _mindate ) {
+		int exemptedDays = 0;
+		def d = _current;
+		def cal = Calendar.instance;
+		while( d > _mindate ) {
+			d = d - 1;
+			cal.setTime(d);
+			if( cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY  || ( holidays.indexOf(d) >=0 ) ) {
+				exemptedDays ++;
+				continue;	
+			}
+			break;
+		} 
+		return exemptedDays;	
+	}
+	
+	private def createCurrentDate(ledger, billdate) {
+		def currdate = ruleService.createFact( "loan", "clfc.loan.CurrentDate");
+		currdate.startDate = (!ledger.last_applied_date)? java.sql.Date.valueOf( ledger.startdate ) : java.sql.Date.valueOf( ledger.last_applied_date ); 
+		currdate.currentDate = java.sql.Date.valueOf( billdate );
+		currdate.exemptedDate = currdate.currentDate - getExemptBackDays( currdate.currentDate, currdate.startDate );
+		currdate.maturityDate = java.sql.Date.valueOf( ledger.enddate );
+		return currdate;
+	}
+	
+	private def createLedger() {
+		//mock the ledger
+		def ledger = [:];
+		ledger.totalprincipal = 5000;
+		ledger.principal_paid = 50;
+		ledger.principal_value = 500;
+		ledger.interest_value = 100;
+		ledger.surchargerate = 0.03;
+		ledger.overduerate = 0.06;
+		ledger.partial = [
+			principal_unpaid:500, principal_paid:0,
+			interest_unpaid:100, interest_paid:50,
+			surcharge_unpaid:17, surcharge_paid:7,
+			overdue_unpaid:0, overdue_paid:0
+		]
+		ledger.startdate = "2011-03-01";
+		ledger.enddate = "2011-03-10";
+		ledger.last_applied_date =  "2011-03-03";
+		return ledger;
+	}
+	
+	@ProxyMethod(local=true)
+	public def applyPayment(def param) {
+		def ledger = createLedger();
+		def currdate = createCurrentDate( ledger, param.paydate );
+		def token= ruleService.createFact( "loan", "clfc.loan.Token");
+		token.date = currdate.startDate;
+		token.amount = param.amtpaid;
+		def list = []
+		def actionHandler = ruleService.createRuleAction();
+		actionHandler.addCommand( "payment", new ApplyPaymentAction(ledger:ledger, result: list) );
+		ruleService.execute( "loan",  [token, currdate], [handler: actionHandler], "payment" ); 
+		return list;
+	}
+	
+}
+
+
+
+
+class ApplyPaymentAction implements RuleActionHandler {
+	def ledger;
+	def result;
+	public void execute(def o, def args) {
+		def token = args[0];
+		def type = args[1];
+		def item = [surcharge: 0.0, overduecharge:0.0];
+		item.principal = (!ledger.partial) ? ledger.principal_value : ledger.partial.principal_unpaid - ledger.partial.principal_paid; 
+		item.interest = (!ledger.partial) ? ledger.interest_value : ledger.partial.interest_unpaid - ledger.partial.interest_paid; 
+		if(type == "pastdue" ) {
+			if(ledger.partial && ledger.partial.surcharge_unpaid > 0) {
+				item.surcharge = ledger.partial.surcharge_unpaid -  ledger.partial.surcharge_paid
+			}
+			else {
+				item.surcharge = NumberUtil.formatDecimal((item.principal + item.interest) * ledger.surchargerate, "#0.00");
+			}
+		}	
+		else if(type == "overdue" )	{
+			item.principal = 0;
+			if(ledger.partial && ledger.partial.overduecharge_unpaid > 0) {
+				item.overduecharge = ledger.partial.overduecharge_unpaid -  ledger.partial.overduecharge_paid
+			}
+			else {
+				item.overduecharge = NumberUtil.formatDecimal( (ledger.totalprincipal-ledger.principal_paid) * ledger.overduerate, "#0.00");
+			}
+		}	
+		def amtpaid = token.amount;
+		def payment = [txndate: token.date]
+		def paysequence = ["interest", "principal"];
+		if(type=="pastdue") paysequence = ["surcharge"] + paysequence;
+		if(type=="overdue") paysequence = ["overduecharge"] + paysequence;
+		
+		//determine first if there is partial for next batch
+		def fullamount = item.principal + item.interest + item.surcharge + item.overduecharge;
+		if( amtpaid > fullamount ) {
+			ledger.remove("partial");
+		}	
+		else if(!ledger.partial){
+			ledger.partial = [principal_unpaid:item.principal, 
+						interest_unpaid:item.interest, 
+						surcharge_unpaid:item.surcharge, 
+						overdue_unpaid:item.overduecharge,
+						principal_paid:0.0, interest_paid:0.0,surcharge_paid:0.0,overduecharge:0.0];
+		}
+		
+		for(fldName in paysequence) {
+			if(item[fldName]) {
+				def amt = (item[fldName] <= amtpaid) ? item[fldName] : amtpaid;
+				payment[fldName] = amt;
+				amtpaid -= amt; 
+				if(ledger.partial) ledger.partial[fldName+"_paid"] += amt; 
+			}
+		}
+		token.amount = amtpaid;
+		result.add(payment);
+		token.date ++;
+	}
+}
+
+

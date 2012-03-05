@@ -1,0 +1,9 @@
+<schema>
+   <element name="loancharge" tablename="loan_charge">
+       <field name="objid" primary="true"/>
+       <field name="description"/>
+       <field name="state"/>
+       <complex name="extended" serializer="default" merge="true"/>
+   </element>
+</schema>
+

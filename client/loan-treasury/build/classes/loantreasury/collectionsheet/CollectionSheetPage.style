@@ -1,0 +1,5 @@
+"moveUp" [ selectedIsFirst ] { enabled: false; }
+"moveUp" [ !selectedIsFirst ] { enabled: true; }
+
+"moveDown" [ selectedIsLast ] { enabled: false; }
+"moveDown" [ !selectedIsLast ] { enabled: true; }

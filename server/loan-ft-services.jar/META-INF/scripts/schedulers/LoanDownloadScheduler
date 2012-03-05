@@ -1,0 +1,52 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+import com.rameses.util.*;
+
+
+class LoanDownloadScheduler
+{
+
+	@PersistenceContext('java:loan')
+	def em;
+
+	@Service('LoanApplicationService')
+	def appSvc;
+
+	@Service('Var')
+	def sysVar;
+	
+
+	@ProxyMethod
+	public def process( task ) {
+		try {
+			if( !em ) return;
+			
+			println "download scheduler: processing";
+			
+			def branch = em.sqlContext.createQuery('select branchid as id, branchcode as code from loanapplication')
+						   .setFirstResult(0)
+						   .setMaxResults(1)
+						   .resultList;
+						   
+			if( !branch ) return;
+			
+			def inv = new DynamicHttpInvoker(sysVar.clfc_main_server_host, sysVar.clfc_main_server_context, true);
+			def remoteSvc = inv.create('LoanApplicationWSService');
+			def resp = remoteSvc.invoke('downloadApp', [branch[0]]);
+
+			if( resp.app ) {
+				println "downloaded $resp.app.appno";
+				appSvc.save( resp.app );
+				remoteSvc.invoke('downloadCompleted', [resp.app]);
+				println "$resp.app.appno successfully saved.";
+			}
+	
+		}
+		catch(e) {
+			throw e;
+		}
+		
+		return true;
+	}
+
+}

@@ -1,0 +1,7 @@
+"criteria.*|selection|doSearch" [mode != 'read' ] {
+    enabled: false;
+}
+
+"criteria.*|selection|doSearch" [ mode == 'read' ] {
+    enabled: true;
+}

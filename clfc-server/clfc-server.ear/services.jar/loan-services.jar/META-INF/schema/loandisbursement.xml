@@ -1,0 +1,21 @@
+<schema>
+	<element name="data_capture" tablename="loan_disbursement_data_capture">
+		<field name="objid" primary="true"/>
+		<field name="appid"/>
+		<field name="appno"/>
+		<field name="bankname"/>
+		<field name="acctno"/>
+		<field name="checkno"/>
+		<field name="checkdate"/>		
+		<field name="amount"/>
+		<field name="currency"/>
+		<field name="dtfiled"/>
+		<field name="payeeid"/>
+		<field name="payeename"/>
+		<field name="particulars"/>
+		<field name="postedbyid"/>
+		<field name="postedbyname"/>
+		<complex name="extended" serializer="true" merge="true"/>
+	</element>
+</schema>
+

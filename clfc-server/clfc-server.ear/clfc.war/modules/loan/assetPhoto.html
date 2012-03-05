@@ -1,0 +1,34 @@
+<script>
+	$put(
+		"assetPhoto", 
+		new function() {
+			
+			this.assetPhoto;
+
+		}
+	);
+</script>
+<style>
+   body{font-family:arial;font-size:8px;}
+   h3.white { color: #ffffff; }
+</style>
+<div>
+	<hr/>
+	<body>        		
+		<table>					
+			<tr><td width=100>Name :</td><td><label context="assetPhoto">
+				<b>#{assetPhoto.objid} #{assetPhoto.name} #{assetPhoto.file}</b></label></td></tr>
+		</table>
+		<hr/>	
+		<table width="100%" context="assetPhoto" items="assetPhoto.comments">
+			<thead>
+				<tr><td>Comments :</td></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<b><td name="message"></td></b>
+				</tr>
+			</tbody>
+		</table>
+	</body>
+</div>

@@ -1,0 +1,63 @@
+<workunit>
+    <invokers>
+        <invoker folderid="menu/services/loan" caption="Capture Check Disbursement"
+                 permission="disbursement.capture" action="create"/>
+        
+        <invoker type="formActions" caption="New"    icon="images/new16.png"    action="create" visibleWhen="#{editmode=='read'}" mnemonic="n" shortcut="ctrl N"/>
+        <invoker type="formActions" caption="Close"  icon="images/exit16.png"   action="_close" immediate="true" visibleWhen="#{editmode=='read'}" mnemonic="c"/>
+        
+        <invoker type="formActions" caption="Save"   icon="images/save16.png"   action="save" visibleWhen="#{editmode!='read'}" mnemonic="s" shortcut="ctrl S"/>
+        <invoker type="formActions" caption="Cancel" icon="images/cancel16.png" action="_close" immediate="true" visibleWhen="#{editmode!='read'}" mnemonic="c"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+
+        class LoanDisbursementController{
+            @Service('LoanDisbursementDataCaptureService')
+            def svc;
+            
+            @Binding
+            def binding;
+        
+            def entity;
+            def editmode = 'read';
+            def borrowername;
+            
+            void create() {
+                borrowername = '';
+                editmode = 'create';
+                entity = [:];
+                binding?.focus('borrowername');
+            }
+            
+            void save() {
+                if( !MsgBox.confirm('You are about to save this transaction.\nPlease verify that all fields correct. Proceed?') ) return;
+                svc.post( entity );
+                editmode = 'read';
+            }
+            
+            def lookupBorrower() {
+                return InvokerUtil.lookupOpener('loan_app_data_capture:lookup',[
+                    searchText: borrowername,
+                    selectHandler: { o ->
+                        borrowername = o.borrowername;
+                        entity.payeeid = o.borrower.objid;
+                        entity.payeename = o.borrowername;
+                        entity.appid = o.objid;
+                        entity.appno = o.appno;
+                        entity.loanAmount = o.loanAmount;
+                        binding.refresh('borrowername|entity.(appno|loanAmount)');
+                        binding.focus('entity.accountno');
+                    }
+                ]);
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="loantreasury.disbursement.DisbursementDataCapturePage"/>
+    </pages>
+</workunit>

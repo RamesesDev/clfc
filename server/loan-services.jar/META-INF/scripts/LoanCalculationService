@@ -1,0 +1,202 @@
+import com.rameses.annotations.*;
+import com.rameses.eserver.*;
+import com.rameses.rules.common.*;
+import com.rameses.util.*;
+
+class LoanCalculationService
+{
+
+	@Resource("RuleService/local")
+    def ruleService;
+
+	def dformat = new java.text.SimpleDateFormat("yyyy-MM-dd");
+
+	def holidays = [];
+
+	private def getExemptedStartDate( def _current, def _mindate ) {
+		int exemptedDays = 0;
+		def d = _current;
+		def cal = Calendar.instance;
+		while( d > _mindate ) {
+			d = d - 1;
+			cal.setTime(d);
+			if( cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY  || ( holidays.indexOf(d) >=0 ) ) {
+				exemptedDays ++;
+				continue;
+			}
+			break;
+		}
+		return _current - exemptedDays;
+	}
+
+	private def createLedger() {
+		//mock the ledger
+		def ledger = [:];
+		ledger.totalprincipal = 5000;
+		ledger.principal_paid = 50;
+		ledger.principal_regular = 500;
+		ledger.interest_regular = 100;
+		ledger.surchargerate = 0.03;
+		ledger.overduerate = 0.06;
+		ledger.partial = [
+			principal_unpaid:500, principal_paid:0,
+			interest_unpaid:100, interest_paid:50,
+			surcharge_unpaid:18, surcharge_paid:7,
+			overdue_unpaid:0, overdue_paid:0
+		]
+		ledger.startdate = "2011-03-01";
+		ledger.enddate = "2011-03-10";
+		ledger.last_applied_date =  "2011-03-03";
+		return ledger;
+	}
+
+	@ProxyMethod(local=true)
+	public def getLoanInfo(def param) {
+		assert param.loanamount; assert param.term; assert param.startdate;
+		assert param.interestrate; assert param.surchargerate; assert param.overduechargerate;
+		def schedule = (!param.schedule) ? "daily" : param.schedule;
+		def ledger =[
+						term:param.term,
+						stardate:param.startdate,
+						interestrate:
+						param.interestrate,
+						surchargerate:param.surchargerate,
+						overduechargerate:param.overduechargerate,
+						schedule:schedule
+					];
+		ledger.principal_total = param.loanamount;
+		ledger.interest_total = NumberUtil.formatDecimal( (ledger.principal_total * (param.interestrate/100)), "#0.00" );
+		ledger.principal_regular = NumberUtil.formatDecimal( (ledger.principal_total) / ledger.term,  "#0.00" );
+		ledger.interest_regular = NumberUtil.formatDecimal( (ledger.interest_total) / ledger.term,  "#0.00" );
+		ledger.surcharge_regular = NumberUtil.formatDecimal( ( ledger.principal_regular + ledger.interest_regular) * ( param.surchargerate / 100) ,  "#0.00" );
+		ledger.maturitydate = dformat.format( java.sql.Date.valueOf( param.startdate ) + param.term);
+		return ledger;
+	}
+
+	@ProxyMethod(local=true)
+	public def loadSchedule(def param) {
+		def p = getLoanInfo( param );
+		def counter = ruleService.createFact( "loan", "clfc.loan.schedule.Counter");
+		counter.term = p.term;
+		counter.principal = p.principal_regular;
+		counter.interest = p.interest_regular;
+		counter.date = java.sql.Date.valueOf( param.startdate );
+		counter.result = [];
+		print counter;
+		ruleService.execute( "loan", [counter]);
+		return counter.result;
+	}
+
+	@ProxyMethod(local=true)
+	public def generateBilling(def param) {
+		def params = [];
+		def token = ruleService.createFact( "loan", "clfc.loan.billing.BillingToken");
+		token.date = java.sql.Date.valueOf(  param.startdate );
+		token.currentDate = java.sql.Date.valueOf( param.billdate );
+		token.exemptedDate = getExemptedStartDate( token.currentDate, token.date);
+		token.maturityDate = java.sql.Date.valueOf( param.enddate );
+		token.principal = param.principal;
+		token.interest = param.interest;
+		token.surcharge = param.surcharge;
+		token.overduerate = 6.0;
+		token.principal_balance = 3500.0;
+		params.add( token );
+		def list = [];
+		def actionHandler = ruleService.createRuleAction();
+		actionHandler.addCommand( "bill", new BillHandler(result:list) );
+		ruleService.execute( "loan", params,  actionHandler );
+		return list;
+	}
+
+
+
+
+	@ProxyMethod(local=true)
+	public def postPayment(def param) {
+		def token = ruleService.createFact( "loan", "clfc.loan.payment.PaymentToken");
+
+		//loan startdate
+		token.date = java.sql.Date.valueOf(  param.startdate );
+		token.currentDate = java.sql.Date.valueOf( param.paydate );
+		token.exemptedDate = getExemptedStartDate( token.currentDate, token.date);
+		token.maturityDate = java.sql.Date.valueOf( param.enddate );
+		token.principal = param.principal;
+		token.interest = param.interest;
+		token.surcharge = param.surcharge;
+		token.overduerate = param.overduerate;
+		token.principal_balance = param.principal_balance;
+		token.amount = param.amtpaid;
+
+		def list = [];
+		def partial = [:];
+		def actionHandler = ruleService.createRuleAction();
+		actionHandler.addCommand( "handler", new PaymentHandler(result:list, partial:partial) );
+		actionHandler.addCommand( "excess-handler", new ExcessPaymentHandler(result:list, partial:partial) );
+		ruleService.execute( "loan", [token], actionHandler );
+		return list;
+	}
+}
+
+class BillHandler implements RuleActionHandler {
+
+	def result;
+	def dformat = new java.text.SimpleDateFormat("yyyy-MM-dd");
+
+	public void execute(def o, def args) {
+		def token = args[0];
+		def bill = args[1];
+		bill.date = dformat.format( token.date );
+		result.add( bill );
+		token.date++;
+	}
+}
+
+class PaymentHandler implements RuleActionHandler {
+	def result;
+	def partial;
+	def dformat = new java.text.SimpleDateFormat("yyyy-MM-dd");
+
+	protected def applyPayment(  amt, field, bill, payment ) {
+		if(!bill[field]) return amt;
+		def balance = bill.remove(field);
+		if( amt <= 0 ) {
+			partial[field] = balance;
+			return amt;
+		}
+		else if( amt > balance ) {
+		 	payment[field] = balance;
+			return amt - balance;
+		}
+		else {
+			payment[field] = amt;
+			partial[field] = balance - amt;
+			return 0.0;
+		}
+    }
+
+	public void execute(def o, def args) {
+		def token = args[0];
+		def bill = args[1];
+		def payment = [date: dformat.format( token.date )];
+		def amt = token.amount;
+		for( fld in ["surcharge", "overduecharge", "interest", "principal"]) {
+			amt = applyPayment( amt, fld, bill, payment );
+		}
+		result.add( payment );
+		token.amount = amt;
+		token.date++;
+	}
+}
+
+class ExcessPaymentHandler extends PaymentHandler {
+	public void execute(def o, def args) {
+		def token = args[0];
+		def bill = args[1];
+		def payment = [date: dformat.format( token.date )];
+		def amt = applyPayment( token.amount, "principal", bill, payment ) ;
+		if(amt > 0.0 ) payment.excess = amt;
+		result.add( payment );
+	}
+}
+
+

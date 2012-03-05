@@ -1,0 +1,10 @@
+import com.rameses.annotations.*;
+import com.rameses.eserver.*;
+import com.rameses.rules.common.*;
+import com.rameses.util.*;
+
+
+public class OverPaymentPostingService
+{
+
+}

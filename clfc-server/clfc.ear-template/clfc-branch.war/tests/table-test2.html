@@ -1,0 +1,125 @@
+<html>
+	<head>
+		<script src="../js/lib/jquery-all.js"></script>
+		<script src="../js/lib/rameses-lib.js"></script>
+
+		<style>
+			body, table { font: 10pt/145% 'arial', 'verdana'; }
+			th { background: gray; color: #fff; }
+			tr.odd td { background: #e3e3e3; }
+			
+			tr.selected td { background: #323232; color: #fff; }
+			tr.selected td.selected { color: green; }
+			
+			.box { border: solid 1px green; padding: 20px; width: 300px; }
+			.right { float: right; }
+			.left { float: left; }
+		</style>
+		
+		<script type="text/javascript">			
+			$put( "profile",
+				new function() {
+				
+					var _this = this;
+					
+					this.selectedItem;
+
+					this.list = [
+						{id: '001', firstname:"elmo", lastname:"nazareno", category: 'A'},
+						{id: '002', firstname:"jess", lastname:"zamora", category: 'A'},
+						{id: '003', firstname:"worgie", lastname:"flores", category: 'A'},
+						{id: '004', firstname:"michael", lastname:"ramos", category: 'B'},
+						{id: '005', firstname:"johana", lastname:"cardona", category: 'B'},
+						{id: '006', firstname:"chariss", lastname:"villarosa", category: 'B'},
+						{id: '007', firstname:"rojean", lastname:"vergara", category: 'C'},
+						{id: '008', firstname:"robert", lastname:"yap", category: 'C'},
+						{id: '009', firstname:"james", lastname:"yap", category: 'C'},
+						{id: '010', firstname:"loren", lastname:"pedrito", category: 'D'}
+					];
+					
+					this.cityList;
+					
+					this.countryList = [
+						{code:'PH', name: 'Philippines'}, {code:'US', name:'United States'}, {code:'JP', name: 'Japan'}
+					];
+					
+					this.propertyChangeListener = {
+						'country' : function(o) {
+							_this.cityList = [];
+							if( !o );
+							else if( o.code == 'PH' )
+								_this.cityList = ['Cebu', 'Talisay', 'Manila'];
+							else if( o.code == 'US' )
+								_this.cityList = ['Covina', 'Vallejo'];
+						}
+					};
+					
+					this.save = function() {
+						alert('Record posted successfully.');
+					};
+					
+					this.refresh = function(){};
+					
+				}
+			);
+		</script>
+
+	</head>
+	<body>
+		<div class="left">
+			<select context="profile" name="country" items="countryList"
+			        emptyText="Select Country" allowNull="true" 
+			        required="true" itemLabel="name">
+			</select>
+			<select context="profile"name="city" items="cityList" 
+			        depends="country" emptyText="Select City" 
+			        allowNull="true" required="true">
+			</select>
+			<br/>
+			<input type="button" context="profile" name="save" value="Save"/>
+			<input type="button" context="profile" name="refresh" value="Refresh" immediate="true"/>
+			<br/>
+			<br/>
+			<table context="profile" name="selectedItem" items="list" 
+			       varName="item" varStatus="stat"
+				   border="1" cellpadding="3" cellspacing="0" width="400"
+				   script="">
+				<thead>
+					<th style="text-align: center">Id</th>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Remarks</th>
+				</thead>
+				<tbody>
+					<tr styleExpr="#{stat.prevItem.category != item.category? '' : 'display: none'}; background: #369; color: #fff;">
+						<td selectable="false" colspan="4" >${item.category}</td>
+					</tr>
+					<tr class="#{stat.index%2==0? 'even' : 'odd'}">
+						<td width="50" align="center" name="item.id">
+						<td name="item.firstname" style=""></td>
+						<td name="item.lastname"></td>
+						<td name="item.remarks"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<div class="box right">
+			<b>ID: </b>
+			<label context="profile" depends="selectedItem">#{selectedItem.id? selectedItem.id : '-'}</label><br/>
+			<b>Firstname: </b>
+			<label context="profile" depends="selectedItem">#{selectedItem.firstname? selectedItem.firstname : '-'}</label><br/>
+			<b>Lastname: </b>
+			<label context="profile" depends="selectedItem">#{selectedItem.lastname? selectedItem.lastname : '-'}</label><br/>
+			<hr/>
+			<b>Country Code: </b>
+			<label context="profile" depends="country">#{country.code? country.code : '-'}</label><br/>
+			<b>Country: </b>
+			<label context="profile" depends="country">#{country.name? country.name : '-'}</label><br/>
+			<b>City: </b>
+			<label context="profile" depends="city">#{city? city : '-'}</label><br/>
+		</div>
+		
+	</body>
+
+</html>

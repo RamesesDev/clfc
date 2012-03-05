@@ -1,0 +1,62 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+import com.rameses.util.*;
+
+
+class LoanBorrowerService
+{
+	@PersistenceContext('java:loan')
+	def em;
+
+	@Service('DateService')
+	def datesvc;
+
+	@Env
+    def env;
+	
+	@ProxyMethod
+	public def post(def o){
+		if(!o.date)  o.dtfiled = datesvc.serverDate;
+		if(!o.appno) o.appno = docSvc.getFormattedNextNo('loan_app', '00000000');
+		
+		o.custid=getCustName(o.borrower);
+		o.appid=o.appno;
+		o.contactno=o.custid;
+		o.lastname=o.borrowername;
+		o.firstname=o.borrowername;
+		o.borrowertype=o.brwr;
+		//o.borrowername = getCustName( o.borrower );
+		//def names = [o.borrowername];
+		//names.addAll( o.jointBorrowerList.collect{ getCustName(it) } );
+		//o.fullborrowername = names.join(' and ');
+		return em.post("loan_borrower_index",o);
+	}
+	@ProxyMethod
+	public def search( param ){
+		def filter = [];
+
+	}
+	
+	@ProxyMethod
+	public def checkBorrower(def param){
+		def o = em.sqlContext.createQuery('select * from loanapplication where appno=$P{paramcode}').setParameters([paramcode:appno]).resultList;
+		def brwr=[];
+		o.each{ brwr.add(read(it)); }
+		def b = brwr.find{ it.borrower.objid == param.objid }
+		return b;
+	}
+	
+	@ProxyMethod
+	public def verifyContact(def o){
+		if(o.contactno==entity.borrower.contactno)   
+			throw new Exception("Contact is the Principal Borrower");
+			//Joint Borrower & CoMaker    
+		if(entity.jointBorrowerList.contains(o))
+			throw new Exception("Contact already in the Joint Borrowers List");
+		if(entity.coMakerList.contains(o))
+			throw new Exception("Contact already in the CoMakers List");
+			//Spouse to Joint Borrower & CoMaker
+		if(entity.borrower.contactno==entity.jointBorrowerList.contains(o))
+			throw new Exception("Contact already in the Joint Borrowers List");	
+	}
+}

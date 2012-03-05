@@ -1,0 +1,132 @@
+<workunit>
+    <invoker type="loan:principalSiblings" caption="Add Siblings Form" target="popup"/>
+    
+    <invoker type="formActions" caption="Add and Close" mnemonic="c" action="add" />
+    <invoker type="formActions" caption="Cancel"        mnemonic="x" action="_close" immediate="true"/>
+    <code lang="groovy">
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class PrincipalSiblingsPageController {
+            @Service('LoanApplicationService')
+            def svc;
+            
+            def entity=[:];
+            def selectHandler;
+            
+            //****  Employment Information  ****//
+            def principalSiblingsEmploymentHandler = [
+                getRows: { 12 },
+                getColumns: {
+                    return [
+                       new Column(name: 'employer', caption: 'Employer',         width: 110),                        
+                       new Column(name: 'telno',    caption: 'Tel No.',          width: 70),
+                       new Column(name: 'address',  caption: 'Address',          width: 100),
+                       new Column(name: 'position', caption: 'Job Desc/Position',width: 110),
+                       new Column(name: 'status',   caption: 'Status', width:90, maxWidth: 100),
+                       new Column(name: 'years',    caption: 'Length of Svc',    width: 90),
+                       new Column(name: 'salary',   caption: 'Compensation',     width: 100, maxWidth: 100),
+                       new Column(name: 'others',   caption: 'Others',           width: 100),
+                    ]
+                },
+                fetchList: { 
+                    if(entity.employmentList==null)
+                        entity.employmentList=[]; 
+                    return entity.employmentList;
+                },
+                createItem:{ [:] },
+                
+                onAddItem:{o-> 
+                    entity.employmentList.add(o);
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        entity.employmentList.remove(o);
+                }
+            ] as SubListModel;
+            
+            def siblingsEmployment;
+            def addPrincipalSiblingsEmployment(){
+                if(!entity.name)throw new Exception("Please specify the name of the sibling(s) first.");
+                if(!entity.age)throw new Exception("Please specify the age of the sibling(s).");
+                if(!entity.address)throw new Exception("Please specify the address of the sibling(s).");
+                return InvokerUtil.lookupOpener("loan:employment",[selectHandler:{ o ->
+                    entity.employmentList.add( o );
+                    principalSiblingsEmploymentHandler.load();
+                }]);
+            }
+            
+            /*def editPrincipalSiblingsEmployment(){
+            
+            }*/
+            
+            def removePrincipalSiblingsEmployment(){
+                if(!siblingsEmployment){
+                    MsgBox.alert("No record selected.");
+                    return null;
+                    binding?.refresh("siblingsEmployment");
+                }
+                if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                    entity.employmentList.remove(siblingsEmployment);
+             }
+             
+             //****  Other Source(s) Of Income  ****//
+             def principalSiblingsOtherSourcesOfIncomeHandler = [
+                getRows: { 15 },
+                getColumns: {
+                    return [
+                        new Column(name: 'kindOfBusiness',caption: 'Income Sources',    width: 150),
+                        new Column(name: 'grossNetIncome',caption: 'Gross/Net Income ', width: 150),
+                        new Column(name: 'remarks',       caption: 'Remarks',           width: 250),
+                    ]
+                },
+                fetchList: { 
+                    if(entity.otherSourcesOfIncomeList==null)
+                        entity.otherSourcesOfIncomeList=[]; 
+                    return entity.otherSourcesOfIncomeList;
+                },
+                onRemoveItem:{o->
+                    if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                        entity.otherSourcesOfIncomeList.remove(o);
+                }
+            ] as SubListModel;
+            
+            def otherSrcOfIncome;
+            def addPrincipalOtherSourcesOfIncome(){
+                if(!entity.name)throw new Exception("Please specify the name of the sibling(s) first.");
+                if(!entity.age)throw new Exception("Please specify the age of the sibling(s).");
+                if(!entity.address)throw new Exception("Please specify the address of the sibling(s).");
+                return InvokerUtil.lookupOpener("loan:otherSourcesOfIncome",[selectHandler:{ o ->
+                    entity.otherSourcesOfIncomeList.add( o );
+                    principalSiblingsOtherSourcesOfIncomeHandler.load();
+                }]);
+            }
+            
+            /*def editPrincipalSiblingsOtherSourcesOfIncome(){
+                if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                    entity.principalSiblingsOtherSourcesOfIncomeList.remove(selected.principalSiblingsOtherSourcesOfIncomeList);
+            }*/
+            
+            def removePrincipalSiblingsOtherSourcesOfIncome(){
+                if(!otherSrcOfIncome){
+                    MsgBox.alert("No record selected.");
+                    return null;
+                    binding?.refresh("otherSrcOfIncome");
+                }
+                if(MsgBox.confirm("Are you sure you want to remove the selected item?"))
+                    entity.otherSourcesOfIncomeList.remove(otherSrcOfIncome);
+            }
+             
+            def add(){
+                if( selectHandler ) selectHandler ( entity );
+                return "_close";
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="loan.ui.PrincipalSiblingsPage"/>
+    </pages>
+</workunit>

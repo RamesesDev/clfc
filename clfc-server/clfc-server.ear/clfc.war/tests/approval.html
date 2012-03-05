@@ -1,0 +1,14 @@
+<script>
+	$put("approval_popup", 
+		new function() {
+			this.handler;
+			this.event;
+			
+			this.select = function() {
+				this.handler("hello");
+			}
+		}
+	)
+</script>
+
+<label context="approval_popup">Event is #{event}</label>

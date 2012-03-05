@@ -1,0 +1,49 @@
+<workunit>
+    <invoker type="loan:orcrLookup" caption="Add OR/CR Entries" target="popup"/>
+    <code lang="groovy">
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class orcrLookupController {
+            //@Service('RouteService')
+            //def svc;
+            
+            def selected;
+            def searchText;
+            def orcrSelectHandler;
+            def selectHandler;
+            def asset;
+            
+            /*def select(){
+                if(!selected){
+                    MsgBox.alert("No Route selected.");
+                    return null;
+                    binding?.refresh("selected");
+                }    
+                else if(selectHandler)selectHandler(selected);        
+                    return "_close";
+            }
+            def listHandler=[
+                    getColumns:{
+                    return[ new Column(name:'code',        caption:"Code", width:30),          
+                            new Column(name:'description', caption:"Description", width:150),
+                            new Column(name:'area',        caption:"Area", width:400)      
+                     ]
+                },
+                fetchList:{o-> 
+                    return svc.getList();
+                },
+                getRows:{
+                    return 15;
+                },
+            ]as SubListModel;
+            */
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="loan.ui.asset.ORCRLookup"/>
+    </pages>
+</workunit>

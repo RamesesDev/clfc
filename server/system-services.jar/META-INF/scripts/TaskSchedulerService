@@ -1,0 +1,86 @@
+import com.rameses.annotations.*;
+
+class TaskSchedulerService {
+
+	@PersistenceContext("system")
+	def em;	
+	
+	@Resource("TaskSchedulerMgmt")
+	def taskMgmt;	
+	
+	@ProxyMethod
+	public def getList(def o ) {
+		def list = em.sqlContext.createNamedQuery("scheduler:list-tasks").resultList;
+		list.each {
+			if(it.startdate) it.startdate = "" + it.startdate;
+			if(it.enddate) it.enddate = ""+it.enddate;
+		}
+		return list;
+	}
+	
+	@ProxyMethod
+	public def create(def taskinfo ) {
+		def o = em.sqlContext.createNamedQuery( "scheduler:get-taskid").singleResult;
+		if(o==null) {
+			em.sqlContext.createNamedExecutor("scheduler:init-taskid").execute();
+			taskinfo.taskid = 1;
+		}
+		else {
+			taskinfo.taskid = o.taskid;
+		}	
+		em.sqlContext.createNamedExecutor("scheduler:update-taskid").execute();
+		return em.create("scheduler", taskinfo );
+		
+	}
+	
+	@ProxyMethod
+	public def read(def o ) {
+		o = em.read( "scheduler", o );
+		if(o) {
+			o.startdate = ""+o.startdate;
+			o.enddate = ""+o.enddate;
+		}
+		return o;
+	}
+	
+	@ProxyMethod
+	public def start(def o ) {
+		taskMgmt.startTask(o.taskid);
+	}
+	
+	@ProxyMethod
+	public def suspend(def o ) {
+		taskMgmt.suspendTask(o.taskid);
+	}
+
+	@ProxyMethod
+	public def resume(def o ) {
+		taskMgmt.resumeTask(o.taskid);
+	}
+
+	@ProxyMethod
+	public def recover(def o ) {
+		taskMgmt.resumeFromError(o.taskid);
+	}
+
+	@ProxyMethod
+	public def getErr(def o ) {
+		o = em.sqlContext.createNamedQuery('scheduler:view-error').setParameter(1,o.taskid).singleResult;
+		if(o) return [msg: o.msg];
+	}
+
+	@AsyncEvent
+	def evt;
+	
+	@ProxyMethod
+	@Async(loop=true)
+	public def fireAsync(def o ) {
+		if(evt.loop < 5) {
+			print "fire " + evt.loop;
+			return "async loop " + evt.loop;
+		}	
+		return null;
+	}
+	
+	
+}

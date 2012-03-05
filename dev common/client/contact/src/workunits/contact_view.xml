@@ -1,0 +1,27 @@
+<workunit>
+     <invokers>
+        <invoker type="contact:view" action="open" target="popup" caption="View Contact"/>
+        <invoker type="formActions" caption="Close" action="_close" />
+    </invokers>
+    <code>
+        <![CDATA[        
+            import com.rameses.rcp.common.*;
+            import com.rameses.rcp.annotations.*;
+            import com.rameses.util.*;
+            import com.rameses.osiris2.client.*;
+
+            public class ContactViewController {
+                def entity;
+                def opener;
+                void open() {
+                    if(!entity)
+                        throw new Exception("Entity must not be null");
+                    opener = InvokerUtil.lookupOpener( "contact:form", [data:entity, allowNew:false] );
+                }
+            }
+        ]]>
+    </code>
+    <pages>
+        <page template="contact.ui.OpenerPopupPage"/> 
+    </pages>
+</workunit>

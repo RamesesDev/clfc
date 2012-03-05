@@ -1,0 +1,57 @@
+<workunit>
+    <invokers>
+        <invoker type="loan:CMInfo" caption="Co-Maker Information" target="popup" action="init"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        import java.io.*;
+        import com.rameses.io.*;
+        
+        class CoMakerInfoController{
+            @Binding
+            def binding;
+
+            def appInfo;
+            def entity;
+            def gtplName;
+
+            void init(){
+                appInfo = TemplateProvider.instance.getResult("loan/ui/"+gtplName+".gtpl",[data:entity]);
+            }
+
+            def viewCMEmployment(){
+                return InvokerUtil.lookupOpener("loan:cmEmploymentInfo",[entity:entity,gtplName:"Borrower_CMEmployment"]);
+            }
+            
+            def viewCMBusiness(){
+                return InvokerUtil.lookupOpener("loan:cmBusinessInfo",[entity:entity,gtplName:"Borrower_CMBusiness"]);
+            }
+            
+            def viewCMOtherIncome(){
+                return InvokerUtil.lookupOpener("loan:cmOtherSrcInfo",[entity:entity,gtplName:"Borrower_CMOtherIncome"]);
+            }
+            
+            def viewCMProfBGround(){
+                return InvokerUtil.lookupOpener("loan:cmProfBGroundInfo",[entity:entity,gtplName:"Borrower_CMProfBGround"]);
+            }
+            
+            def viewCMSpouse(){
+                return InvokerUtil.lookupOpener("loan:cmSpouseInfo",[entity:entity,gtplName:"Borrower_CMPSpouse"]);
+            }
+            def close(){
+                appInfo=null;
+                binding.fireNavigation "_close";
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="loan.ui.AppInfoPage"/>
+    </pages>
+</workunit>

@@ -1,0 +1,95 @@
+<schema>
+   <element name="loanapplication" tablename="loanapplication">
+       <field name="objid" primary="true"/>
+       <field name="appno"/> 
+	   <field name="clientcode"/>
+	   <field name="borrowername"/>
+	   <field name="fullborrowername"/>
+	   <field name="state"/>
+	   <field name="loancount"/>
+	   <field name="routecode"/>
+	   <field name="routedescription"/>
+	   <field name="dtfiled"/>
+	   <field name="dtreleased"/>
+	   <field name="dtsubmittedforreleasedate"/>
+	   <field name="dtsubmittedforci"/>
+	   <field name="dtsubmittedforapproval"/>
+   	   <field name="dtsubmittedforfla"/>
+	   <field name="approvedate"/>
+	   <field name="expirydate"/>
+	   <field name="disapprovedate"/>
+	   <field name="resenddate"/>
+       <field name="canceleddate"/>
+	   <field name="disqualifieddate"/>
+       <field name="returneddate"/>
+	   <field name="mode"/>
+	   <field name="branchid"/>
+	   <field name="branchcode"/>
+       <field name="branchname"/>	
+	   <complex name="comments" serializer="default" type="list"/>
+	   <complex name="cirecommendation" serializer="default"/>
+	   <complex name="crecomrecommendation" serializer="default"/>
+	   <complex name="loaninfo" serializer="default"/>
+       <complex name="borrower" serializer="default"/>
+       <complex name="propertylist" serializer="default" type="list"/>
+       <complex name="vehiclelist" serializer="default" type="list"/>
+       <complex name="appliancelist" serializer="default" type="list"/>
+       <complex name="otherslist" serializer="default" type="list"/>
+       <complex name="attachmentslist" serializer="default" type="list"/>
+       <complex name="ledger" serializer="default"/>
+       <complex name="payment" serializer="default"/>
+       <complex name="extended" serializer="default" merge="true"/>
+       <complex name="applog" serializer="default" type="list"/>
+   </element>
+
+   <element name="loanhistory" tablename="loan_history">
+       <field name="objid" primary="true"/>
+       <field name="appno"/>
+	   <field name="state"/>
+	   <complex name="loaninfo" serializer="default"/>
+       <complex name="borrower" serializer="default"/>
+       <complex name="propertylist" serializer="default" type="list"/>
+       <complex name="vehiclelist" serializer="default" type="list"/>
+       <complex name="appliancelist" serializer="default" type="list"/>
+       <complex name="otherslist" serializer="default" type="list"/>
+	   <complex name="attachmentslist" serializer="default" type="list"/>
+       <complex name="comments" serializer="default" type="list"/>
+       <complex name="extended" serializer="default" merge="true"/>
+   </element>
+
+   <element name="list" tablename="loanapplication_list">
+		<field name="objid" primary="true"/>
+		<field name="appno"/>
+		<field name="borrowername"/>
+		<field name="date"/>
+	</element>
+
+	<element name="loanappno" tablename="loanappno">
+		<field name="objid" primary="true"/>
+		<field name="appno"/>
+		<field name="collectionno"/>
+	</element>
+
+	<!--
+	<element name="ledger" tablename="loan_app_ledger">
+
+	</element>
+	-->
+
+	<element name="ledger_item" tablename="loan_ledger_item">
+		<field name="objid" primary="true" />
+		<field name="appid"/>
+		<field name="date"/>
+		<field name="principal"/>
+		<field name="principal_balance"/>
+		<field name="interest"/>
+		<field name="absent_penalty"/>
+		<field name="underpayment_penalty"/>
+		<field name="pastdue"/>
+		<field name="state"/>
+		<field name="payment"/>
+		<field name="refno"/>
+		<field name="paymentdate"/>
+		<field name="extended"/> 
+	</element>
+</schema>

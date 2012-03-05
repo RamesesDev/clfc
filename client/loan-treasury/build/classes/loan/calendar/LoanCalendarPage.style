@@ -1,0 +1,8 @@
+
+'entity.*' [editmode=='read'] { readonly: true; }
+'entity.*' [editmode!='read'] { readonly: false; }
+
+'entity.date' [editmode!='create'] { readonly: true; }
+
+'entity' [editmode=='read'] { enabled: true; }
+'entity' [editmode!='read'] { enabled: false; }

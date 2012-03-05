@@ -1,0 +1,34 @@
+import com.rameses.annotations.*;
+
+class RoleLoginInterceptor {
+	
+    @PersistenceContext("main")
+    def em;
+    
+    @After(pattern="SessionService.login.*")
+    public def fetchRolesOnLogin( def evt ) {
+		def session = evt.result;
+		session.roles = em.sqlContext.createQuery('''
+			SELECT 
+				ur.objid as objid, r.objid AS role, r.name AS rolename,
+				ug.objid AS groupid, ug.code AS groupcode, ug.name AS groupname,
+				ps.permissions, r.disallowed AS roledisallowed, ur.disallowed AS userdisallowed
+			FROM userrole ur 
+			INNER JOIN usergroup ug ON ur.usergroup=ug.objid
+			INNER JOIN role r ON r.objid=ur.role
+			INNER JOIN permissionset ps ON ps.name=r.permissionset
+			WHERE ur.userid = $P{objid}
+			''').setParameters(session).resultList.each {
+				it.permissions = em.serializer.read( it.permissions )*.action;
+				def roledisallowed = (it.roledisallowed) ? em.serializer.read( it.roledisallowed ) : [];
+				def userdisallowed = (it.userdisallowed) ? em.serializer.read( it.userdisallowed ) : [];
+				it.permissions = it.permissions - roledisallowed - userdisallowed;
+				it.remove( "roledisallowed" );
+				it.remove( "userdisallowed" );	
+				it.title = it.rolename + "-" + it.groupname;			
+			}
+
+		return em.update( "usersession", session );
+    }     
+
+}

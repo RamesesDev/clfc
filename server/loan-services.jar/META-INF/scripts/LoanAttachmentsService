@@ -1,0 +1,81 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+import com.rameses.util.*;
+import com.rameses.io.*;
+
+
+class LoanAttachmentsService
+{
+	@PersistenceContext('java:loan')
+	def em;
+
+	@Service('DateService')
+	def datesvc;
+
+    @Env
+    def env;
+    
+    static def BUFF_SIZE = 1024 * 32;
+	static def UPLOAD_DIR = System.getProperty("jboss.server.home.dir") + "/apps/clfc.ear/clfc-branch.war/photos";
+    
+
+	@ProxyMethod
+	public void saveByBlock( param ) {
+		assert param.appid;
+		assert param.objid;
+		
+		try {
+			def file = new File(UPLOAD_DIR + '/' + param.appid.hashCode() + '/' + param.objid.hashCode());
+			if( param._batch == 0 ) {
+				if( !file.parentFile.exists() ) file.parentFile.mkdirs();
+				file.delete();
+			}
+			
+			def foh = new FileTransfer.FileOutputHandler(file);
+			foh.write( param._data );
+			foh.close();
+		}
+		catch(e) {
+			e.printStackTrace();
+			throw e;	
+		}		
+	}
+
+	@ProxyMethod
+	public def readByBlock( param ) {
+		assert param.appid;
+		assert param.objid;
+		
+		//if the client sends the result back,
+		//check if already returned the last block
+		if( param.last ) return null;
+		
+		def content;
+		def fis;
+		def file;
+		
+		try {
+			file = new File(UPLOAD_DIR + '/' + param.appid.hashCode() + '/' + param.objid.hashCode());
+			fis = new FileTransfer.FileInputSource( file, BUFF_SIZE );
+			if( param.lastPos ) fis.position = param.lastPos;
+			content = fis.read();
+		}
+		catch(e) {
+			e.printStackTrace();
+		}
+		finally {
+			if( fis ) fis.close();	
+		}
+        
+		if( !content ) return null;
+
+		return [
+			objid: param.objid, appid: param.appid, 
+			lastPos: fis.position, content: content, 
+			last: content.length < BUFF_SIZE,
+			lastModified: file.lastModified(),
+			fileLength: file.length(),
+		];
+	}
+
+}

@@ -1,0 +1,78 @@
+import com.rameses.rcp.annotations.*;
+import com.rameses.rcp.common.*;
+import com.rameses.util.*;
+import com.rameses.osiris2.client.*;
+import com.rameses.osiris2.reports.*;
+import com.rameses.common.*;
+import java.util.regex.*;
+
+
+public class CheckPrintScript
+{
+    def printFormat;
+    static def dt_formatter = new java.text.SimpleDateFormat('MMMM dd, yyyy');
+    
+
+    def reportModel=[
+        getReportName:{
+            return "treasury/check/Check_Print.jasper";
+        },
+        getReportData:{
+            return [printFormat:printFormat];
+        }
+    ] as ReportModel;
+
+    boolean print( param ) {
+        
+        param.amt_words = NumberToWords.instance.convert(param.amount).toUpperCase() + " pesos and 00/100 only";
+        param.checkdate =  dt_formatter.format( param.checkdate );
+
+        printFormat = parse(param.format, param);
+        reportModel.viewReport();
+        return ReportUtil.print(reportModel.report, true);
+    }
+
+    private String parse(String tpl, Map data) {
+        StringBuffer sb = new StringBuffer();
+        Matcher m = Pattern.compile(/(\$\{(.*?)\})[^\$]*/).matcher(tpl);
+        while( m.find() ) {
+            String str = m.group();
+            Object v = data.get(m.group(2));
+            String newstr = str.replace(m.group(1), v+"");
+            
+            if( newstr.length() != str.length() ) {
+                if( newstr.length() > str.length() )
+                {
+                    StringBuffer tsb = new StringBuffer();
+                    int diff = newstr.length() - str.length();
+                    for(int i=newstr.length()-1; i>=0 ; --i) {
+                        if( newstr.charAt(i) == ' ' && diff>0 ) {
+                            diff--;
+                        }
+                        else {
+                            tsb.append(newstr.charAt(i));
+                        }
+                            
+                    }
+                    newstr = tsb.reverse().toString();
+                    if( newstr.length() > str.length() ) {
+                        newstr = newstr.substring(0, str.length());
+                    }
+                }
+                else
+                    newstr = newstr + repeat(" ", str.length() - newstr.length());
+            }
+            
+            m.appendReplacement(sb, newstr);
+        }
+        m.appendTail(sb);
+        
+        return sb.toString();
+    }
+    
+    private String repeat(String str, int length) {
+        StringBuffer sb = new StringBuffer();
+        for(int i=0; i<length; ++i) sb.append(str);
+        return sb.toString();
+    }
+}

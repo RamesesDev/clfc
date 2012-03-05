@@ -1,0 +1,86 @@
+import com.rameses.annotations.*;
+import com.rameses.eserver.*;
+import com.rameses.rules.common.*;
+import com.rameses.util.*;
+
+
+public class FixRatePostingService
+{
+	@Service('DateService')
+	def dateSvc;
+	
+	@Service('LoanBillingService')
+	def billingSvc;
+	
+	@Service('LoanLedgerService')
+	def ledgerSvc;
+	
+	static final def dt_formatter = new java.text.SimpleDateFormat('yyyy-MM-dd');
+	
+
+	@ProxyMethod
+	public def postPayment( param ) {	
+		assert param.appid;
+		assert param.amount;
+		assert param.billno;
+		//assert param.mode
+		
+		def ledger = param.ledger;
+		
+		param.amount = NumberUtil.formatDecimal(param.amount, '0.00');
+		def paydate = param.date? param.date : dateSvc.serverDate;
+		if( paydate instanceof String ) paydate =  parseDate( paydate );
+		
+		def amount = param.amount;
+		def paymentSummary = [principal: 0.00, interest: 0.00, surcharge: 0.00, pastdue: 0.00];		
+		def item = [appid: param.appid, date: DateUtil.add(parseDate(ledger.lastDatePaid), '1d'), interest: 0.00, principal: 0.00];
+		
+		if( ledger.waivedIntBalance > 0 ) {
+			if( ledger.waivedIntBalance > amount )
+				item.interest = amount;
+			else
+				item.interest = ledger.waivedIntBalance;
+				
+			amount -= item.interest;
+			ledger.waivedIntBalance -= item.interest;
+		}
+		if( amount > 0 ) {
+			if( ledger.principalBalance > amount )
+				item.principal = amount;
+			else
+				ledger.principal = ledger.principalBalance;
+				
+			amount -= item.principal;
+			ledger.principalBalance -= item.principal;
+			
+			if( amount > 0 ) {
+				item.interest += amount;
+			}
+		}
+		
+		if( ledger.principalBalance <= 0.00 ) {
+			ledger.fullyPaidAmt = param.amount;
+			ledger.dateFullyPaid = paydate;
+		}
+		
+		item.principal_balance = ledger.principalBalance;
+		item.payment = param.amount;
+		item.paymentdate = paydate;
+		item.refno = param.billno;
+		
+		ledger.lastDatePaid = item.date;
+		ledger.totalPaid += param.amount;    //actual amount passed
+		ledger.totalPrincipalPaid += item.principal; //remaining amount for the principal
+		ledger.totalInterestPaid += item.interest;
+		
+		ledgerSvc.update([objid: param.appid, ledger: ledger]);
+		ledgerSvc.createDetail( item );
+		
+		return paymentSummary;
+	}
+	
+	private def parseDate( date ) {
+		def strDate = date instanceof String? date : dt_formatter.format( date );
+		return dt_formatter.parse( strDate );
+	}
+}

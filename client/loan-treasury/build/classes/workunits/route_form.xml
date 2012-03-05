@@ -1,0 +1,88 @@
+<workunit>
+    <invokers>
+        <invoker type="route:route_entry" target="popup"/>
+        <invoker type="formActions" tooltip="Add New Route"  mnemonic="a" icon="images/add16.png"     caption="Add"    action="addRoute"     permission="route.create"  visibleWhen="#{formMode=='read' || formMode=='canAdd'}" />
+        <invoker type="formActions" tooltip="Edit Route"     mnemonic="e" icon="images/edit16.png"    caption="Edit"   action="editRoute"    permission="route.edit"    visibleWhen="#{formMode=='read'}"/>
+        <invoker type="formActions" tooltip="Delete Route"   mnemonic="d" icon="images/delete16.png"  caption="Remove" action="deleteRoute"  permission="route.delete"  visibleWhen="#{formMode=='read'}"/>
+        <invoker type="formActions" tooltip="Update Route"   mnemonic="u" icon="images/save16.png"    caption="Save"   action="updateRoute"  visibleWhen="#{formMode=='edit'}"/>
+        <invoker type="formActions" tooltip="Save New Route" mnemonic="s" icon="images/save16.png"    caption="Save"   action="saveRoute"    visibleWhen="#{formMode=='add'}"/>
+        <invoker type="formActions" tooltip="Cancel"         mnemonic="c" icon="images/cancel16.png"  caption="Cancel" action="cancel"       visibleWhen="#{formMode=='add' || formMode=='edit'}"  immediate="true"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        
+        class RouteFormController{
+            @Service("RouteService")
+            def svc;
+            
+            @Binding
+            def binding;
+            
+            def entity = [:];
+            def tmp = [:];
+            def modeHandler;
+            def formMode = 'read';
+
+            void setEntity(o){
+                entity = o;
+                binding?.refresh();
+            }
+           
+            void setFormMode(o){
+                formMode = o;
+                binding?.refresh();
+            }
+            
+            void addRoute(){
+                formMode="add";
+                modeHandler(formMode, "add");
+                entity=[:];
+                binding?.focus("entity.description");
+            }
+            
+            void saveRoute(){
+                svc.createData(entity);
+                formMode="read";
+                modeHandler(formMode, null);
+            }
+            
+            void editRoute(){
+                formMode="edit";
+                tmp.clear();
+                tmp.putAll(entity);
+                modeHandler(formMode, "edit");
+            }
+            
+            void updateRoute(){
+                svc.updateData(entity);
+                formMode="read";
+                modeHandler(formMode, null);
+            }
+            
+            void deleteRoute(){
+                if(MsgBox.confirm("Are you sure you want to delete")){
+                    svc.deleteData(entity);
+                }
+                formMode="read";
+                entity=[:];
+                modeHandler(formMode, null);
+            }
+            
+            def cancel(){
+                entity.putAll(tmp);
+                tmp.clear();
+                formMode="read";                    
+                modeHandler(formMode, "cancel");
+            }
+        }
+        ]]> 
+    </code>
+    <pages>
+        <page template="route.ui.RouteForm"/>
+    </pages>
+</workunit>

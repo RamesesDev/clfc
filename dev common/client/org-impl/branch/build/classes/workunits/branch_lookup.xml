@@ -1,0 +1,23 @@
+<workunit extends="org/org_lookup.xml">
+     <invokers>
+        <invoker type="branch:lookup" target="popup" caption="Lookup Branch"/>
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        
+        public class BranchLookupController extends org.OrgLookup {
+            
+            @Binding
+            def binding;
+        
+            @Service("BranchService")
+            def service;
+            
+            String orgType = "branch";
+        }
+        ]]>
+    </code>
+
+</workunit>

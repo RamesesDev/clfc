@@ -1,0 +1,23 @@
+<workunit extends="org/org_lookup.xml">
+     <invokers>
+        <invoker type="businessunit:lookup" target="popup" caption="Lookup Business Unit"/>
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        
+        public class BusinessUnitLookupController extends org.OrgLookup {
+            
+            @Binding
+            def binding;
+        
+            @Service("BusinessUnitService")
+            def service;
+            
+            String orgType = "businessunit";
+        }
+        ]]>
+    </code>
+
+</workunit>

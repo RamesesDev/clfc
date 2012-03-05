@@ -1,0 +1,38 @@
+<schema>
+	<element name="check_voucher" tablename="check_voucher">
+		<field name="objid" primary="true"/>
+		<field name="refid"/>
+		<field name="refno"/>
+		<field name="reftype"/>
+		<field name="voucherno"/>
+		<field name="bankname"/>
+		<field name="acctno"/>
+		<field name="checkno"/>
+		<field name="checkdate"/>
+		<field name="dtfiled"/>
+		<field name="payeeid"/>
+		<field name="payeename"/>
+		<field name="payeetype"/>
+		<field name="particulars"/>
+		<field name="amount"/>
+		<field name="currency"/>
+		<field name="disbursement_type"/>
+		<field name="payment_type"/>
+		<field name="jvid"/>
+		<field name="state"/>
+		<complex name="extended" serializer="true" merge="true"/>
+	</element>
+
+	<element name="detail" tablename="check_voucher_detail">
+		<field name="objid" primary="true"/>
+		<field name="parentid"/>
+		<field name="acctid"/>
+		<field name="acctcode"/>
+		<field name="accttitle"/>
+		<field name="fund"/>
+		<field name="amount"/>
+		<field name="currency"/>
+		<complex name="extended" serializer="true" merge="true"/>
+	</element>
+</schema>
+

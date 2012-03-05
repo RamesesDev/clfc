@@ -1,0 +1,8 @@
+<folders>
+    <folder id="menu">
+        <folder id="services" caption="Services">
+            <folder id="contact" caption="Contact Management"/>
+        </folder>
+    </folder>
+</folders>
+

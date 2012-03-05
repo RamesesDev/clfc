@@ -1,0 +1,61 @@
+<script>
+	$put(
+		"assetOthers", 
+		new function() {
+			this.application;
+			this.assetOthers;
+			this.onload = function() {
+				setTimeout( function(){ $('.asset a').lightBox({fixedNavigation:true}); }, 100 );
+			};
+		}
+	);
+</script>
+<style>
+   body{font-family:arial;font-size:8px;}
+   h3.white { color: #ffffff; }
+</style>
+<div>
+	<body>
+		<table model="listModel" border="0" width="100%" cellspacing="0" class="grid">
+			<tr><td width=130>Name :</td>
+			<td><label context="assetOthers"><b>#{assetOthers.subject}</b></label></td></tr>
+			<tr><td>Registered Name :</td>
+			<td><label context="assetOthers"><b>#{assetOthers.registeredName}</b></label></td></tr>
+			<tr><td>Use :</td>
+			<td><label context="assetOthers"><b>#{assetOthers.use}</b></label></td></tr>
+			<tr><td>Mode of Acquisition :</td>
+			<td><label context="assetOthers"><b class="olive">#{assetOthers.modeOfAcquisition}</b></label></td></tr>
+			<tr><td>Date Acquired :</td>
+			<td><label context="assetOthers"><b class="red"> #{assetOthers.dateAcquired? assetOthers.dateAcquired: 'Not specified' }</b></label></td></tr>
+			<tr><td>Appraised Value :</td>
+				<td>
+					<label context="assetOthers" visibleWhen="#{assetOthers.appraisedvalue}">
+						<b>Php</b><b class="teal"> #{assetOthers.appraisedvalue.formatDecimal()}</b>
+					</label>
+					<label context="assetOthers" visibleWhen="#{!assetOthers.appraisedvalue}">
+						<b>Php</b> <b class="teal">0.00</b>
+					</label>
+				</td>
+			</tr>
+			<tr><td>Remarks :</td>
+			<td><label context="assetOthers"><b>#{assetOthers.remarks.toUpperCase()}</b></label></td></tr>
+		</table>
+		<hr/>
+		Photo(s):<br/>
+		<div style="text-align: center" context="assetOthers" visibleWhen="#{!assetOthers.photos}">
+			<i><b class="maroon">No Photo at present.</b></i>
+		</div>	
+		<div class="asset-box">
+			<nobr>
+				<ul class="asset" context="assetOthers" items="assetOthers.photos" varName="item">		
+					<li style="display: inline">
+						<a href="/clfc-photos/?b=#{application.branchcode}&a=#{application.objid}&id=#{item.objid}"
+						   title="#{item.name? item.name : ''}">
+							<img src="/clfc-photos/?b=#{application.branchcode}&a=#{application.objid}&id=#{item.objid}" height="100"/>
+						</a>
+					</li>
+				</ul>
+			</nobr>
+		</div>
+	</body>
+</div>

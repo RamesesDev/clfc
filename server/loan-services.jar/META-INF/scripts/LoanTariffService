@@ -1,0 +1,125 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+
+import java.util.*;
+
+
+
+class LoanTariffService {
+
+	@PersistenceContext('java:loan')
+	def em;
+
+	@Resource("RuleMgmt")
+	def ruleMgmt;
+
+	@Service('DateService')
+	def datesvc;
+
+
+
+	@ProxyMethod
+	public def getList( param ) {
+		def qry = em.sqlContext.createQuery('select * from loan_charge where description like ?');
+		if ( param.description )
+			param.description = param.description + '%';
+		else
+			param.description = '%';
+
+		qry.setParameter(1, param.description);
+
+		if ( param._start ) qry.setFirstResult( param._start );
+		if ( param._limit ) qry.setMaxResults( param._limit );
+
+		return qry.resultList
+	}
+
+	@ProxyMethod
+	public def read( rule ) {
+		return em.read('loancharge', rule);
+	}
+
+	@ProxyMethod
+	public def save( rule ) {
+		rule.state = 'DRAFT';
+		em.save('loancharge', rule, true, true);
+		return rule;
+	}
+
+	@ProxyMethod
+	public void delete( rule ) {
+		em.delete("loancharge", rule);
+	}
+
+	@ProxyMethod
+	public def undeploy( rule ) {
+		def pkgName = 'clfc.loan.fees.R' + rule.objid.hashCode().toString().replaceAll('-', '_');
+		ruleMgmt.removeRulePackage( "loan_fees", '', pkgName);
+
+		rule.state = 'DRAFT';
+		em.save( "loancharge", rule );
+		return rule;
+	}
+
+	@ProxyMethod
+	public def deploy( rule ) {
+		def ruleText = generateRule(rule);
+		println ruleText;
+		def pkgName = 'clfc.loan.fees.R' + rule.objid.hashCode().toString().replaceAll('-', '_');
+		ruleMgmt.removeRulePackage( "loan_fees", '', pkgName, false ); //remove package without redeploy
+		ruleMgmt.addRulePackage( "loan_fees", '', pkgName, ruleText, true ); //add package and redeploy
+
+		rule.state = 'DEPLOYED';
+		em.save( "loancharge", rule );
+		return rule;
+	}
+
+
+	private def generateRule(def param){
+		StringBuffer sb = new StringBuffer();
+
+		sb.append(" package clfc.loan.fees.R" + param.objid.hashCode().toString().replaceAll('-', '_') + ";\n\n");
+		sb.append(" import clfc.loan.fees.LoanApplication;\n");
+		sb.append(" import java.util.*;\n");
+		sb.append(" import java.math.*;\n\n");
+		sb.append(" global java.util.List result;\n");
+		int i = 0;
+		param.list.each(){o->
+		sb.append("\n rule \"rule" + ++i + "\"\n");
+		sb.append(spaces(5) + "when\n");
+		sb.append(spaces(9) + "LoanApplication(");
+		if( param.appType == 'new' )
+			sb.append("loancount == 1");
+		else {
+			if( !param.fromtimes )
+				sb.append("loancount > 1");
+			else
+				sb.append("loancount >=" + (param.fromtimes+1));
+			
+			if( param.totimes ) sb.append(", loancount <=" + (param.totimes+1) );
+		}
+		
+		sb.append(", \$amount: amount >= " + o.from);
+			
+		if(o.to) 
+			sb.append(", amount < " + o.to + " );\n");
+		else	
+			sb.append(" );\n");
+			
+		sb.append(spaces(5) + "then\n");
+		sb.append(spaces(9) + "Map map = new HashMap();\n");
+		sb.append(spaces(9) + "map.put( \"acctid\", \"" + param.account.objid + "\" );\n");
+		sb.append(spaces(9) + "map.put( \"acctcode\", \"" + (param.account.code? param.account.code : "") + "\" );\n");
+		sb.append(spaces(9) + "map.put( \"accttitle\", \"" + (param.account.title? param.account.title : "") + "\" );\n");
+		sb.append(spaces(9) + "map.put( \"amount\", new BigDecimal( " + o.amount + " ) );\n");
+		sb.append(spaces(9) + "result.add( map );\n");
+		sb.append(" end\n");
+		}
+		return sb.toString();
+	}
+
+	public String spaces(int size){
+		return String.format(("%" + size + "s"), " ");
+	}
+
+}

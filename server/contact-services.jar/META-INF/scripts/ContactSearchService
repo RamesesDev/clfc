@@ -1,0 +1,76 @@
+import com.rameses.annotations.*;
+import com.rameses.util.*;
+
+class ContactSearchService {
+
+	@PersistenceContext("java:contact")
+	def em; 
+	
+	@Env
+	def env;
+
+	@ProxyMethod
+	public def search( def criteria ) {
+        if ( criteria.custno ) 
+			return findByContactno( [contactno: criteria.custno] );
+        else if( criteria.lastname || criteria.firstname ) 
+			return findByName( criteria );
+        else
+			return [];
+	}
+	
+	
+	@ProxyMethod
+	public def findByName( def param ) {
+		if( !param.lastname )
+			throw new Exception("Please include lastname in search");
+
+		def maxScore = 0.88;
+		def qry = em.sqlContext.createNamedQuery( 'contact:findByName' );
+		
+		def list = [];
+		qry.setParameters( param ).resultList.each {
+			double score = JaroWinkler.compare( it.lastname.toUpperCase(), param.lastname.toUpperCase() );
+			if( score > maxScore ) {
+				boolean pass = true;
+				if( param.firstname && it.firstname) {
+					pass = false;
+					
+					//test each name if firstname is composed of multi names. If there is at least one instance
+					//that passes, it is already accepted.
+					for(fname in it.firstname.split("\\s{1,}")) {
+						double fscore = JaroWinkler.compare( fname.trim().toUpperCase(), param.firstname.toUpperCase() );
+						if(fscore > maxScore) {
+							pass = true;
+							score = (score + fscore)/2.0;
+							break;
+						}
+					}
+				}
+				if(pass) {
+					it.score = score;
+					it.name = it.lastname + ", " + it.firstname;
+					list.add( it );
+				}
+			}
+		}
+		if(list.size()>50)
+			return list.sort{ 1 - it.score }[0..50];
+		else
+			return list.sort{ 1-it.score};
+	}
+	
+	@ProxyMethod
+	public def findByContactno( def param ) {
+		return em.sqlContext.createNamedQuery( "contact:findByContactno" ).setParameters(param).resultList; 
+	}
+	
+	@ProxyMethod
+	public def findConnections( param ) {
+		return em.sqlContext.createNamedQuery("contact:findConnections").setParameter('principal', param.principal).resultList;
+	}
+	
+	
+	
+
+}

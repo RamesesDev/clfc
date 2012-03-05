@@ -1,0 +1,285 @@
+<html>
+	<head>
+		<link href="../../js/lib/css/jquery-ui/jquery.css" rel="stylesheet" />
+		<link href="../../css/secured.css" rel="stylesheet" />
+		<link href="style.css" rel="stylesheet" />
+		<script src="../../js/lib/jquery-all.js"></script>
+		<script src="../../js/lib/rameses-lib.js"></script>
+		<script>
+			InvokerUtil.register( {"id":"loan:collateralInfo", "title":"Collateral Info","page":"collateralInfo.html","context":"collateralInfo"}  );
+			InvokerUtil.register( {"id":"loan:loan_approval", "title":"Collateral Info","page":"approval.html","context":"loan_approval"}  );
+			
+			$put(
+				"loan_approval", 
+				new function() {			
+					var _this = this;
+					this._controller;
+					
+					this.entity;
+					this.info;
+					this.selectHandler;
+					this.annotation;
+					this.selectedOption;
+					this.application;
+					
+					this.selected;
+					this.collateralInfo;
+					this.collateral;
+					this.selectedObj = {};
+					
+					this.mustList;
+					
+					
+					var collateralHandler = function() {
+						_this.mustList = [];
+						var app = $ctx('loan').selected;
+						console.log( app.appliancelist );
+						for(var i=0; i<app.appliancelist.length; ++i) {
+							var a = app.appliancelist[i];
+							if( a.must == true ) _this.mustList.push(a);
+						}
+						_this.mustModel.load();
+					};
+					
+					this.mustModel = {
+						fetchList: function(){ return _this.mustList }
+					};
+					
+					this.viewCollateral = function() {
+						var p = new PopupOpener('loan:collateralInfo', {    
+								//branchcode: this.selected.branchcode,
+								//appid: this.selected.objid,
+								collateral: this.selectedObj.collateral,
+								application: this.selected,
+								closeHandler: collateralHandler
+						});
+						p.title = 'Must Collateral(s)';
+						p.options = {width: 800, height: 580};
+						return p
+					}
+
+					this.viewOffer = function() {
+						var p = new PopupOpener('loan:offer', {    
+								//branchcode: this.selected.branchcode,
+								//appid: this.selected.objid,
+								offer: this.selectedObj.offer
+						});
+						p.title = 'Offeral Form';
+						p.options = {width: 625, height: 460};
+						return p
+					}
+
+					this.propertyChangeListener = {
+						'info.approvalType' : function(v) {
+							if( v == 'approved' )
+								delete _this.info.amountapprovedOptions;
+							else
+								//_this.info.amountapprovedOptions = [];
+								_this.info.approved = [];
+						}
+					};
+
+					// Mouse Click event on Collateral(s) Attached
+					/*$("#a").hover(
+						function(){
+							//$("#z").css('display','block');
+							$("#z").fadeIn();
+						},
+						function(){
+							//$("#z").css('display','none');
+							$("#z").fadeOut();
+						}
+					);
+					*/
+					
+					//Mouse Focus event on Collateral(s) Attached
+					var flgClick=false;
+					$("#a").click(function(){
+						if(flgClick){
+							$("#z").fadeIn();
+							flgClick=false;
+						}
+						else{
+							$("#z").fadeOut();
+							flgClick=true;
+						}
+					});
+					
+					this.onload = function() {
+						this.info = ObjectUtil.clone( this.entity );
+						//if( !this.info.approvalType )
+						//	this.info.approvalType = 'approved';
+							
+						//if( this.info.amountapprovedOptions )
+						//	this.selectedOption = this.info.amountapprovedOptions[0];
+					};
+					
+					this.close = function() {
+						return "_close";
+					};
+					
+					this.approve = function()
+					{
+						if (!confirm('You are about to approve this transaction. Proceed?')) return;
+
+						if( !this.annotation || !this.annotation.trim() )
+							throw new Error('Please specify the annotation.');
+
+						for(var i in this.info) this.entity[i] = this.info[i];
+						
+						if (this.selectHandler) this.selectHandler(this.annotation);
+							return "_close";
+						
+					};
+					
+					this.addCreditAmount = function() {
+						var amt = prompt("Enter an amount.", "");
+						if( amt ) {
+							amt = parseFloat(amt);
+							if( isNaN(amt) )
+								throw new Error('Invalid amount entered.');
+							
+							var itm = {amount: amt, remarks: ''};
+							//this.info.amountapprovedOptions.push( itm );
+							if( !this.selectedOption ) this.selectedOption = itm;
+						}
+					}
+					
+					this.removeCreditAmount = function() {
+						if( !this.selectedOption ) return;
+						if( !confirm('Are you sure you want to remove the selected amount?') ) return;
+						
+						var so = this.selectedOption, op = this.info.amountapprovedOptions;
+						for(var i=0; i<op.length; ++i) {
+							if( so.amount == op[i].amount ) {
+								op.splice(i, 1);
+								break;	
+							}
+						}
+						this.selectedOption = null;
+					}
+
+					this.addIncreaseAmount = function() {
+						var amt = prompt("Enter an amount.", "");
+						if( amt ) {
+							amt = parseFloat(amt);
+							if( isNaN(amt) )
+								throw new Error('Invalid amount entered.');
+							
+							var itm = {amount: amt, remarks: ''};
+							//this.info.amountapprovedOptions.push( itm );
+							if( !this.selectedOption ) this.selectedOption = itm;
+						}
+					}
+					
+					this.removeIncreaseAmount = function() {
+						if( !this.selectedOption ) return;
+						if( !confirm('Are you sure you want to remove the selected amount?') ) return;
+						
+						var so = this.selectedOption, op = this.info.amountapprovedOptions;
+						for(var i=0; i<op.length; ++i) {
+							if( so.amount == op[i].amount ) {
+								op.splice(i, 1);
+								break;	
+							}
+						}
+						this.selectedOption = null;
+					}
+				}
+			);
+		</script>
+		<style>
+			.form-lbl { width: 150px; display: inline-block; }
+			.selection { background: #fff; border: 1px inset #aaa; }
+			.selection td { padding: 3px 5px; cursor: pointer; }
+			.selection .selected { background: #ccc; }
+		</style>
+	</head>
+	<body>
+		<fieldset>
+			<legend>APPROVAL</legend>
+			<div>
+				<table>
+					<td valign="top" width="100px">
+						<tr>
+							<td>Applied Amount:</td>
+							<td colspan="3">	
+								<label context="loan_approval">
+									<b>#{info.loanamount.formatDecimal()}</b>								
+								</label>
+								<input type="number" context="loan_approval"/><br/>
+								<!--<input type="button" context="loan_approval" name="addCreditAmount" value="Add Amount" immediate="true"/>
+								<input type="button" context="loan_approval" name="removeCreditAmount" value="Remove Amount" immediate="true"/>-->
+							</td>
+						</tr>
+						<tr>
+							<td>Absences:</td>
+							<td colspan="3">
+								A.) Policy
+									<label context="loan_approval">
+										<input type="number" context="loan_approval"/>
+										<!--<input type="text" id="textbox" value="Search" context="loan_approval"
+											onclick="if(this.value=='Search'){this.value=''; this.style.color='#000'}"
+											onblur="if(this.value==''){this.value='Search'; this.style.color='#555'}"
+										/>-->
+									</label>
+								B.) Provisions
+									<label context="loan_approval">
+										<input type="number" context="loan_approval"/>
+									</label>
+							</td>
+						</tr>
+						<tr>
+							<td>Credit Limit:</td>
+							<td colspan="3">
+								<label context="loan_approval">
+									<input type="number" context="loan_approval"/><br/>
+									<!--<input type="button" context="loan_approval" name="addCreditAmount" value="Add Amount" immediate="true"/>
+									<input type="button" context="loan_approval" name="removeCreditAmount" value="Remove Amount" immediate="true"/>-->
+								</label>
+								<!--<div style="width:100px;line-height:19px; text-align:right; font-size:11px; font-weight: bold;">-->
+							</td>
+						</tr>
+						<tr>
+							<td>Increase:</td>
+							<td colspan="3">
+								<label context="loan_approval">
+									<input type="number" context="loan_approval"/><br/>
+									<!--<input type="button" context="loan_approval" name="addIncreaseAmount" value="Add Amount" immediate="true"/>
+									<input type="button" context="loan_approval" name="removeIncreaseAmount" value="Remove Amount" immediate="true"/>-->
+								</label>
+							</td>
+						</tr>
+					</td>	
+				</table>
+				<div id="xyz">
+					<a href="#" context="loan_approval" name="viewCollateral" title="Click to View/Add Must Collateral(s)">
+						<b class="green">Must</b>
+					</a><br/>
+					<table context="loan_approval" model="mustModel">
+						<tbody>
+							<tr>
+								<td>#{model} / #{serial} / #{brand}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<br/>
+					Annotation
+				<br/>
+				<textarea context="loan_approval"  name="annotation" rows="7" style="width:100%;" placeholder="Write your annotations here..."></textarea>
+				<div class="dialog-buttons">
+					<input type="button"  context="loan_approval" name="approve" value="Approve"/>
+					<input type="button"  context="loan_approval" name="close" value="Cancel" immediate="true"/>
+				</div>
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>
+				<a id="a" href="#" title="Click to View/Add Offer" context="loan_approval" name="viewOffer">
+					<b>OFFER</b>
+				</a>
+			</legend>
+		</fieldset>
+	</body>
+</html>

@@ -1,0 +1,46 @@
+<workunit>
+    
+    <invokers>
+        <invoker type="lookup:category" caption="Lookup Account" /> 
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class LookupAccountCategoryController {
+
+            @Service("GLService")
+            def service;
+            
+            def selectHandler;
+            def selected;
+            
+            @Script("GLAccountUtil")
+            def glmodel;
+            
+            public def getRootnodes() {
+                return glmodel.rootNodes;    
+            }
+            
+            public def getHandler() {
+                return glmodel.treeHandler;
+            }
+        
+            public def select() {
+                if(!selected.item) throw new Exception("There is no item in selected object");
+                selectHandler( selected.item );
+                return "_close";
+            }
+            
+        }
+        ]]>
+    </code>
+    
+    <pages>
+        <page template="gl.account.ui.LookupAccountCategoryPage"/>
+    </pages>    
+    
+</workunit>

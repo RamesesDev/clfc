@@ -1,0 +1,100 @@
+<workunit>
+    <invokers>
+        <invoker folderid="/menu/mgmt/loan" caption="Loan Settings" action="open" target="popup" permission="loan_setting.update"/>
+                
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        import java.io.*;
+        import com.rameses.io.*;
+
+        public class LoanSettingController {
+            
+            @Service('Var')
+            def svc;
+            
+            @Binding
+            def binding;
+            
+            def entity;
+            def mode = 'read';
+            
+            
+            def create() {
+                return [
+                    receivable_acct : [:],
+                    interest_acct : [:],
+                    surcharge_acct : [:],
+                    curr_principal_acct : [:],
+                    curr_interest_acct : [:],
+                    past_due_principal_acct: [:],
+                    past_due_interest_acct : [:]
+                ];
+            }
+            
+            void open() {
+                entity = create();
+                entity.putAll(svc.get("loan_settings"));
+                if( entity == null ) entity = create();
+            }
+            
+            void save() {
+                svc.set("loan_settings", entity);
+            }
+            
+            void toggle() {
+                if( mode == 'read' ) {
+                    open();
+                    mode = 'edit';
+                }
+                else {
+                    save();
+                    mode = 'read';
+                }
+            }
+            
+            def lookupRA() {
+                return lookupAcct('receivable_acct');
+            }
+            
+            def lookupIA() {
+                return lookupAcct('interest_acct');
+            }
+            
+            def lookupSA() {
+                return lookupAcct('surcharge_acct');
+            }
+            
+            def lookupCPA() {
+                return lookupAcct('curr_principal_acct');
+            }
+            
+            def lookupPDIA() {
+                return lookupAcct('past_due_interest_acct');
+            }
+            
+            def lookupAcct( field ) {
+                return InvokerUtil.lookupOpener("revenueaccounts:lookup", [
+                    selectHandler: { o ->
+                        entity[field] = o? o : [:];
+                        binding.refresh("entity.${field}.*");
+                    }
+                ]);
+            }
+        }
+        
+        ]]>
+    </code>
+    
+    <pages>
+        <page template="loan.settings.LoanSettingsPage" />
+    </pages>
+</workunit>

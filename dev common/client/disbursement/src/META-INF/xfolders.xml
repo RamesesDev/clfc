@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<folders>
+    <folder id="menu">
+        <folder id="treasury" caption="Treasury" >
+            <folder id="disbursement" caption="Disbursement"/>
+        </folder>
+    </folder>
+</folders>

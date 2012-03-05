@@ -1,0 +1,38 @@
+<html>
+	
+	<head>
+		<link rel="stylesheet" href="../js/lib/css/jquery-ui/jquery.css" type="text/css" />
+		<script src="../js/lib/jquery-all.js" ></script>
+		<script src="../js/lib/rameses-lib.js" ></script>
+		
+		<script>
+			$put("test", 
+				new function() {
+					
+					this.choice;
+					this.choices = ["type1", "type2", "type3"]
+					this.remarks;
+					
+					this.showEntries = function() {
+						alert( 'choice: ' + this.choice + ', ramarks: ' + this.remarks );
+					};
+				}
+			);
+		</script>
+	</head>
+	<body>	
+		Choices:
+		<br>
+		
+		<select items="choices" context="test" name="choice" ></select>
+		<label context="test" depends="choice">You have selected #{choice}</label>
+		<br/>
+		<label context="test" visibleWhen="#{choice == 'type2'}" depends="choice">
+			<b>Remarks</b>
+			<input type="text" context="test" name="remarks" required="true"/>
+		</label>
+		<br/>
+		<input type="button" context="test" value="Show Entries" name="showEntries" />
+		
+	</body>
+</html>	

@@ -1,0 +1,226 @@
+package clfc.loan.payment;
+
+import com.rameses.util.*;
+import java.util.*;
+import java.math.*;
+
+global com.rameses.rules.common.RuleAction action;
+
+
+#===============================================
+#	Facts
+#===============================================
+
+declare LedgerFact
+    maturityDate: 		java.util.Date
+    nextPaymentDate:	java.util.Date
+    
+	dailyPayment: 		java.math.BigDecimal
+	dailyInt:			java.math.BigDecimal
+	
+	underpaymentrate:	java.math.BigDecimal
+	absentrate:			java.math.BigDecimal
+	pastduerate:		java.math.BigDecimal
+	
+	principalBalance:	java.math.BigDecimal
+	daysDue:			int	
+	daysCanPay:			int
+	
+	daysExempted: 		int
+	
+	totalDue:			java.math.BigDecimal
+end
+
+declare PaymentFact
+	date:				java.util.Date	
+	amount:				java.math.BigDecimal
+	underpayment:		boolean
+end
+
+declare LatePaymentFact
+	date:				 java.util.Date
+	amount:				 java.math.BigDecimal
+	penalty_up:			 java.math.BigDecimal
+	penalty_up_computed: boolean
+end
+
+
+
+#===============================================
+#	Rules
+#===============================================
+
+# ---- REGULAR PAYMENTS -----
+
+rule "determine if payment is below total due"
+	dialect "mvel"
+	no-loop
+	salience 1000
+	
+	when
+		LedgerFact( $td: totalDue )
+		$p: PaymentFact( amount < $td )
+	then
+		$p.underpayment = true;
+		
+		System.out.println( "checking underpayment " );
+		
+		drools.update( $p );
+end
+
+rule "regular payment"
+	dialect "mvel"
+
+	when
+		LedgerFact( $npd: nextPaymentDate, $dp: dailyPayment == totalDue, $di: dailyInt, $md: maturityDate )
+		PaymentFact( $date: date <= $npd && date <= $md, amount == $dp )
+	then 
+		Map map = new HashMap();
+		map.put( "date", $npd );
+		map.put( "principal", $dp.subtract($di) );
+		map.put( "interest", $di );
+		
+		System.out.println("computing regular payment");
+		
+		action.execute( "payment", new Object[]{ map } );
+end
+
+rule "regular underpayment payment"
+	dialect "mvel"
+	
+	when
+		LedgerFact( $npd: nextPaymentDate, $dp: dailyPayment, $upr: underpaymentrate, $di: dailyInt, $md: maturityDate )
+		PaymentFact( $date: date <= $npd && date <= $md, $amt: amount, underpayment == true )
+	then
+		penalty_up = NumberUtil.formatDecimal( ($dp - $amt) * $upr, "0.00");
+		principal = $amt - NumberUtil.formatDecimal( $di + penalty_up , "0.00" );
+	
+		Map map = new HashMap();
+		map.put( "date", $npd );
+		map.put( "principal", principal );
+		map.put( "interest", $di );
+		map.put( "penalty_up", penalty_up );
+		
+		System.out.println("computing regular underpayment");
+		
+		action.execute( "payment", new Object[]{ map } );
+end
+
+rule "advance payment"
+	dialect "mvel"
+	
+	when
+		$l: LedgerFact( $npd: nextPaymentDate, $dp: dailyPayment, $di: dailyInt, $md: maturityDate )
+		$p: PaymentFact( $date: date == $npd && date <= $md, $amt: amount > $dp )
+	then		
+		Map map = new HashMap();
+		map.put( "date", $npd );
+		map.put( "principal", $dp - $di );
+		map.put( "interest", $di );
+				
+		action.execute( "payment", new Object[]{ map } );
+		
+		$l.nextPaymentDate = DateUtil.add( $date, '1d' );
+		$p.amount = $amt - $dp;
+		
+		System.out.println("computing advance payment");
+			
+		drools.update( $l );
+		drools.update( $p );
+end
+
+
+# -----   LATE PAYMENTS ------
+
+rule "calculate for late payment"
+	dialect "mvel"
+	
+	when
+		$l: LedgerFact( 
+			   $npd: nextPaymentDate, $md: maturityDate, $dp: dailyPayment, $di: dailyInt, 
+			   $abr: absentrate, $upr: underpaymentrate, $dd: daysDue 
+		    )
+		$p: PaymentFact( $date: date > $npd && date <= $md, $amt: amount )
+	then
+		latePayment = new LatePaymentFact();
+		latePayment.date = $npd;
+		latePayment.amount = $amt;
+		latePayment.penalty_up = 0.00;
+		
+		System.out.println("computing late payment from " + $npd );
+
+		drools.insert( latePayment );
+end
+
+rule "calculate underpayment penalty for late payment"
+	dialect "mvel"
+	no-loop
+	salience 100
+	
+	when
+		LedgerFact( $td: totalDue, $upr: underpaymentrate )
+		PaymentFact( underpayment == true )
+		$lp: LatePaymentFact( $amt: amount, penalty_up_computed == false )
+	then
+		penalty_up = NumberUtil.formatDecimal(($td - $amt) * $upr, "0.00");
+		
+		$lp.penalty_up_computed = true;
+		$lp.penalty_up = penalty_up;
+		$lp.amount = $lp.amount - $lp.penalty_up;
+		
+		System.out.println( "computing underpayment penalty for late payment" );
+		
+		drools.update( $lp );
+end
+
+rule "pay previous interest and absent penalty"
+	dialect "mvel"
+	salience 90
+
+	when
+		$l: LedgerFact($di: dailyInt, $dp: dailyPayment, $abr: absentrate)
+		$p: PaymentFact( $currentDate: date )
+		$lp: LatePaymentFact( amount > 0, $date: date < $currentDate )
+	then
+		penalty = NumberUtil.formatDecimal($dp * $abr, "0.00");
+
+		Map map = new HashMap();
+		map.put( "date", $date );
+		map.put( "principal", 0.00 );
+		map.put( "interest", $di );
+		map.put( "penalty_ab", penalty );
+		
+		System.out.println( "computing absent penalty" );
+
+		action.execute( "payment", new Object[]{ map } );
+		
+		$lp.date = DateUtil.add( $lp.date, "1d" );
+		$lp.amount = NumberUtil.formatDecimal($lp.amount - $di - penalty, "0.00");
+		drools.update( $lp );
+end
+
+rule "pay principal and current interest and absent penalty"
+	dialect "mvel"
+	salience 80
+
+	when
+		LedgerFact( $di: dailyInt )
+		PaymentFact( $currentDate: date )
+		$lp: LatePaymentFact($amt: amount > 0, $date: date == $currentDate )
+	then
+		//do not subtract penalty_up, it is already subtracted to the amount
+		amount = $amt - $di;
+	
+		Map map = new HashMap();
+		map.put( "date", $date );
+		map.put( "principal", amount );
+		map.put( "interest", $di );
+		map.put( "penalty_up", $lp.penalty_up );
+
+		System.out.println( "computing last payment" );
+
+		action.execute( "payment", new Object[]{ map } );
+end
+
+
+

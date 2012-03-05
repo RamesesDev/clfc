@@ -1,0 +1,11 @@
+<schema>
+
+	<element name="loan_calendar" tablename="loan_calendar">
+        <field name="date" primary="true" />
+        <field name="year"/>
+		<field name="month"/>
+		<field name="description"/>
+	</element>
+
+</schema>
+

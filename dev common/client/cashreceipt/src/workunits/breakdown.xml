@@ -1,0 +1,89 @@
+<workunit>
+    
+    <invokers>
+        <invoker type="cashreceipt:breakdown" action="init"/>
+    </invokers>
+    
+    <code>
+        <![CDATA[
+        
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        
+        public class CashReceiptBreakdownController  {
+        
+            @Binding
+            def binding;
+        
+            def list;
+            def totalBreakdown = 0.0;
+            def totalAmount = 0.0;
+            def selection;
+            def mode = 'create';
+
+                        
+            def listHandler =[
+                getRows: { return list.size() + 1 },
+                getColumns:{
+                    return[ new Column(name:"caption", caption:"Denomination", alignment: 'right'),
+                            new Column(name:"qty", caption:"Quantity", editable: true, type:"decimal", alignment:"right"),
+                            new Column(name:"amount", caption:"Amount", type:"decimal")
+                    ]
+                },
+                fetchList:{o->
+                    return list;
+                },
+                onUpdateItem:{o->
+                    o.qty = (!o) ? 0.0 : o.qty;
+                    if( o.denomination > 1.00 ) 
+                        o.qty = (int) o.qty;
+                    
+                    def prevAmt = o.amount;
+                    o.amount = o.denomination * o.qty;
+                    totalBreakdown += ( o.amount - prevAmt );
+                }
+            ] as SubListModel;
+            
+            
+            public void init() {
+                if( this.list == null ) {
+                    this.list = [
+                        1000.00, 500.00, 200.00, 100.00, 50.00, 20.00, 10.00, 1.00
+                    ]
+                    .collect{ 
+                        [caption: (it > 1.00? it+'' : 'Coins'), denomination:it, qty:0, amount:0.0]
+                    };
+                }
+            }
+            
+            void setTotalAmount( amt ) {
+                this.totalAmount = amt;
+                totalBreakdown = 0.00;
+                this.list = null;
+                init();
+                listHandler.load();
+                binding?.refresh('totalAmount');
+            }
+            
+            void setList( brkList ) {
+                this.list = brkList;
+                totalBreakdown = list*.amount.sum();
+                listHandler.load();
+            }
+            
+            void setMode( md ) {
+                this.mode = md;
+                binding?.refresh();
+            }
+                                                
+        }
+        
+        ]]>
+    </code>
+
+    <pages>
+        <page template="cashreceipt.ui.CashBreakdownPage"/>
+    </pages>
+    
+</workunit>

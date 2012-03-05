@@ -1,0 +1,79 @@
+<workunit>
+    <invokers>
+        <invoker folderid="menu/dev" action="createNew" caption="ScriptServiceAnalyzer"/>
+            <!--permission="application.removePayment"/>-->
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        import javax.swing.*;
+        import com.rameses.io.*;
+        import java.io.*;
+        
+        public class ScriptServiceAnalyzerController{
+            static def APPROVE = JFileChooser.APPROVE_OPTION;
+        
+            @Service("ScriptServiceAnalyzer")
+            def svc;
+        
+            def status;
+            def file;
+            def script;
+            def result;
+            
+            def _fileChooser;
+            
+            def getFileChooser() {
+                if( _fileChooser ) return _fileChooser;
+                
+                _fileChooser = new JFileChooser();
+                return _fileChooser;
+            }
+            
+            void execute() {
+                result = svc.execute( script );
+            }
+            
+            void createNew() {
+                file = null;
+                script = "";
+                status = "(New) Unsaved";
+            }
+            
+            void save() {
+                if( !file ) {
+                    if( fileChooser.showSaveDialog(null) == APPROVE ) {
+                        def f = fileChooser.selectedFile;
+                        if( f.exists() && !MsgBox.confirm('File already exists. Are you sure you want to replace it?') ) 
+                        {
+                            return;
+                        }
+                        file = f;
+                    }
+                }
+                if( file ) {
+                    def bis = new ByteArrayInputStream(script.bytes);
+                    def fos = new FileOutputStream(file);
+                    StreamUtil.write(bis, fos);
+                    status = "Filename: $file";
+                    MsgBox.alert('Script saved.');
+                }
+            }
+            
+            void open() {
+                if( fileChooser.showOpenDialog(null) == APPROVE ) {
+                    file = fileChooser.selectedFile;
+                    status = "Filename: $file";
+                    script = StreamUtil.toString(new FileInputStream(file));
+                }
+            }
+            
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="dev.ui.ScriptServiceAnalyzerPage"/>
+    </pages>
+</workunit>

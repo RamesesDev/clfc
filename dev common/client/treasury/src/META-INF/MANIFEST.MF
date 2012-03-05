@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.6.5
+Created-By: 1.5.0_15-b04 (Sun Microsystems Inc.)
+Main-Class: treasury.tester.Main
+Class-Path: lib/swing-layout-1.0.jar lib/rameses-common.jar lib/ramese
+ s-client-ui.jar lib/rameses-client-ui-support.jar lib/osiris2-framewo
+ rk.jar lib/osiris2-client-ui.jar lib/osiris2-client-ui-ext.jar lib/os
+ iris2-report.jar lib/rameses-bi-tools.jar lib/client-common-lib.jar l
+ ib/invokertest.jar lib/commons-beanutils-1.8.0.jar lib/commons-collec
+ tions-3.2.1.jar lib/commons-digester-1.7.jar lib/commons-logging-1.1.
+ jar lib/iText-2.1.0.jar lib/jasperreports-3.5.3.jar lib/jdt-compiler-
+ 3.1.1.jar lib/png-encoder-1.5.jar lib/poi-3.2-FINAL-20081019.jar lib/
+ groovy-all-1.5.5.jar lib/juel-2.1.2.jar lib/splaf.jar lib/shared.jar
+X-COMMENT: Main-Class will be added automatically by build
+

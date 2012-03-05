@@ -1,0 +1,31 @@
+"entity.*" [mode!='read']{readonly:false;}
+"entity.*" [mode=='read']{readonly:true;}
+
+"entity.routecode" [true]{editable:false;}
+
+"entity.employment.*" [entity.employed==1 && mode!='read'] {readonly:false;}
+"entity.employment.*" [entity.employed==0] {readonly:true;}
+
+"entity.business.*" [entity.hasBusiness==1 && mode!='read'] {readonly:false;}
+"entity.business.*" [entity.hasBusiness==0] {readonly:true;}
+
+"entity.kindOfBusiness" [entity.otherBusinessSpecified==1 && mode!='read'] {readonly:false;}
+"entity.kindOfBusiness" [entity.otherBusinessSpecified==0] {readonly:true;}
+"entity.grossNetIncome" [entity.otherBusinessSpecified==1 && mode!='read'] {readonly:false;}
+"entity.grossNetIncome" [entity.otherBusinessSpecified==0] {readonly:true;}
+"entity.remarks" [entity.otherBusinessSpecified==1 && mode!='read'] {readonly:false;}
+"entity.remarks" [entity.otherBusinessSpecified==0] {readonly:true;}
+
+"entity.husbandEmployer" [entity.employedHusband==1 && mode!='read'] {enabled:false;}
+"entity.husbandEmployer" [entity.employedHusband==0] {enabled:true;}
+
+"entity.wifeEmployer" [entity.employedWife==1 && mode!='read'] {enabled:false;}
+"entity.wifeEmployer" [entity.employedWife==0] {enabled:true;}
+
+"entity.(appno|loancount|state|dtfiled|branchcode|filedby)" [true] {readonly:true;}
+
+"removeAsset "[mode!='read' && selectedAsset!=null] { visible: true; }
+"removeAsset "[mode=='read' || selectedAsset==null] { visible: false; }
+
+"addAsset" [mode!='read' && assettype!=null] { visible: true; }
+"addAsset" [mode=='read' || assettype==null] { visible: true; }

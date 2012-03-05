@@ -1,0 +1,2 @@
+"selection|searchText" [busy] { readonly: true; }
+"selection|searchText" [!busy] { readonly: false; }

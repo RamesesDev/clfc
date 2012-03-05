@@ -1,0 +1,2 @@
+'entity.*' [editmode == 'read'] { readonly: true; }
+'entity.*' [editmode != 'read'] { readonly: false; }

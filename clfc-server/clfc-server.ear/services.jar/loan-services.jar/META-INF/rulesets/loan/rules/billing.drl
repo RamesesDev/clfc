@@ -1,0 +1,110 @@
+package clfc.loan.billing;
+
+import com.rameses.util.NumberUtil;
+import java.util.*;
+import java.math.*;
+
+global com.rameses.rules.common.RuleAction action;
+
+declare BillingToken 
+	startDate: java.util.Date 
+    exemptedDate: java.util.Date
+	currentDate: java.util.Date
+    maturityDate: java.util.Date
+
+    date: java.util.Date
+	principal: java.math.BigDecimal
+	interest: java.math.BigDecimal
+	surcharge: java.math.BigDecimal
+	
+	principal_balance: java.math.BigDecimal
+	overduerate : java.math.BigDecimal
+end
+
+declare PartialBalance
+	date: java.util.Date
+	principal: java.math.BigDecimal
+	interest: java.math.BigDecimal
+	surcharge: java.math.BigDecimal
+	overduecharge: java.math.BigDecimal
+end
+
+rule "calculate partial unpaid past due"
+	when
+		t: BillingToken( $date: date < exemptedDate, date < currentDate,  date <= maturityDate  )
+		p: PartialBalance( date == $date, $principal: principal, $interest: interest, $surcharge: surcharge  ) 
+	then 
+		Map map = new HashMap();
+		map.put( "principal", $principal );
+		map.put( "interest", $interest );
+		map.put( "surcharge", $surcharge );
+		action.execute( "bill", new Object[]{ t, map } );
+		drools.update( t );
+		drools.retract( p );
+end
+
+rule "calculate regular unpaid past due"
+	when
+		t: BillingToken( $date:date < exemptedDate, date < currentDate, date <= maturityDate, $principal: principal, $interest: interest, $surcharge: surcharge )
+		not PartialBalance() 
+	then 
+		Map map = new HashMap();
+		map.put( "principal", $principal );
+		map.put( "interest", $interest );
+		map.put( "surcharge", $surcharge );
+		action.execute( "bill", new Object[]{ t, map } );
+		drools.update( t );
+end
+
+rule "calculate partial unpaid current due"
+	when
+		t: BillingToken( $date: date >= exemptedDate, date <= currentDate, date <= maturityDate )
+		p: PartialBalance( date == $date, $principal: principal, $interest: interest )
+	then 
+		Map map = new HashMap();
+		map.put( "principal", $principal );
+		map.put( "interest", $interest );
+		action.execute( "bill", new Object[]{ t, map } );
+		drools.update( t );
+		drools.retract( p );
+end
+
+rule "calculate regular unpaid current due"
+	when
+		t: BillingToken( $date: date >= exemptedDate, date <= currentDate, date <= maturityDate, $principal: principal, $interest: interest )
+		not PartialBalance() 
+	then 
+		Map map = new HashMap();
+		map.put( "principal", $principal );
+		map.put( "interest", $interest );
+		action.execute( "bill", new Object[]{ t, map} );
+		drools.update( t );
+end
+
+rule "calculate partial unpaid over due"
+	when
+		t: BillingToken( $date: date > maturityDate, date <=currentDate )
+		p: PartialBalance( date == $date, $interest: interest, $overduecharge: overduecharge ) 
+	then 
+		Map map = new HashMap();
+		map.put( "interest", $interest );
+		map.put( "overduecharge", $overduecharge );
+		action.execute( "bill", new Object[]{ t, map } );
+		drools.update( t );
+		drools.retract( p );
+end
+
+rule "calculate regular unpaid over due"
+	when
+		t: BillingToken( $date: date > maturityDate, date <=currentDate, $principal_balance: principal_balance, $overduerate: overduerate, $interest: interest )
+		not PartialBalance() 
+	then 
+		double bal = $principal_balance.doubleValue();
+		double r = $overduerate.doubleValue();
+		BigDecimal overdue = NumberUtil.formatDecimal((bal * r/100), "#0.00");
+		Map map = new HashMap();
+		map.put( "interest", $interest );
+		map.put( "overduecharge", overdue );
+		action.execute( "bill", new Object[]{ t, map } );
+		drools.update( t );
+end

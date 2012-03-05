@@ -1,0 +1,145 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+import com.rameses.util.*;
+
+
+class LoanCollectionSheetService
+{
+
+	@PersistenceContext('java:loan')
+	def em;
+ 
+	@Service('DateService')
+	def datesvc;
+
+	@Service('LoanLedgerService')
+	def ledgerSvc;
+
+	@Service('Var')
+	def vars;
+
+	@Service('LoanDocNoService')
+	def docSvc; 
+
+	private static def num_format = new java.text.DecimalFormat('00000000');
+	static def dec_format = new java.text.DecimalFormat("00000000");
+	static dt_formatter = new java.text.SimpleDateFormat('yyyy-MM-dd');
+	
+	
+	
+	private def parseDate( date ) {
+		def strDate = (date instanceof String)? date : dt_formatter.format( date );
+		return dt_formatter.parse( strDate );
+	}
+
+	@ProxyMethod
+	public def build( param ){
+		def prev = em.sqlContext.createQuery('select objid from collection_sheet where routecode=?')
+		             .setParameter(1, param.routecode).singleResult;
+
+		if( prev )
+			throw new Exception("There is still an unremitted collection sheet for route $param.routecode.");
+
+		def items = em.sqlContext.createQuery('select objid,appno,borrowername,fullborrowername,borrower,ledger from loanapplication where state=? and routecode=? and dtreleased < ? order by indexno')
+		              .setParameter(1,'RELEASED')
+					  .setParameter(2,param.routecode)
+					  .setParameter(3,param.date)
+		              .resultList;
+		if( !items )
+			throw new Exception('No application record to collect.');
+
+		def sheet = [
+			objid: 'CLSHT' + new java.rmi.server.UID(), 
+			date: dt_formatter.parse( param.date ),
+			routecode: param.routecode, 
+			routedescription: param.routedescription,
+			collector: param.collector, list:[]
+		];
+
+		sheet.list = items.collect {
+			def ledger = em.serializer.read( it.ledger );
+			def lastPayment = ledger.lastDatePaid? ledger.lastDatePaid : DateUtil.add(parseDate(ledger.startDate), '-1d');
+			def daysDue = DateUtil.diff( parseDate(lastPayment), sheet.date);
+			daysDue = (daysDue > 0? daysDue : 0);
+			it.amountDue = ledger.dailyPayment * daysDue;
+			
+			return [
+				appid: it.objid,
+				appno: it.appno,
+				name: it.fullborrowername? it.fullborrowername : it.borrowername,
+				borrower: em.serializer.read( it.borrower ),
+				totalPaid: ledger.totalPaid,
+				loanAmount: ledger.loanAmount,
+				dailyPayment: ledger.dailyPayment,
+				totalDaysDue: daysDue,
+				totalDue: ledger.dailyPayment * (daysDue > 0? daysDue : 0),
+			];
+		}
+		
+		if( !sheet.list )
+			throw new Exception('No record due for collection found.');
+		return sheet;
+	}
+
+	@ProxyMethod
+	public def post(def o, def isReordered){
+		o.collectionno = docSvc.getFormattedNextNo('collection_sheet', '00000000');
+		if( !o.date ) o.date = datesvc.serverDate;
+		o.list.eachWithIndex { item, idx ->
+			item.billno = docSvc.getFormattedNextNo('loan_payment', '00000000');
+			if(isReordered){
+				em.sqlContext.createExecutor('update loanapplication set indexno=? where objid=?')
+				.setParameter(1, idx)
+				.setParameter(2, item.appid)
+				.execute();
+			}
+		}
+		return em.create("collectionsheet", o);
+	}
+
+	@ProxyMethod
+	public def update(def param){
+		def o=em.update("collectionsheet", param);
+		return o;
+	}
+
+	@ProxyMethod
+	public void updateDetails( param ) {
+		assert param.objid;
+		assert param.list;
+
+		def old = read([objid: param.objid]);
+		param.list.each { newItem ->
+			def item = old.list.find { it.billno == newItem.billno };
+			if( item ) item.amountpaid = newItem.amountpaid;
+		};
+		update( old );
+	}
+
+	@ProxyMethod
+	public def read(def param){
+		return em.read("collectionsheet", param);
+	}
+
+	@ProxyMethod
+	public def findByCode(def param) {
+		if( param.collectionno.trim().matches(/\d+/) )
+			param.collectionno = num_format.format( param.collectionno.toInteger() );
+	
+		def result = em.sqlContext.createQuery('select objid from collection_sheet where collectionno = ?')
+		               .setParameter(1, param.collectionno).singleResult;
+
+		if( !result )
+			throw new Exception('No open collection sheet found.');
+
+		return read([objid: result.objid]);
+	}
+	
+	@ProxyMethod
+	public def getList() {
+		return em.sqlContext.createQuery('select * from collection_sheet')
+		         .resultList
+				 .each { it.list = em.serializer.read(it.list); };
+	}
+
+}

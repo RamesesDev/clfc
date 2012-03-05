@@ -1,0 +1,57 @@
+<workunit>
+    <invokers>
+        <invoker type="loan:history" target="popup" caption="Loan History Form" />
+        
+        <invoker type="formActions" caption="Open"   action="open"   mnemonic="p" default="true"/>
+        <invoker type="formActions" caption="Cancel" action="_close" mnemonic="c" immediate="true"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        import java.io.*; 
+        import com.rameses.io.*;
+        
+        class LoanHistoryController{
+            @Service( "LoanApplicationService" )
+            def svc;
+            
+            @Binding
+            def binding;
+            
+            def selected;
+            def selectHandler;
+            def loanHistoryHandler=[
+                    getColumns:{
+                    return[ 
+                            new Column(name:'amountapproved', caption:"Amount",          width:200),          
+                            new Column(name:'dtreleased',     caption:"Date Released",   width:200),
+                            new Column(name:'maturitydate',   caption:"Maturity Date",   width:200),
+                            new Column(name:'fullyPaidAmt',   caption:"Amt Fully Paid",  width:300),
+                            new Column(name:'dateFullyPaid',  caption:"Date Fully Paid", width:300),
+                            new Column(name:'totalAbsent',    caption:"Absences",        width:200),
+                            new Column(name:'totalPenalty',   caption:"Total Penalty",   width:200),
+                          ]
+                },
+                fetchList:{o-> 
+                    return svc.getList();
+                },
+                getRows:{
+                    return 15;
+                }
+            ]as SubListModel;
+            
+            def open(){
+                return "_close";
+            }
+         }
+         ]]>
+     </code>
+     <pages>
+        <page template="loan.ui.ledger.LoanHistory"/>
+     </pages>
+</workunit>

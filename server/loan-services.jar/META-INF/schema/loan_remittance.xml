@@ -1,0 +1,13 @@
+<schema>
+	 <element name="loan_remittance" tablename="loan_remittance">
+        <field name="collectionno" primary="true" />
+		<field name="routeno" />
+        <field name="collector" />
+		<field name="date" />
+		<field name="total" />
+        <complex name="list" serializer="default" />
+		<complex name="breakdownlist" serializer="default" />
+	</element>
+
+</schema>
+

@@ -1,0 +1,43 @@
+<workunit>
+    <invokers>
+        <invoker type="revenueaccounts:lookup" caption="Revenue Accounts" target="popup"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        import groovy.text.*;
+        
+        public class RevenueAccountLookupController{
+            @Service('RevenueAccountService')
+            def svc;
+            
+            def searchText;
+            def selection;
+            def selectHandler;
+            
+            def listHandler = [
+               getColumns:{
+                    return[ 
+                        new Column(name:"code", caption:"Acct Code", maxWidth:80),
+                        new Column(name:"title", caption:"Acct Title")
+                    ];
+                },
+                fetchList:{o->
+                    if( searchText ) o.searchText = searchText;
+                    return svc.getList( o );
+                }
+            ] as PageListModel;
+            
+            def doSelect() {
+                if( selectHandler ) selectHandler( selection );
+                return "_close";
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="revacct.ui.RevenueAccountLookupPage"/>
+    </pages>
+</workunit>

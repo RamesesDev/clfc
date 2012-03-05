@@ -1,0 +1,128 @@
+<script>
+	$put(
+		"loan_map", 
+		new function() {
+			
+			this.confirmMsg;
+			this.map;
+			this.mapHandler;
+			
+			this.close = function() {
+				return '_close';
+			};
+
+			/*this.post = function(){
+				var msg = this.confirmMsg? this.confirmMsg : 'You are about to post this message. Proceed?';
+				if (!confirm(msg)) return;
+				
+				if (this.commentHandler) this.commentHandler(this.comment);
+				return "_close";
+			};*/
+		}
+	);
+	
+</script>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>Google Earth API Sample</title>
+    <script src="http://www.google.com/jsapi?key=ABQIAAAAuPsJpk3MBtDpJ4G8cqBnjRRaGTYH6UMl8mADNa0YKuWNNa8VNxQCzVBXTx2DYyXGsTOxpWhvIG7Djw" type="text/javascript"></script>
+    <script type="text/javascript">
+      function addSampleButton(caption, clickHandler) {
+        var btn = document.createElement('input');
+        btn.type = 'button';
+        btn.value = caption;
+        
+        if (btn.attachEvent)
+          btn.attachEvent('onclick', clickHandler);
+        else
+          btn.addEventListener('click', clickHandler, false);
+
+        // add the button to the Sample UI
+        document.getElementById('sample-ui').appendChild(btn);
+      }
+      
+      function addSampleUIHtml(html) {
+        document.getElementById('sample-ui').innerHTML += html;
+      }
+    </script>
+    <script type="text/javascript">
+    var ge;
+    
+    var placemark;
+    
+    google.load("earth", "1");
+    
+    function init() {
+      google.earth.createInstance('map3d', initCallback, failureCallback);
+    }
+    
+    function initCallback(instance) {
+      ge = instance;
+      ge.getWindow().setVisibility(true);
+    
+      // add a navigation control
+      ge.getNavigationControl().setVisibility(ge.VISIBILITY_AUTO);
+    
+      // add some layers
+      ge.getLayerRoot().enableLayerById(ge.LAYER_BORDERS, true);
+      ge.getLayerRoot().enableLayerById(ge.LAYER_ROADS, true);
+    
+      // create the placemark
+      placemark = ge.createPlacemark('');
+    
+      var point = ge.createPoint('');
+      point.setLatitude(37);
+      point.setLongitude(-122);
+      placemark.setGeometry(point);
+    
+      // add the placemark to the earth DOM
+      ge.getFeatures().appendChild(placemark);
+    
+      // look at the placemark we created
+      var la = ge.createLookAt('');
+      la.set(37, -122,
+        0, // altitude
+        ge.ALTITUDE_RELATIVE_TO_GROUND,
+        0, // heading
+        0, // straight-down tilt
+        5000 // range (inverse of zoom)
+        );
+      ge.getView().setAbstractView(la);
+      placemark.setName('Click me!');
+    
+      google.earth.addEventListener(placemark, 'click', function(event) {
+        // prevent the default balloon from popping up
+        event.preventDefault();
+    
+        var balloon = ge.createHtmlStringBalloon('');
+        balloon.setFeature(event.getTarget());
+        balloon.setMaxWidth(300);
+    
+        // Google logo.
+        balloon.setContentString(
+            '<a href="#" onclick="alert(\'Running some JavaScript!\');">Alert!</a>');
+    
+        ge.setBalloon(balloon);
+      });
+    
+      // just for debugging purposes
+      document.getElementById('installed-plugin-version').innerHTML =
+        ge.getPluginVersion().toString();
+    }
+    
+    function failureCallback(errorCode) {
+    }
+    
+    </script>
+  </head>
+  <body onload="init()" style="font-family: arial, sans-serif; font-size: 13px; border: 0;">
+    <div id="sample-ui"></div>
+    <div id="map3d" style="width: 500px; height: 380px;"></div>
+    <br>
+    <div>Installed Plugin Version: <span id="installed-plugin-version" style="font-weight: bold;">Loading...</span></div>
+  </body>
+</html>
+​

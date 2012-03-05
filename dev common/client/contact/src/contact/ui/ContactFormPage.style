@@ -1,0 +1,7 @@
+"customFieldsModel" [mode != 'read' ] {
+    viewType: input;
+}
+
+"customFieldsModel" [ mode == 'read' ] {
+    viewType: html;
+}

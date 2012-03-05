@@ -1,0 +1,5 @@
+'entity.*' [mode=='read'] { readonly: true; }
+'entity.*' [mode!='read'] { readonly: false; }
+
+'toggle' [mode=='read'] { text: 'Edit'; }
+'toggle' [mode!='read'] { text: 'Update'; }

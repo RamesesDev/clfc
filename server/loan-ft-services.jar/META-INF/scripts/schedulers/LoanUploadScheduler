@@ -1,0 +1,89 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+import com.rameses.util.*;
+
+class LoanUploadScheduler
+{
+
+	@PersistenceContext('java:loan')
+	def em;
+
+	@Service('LoanApplicationService')
+	def appSvc;
+	
+	@Service('LoanAttachmentsService')
+	def attSvc;
+
+	@Service('Var')
+	def sysVar;
+    
+	@ProxyMethod
+	public def process( task ) {
+		try {
+			if( !em ) return;
+			
+			println "upload scheduler: processing";
+			
+			def item = em.sqlContext.createQuery('select * from loanapplication_for_upload order by indexno')
+						   .setFirstResult(0)
+						   .setMaxResults(1)
+						   .singleResult;
+						   
+			if( !item ) return;
+
+			def app = appSvc.read([objid: item.appid]);
+			if( app ) {
+			
+				def inv = new DynamicHttpInvoker(sysVar.clfc_main_server_host, sysVar.clfc_main_server_context, true);
+				def remoteSvc = inv.create('LoanApplicationWSService');
+				
+				println "uploading application $app.appno";
+				remoteSvc.invoke('uploadApp', [app]);
+			
+				def uploadPhotos = {
+					it.photos?.each {
+						println "uploading photo (${it.objid}) of application $app.appno";
+						def result = [appid: app.objid, objid: it.objid];
+						def counter = 0;
+						while( (result = attSvc.readByBlock( result )) != null ) {
+							result.count = ++counter;
+							result.branchcode = app.branchcode;
+							remoteSvc.invoke('uploadAttrachment', [result] );
+						}
+					};
+				};
+			
+				app.propertylist.each( uploadPhotos );
+				app.vehiclelist.each( uploadPhotos );
+				app.appliancelist.each( uploadPhotos );
+				app.otherslist.each( uploadPhotos );
+				app.attachmentslist.each( uploadPhotos );
+				
+				def profilePics = [];
+				if( app.borrower.hasPhoto ) profilePics << [objid: app.borrower.objid];
+				if( app.spouse ){
+					if( app.spouse?.hasPhoto ) profilePics << [objid: app.spouse.objid];	
+				}
+				app.jointBorrowerList?.each { jb ->
+					if( jb.hasPhoto ) profilePics << [objid: jb.objid];
+					if( jb.spouse?.hasPhoto ) profilePics << [objid: jb.spouse.objid];
+				}
+				app.coMakerList?.each { cm ->
+					if( cm.hasPhoto ) profilePics << [objid: cm.objid];
+					if( cm.spouse?.hasPhoto ) profilePics << [objid: cm.spouse.objid];
+				}
+				uploadPhotos( [photos: profilePics] );
+			}
+			
+			em.sqlContext.createExecutor('delete from loanapplication_for_upload where indexno=?')
+			  .setParameter(1, item.indexno)
+			  .execute();
+
+		}
+		catch(e) {
+			throw e;
+		}
+		
+		return true;
+	}
+}

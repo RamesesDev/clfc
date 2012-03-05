@@ -1,0 +1,46 @@
+<workunit>
+    <invokers>
+        <invoker type="loan_app_data_capture:lookup" caption="Loan Application Search" target="popup"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        
+        class applicationLoookupController{
+            @Service('LoanDisbursementDataCaptureService')
+            def svc;
+            
+            def selected;
+            def searchText;
+            def selectHandler;
+            
+            def select()
+            {
+                if( !selected )
+                    throw new Exception('No item selected.');
+            
+                if(selectHandler)selectHandler(selected);
+                return "_close";
+            }
+            
+            def listHandler=[
+                    getColumns:{
+                    return[ new Column(name:'appno',         caption:"Application No.", width:200),          
+                            new Column(name:'borrowername',  caption:"Borrower Name", width:380),
+                            new Column(name:'loanAmount',    caption:"Loan Amount", width:140),
+                     ]
+                },
+                fetchList:{o-> 
+                    if(searchText) o.searchText = searchText;
+                    return svc.findBorrower(o);
+                },
+            ]as PageListModel;  
+        }
+        ]]>
+    </code>
+    <pages>
+	<page template="loantreasury.collection.ui.ApplicationLookupPage"/>
+    </pages>    
+</workunit>

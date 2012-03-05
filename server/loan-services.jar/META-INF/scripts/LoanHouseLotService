@@ -1,0 +1,23 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+import com.rameses.util.*;
+
+
+class LoanHouseLotService
+{
+	@PersistenceContext('java:loan')
+	def em;
+
+	@Service('DateService')
+	def datesvc;
+	
+	@ProxyMethod
+	def getHouseList(){
+		return em.sqlContext.createQuery('select * from loan_house_lot_type').resultList;
+	}
+	
+	@ProxyMethod
+	def getLotList(){
+		return em.sqlContext.createQuery('select * from loan_house_lot_type').resultList;
+	}
+}	

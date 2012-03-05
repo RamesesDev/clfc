@@ -1,0 +1,20 @@
+<schema>
+    
+    <element name="testschema" tablename="test_schema">
+        <field name="objid" primary="true"/>
+        <field name="code"/>
+        <complex name="info" serializer="default" merge="true" />
+		<link ref="extend"/>
+		<complex name="itemlist" serializer="default" type="list" />
+    </element>
+
+	<element name="extend">
+        <field name="name"/>
+		<field name="address"/>
+		<complex name="contact" serializer="default"/>
+		<complex name="sender" serializer="default"/>
+	</element>
+	
+</schema>
+
+

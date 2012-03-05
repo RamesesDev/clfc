@@ -1,0 +1,33 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+
+class RouteService {
+
+	@PersistenceContext('java:loan')
+	def em;
+	
+	@Service('LoanDocNoService')
+    def docSvc;
+	
+		
+	@ProxyMethod
+	def getList(){
+		return em.sqlContext.createQuery('select * from route').resultList;
+	}
+	
+	@ProxyMethod
+	def createData(def o){
+		if( !o.code ) o.code = 'R-' + docSvc.getNextNo('loan_route');
+		return em.create("collection_route", o);			
+	}
+	
+	@ProxyMethod
+	def updateData(def o){
+		return em.update("collection_route", o);			
+	}
+	
+	@ProxyMethod
+	def deleteData(def o){
+		return em.delete("collection_route", o);
+	}
+}

@@ -1,0 +1,17 @@
+<workunit extends="org/org_mgmt_lookup.xml">
+
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        
+        public class CompanyMgmtController extends org.OrgMgmtLookup {
+            
+            @Service("CompanyService")
+            def service;
+            
+            String orgType = "company";
+        }
+        ]]>
+    </code>
+    
+</workunit>

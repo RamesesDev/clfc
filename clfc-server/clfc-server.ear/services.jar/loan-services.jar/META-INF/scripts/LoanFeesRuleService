@@ -1,0 +1,20 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+
+class LoanFeesRuleService {	
+	
+	@Resource('RuleService/local')
+	def ruleService;
+	
+	@ProxyMethod
+	public def getFees( param ) {
+		List result = new ArrayList();
+		def app = ruleService.createFact("loan_fees", "clfc.loan.fees.LoanApplication");
+		app.amount = param.amount;
+		app.loancount = param.loancount;
+		ruleService.execute( "loan_fees", [app],  [result:result], null );
+		return result;
+	}
+	
+	
+}

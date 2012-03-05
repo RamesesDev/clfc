@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="subReportCoMakerInfo (copy)"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="535"
+		 pageHeight="842"
+		 columnWidth="535"
+		 columnSpacing="0"
+		 leftMargin="0"
+		 rightMargin="0"
+		 topMargin="0"
+		 bottomMargin="0"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="COMAKER_OTHERSOURCEOFINCOME" isForPrompting="false" class="java.lang.Object"/>
+	<parameter name="COMAKER_PROFESSIONALBACKGROUND" isForPrompting="false" class="java.lang.Object"/>
+	<parameter name="COMAKER_EMPLOYMENT" isForPrompting="false" class="java.lang.Object"/>
+	<parameter name="COMAKER_MAINBUSINESS" isForPrompting="false" class="java.lang.Object"/>
+	<parameter name="COMAKER_SPOUSEINFO" isForPrompting="false" class="java.lang.Object"/>
+
+	<field name="lastname" class="java.lang.String"/>
+	<field name="firstname" class="java.lang.String"/>
+	<field name="middlename" class="java.lang.String"/>
+	<field name="coMaKerAge" class="java.lang.String"/>
+	<field name="coMakerAddress" class="java.lang.String"/>
+	<field name="coMakerResidency" class="java.lang.String"/>
+	<field name="spouse" class="java.lang.Object"/>
+	<field name="mainBusinessList" class="java.lang.Object"/>
+	<field name="otherSourcesOfIncomeList" class="java.lang.Object"/>
+	<field name="profBackgroundList" class="java.lang.Object"/>
+	<field name="employmentList" class="java.lang.Object"/>
+
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="24"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="172"
+						y="1"
+						width="182"
+						height="22"
+						key="staticText-27"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
+					</textElement>
+				<text><![CDATA[    CO-MAKER INFORMATION]]></text>
+				</staticText>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="503"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="7"
+						y="2"
+						width="40"
+						height="11"
+						key="staticText-23"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<text><![CDATA[Name :]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="55"
+						y="2"
+						width="212"
+						height="11"
+						key="textField-1"/>
+					<box>					<bottomPen lineWidth="0.5"/>
+</box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{lastname}+","+" "+$F{firstname}+" "+"("+" "+$F{middlename}+" "+")"]]></textFieldExpression>
+				</textField>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="7"
+						y="297"
+						width="508"
+						height="62"
+						key="subreport-1"
+						isRemoveLineWhenBlank="true"
+						isPrintWhenDetailOverflows="true"/>
+					<dataSourceExpression><![CDATA[$F{otherSourcesOfIncomeList}]]></dataSourceExpression>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{COMAKER_OTHERSOURCEOFINCOME}]]></subreportExpression>
+				</subreport>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="7"
+						y="362"
+						width="508"
+						height="66"
+						key="subreport-2"
+						isRemoveLineWhenBlank="true"
+						isPrintWhenDetailOverflows="true"/>
+					<dataSourceExpression><![CDATA[$F{profBackgroundList}]]></dataSourceExpression>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{COMAKER_PROFESSIONALBACKGROUND}]]></subreportExpression>
+				</subreport>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="7"
+						y="430"
+						width="508"
+						height="73"
+						key="subreport-3"
+						isRemoveLineWhenBlank="true"
+						isPrintWhenDetailOverflows="true"/>
+					<dataSourceExpression><![CDATA[$F{employmentList}]]></dataSourceExpression>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{COMAKER_EMPLOYMENT}]]></subreportExpression>
+				</subreport>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="7"
+						y="121"
+						width="508"
+						height="174"
+						key="subreport-4"
+						isRemoveLineWhenBlank="true"
+						isPrintWhenDetailOverflows="true"/>
+					<dataSourceExpression><![CDATA[$F{mainBusinessList}]]></dataSourceExpression>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{COMAKER_MAINBUSINESS}]]></subreportExpression>
+				</subreport>
+				<staticText>
+					<reportElement
+						x="7"
+						y="12"
+						width="49"
+						height="11"
+						key="staticText-24"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<text><![CDATA[Age :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="7"
+						y="22"
+						width="49"
+						height="11"
+						key="staticText-25"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<text><![CDATA[Address :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="318"
+						y="2"
+						width="49"
+						height="11"
+						key="staticText-26"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<text><![CDATA[Residency :]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="55"
+						y="12"
+						width="212"
+						height="11"
+						key="textField-2"/>
+					<box>					<bottomPen lineWidth="0.5"/>
+</box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{coMaKerAge}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="55"
+						y="22"
+						width="212"
+						height="11"
+						key="textField-3"/>
+					<box>					<bottomPen lineWidth="0.5"/>
+</box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{coMakerAddress}]]></textFieldExpression>
+				</textField>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="8"
+						y="52"
+						width="508"
+						height="67"
+						key="subreport-5"
+						isRemoveLineWhenBlank="true"
+						isPrintWhenDetailOverflows="true"/>
+					<dataSourceExpression><![CDATA[$F{spouse}]]></dataSourceExpression>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{COMAKER_SPOUSEINFO}]]></subreportExpression>
+				</subreport>
+				<staticText>
+					<reportElement
+						x="318"
+						y="30"
+						width="65"
+						height="11"
+						key="staticText-28"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<text><![CDATA[Lot Occupancy :]]></text>
+				</staticText>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

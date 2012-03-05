@@ -1,0 +1,54 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+import com.rameses.util.*;
+
+
+public class LoanDisbursementDataCaptureService 
+{
+	@PersistenceContext('java:loan')
+	def em;
+	
+	@Service('LoanApplicationSearchService')
+	def searchSvc;
+	
+	@Service('LoanApplicationService')
+	def appSvc;
+	
+	@Service('DateService')
+	def dateSvc;
+	
+	@Env
+	def env;
+
+
+	@ProxyMethod
+	public def findBorrower( param ) {
+		param.state = 'FOR_RELEASE';
+		param.mode = 'CAPTURE';
+		return searchSvc.getList( param );
+	}
+
+	@ProxyMethod
+	public def post( data ) {
+		if( !data.objid )        data.objid = "LDDC-" + new java.rmi.server.UID();
+		if( !data.dtfiled )      data.dtfiled = dateSvc.serverDate;
+		
+		data.postedbyid = env.USERID;
+		data.postedbyname = env.USER;
+		
+		data = em.create("loandisbursement:data_capture", data);
+		
+		def param = [
+			objid : data.appid,
+			date  : data.checkdate,
+			acctno : data.acctno,
+			checkno : data.checkno,
+			bankname : data.bankname,
+		];
+				
+		appSvc.release( param );
+		
+		return data;
+	}
+
+}

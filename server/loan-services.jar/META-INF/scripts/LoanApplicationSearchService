@@ -1,0 +1,236 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+import com.rameses.util.*;
+
+class LoanApplicationSearchService
+{
+	@PersistenceContext('java:loan')
+	def em;
+
+	@Service('DateService')
+	def datesvc;
+
+	@Service('LoanApplicationService')
+	def loanSvc;
+
+	@Env
+	def env;
+  
+	private static def num_format = new java.text.DecimalFormat('00000000');
+ 
+  	@ProxyMethod
+	public def getList( param ){
+		def start = System.currentTimeMillis();
+		try {
+			println "getting result";
+			return doSearch( param ).each {
+				if( it.borrower ) it.borrower = em.serializer.read( it.borrower );
+				if( it.ledger ) {
+					def ledger = em.serializer.read( it.remove('ledger') );
+					it.loanAmount = ledger.loanAmount;
+					it.dailyPayment = ledger.dailyPayment;
+					def lastPayment = ledger.lastDatePaid? ledger.lastDatePaid : DateUtil.add(parseDate(ledger.startDate), '-1d');
+					def daysDue = DateUtil.diff( parseDate(lastPayment),parseDate(datesvc.serverDate));
+					if( ledger.mode == 'fixed' )
+						it.amountDue = ledger.principalBalance + ledger.waivedIntBalance;
+					else
+						it.amountDue = ledger.dailyPayment * (daysDue > 0? daysDue : 0);
+				}
+				if( it.loaninfo ) {
+					def info = em.serializer.read( it.remove('loaninfo') );
+					it.loanAmount = info.amountapproved;
+				}
+			};
+		}
+		catch(e) {}
+		finally {
+			println "processed in " + (System.currentTimeMillis() - start);
+		}
+	}
+	
+	private def doSearch( param ) {
+		if( param.searchText ) {
+			println "searching searchText $param.searchText";
+			def result;			
+			param.appno = param.searchText;
+			param.name = param.searchText;
+			param.routecode = param.searchText;
+			param.routedescription = param.searchText;
+			param.loanno = param.searchText;			
+			if( (result = findByAppNo(param)) )  return result;
+			if( (result = findByName(param)) )   return result;			
+			if( (result = findByRoute(param)) )  return result;
+			if( (result = findByRouteDes(param)) )  return result;
+			if( (result = findByLoanNo(param)) ) return result;
+			return [];
+		}
+
+		def filter = [];
+		if( param.state ) 
+			filter << 'state=$P{state}';
+		else if( param.allowedStates ) 
+			buildStatesFilter( filter, param );
+		else
+			return [];
+			
+		if( param.mode )  filter << 'mode=$P{mode}';
+			param.filter = filter.join(' and ');
+
+		def qry = em.sqlContext.createNamedQuery('loan_app_search:find-app')
+		            .setVars(param)
+		            .setParameters(param);
+
+		if( param._start ) qry.setFirstResult(param._start);
+		if( param._limit ) 
+			qry.setMaxResults(param._limit);
+		else
+			qry.setMaxResults(100);
+		
+		println "start $param._start";
+		println "limit $param._limit";
+		
+		return qry.resultList;
+	}
+	
+	private void buildStatesFilter( filter, param ) {
+		def items = [];
+		param.allowedStates.eachWithIndex { state, i ->
+			def key = 'state_' + i;
+			items << '$P{' + key + '}';
+			param[key] = state;
+		}
+		filter << 'state in (' + items.join(',') + ')';
+	}
+	
+	@ProxyMethod
+	public def findByAppNo( param ) {
+		if( !param.appno.trim().matches(/\d+/) ) return null;
+	
+		def filter = ['appno=$P{appno}'];
+		if( param.state ) 
+			filter << 'state=$P{state}';
+		else if( param.allowedStates ) 
+			buildStatesFilter( filter, param );
+		if( param.mode )  filter << 'mode=$P{mode}';
+		
+		if(param.appno.length() <= 8)
+			param.appno = env.CLIENTCODE + num_format.format(param.appno.toInteger());
+		
+		def qry = em.sqlContext.createNamedQuery('loan_app_search:find-app')
+		            .setVars([filter: filter.join(' and ')])
+		            .setParameters( param );
+		            
+		if( param._start ) qry.setFirstResult( param._start );
+		if( param._limit ) qry.setMaxResults( param._limit );
+		
+		return qry.resultList;
+	}
+	
+	@ProxyMethod
+	public def findByName( param ) {
+		def filter = [];
+		
+		if( param.state ) 
+			filter << 'state=$P{state}';
+		else if( param.allowedStates ) 
+			buildStatesFilter( filter, param );
+		
+		if( param.mode )  filter << 'mode=$P{mode}';
+		
+		if( param.principalOnly ) {
+			filter << 'borrowertype=$P{borrowertype}';
+			param.borrowertype = 'principal';
+		}
+				
+		param.name = param.name+'%';
+		def qry = em.sqlContext.createNamedQuery('loan_app_search:find-by-borrowername')
+		            .setVars([filter: filter? ' and ' + filter.join(' and ') : ''])
+		            .setParameters( param );
+		            
+		if( param._start ) qry.setFirstResult( param._start );
+		if( param._limit ) qry.setMaxResults( param._limit );
+		
+		return qry.resultList;
+	}
+	
+	
+	@ProxyMethod
+	public def findByRoute( param ) {
+		def filter = ['routecode=$P{routecode}'];
+		
+		if( param.state ) 
+			filter << 'state=$P{state}';
+		else if( param.allowedStates ) 
+			buildStatesFilter( filter, param );
+		
+		if( param.mode )  filter << 'mode=$P{mode}';
+
+		def qry = em.sqlContext.createNamedQuery('loan_app_search:find-app')
+		            .setVars([filter: filter.join(' and ')])
+		            .setParameters( param );
+		            
+		if( param._start ) qry.setFirstResult( param._start );
+		if( param._limit ) qry.setMaxResults( param._limit );
+		
+		return qry.resultList;
+	}
+
+	@ProxyMethod
+	public def findByRouteDes( param ) {
+		def filter = ['routedescription=$P{routedescription}'];
+		
+		if( param.state ) 
+			filter << 'state=$P{state}';
+		else if( param.allowedStates ) 
+			buildStatesFilter( filter, param );
+		
+		if( param.mode )  filter << 'mode=$P{mode}';
+
+		def qry = em.sqlContext.createNamedQuery('loan_app_search:find-app')
+		            .setVars([filter: filter.join(' and ')])
+		            .setParameters( param );
+		            
+		if( param._start ) qry.setFirstResult( param._start );
+		if( param._limit ) qry.setMaxResults( param._limit );
+		
+		return qry.resultList;
+	}
+	
+	/**
+	 * added this method to support migrated data searching
+	 */
+	@ProxyMethod
+	public def findByLoanNo( param ) {
+		def filter = ['loanno=$P{loanno}'];
+		if( param.state ) 
+			filter << 'state=$P{state}';
+		else if( param.allowedStates ) 
+			buildStatesFilter( filter, param );
+		if( param.mode )  filter << 'mode=$P{mode}';
+				
+		def qry = em.sqlContext.createNamedQuery('loan_app_search:find-app')
+		            .setVars([filter: filter.join(' and ')])
+		            .setParameters( param );
+
+		if( param._start ) qry.setFirstResult( param._start );
+		if( param._limit ) qry.setMaxResults( param._limit );
+		
+		return qry.resultList;
+	}
+	
+	@ProxyMethod
+	public def search( param ){
+		param.state = 'RELEASED';
+		param.searchText = param.borrowername;
+		param.principalOnly = true;
+
+		return getList( param );
+	}
+	
+	static def dt_formatter = new java.text.SimpleDateFormat('yyyy-MM-dd');
+	
+	private def parseDate( date ) {
+		def strDate = (date instanceof String)? date : dt_formatter.format( date );
+		return dt_formatter.parse( strDate );
+	}
+}

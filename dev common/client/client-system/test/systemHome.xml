@@ -1,0 +1,27 @@
+<workunit>
+    
+    <invokers>
+        <invoker type="loader" caption="Home" index="1000"/>
+        <invoker folderid="menu/file" caption="Save"/>
+        <invoker folderid="menu/file/settings" caption="Users Settings"/>
+        <!--
+        <invoker folderid="menu/file/settings/userpref" caption="Themes"/>
+        <invoker folderid="menu/file/settings/printingpref" caption="Printing Options"/>
+        <invoker folderid="menu/file/settings/printingpref" caption="Printers"/>
+        -->
+    </invokers>
+    
+    <code>
+        <![CDATA[
+                        
+        public class SystemController{
+            
+                        
+        }
+        
+        ]]>
+    </code>
+    <pages>
+        <page template="mlsystem.HomePage"/>
+    </pages>
+</workunit>

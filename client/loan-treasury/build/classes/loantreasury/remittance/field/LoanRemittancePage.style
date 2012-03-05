@@ -1,0 +1,3 @@
+"selected" [ mode!="read" ] { readonly:false; }
+"selected" [ mode=="read" ] { readonly:true; }
+

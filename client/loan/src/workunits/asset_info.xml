@@ -1,0 +1,95 @@
+<workunit>
+    <invokers>
+        <invoker type="loan:asset_info"       target="popup" caption="Collateral Information" action="init"/>
+        <invoker type="loan:asset_info_popup" target="popup" caption="Collateral Information" action="viewPopup"/>
+        
+        <invoker type="formActions" caption="Close" action="_close" mnemonic="c"/>
+    </invokers>
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.util.*;
+        
+        
+        class AssetInfoController {
+        
+            @Binding
+            def binding;
+            
+            def appid;
+            def entity;
+            def type;
+            def info;
+            def mode = 'read';
+            
+            @Service( "LoanApplicationService" )
+            def svc;
+            
+            def selectHandler;
+            
+            void init() {
+                if( entity ) {
+                    String tpl = "loan/ui/asset/asset_html_"+type+".gtpl";
+                    info = TemplateProvider.instance.getResult( tpl, [info:[data:entity,mode:mode]] );
+                }
+                else {
+                    info = '<html><b>No record selected.</b></html>';
+                }
+            }
+            
+            def viewPopup() {
+                init();
+                return 'popup';
+            }
+            
+            def preview( id ) {
+                def photo = entity.photos.find { it.objid == id };
+                return InvokerUtil.lookupOpener('loan:asset_photo_view', [photo:photo, appid:appid]);
+            }
+            
+            def editAsset(){
+                return InvokerUtil.lookupOpener("asset:"+type+"_open",[
+                    asset:entity,
+                    appid: appid,
+                    selectHandler:{ o ->
+                        entity.putAll( o );
+                        if( selectHandler ) 
+                            selectHandler(entity);
+                        else
+                            binding.refresh();
+                    },
+                ]);
+            }
+            
+            def addAssetComment() {
+                return InvokerUtil.lookupOpener("loan:comment",[
+                    selectHandler:{o->
+                        entity.comments.add( svc.addCollateralComment(o) );
+                        if( selectHandler ) 
+                            selectHandler(entity);
+                        else
+                            binding?.refresh();
+                    }
+               ]);
+            }
+            
+            void refresh( param ) {
+                param = param? param : [:];
+                entity = param.entity? param.entity : null;
+                type = param.type? param.type : null;
+                mode = param.mode? param.mode : null;
+                appid = param.appid? param.appid: null;
+                init();
+                
+                binding?.refresh();
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page name="info" template="loan.ui.asset.AssetInfoPage"/>
+        <page name="popup" template="loan.ui.asset.AssetInfoPopupPage"/>
+    </pages>
+</workunit>

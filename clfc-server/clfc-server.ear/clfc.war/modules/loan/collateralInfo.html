@@ -1,0 +1,242 @@
+<html>
+	<head>
+		<link href="../../css/secured.css" rel="stylesheet" />
+		<link href="style.css" rel="stylesheet" />
+		<script src="../../js/lib/jquery-all.js"></script>
+		<script src="../../js/lib/rameses-lib.js"></script>
+		<script>
+			$put(
+				"collateralInfo",
+				new function() {
+				
+					this.application;
+					this.collateralInfo;
+					this.collateral;
+					this.selectedObj = {};
+					
+					//this.selected is the selected object in loan controller
+					this.selected;
+					
+					this.onload = function () {
+						this.selected = $ctx('loan').selected;
+						
+						setTimeout( function(){ $('.asset a').lightBox({fixedNavigation:true}); }, 100 );
+					};
+					
+					this.doOk = function() {
+						if( this.closeHandler ) this.closeHandler();
+						return "_close";
+					};
+
+					this.viewAppliance = function() {
+						var p = new PopupOpener('loan:assetAppliance', {assetAppliance: this.selectedObj.appliance, application: this.selected});
+						p.title = 'Appliance Collateral Info';
+						p.options = {width: 500, height: 430};
+						return p;
+					};
+
+					this.viewVehicle = function() {
+						var p = new PopupOpener('loan:assetVehicle', {assetVehicle: this.selectedObj.vehicle, application: this.selected});
+						p.title = 'Vehicle Collateral Info';
+						p.options = {width: 500, height: 550};
+						return p;
+					};
+
+					this.viewProperty = function() {
+						var p = new PopupOpener('loan:assetProperty', {assetProperty: this.selectedObj.property, application: this.selected});
+						p.title = 'Property Collateral Info';
+						p.options = {width: 500, height: 430};
+						return p;
+					};
+
+					this.viewOtherCollateral = function() {
+						var p = new PopupOpener('loan:assetOthers', {assetOthers: this.selectedObj.others, application: this.selected});
+						p.title = 'Other Collateral Info';
+						p.options = {width: 500, height: 430};
+						return p;
+					};
+				}
+			);
+			
+			
+			$put(
+				'loan',
+				new function() {
+					this.selected = {
+						appliancelist: [
+							{type:'', model:'124', serial:'1234', brand:'sanyo'},
+							{type:'', model:'124', serial:'1234', brand:'sumsung'},
+							{type:'', model:'124', serial:'1234', brand:'goldstar'},
+						]
+					};
+				}
+			);
+		</script>
+	</head>
+	<body>
+		<div class="box">
+			COLLATERAL(S) INFORMATION
+		</div>
+		<i context="collateralInfo" visibleWhen="#{!selected.appliancelist.length > 0}" class="maroon">
+			No appliance(s) specified.
+		</i>
+		<!--
+		<ul>
+			<li context="collateralInfo" items="selected.appliancelist">
+				<a href="#" context="collateralInfo" name="viewAppliance">
+					<label context="collateralInfo">
+						<input type="checkbox" context="collateralInfo"/>#{type}
+					</label>
+				</a>
+			</li>
+		</ul>
+		-->
+		<j context="collateralInfo" visibleWhen="#{selected.appliancelist.length >0}">
+			<b class="maroon">Appliance(s)</b> ( Total Appraised = <b>Php</b> <b class="teal"><label context="collateralInfo">#{appraisedvalue.formatDecimal()}</label></b> )
+		</j>
+		<table context="collateralInfo" items="selected.appliancelist" varStatus="stat"
+			   visibleWhen="#{selected.appliancelist.length >0}" name="selectedObj.appliance"
+			   class="grid" width="100%" cellspacing="0">
+			<thead>
+				<tr>
+					<th width="5%"></th>  <!--for the check box header-->
+					<th width="25%">Appliance</th>
+					<th width="35%">Brand <b>/</b> Serial# <b>/</b> Model#</th>
+					<th width="15%">Appraised Value</th>
+					<th width="25%">Remarks</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}">
+						<input type="checkbox" context="collateralInfo" name="selected.appliancelist[#{stat.index}].must"/>
+					</td>
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}">#{type}</td>
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}">
+						<a context="collateralInfo" action="viewAppliance">
+							#{brand} <b>/</b> #{serial} <b>/</b> #{model}
+						</a>
+					</td>
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}"><b class="gray">Php</b> <j class="teal2">#{appraisedvalue.formatDecimal()}</j></td>
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}">#{remarks.toUpperCase()}</td>
+				</tr>
+			</tbody>
+		</table>
+		<i context="collateralInfo" visibleWhen="#{!selected.vehiclelist.length > 0}" class="maroon">
+			No vehichle(s) specified.
+		</i>
+		<j context="collateralInfo" visibleWhen="#{selected.vehiclelist.length >0}">
+			<b class="maroon">Vehicle(s)</b> ( Total Appraised = <b>Php</b> <b class="teal"><label context="collateralInfo">#{appraisedvalue.formatDecimal()}</label></b> )
+		</j>
+		<table context="collateralInfo" items="selected.vehiclelist" class="grid" width="100%" cellspacing="0"
+					visibleWhen="#{selected.vehiclelist.length >0}" name="selectedObj.vehicle">
+			<thead>
+				<tr>
+					<th width="5%"></th> <!--for the check box header-->
+					<th width="20%">Make</th>
+					<th width="20%">Model</th>
+					<th width="30%">Type <b>/</b> Engine# <b>/</b> Chassis#</th>
+					<th width="10%">Plate#</th>
+					<th width="20%">Registration#</th>
+					<th width="20%">Remarks</th>
+				</tr>
+			</thead>
+			<tbody class="selectable">
+				<tr context="collateralInfo" action="viewVehicle">
+					<!--<td valign="top" class="${idx%2==0? 'even' : 'odd'}">
+						<input type="checkbox" context="collateralInfo"/>#{make}
+					</td>-->
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}">
+						<input type="checkbox" context="collateralInfo" name="entity.selectedVehicle[#{stat.index}].vehicle" mode="set" checkedvalue="make"/>
+					</td>
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}">#{make}</td>
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}">#{model}</td>
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}">#{type} <b>/</b> #{engineno} <b>/</b> #{chassisno}</td>
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}">#{plateno}</td>
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}">#{regno}</td>
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}">#{remarks.toUpperCase()}</td>
+				</tr>
+			</tbody>
+		</table>
+		<i context="collateralInfo" visibleWhen="#{!selected.propertylist.length > 0}" class="maroon">
+			No property(s) specified.
+		</i>
+		<label context="collateralInfo" visibleWhen="#{selected.propertylist.length >0}">
+			<b class="maroon">Property/Properties</b> ( Total Appraised = <b>Php</b> <b class="teal"> <label context="collateralInfo">#{appraisedvalue.formatDecimal()}</label></b> )
+		</label>
+		<table context="collateralInfo" items="selected.propertylist" class="grid" width="100%" cellspacing="0"
+			   visibleWhen="#{selected.propertylist.length >0}" name="selectedObj.property">
+			<thead>
+				<tr>
+					<th></th> <!--For the check box header-->
+					<th>Land/Building</th>
+					<th>Location</th>
+					<th>Zonal Value</th>
+					<th>Appraised Value</th>
+					<th>Area</th>
+				</tr>
+			</thead>
+			<tbody class="selectable">
+				<tr context="collateralInfo" action="viewProperty">
+					<!--<td valign="top" class="${idx%2==0? 'even' : 'odd'}">
+						<input type="checkbox" context="collateralInfo"/>#{rpu}
+					</td>-->
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}">
+						<input type="checkbox" context="collateralInfo" name="entity.selectedVehicle[#{stat.index}].vehicle" mode="set" checkedvalue="rpu"/>
+					</td>
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}">#{location}</td>
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}">#{rpu}</td>
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}" visibleWhen="#{zonalvalue}"><b class="gray">Php</b> <j class="teal2">#{zonalvalue.formatDecimal()}</j></td>	
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}"><b class="gray">Php</b> <j class="teal2">#{appraisedvalue.formatDecimal()}</j></td>
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}">#{area.formatDecimal()} #{uom}</td>
+				</tr>
+			</tbody>
+		</table>
+		<i context="collateralInfo" visibleWhen="#{!selected.otherslist.length > 0}" class="maroon">
+			No other collateral(s) specified.
+		</i>
+		<j context="collateralInfo" visibleWhen="#{selected.otherslist.length >0}">
+			<b class="maroon">Other Collateral(s)</b> ( Total Appraised = <b>Php</b> <b class="teal"><label context="collateralInfo">#{appraisedvalue.formatDecimal()}</label></b> )
+		</j>
+		<table context="collateralInfo" items="selected.otherslist" class="grid" width="100%" cellspacing="0"
+					visibleWhen="#{selected.otherslist.length >0}" name="selectedObj.others">
+			<thead>
+				<tr>
+					<th width="5%"></th>
+					<th width="20%">Name</th>
+					<th width="20%">Classification</th>
+					<th width="10%">Use</th>
+					<th width="15%">Date Acquired</th>
+					<th width="15%">Market/Appraised Value</th>
+					<th width="20%">Remarks</th>
+				</tr>
+			</thead>
+			<tbody class="selectable">
+				<tr context="collateralInfo" action="viewOtherCollateral">
+					<!--<td valign="top" class="${idx%2==0? 'even' : 'odd'}">
+						<input type="checkbox" context="collateralInfo"/>#{subject}
+					</td>-->
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}">
+						<input type="checkbox" context="collateralInfo" name="entity.selectedVehicle[#{stat.index}].vehicle" mode="set" checkedvalue="subject"/>
+					</td>
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}">#{subject}</td>
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}">#{modeOfAcquisition}</td>
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}">#{use}</td>
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}">#{dateAcquired}</td>
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}"><b class="gray">Php</b> <b class="teal">#{appraisedvalue.formatDecimal()}</b></td>
+					<td valign="top" class="${idx%2==0? 'even' : 'odd'}">#{remarks.toUpperCase()}</td>
+				</tr>
+			</tbody>
+		</table>
+		<table>
+			<div style="text-align:left">
+				Total CAV : 
+				<label context="collateralInfo" visibleWhen="#{selected.totalCAV}"><b>Php</b> <b class="teal"><u>#{selected.totalCAV.formatDecimal()}</u></b></label>
+				<label context="collateralInfo" visibleWhen="#{!selected.totalCAV}" class="maroon"></u>0.00</u></label>
+			</div>
+		</table>
+		<div class="dialog-buttons">
+			<input type="button"  context="collateralInfo" name="doOk" value="Ok"/>
+		</div>
+	</body>
+</html>

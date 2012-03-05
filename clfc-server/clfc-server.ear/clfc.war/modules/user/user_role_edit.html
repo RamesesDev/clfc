@@ -1,0 +1,16 @@
+Org Unit Type: <br/>
+<select context="useredit" name="entity.type" items="typeList" itemKey="type" itemLabel="type" allowNull="true" emptyText="Please Select"></select><br/>
+
+Org Unit:<br/>
+<select context="useredit" name="entity.usergroupName" depends="entity.type" items="showParent();" itemKey="objid" itemLabel="name" allowNull="true" emptyText="Please Select"></select><br/>
+
+Role:<br/>
+<select context="useredit" name="entity.rolename" items="roleList" itemKey="name" itemLabel="name"></select><br/>
+
+
+<div class="dialog-buttons-left">
+    <input type="button" context="useredit" name="_default" value="Back" immediate="true"/>
+</div>
+<div class="dialog-buttons-right">
+    <input type="button" context="useredit" name="updateRole" value="Save"/>
+</div>

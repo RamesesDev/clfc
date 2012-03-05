@@ -1,0 +1,132 @@
+<workunit>
+    <invokers>
+        <invoker folderid="menu/services/loan" caption="Loan Applications" action="init" permission="application.viewList" index="0"/>
+        
+        <invoker type="home:menu" caption="Loan Applications" action="init" icon="images/applications32.png"
+                 permission="application.viewList" index="0" target="window"/>
+        
+         <invoker type="refreshAction" icon="images/refresh16.png" tooltip="Refresh" action="refreshList"/>
+         
+        <!-- state codes -->
+        <invoker type="application:state-list" caption="Pending"          name="PENDING"          permission="application.viewPendingList"/>  
+        <invoker type="application:state-list" caption="For Inspection"   name="FOR_INSPECTION"   permission="application.viewForInspectionList"/>
+        <invoker type="application:state-list" caption="For FLA"          name="FOR_FLA"          permission="application.viewForFLAList"/>
+        <invoker type="application:state-list" caption="For Approval"     name="FOR_APPROVAL"     permission="application.viewForApprovalList"/>
+        <invoker type="application:state-list" caption="Approved"         name="APPROVED"         permission="application.viewApprovedList"/>
+        <invoker type="application:state-list" caption="For Release"      name="FOR_RELEASE"      permission="application.viewForReleaseList"/>
+        <invoker type="application:state-list" caption="Released"         name="RELEASED"         permission="application.viewReleasedList"/>
+        <invoker type="application:state-list" caption="Fully Paid"       name="CLOSED"           permission="application.viewClosedList"/>
+        <invoker type="application:state-list" caption="Disapproved"      name="DISAPPROVED"      permission="application.viewDisapprovedList"/>
+        <invoker type="application:state-list" caption="Disqualified-Out" name="DISQUALIFIED_OUT" permission="application.viewDisqualifiedOutList"/>
+        <invoker type="application:state-list" caption="Canceled-Out"     name="CANCELED_OUT"     permission="application.viewCanceledOutList"/>
+        <invoker type="application:state-list" caption="Back-Out"         name="BACK_OUT"         permission="application.viewBackOutList"/>
+    </invokers>    
+    <code>
+        <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        
+        class LoanApplicationListController{
+            @Binding
+            def binding;
+            
+            @Service( "LoanApplicationSearchService" )
+            def searchSvc;
+            
+            @Service( "LoanApplicationService" )
+            def svc;
+            
+            def entity=[:];
+            def selected;
+            def selection;
+            def searchText;
+            def opener;
+            def mode;
+            boolean busy;
+            
+            def itemStatus = InvokerUtil.lookup("application:state-list");
+            def loadedStatusList = [];
+            
+            void init(){
+                openLoanOpener();
+                
+                loadedStatusList.clear();
+                if( itemStatus ) {
+                    selection = itemStatus[0].properties.name;
+                    itemStatus.each { loadedStatusList << it.properties.name }
+                }
+            }
+            
+            def listHandler = [
+                getColumns: {
+                    return[
+                            new Column(name:"appno",            caption:"Application no.",width:95),
+                            new Column(name:"fullborrowername", caption:"Borrower name",width:220),
+                            new Column(name:"state",            caption:"State", width: 107),
+                            new Column(name:"routedescription", caption:"Route", width: 45),
+                           ]
+                },
+                fetchList:{o->
+                   o.state = selection;
+                   o.allowedStates = loadedStatusList;
+                   o.searchText = searchText;
+                   return searchSvc.getList(o);
+                },
+                getRows:{
+                    return 29;
+                }
+           ]as PageListModel;
+           
+            void setSelection(e){
+                this.selection = e;
+                searchText = '';
+                listHandler.load();
+            }
+            
+            void setSelected(e){
+                this.selected=e;
+                openLoanOpener();
+            }
+            
+            void openLoanOpener(){
+                initEntity();
+                if( !selected ) {
+                    mode='read';
+                }
+                else{
+                    entity=svc.read(selected);
+                    mode='selected';
+                }
+                opener=InvokerUtil.lookupOpener("loan:info",[
+                    entity:entity,
+                    mode:mode,
+                    selectHandler:{o->
+                        listHandler.load();
+                    }
+                ]);
+            }
+            
+            void refreshList(){
+                listHandler.load();
+            }
+
+            void initEntity(){
+               entity=[
+                    loaninfo:[interestrate:20],
+                    propertylist:[],
+                    vehiclelist:[],
+                    appliancelist:[],
+                    comments:[]
+                ];
+            }
+        }
+        ]]>
+    </code>
+    <pages>
+        <page template="loan.ui.ApplicationList"/>
+    </pages>
+</workunit>

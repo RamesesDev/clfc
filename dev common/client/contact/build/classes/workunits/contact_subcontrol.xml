@@ -1,0 +1,45 @@
+<workunit>
+     <invokers>
+        <invoker type="control:contact"/>
+     </invokers>
+    <code>
+        <![CDATA[
+            import com.rameses.rcp.common.*;
+            import com.rameses.rcp.annotations.*;
+            import com.rameses.util.*;
+            import com.rameses.osiris2.client.*;
+
+            public class ContactSubControlController extends SubControlModel {
+                @Binding
+                def binding;
+                
+                @Script('ContactDef')
+                def custDef;
+            
+                def customFields;
+                
+                def formPanelModel = [
+                    getFormControls: { return customFields; }
+                ] as FormPanelModel;
+            
+                def createContext() {
+                    return [:]
+                }
+                
+                void onInit() {
+                    customFields = custDef.getFormFields( context, 'context' );
+                }
+                
+                void onRefresh() {
+                }
+                
+                public String getHtmlFormat() {
+                    return formPanelModel.partialHtmlFormat;
+                }   
+            }
+        ]]>
+    </code>
+    <pages>
+        <page template="contact.ui.ContactSubControlPage"/> 
+    </pages>
+</workunit>

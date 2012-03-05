@@ -1,0 +1,58 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+import com.rameses.util.*;
+
+
+class BillingScheduleService
+{
+
+	@PersistenceContext('java:loan')
+	def em;
+
+	@Service('LoanBillingService')
+	def billSvc;
+
+	@Service('LoanLedgerService')
+	def ledgerSvc;
+
+
+
+	@ProxyMethod
+	public void start() {
+		println 'BillingScheduleService: starting billing run';
+
+		runBill( null );
+
+		println 'BillingScheduleService: billing run completed.';
+	}
+
+	@ProxyMethod
+	public def runBill( param ) {
+		def appList = em.sqlContext.createNamedQuery('loan_app:get-apps-for-billing').resultList;
+		def msgList = [];
+		appList.each { app->
+			println 'BillingScheduleService: processing ' + app.appno;
+
+			try {
+				def ledger = em.serializer.read( app.ledger );
+				ledger = billSvc.bill([
+					appid: app.objid,
+					ledger: ledger,
+					billDate: param?.billDate
+				]);
+				if( ledger ) {
+					ledgerSvc.update( [objid: app.objid, ledger: ledger] );
+				}
+			}
+			catch(e) {
+				def orig = ExceptionManager.instance.getOriginal(e);
+				def msg = 'error processing ' + app.appno + ', message: ' + orig.message;
+				msgList << msg;
+				println 'BillingScheduleService: ' + msg;
+			}
+		};
+
+		return msgList;
+	}
+
+}

@@ -1,0 +1,29 @@
+import com.rameses.annotations.*;
+
+class AsyncScriptService {
+
+	@Resource("ScriptService/local")
+	def scriptService;	
+	
+	@ProxyMethod
+	public def poll( String requestId ) {
+		def result = scriptService.getPollData( requestId );
+		def data = [requestId:requestId];
+		if(result==null) {
+			data.status = "NO DATA";
+		}
+		else if(result instanceof Exception) {
+			data.status = "ERROR";
+			data.result = result.message; 
+		}
+		else if(result == "EOF") {
+			data.status = "EOF";
+		}	
+		else {
+			data.status = "OK";
+			data.result = result; 
+		}	
+		return data;
+	}
+	
+}

@@ -1,0 +1,147 @@
+import com.rameses.annotations.*;
+import com.rameses.util.*;
+
+class ContactService {
+
+	@PersistenceContext("java:contact")
+	def em;
+
+	@Service("DateService")
+	def dateService;
+
+	@Service("ContactSearchService")
+	def searchService;
+	
+	@Env
+	def env;
+	
+	@Service("Var")
+	def vars;	
+	
+	/***
+	* saveNewCustomer contains a few switches passed as map in the second a parameter
+	* validate (boolean) = if true,
+	*/
+	@ProxyMethod
+	public def saveNew( def contact, def options ) {
+		
+		//check first if there are duplicate matches. provided validate is true
+		if( options?.validate ) {
+			def list = searchService.findByName( [firstname:contact.firstname, lastname: contact.lastname] );
+			if(list) throw new Warning("confirm_duplicates", [ list: list ]);
+		}
+		contact.objid = "CONT" + new java.rmi.server.UID();
+		contact.contactno = em.sqlContext.createNamedQuery("contact:getNextContactno").singleResult.contactno+'';
+		
+		def contactfile = [:];
+		contactfile.objid = contact.objid;
+		contactfile.contactno = contact.contactno;
+		contactfile.schemaname = "contact:contact";
+	    contactfile.version = "1.0";
+		contactfile.state = "PENDING";		
+		contactfile.docowner = env.USER;
+		contactfile.dtfiled = dateService.serverDate;
+		contactfile.info = contact;
+		
+		em.validate( "contact:contact", contact );
+		em.create( "contact:contactfile", contactfile );
+
+		def list = em.indexer.getIndexFor( "contact:contact" );
+		em.indexer.fire( list, contact );
+		em.sqlContext.createNamedExecutor("contact:updateContactno").execute();
+		return contact;
+	}
+
+	@ProxyMethod
+	public def saveConnection( relation ) {
+		em.create('contact:connection', relation);
+		return relation;
+	}
+
+	@ProxyMethod
+	public def updateConnection( relation ) {
+		em.update('contact:connection', relation);
+		return relation;
+	}
+
+	@ProxyMethod
+	public def getConnection( param ){
+		return em.read('contact:connection', param);
+	}
+
+	@ProxyMethod
+	public def updateContact( def contact , def options ) {
+		if(!options?.reason)
+			throw new Exception("Please provide a reason for change");
+	    em.validate( "contact:contact", contact );
+		
+		//update relation if specified in the options
+		if( options.relation && options.principal_id ) {
+			def param = [
+				principal: options.principal_id, 
+				relater: contact.objid, 
+				relationship: options.relation
+			];
+			updateConnection( param );
+		}
+		
+		//before updating, read first the original copy.
+		def contactfile = em.read( "contact:contactfile", [objid: contact.objid] );
+		def old = em.serializer.read( contactfile.info );
+		
+		//check if there are changes using MapVersionControl. If there are no changes do not proceed.
+		def mvc = new MapVersionControl();
+		def changeinfo = mvc.diff( old, contact );
+		if(changeinfo.isEmpty()) { 
+			return contact;
+		}
+		
+		//temporary solution because the em.update is giving us error for this type of saving.
+		def dtmodified = dateService.serverDate;
+		def modifiedby = env.USER;
+		
+		def p = [objid:contact.objid];
+		p.dtmodified = dtmodified;
+		p.modifiedby = modifiedby;
+		p.info = em.serializer.write(contact);
+		em.sqlContext.createNamedExecutor('contact:updateContact').setParameters(p).execute();
+
+		//fire up the indexers. remove unneccessary
+		def list = em.indexer.getIndexFor( "contact:contact" );
+		list.each {
+		    try {
+		        em.save(it, contact, true, true);
+		    }catch(e) { println e.message }
+		}
+		
+		//log the history
+		def hist = [objid:"CONTACT_HIST"+new java.rmi.server.UID(), contactid: contact.objid ];
+		hist.changeinfo = changeinfo;
+		hist.info = old;
+		hist.dtmodified = dtmodified;
+		hist.modifiedby = modifiedby;
+		hist.lastname = old.lastname;
+		hist.firstname = old.firstname;
+		hist.middlename = old.middlename;
+		hist.reason = options.reason;
+		em.create("contact:contact_change_history", hist );
+		
+		return contact;
+	}
+
+	@ProxyMethod
+	public def open( def param ) {
+		if( !param.objid )
+			throw new Exception("objid is required");
+		def contactfile = em.read( "contact:contactfile", param );
+		if( contactfile?.info ) {
+			def o = em.serializer.read( contactfile.info );
+			o.contactno = o.contactno+'';
+			if(!o.name) o.name = o.lastname + "," + o.firstname;
+			return o;
+		}
+		return null;
+	}
+	
+
+}

@@ -1,0 +1,5 @@
+"entity.employment.*" [entity.employed==1] {readonly:false;}
+"entity.employment.*" [entity.employed==0] {readonly:true;}
+
+"entity.*" [entity.otherSource==1] {readonly:false;}
+"entity.*" [entity.otherSource==0] {readonly:true;}
