@@ -41,10 +41,10 @@
                 getRows: { return 20 },
                 getColumns:{
                     return [
-                        new Column(name:"code",        caption:"Route Code"),          
-                        new Column(name:"description", caption:"Description", width:250),
-                        new Column(name:"area",        caption:"Area", width:200)
-                    ];
+                            new Column(name:"code",        caption:"Route Code"),          
+                            new Column(name:"description", caption:"Description", width:250),
+                            new Column(name:"area",        caption:"Area", width:200)
+                           ];
                 },
                 fetchList:{o-> 
                     svc.getList();

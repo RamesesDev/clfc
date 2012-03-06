@@ -38,33 +38,39 @@ public class LoanRemittance_ShortageOverPaymentPage extends javax.swing.JPanel {
 
         xTextArea1.setColumns(20);
         xTextArea1.setRows(5);
-        xTextArea1.setName("filter.reasons");
+        xTextArea1.setWrapStyleWord(true);
+        xTextArea1.setCaption("Remarks");
+        xTextArea1.setHint("Specify your remarks here.");
+        xTextArea1.setName("entity.reasons");
+        xTextArea1.setRequired(true);
+        xTextArea1.setShowCaption(false);
+        xTextArea1.setToolTipText("Type your remarks here.");
         jScrollPane1.setViewportView(xTextArea1);
 
         formPanel1.setCaptionWidth(102);
         xTextField1.setCaption("Collector's Name");
-        xTextField1.setName("filter.collector");
+        xTextField1.setName("entity.collector");
         xTextField1.setPreferredSize(new java.awt.Dimension(150, 19));
         xTextField1.setReadonly(true);
         xTextField1.setToolTipText("Collector's Name");
         formPanel1.add(xTextField1);
 
         xDateField1.setCaption("Date");
-        xDateField1.setName("filter.date");
+        xDateField1.setName("entity.date");
         xDateField1.setPreferredSize(new java.awt.Dimension(150, 19));
         xDateField1.setReadonly(true);
         xDateField1.setToolTipText("Date");
         formPanel1.add(xDateField1);
 
         xTextField3.setCaption("Route");
-        xTextField3.setName("filter.route");
+        xTextField3.setName("entity.route");
         xTextField3.setPreferredSize(new java.awt.Dimension(150, 19));
         xTextField3.setReadonly(true);
         xTextField3.setToolTipText("Time of Arrival");
         formPanel1.add(xTextField3);
 
         xTextField2.setCaption("Time of Arrival");
-        xTextField2.setName("filter.timeOfArrival");
+        xTextField2.setName("entity.timeOfArrival");
         xTextField2.setPreferredSize(new java.awt.Dimension(150, 19));
         xTextField2.setRequired(true);
         xTextField2.setToolTipText("Time of Arrival");
@@ -74,7 +80,7 @@ public class LoanRemittance_ShortageOverPaymentPage extends javax.swing.JPanel {
         xNumberField1.setFieldType(java.math.BigDecimal.class);
         xNumberField1.setFont(new java.awt.Font("Arial", 1, 18));
         xNumberField1.setForeground(new java.awt.Color(204, 0, 0));
-        xNumberField1.setName("filter.amount");
+        xNumberField1.setName("entity.amount");
         xNumberField1.setPattern("#,##0.00");
         xNumberField1.setPreferredSize(new java.awt.Dimension(150, 40));
         xNumberField1.setRequired(true);

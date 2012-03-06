@@ -181,12 +181,12 @@
             def report;            
             def printOut;
 
-            void setPrintOut( po ) {
+            void setPrintOut( po ){
                 this.printOut = po;
                 initReportModel();
             }
             
-            void initReportModel() {
+            void initReportModel(){
                 if( !printOut ) printOut = itemReport[0];
                 
                 report = [

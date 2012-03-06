@@ -30,7 +30,7 @@
         <% if(!data.spouse) { %>
             <h3>No Spouse specified</h3>
         <%}else{%>
-            <!--<%if( data.spouse.hasPhoto ){%>-->
+            <%if( !data.spouse.hasPhoto ){%>
                <table>     
                     <tr>
                         <td valign="top"><b>Photo:</b></td>
@@ -39,7 +39,17 @@
                         </tr>
                     </tr>
                </table>
-            <!--<%}%>-->
+            <%}%>
+            <%if( data.spouse.hasPhoto ){%>
+               <table>     
+                    <tr>
+                        <td valign="top"><b>Photo:</b></td>
+                        <tr>
+                            <td valign="top"><td><b class="red">No Photo(s) Attached</td>
+                        </tr>
+                    </tr>
+               </table>
+            <%}%>
             <table>
                 <tr><td><b>Customer No. :</b></td><td> <b class="navy">${data.spouse.contactno}</b></td></tr><br><br>
                 <tr><td><b>Name :</b></td><td> ${data.spouse.lastname}, ${data.spouse.firstname} 
@@ -229,47 +239,47 @@
                             <table>
                                 <tr><td><b>Name :</b></td><td> ${ssl.name}</td></tr>
                                 <%if(!ssl.Birthdate) { %>
-                                    <tr><td><b>Birthdate :</b></td><td> <i class="maroon">Not specified at present.</i></td></tr>
+                                    <tr><td><b>Birthdate :</b></td><td> <i class="red2">Not specified at present.</i></td></tr>
                                 <%}%>
                                 <%if(ssl.Birthdate) { %>
                                     <tr><td><b>Birthdate :</b></td><td> <j class="green">${formatDate(ssl.Birthdate)}</j></td></tr>
                                 <%}%>
                                 <%if(!ssl.age) { %>
-                                    <tr><td><b>Age :</b></td><td><b class="maroon">-</b></td></tr>
+                                    <tr><td><b>Age :</b></td><td><b class="red2">-</b></td></tr>
                                 <%}%>
                                 <%if(ssl.age) { %>
                                     <tr><td><b>Age :</b></td><td> ${ssl.age}</td></tr>
                                 <%}%>
                                 <%if(!ssl.address) { %>
-                                    <tr><td><b>Address :</b></td><td><i class="maroon">Not specified at present.</i></td></tr>
+                                    <tr><td><b>Address :</b></td><td><i class="red2">Not specified at present.</i></td></tr>
                                 <%}%>
                                 <%if(ssl.address) { %>
                                     <tr><td><b>Address :</b></td><td> ${ssl.address}</td></tr>
-                                <%}%><hr>
-                            </table>
-                            <table>
-                                <%if (data.principalSpouseSiblingsList.employmentList && data.principalSpouseSiblingsList.otherSourcesOfIncomeList) {%>
-                                    <tr>
-                                        <th><b>SOURCE(S) OF INCOME</b></th>
-                                    </tr>
                                 <%}%>
-                                <%if (!data.principalSpouseSiblingsList.employmentList && !data.principalSpouseSiblingsList.otherSourcesOfIncomeList) {%>
-                                    <tr>
-                                        <th><b>SOURCE(S) OF INCOME</b></th>
-                                        <tr><i class="red2">Not Specified at present</i></tr>
-                                    </tr>
-                                <%}%>
-                            </table>
-                            <div>
-                                <%
-                                    def links = [];
-                                    if( data.principalSpouseSiblingsList.employmentList )   links << '<a href="viewSiblingsEmployment">Employment</a>';
-                                    if( data.principalSpouseSiblingsList.otherSourcesOfIncomeList ) links << '<a href="viewSiblingsOtherIncome">Other Income</a>';
-                                    if( links )
-                                        println links.join(' | ');
-                                %>
-                            </div><hr>
-                       <%}%>
+                            </table><hr>
+                       <%}%><br>
+                       <table>
+                            <%if (data.principalSpouseSiblingsList.employmentList && data.principalSpouseSiblingsList.otherSourcesOfIncomeList) {%>
+                                <tr>
+                                    <th><b>SOURCE(S) OF INCOME</b></th>
+                                </tr>
+                            <%}%>
+                            <%if (!data.principalSpouseSiblingsList.employmentList && !data.principalSpouseSiblingsList.otherSourcesOfIncomeList) {%>
+                                <tr>
+                                    <th><b>SOURCE(S) OF INCOME</b></th>
+                                    <tr><i class="red2">Not Specified at present</i></tr>
+                                </tr>
+                            <%}%>
+                        </table>
+                        <div>
+                            <%
+                                def links = [];
+                                if( data.principalSpouseSiblingsList.employmentList )   links << '<a href="viewSiblingsEmployment">Employment</a>';
+                                if( data.principalSpouseSiblingsList.otherSourcesOfIncomeList ) links << '<a href="viewSiblingsOtherIncome">Other Income</a>';
+                                if( links )
+                                    println links.join(' | ');
+                            %>
+                        </div><!--<hr>-->
                     </td>
                 </tr>
              </table>

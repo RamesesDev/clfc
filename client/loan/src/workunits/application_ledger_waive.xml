@@ -1,6 +1,7 @@
 <workunit>
     <invokers>
-        <invoker type="application:waiveLedger" caption="Waive Ledger" target="popup" action="init"/>
+        <invoker type="application:waiveLedger" caption="Waive Ledger" target="popup" 
+                 action="init" permission="application.waiveLedger"/>
     </invokers>
     <code>
         <![CDATA[

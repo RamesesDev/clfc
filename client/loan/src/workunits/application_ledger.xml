@@ -13,6 +13,12 @@
         
         <invoker type="formActions" caption="Back" icon="images/back16.png" mnemonic="b" 
                  action="back" visibleWhen="#{view!='main'}"/>
+        
+        <invoker type="formActions" caption="Print Ledger" mnemonic="p" action="print" icon="images/print16.png"
+                 permission="application.printLedger" tooltip="Print this ledger"/>
+        
+        <invoker type="formActions" caption="Waive Ledger" mnemonic="w"
+                 action="waiveLedger" permission="application.waiveLedger"/>
                  
         <invoker type="formActions" caption="View Details" mnemonic="d" action="viewDetails"
                  visibleWhen="#{view=='main'}"/>
@@ -21,12 +27,7 @@
                  permission="application.capturePayment" visibleWhen="#{view!='main'}"/>
                  <!--visibleWhen="#{ledger.principalBalance &gt; 0 and entity.mode == 'CAPTURE' || entity.mode == 'ONLINE'}"/>-->
                  <!--visibleWhen="#{ledger.principalBalance &gt; 0 and entity.mode == 'CAPTURE'}"/>-->
-        <invoker type="formActions" caption="Waive Ledger" mnemonic="w"
-                 action="waiveLedger" permission="application.waiveLedger"/>
-                 
-        <invoker type="formActions" caption="Print Ledger" mnemonic="p" action="print" icon="images/print16.png"
-                 permission="application.printLedger" tooltip="Print this ledger"/>
-                 
+        
         <invoker type="formActions" caption="Add Interest" mnemonic="a" action="addInterest" icon="images/add16.png"
                  permission="application.addInterest" tooltip="Add 7 Days of interest on this account"/>
                  
