@@ -16,4 +16,188 @@ public class OverPaymentPostingService
 	def ledgerSvc;
 	
 	static final def dt_formatter = new java.text.SimpleDateFormat('yyyy-MM-dd');
+	
+
+	@ProxyMethod
+	public def postPayment( param ) 
+	{	
+		assert param.appid;
+		assert param.amount;
+		assert param.billno;
+		
+
+		param.amount = fixDecimal( param.amount );
+		def paydate = param.date? param.date : dateSvc.serverDate;
+		if( paydate instanceof String ) paydate =  parseDate( paydate );
+	
+		def amount = param.amount;
+		def unpaid = [];
+		def itemsPaid = [];
+		def paymentSummary = [principal: 0.00, interest: 0.00, surcharge: 0.00, pastdue: 0.00];
+		
+		def ledger = param.ledger;
+		
+		if( ledger.principalBalance > 0.00 ) {
+			if( ledger.lastDatePaid ) {
+				def p = [objid: param.appid];
+				p.datefrom = DateUtil.add( parseDate(ledger.lastDatePaid), '1d');
+				p.dateto = ledger.nextBillDate;
+				unpaid = ledgerSvc.getDetails( p );
+			}
+
+			def maturityDate = parseDate( ledger.maturityDate );
+		
+			//bill first
+			def result = billingSvc.bill([ ledger: ledger, unpaid: unpaid, billDate: paydate]);
+
+			if( result ) {
+				ledger.putAll( result.ledger );
+				unpaid = result.items;
+			}
+
+			def daysCanPay = (int)(amount / ledger.overPayment);
+			def totalDailyDue = (unpaid.size()) * ledger.dailyPayment;
+			
+			boolean isUnderpaid = false;
+			def underpmt = 0.00;
+			if( amount < totalDailyDue ) {
+				isUnderpaid = true;
+			}
+		
+			def currPaymentDate =  parseDate(ledger.nextBillDate) - 1;
+			for(int i=0; i<unpaid.size(); ++i) {
+				def it = unpaid[i];
+				
+				if( (amount - underpmt) <= it.interest + (it.absent_penalty? it.absent_penalty : 0.00) ) break;
+			
+				if( it.interest ) amount -= it.interest;
+				if( it.pastdue )  amount -= it.pastdue;
+				if( it.absent_penalty ) 
+				{
+					amount -= it.absent_penalty;
+				}
+				 //the date is supposed to be exempted, but the payer fails to coverup
+				 //charge an absent penalty
+				else if( isUnderpaid && it.date != currPaymentDate ) 
+				{
+					it.absent_penalty = fixDecimal(ledger.dailyPayment * ledger.absentrate);
+					amount -= it.absent_penalty;
+				}
+			
+				paymentSummary.interest += it.interest;
+				if( it.absent_penalty ) paymentSummary.surcharge += it.absent_penalty;
+				if( it.pastdue ) paymentSummary.pastdue = it.pastdue;
+			
+				itemsPaid << it;
+				
+				if( isUnderpaid ) {
+					def runningDue = (i+1) * ledger.dailyPayment
+					underpmt = fixDecimal((runningDue - param.amount) * ledger.underpaymentrate);
+				}
+			}
+		
+			//last schedule paid
+			def date = null;
+			if( itemsPaid )
+				date = DateUtil.add( parseDate(itemsPaid[-1].date), '1d' );
+			else
+				date = parseDate( ledger.nextBillDate );
+		
+		
+			//if the loan is not yet due and the payment can pay for more than the days due, so pay advance			
+			if( date <= maturityDate && daysCanPay > unpaid.size() && amount > ledger.dailyInt ) {
+				def days = daysCanPay - unpaid.size();
+			
+				for(int i=0; i<days; ++i) {
+					if( date > maturityDate || amount <= ledger.dailyInt ) break;
+					def bill = billingSvc.bill([ledger: ledger, billDate: date]);
+					ledger.putAll( bill.ledger );
+					def item = bill.items[0]; //unpaid is only one
+				
+					amount -= item.interest;
+					unpaid << item;
+					itemsPaid << item;
+					paymentSummary.interest += item.interest;
+					date = DateUtil.add( date, '1d' );
+				}
+			}
+				
+			if( underpmt ) {
+				itemsPaid[-1].underpayment_penalty = underpmt;
+				paymentSummary.surcharge += underpmt;
+				amount -= underpmt;
+			}
+			
+			//this happens if it is an advance payment and paying partial amount
+			if( !itemsPaid )
+				throw new Exception('Advance partial payment is not allowed.');
+
+			def lastPaid = itemsPaid[-1];
+			lastPaid.payment = param.amount;
+			lastPaid.paymentdate = paydate;
+			lastPaid.refno = param.billno;
+		
+			//-- update ledger info
+			if( ledger.principalBalance >= amount ) {
+				ledger.principalBalance -= amount;
+			}
+			else {
+				def extraAmtPaid = amount - ledger.principalBalance;
+				amount = ledger.principalBalance;
+				ledger.principalBalance = 0.00;
+				if( extraAmtPaid > 0 ) {
+					lastPaid.interest += extraAmtPaid;
+					paymentSummary.interest += extraAmtPaid;
+				}
+			}
+		
+			if( ledger.principalBalance <= 0.00 ) {
+				ledger.fullyPaidAmt = param.amount;
+				ledger.dateFullyPaid = paydate;
+			}
+			
+			lastPaid.principal = amount;
+			paymentSummary.principal = amount;
+			lastPaid.principal_balance = ledger.principalBalance;
+			
+			itemsPaid.each { it.paymentMode = param.mode? param.mode : 'ONLINE' };
+			
+			ledger.lastDatePaid = lastPaid.date;
+			ledger.totalPaid += param.amount;    //actual amount passed
+			ledger.totalPrincipalPaid += amount; //remaining amount for the principal
+			ledger.totalInterestPaid += paymentSummary.interest;
+			ledger.totalPenaltyPaid += paymentSummary.surcharge;
+			ledger.totalAbsent += itemsPaid.findAll { it.absent_penalty && it.absent_penalty > 0.00 }.size();
+			
+			ledgerSvc.update([objid: param.appid, ledger: ledger]);
+			ledgerSvc.updateDetails( [appid: param.appid, details: unpaid] );
+		}
+		//if the payment is done after the ledger is fully paid
+		else {
+			if( param.acceptEvenFullyPaid ) {
+				if( ledger.extraAmtPaid == null )
+					ledger.extraAmtPaid = param.amount;
+				else
+					ledger.extraAmtPaid += param.amount;
+					
+				ledgerSvc.update([objid: param.appid, ledger: ledger]);
+			}
+			else {
+				throw new Exception("Ledger is already fully paid.");
+			}
+		}
+		
+		return paymentSummary;
+	}
+	
+	
+	//------ helper -----------
+	private def parseDate( date ) {
+		def strDate = date instanceof String? date : dt_formatter.format( date );
+		return dt_formatter.parse( strDate );
+	}
+	
+	private def fixDecimal( value ) {
+		return NumberUtil.formatDecimal(value, '0.00');
+	}
 }

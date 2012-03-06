@@ -99,22 +99,8 @@ class LoanLedgerService
 			if( !app ) throw new Exception("No loan application record found.");
 			if( !app.ledger ) throw new Exception("Application $app.appno has no ledger.");
 			
-			def ledger = em.serializer.read( app.ledger );
-			
-			def md = parseDate(ledger.maturityDate);
-			def dg = parseDate(ledger.dtcreated);
-			def ld;
-			if( ledger.lastDatePaid )
-				ld = parseDate(ledger.lastDatePaid);
-			else
-				ld = dg;
-			
-			if( !ledger.mode || ledger.mode == 'regular' )
-				ledger.loanBalance = (ledger.term - DateUtil.diff(dg,ld)) * ledger.dailyInt + ledger.principalBalance;
-			else if( ledger.mode == 'over' )
-				ledger.loanBalance = (ledger.term - DateUtil.diff(dg,ld)) * ledger.dailyInt + ledger.principalBalance;
-			else if( ledger.mode == 'fixed' )
-				ledger.loanBalance = ledger.principalBalance + ledger.waivedIntBalance;
+			def ledger = em.serializer.read( app.ledger );			
+			ledger.loanBalance = computeLoanBalance( ledger );
 
 			return ledger;
 		}
@@ -122,6 +108,31 @@ class LoanLedgerService
 			e.printStackTrace();
 			throw e;
 		}
+	}
+	
+	@ProxyMethod
+	public def computeLoanBalance( ledger ) 
+	{
+		def md = parseDate(ledger.maturityDate);
+		def dg = parseDate(ledger.dtcreated);
+		def ld;
+		if( ledger.lastDatePaid ) {
+			ld = parseDate(ledger.lastDatePaid);
+		}
+		else {
+			ld = dg;
+		}
+		
+		if( ledger.mode == 'over' )
+		{
+			return (ledger.term - DateUtil.diff(dg,ld)) * ledger.dailyInt + ledger.principalBalance;
+		}
+		if( ledger.mode == 'fixed' ) {
+			return ledger.principalBalance + ledger.waivedIntBalance;
+		}
+		
+		//regular
+		return (ledger.term - DateUtil.diff(dg,ld)) * ledger.dailyInt + ledger.principalBalance;
 	}
 
 	/**

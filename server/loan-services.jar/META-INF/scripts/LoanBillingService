@@ -12,9 +12,6 @@ class LoanBillingService
 
 	@Service('DateService')
 	def datesvc;
-
-	@Service('LoanLedgerService')
-	def ledgerSvc;
 	
 	@Service('LoanCalendarService')
 	def calSvc;

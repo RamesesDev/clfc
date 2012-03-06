@@ -23,7 +23,6 @@ public class FixRatePostingService
 		assert param.appid;
 		assert param.amount;
 		assert param.billno;
-		//assert param.mode
 		
 		def ledger = param.ledger;
 		
