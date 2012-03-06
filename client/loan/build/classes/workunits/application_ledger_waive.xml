@@ -1,6 +1,7 @@
 <workunit>
     <invokers>
-        <invoker type="application:waiveLedger" caption="Waive Ledger" target="popup" action="init"/>
+        <invoker type="application:waiveLedger" caption="Waive Ledger" target="popup" 
+                 action="init" permission="application.waiveLedger"/>
     </invokers>
     <code>
         <![CDATA[
@@ -30,7 +31,7 @@
                 
             }    
             
-            def save() {
+            def save(){
                 if( MsgBox.confirm('You are about to waive this ledger.\nPlease verify that all entries are correct. Proceed?') ) 
                 {
                     waiver.appid = appid;
@@ -41,7 +42,7 @@
                 return null;
             }
         }
-       ]]>
+        ]]>
     </code>
     <pages>
         <page template="loan.ui.ledger.WaiverPage"/>

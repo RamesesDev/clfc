@@ -31,6 +31,6 @@
         ]]>
     </code>
     <pages>
-        <page template="loan.ui.ledger.LedgerSearchDate"/>
+        <page template="loan.ui.ledger.LedgerSearchPaymentDate"/>
     </pages>    
 </workunit>

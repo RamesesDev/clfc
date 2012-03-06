@@ -8,7 +8,7 @@
                  target="window" icon="images/indent32.png"/>
         
         <invoker type="formActions" mnemonic="n" action="open" caption="Next"
-            tooltip="Next" icon="images/next16.png" visibleWhen="#{mode=='init'}"/>
+            tooltip="Next" icon="images/next16.png" visibleWhen="#{mode=='init'}" default="true"/>
             
         <invoker type="formActions" mnemonic="s" action="save" caption="Save"
             tooltip="Save Remittance" icon="images/save16.png" visibleWhen="#{mode=='create'}" />
@@ -104,25 +104,36 @@
                 if(pos!=-1) prevRAmount = entity.list.amountpaid[pos];
             }
     
+            def sSelectHandler;
+            def shortHandler={o->
+                entity.routecode=o.code;
+                entity.collector=o.collector;
+                entity.routedescription=o.description;
+                binding.refresh("entity.routecode");
+            };
+                        
             def save() {
                 def brkHandle = breakDownOpener.handle;
                 if(brkHandle.totalBreakdown != entity.total){
                     //throw new Exception("Total breakdown and Total Amount is not equal.");
                     
-                    MsgBox.alert("Total breakdown and Total Amount is not equal.");
-                        //for over payment/remittance
-                        if(brkHandle.totalBreakdown > entity.total){
-                            return InvokerUtil.lookupOpener("collection:overPayment",[:])
-                        }
-                        //for short payment/remittance
-                        if(brkHandle.totalBreakdown < entity.total){
-                            return InvokerUtil.lookupOpener("collection:shortagePayment",[:])
-                        }
-                        
-                    
+                    MsgBox.alert("Total Cash Breakdown " +brkHandle.totalBreakdown+ " and Total Amount " +entity.total+ " is not equal.");
                     //if(!MsgBox.confirm('Are you sure you want to remit this collection \nwith the Total breakdown and Total Amount is not equal?')){
-                        //return confirm({InvokerUtil.lookupOpener("collection:shortagePayment",[:]) });
+                        //return confirm({ entity ->
+                            //For Over Payment/Remittance
+                            if(brkHandle.totalBreakdown > entity.total){
+                                return InvokerUtil.lookupOpener("collection:overPayment",[entity:entity, shortHandler:sSelectHandler]);
+                                print();
+                            }
+
+                            //For Short Payment/Remittance
+                            if(brkHandle.totalBreakdown < entity.total){
+                                return InvokerUtil.lookupOpener("collection:shortagePayment",[ : ]);
+                                print();
+                            }
+                        //});
                     //}
+                    
                     /*
                     if(MsgBox.confirm("You are about to return this application to pending, proceed?")){
                         return confirm({ message ->
@@ -144,6 +155,67 @@
                 entity.breakdown = brkHandle.list;
                 svc.remitCollectionSheet( entity );
                 mode = "read";
+            }
+
+            def print(){
+                MsgBox.alert("Printing is not supported at this time.");
+                //setPrintOut();
+            }
+            
+             //--- Report Support -----//
+            def itemReport = [ "Shortage Payment", "Over Payment" ]
+            def report;    
+            def printOut;
+
+            void setPrintOut( po ) {
+                this.printOut = po;
+                initReportModel();
+            }
+            
+            void initReportModel() {
+                if( !printOut ) printOut = itemReport[0];
+                
+                report = [
+                    getReportName: {
+                        if( "Shortage Payment".equals(printOut) )
+                            return 'loantreasury/printout/ShortagePayment.jasper';
+                        else
+                            return 'loantreasury/printout/OverPayment.jasper';
+                    },
+                    getReportData: {
+                        def data = [:];
+                        
+                        data.collector = data.collector;
+                        data.date = data.date;
+                        
+                        if( data.routecode ==null )
+                            data.routecode = '';
+                        else data.routecode = data.routecode;
+                        if( data.routedescription ==null )
+                            data.routedescription = '';
+                        else data.routedescription = data.routedescription;
+                        data.route = data.routecode + " - " + data.routedescription;
+                        
+                        if(data.amount!=null)    
+                            data.amount = new BigDecimal(data.amount);
+                        else
+                            data.amount = new BigDecimal(0.00);
+                            
+                        data.reasons = data.reasons;
+                        data.srno = data.srno;
+                        data.orno = data.orno;
+                        return data;
+                    },
+                    getParameters:{ 
+                        return [ 
+                            BRANCH_NAME: OsirisContext.env.CLIENT.name ,
+                            PRINTDATE: new Date(), 
+                            User: OsirisContext.env.USERINFO.firstname + ' ' + OsirisContext.env.USERINFO.lastname
+                        ]
+                    }
+                ] as ReportModel;
+                
+                report.viewReport();
             }
             
             def routeSelectHandler={o->

@@ -22,37 +22,20 @@
             @Service( "LoanApplicationSearchService" )
             def searchSvc;
             
-            def selectHandler;
-            def searchPayee;
+            def sSelectHandler;
+            def shortSelectHandler={o->
+                entity.routecode=o.code;
+                entity.routedescription=o.description;
+                binding.refresh("entity.routecode");
+            };
             
-            def filter = [date: OsirisContext.env.LOCALE_TIME];
+            def entity = [ date: OsirisContext.env.LOCALE_TIME
+                         
+                          ];
             
             def Ok(){
                 return "_close";
             }
-            
-            /*
-            def find(){
-                
-                if( !selected )
-                    throw new Exception('No item selected.');
-                    
-                if(selectHandler)selectHandler(selected);
-                return "_close";
-               
-                if( searchText==null || !searchText){
-                    MsgBox.alert("Nothing to Find");
-                    return;
-                }else return "_close";
-            }
-            
-            def searchPayee(){
-                if( searchText==null || !searchText){
-                    MsgBox.alert("Nothing to Find");
-                    return;
-                }else return "_close";
-            }
-            */
         }    
         ]]>
     </code>
