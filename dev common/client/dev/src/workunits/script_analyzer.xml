@@ -12,7 +12,8 @@
         import com.rameses.io.*;
         import java.io.*;
         
-        public class ScriptServiceAnalyzerController{
+        public class ScriptServiceAnalyzerController
+        {
             static def APPROVE = JFileChooser.APPROVE_OPTION;
         
             @Service("ScriptServiceAnalyzer")

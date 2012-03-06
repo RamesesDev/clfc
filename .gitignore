@@ -1,0 +1,11 @@
+**DS_Store
+*/*/build
+*/*/dist
+**cvs*
+
+dev\ common/*/*/build
+dev\ common/*/*/dist
+
+platform/*/build
+platform/*/dist
+platform/*/osiris2

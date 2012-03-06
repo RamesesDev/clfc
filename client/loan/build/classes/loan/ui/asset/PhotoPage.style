@@ -1,5 +1,0 @@
-"photo.*" [editmode=='read'] {readonly:true;}
-"photo.*" [editmode!='read'] {readonly:false;}
-
-"photo.file" [editmode=='read'] { visible: false; }
-"photo.file" [editmode!='read'] { visible: true; }

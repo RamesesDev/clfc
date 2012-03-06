@@ -1,9 +1,0 @@
-<folders>
-    <folder id="menu">
-        <folder id="services" caption="Service">
-            <folder id="loan" caption="Loan">
-                <folder id="renew" caption="Renew"/>
-            </folder>
-        </folder>
-    </folder>
-</folders>
