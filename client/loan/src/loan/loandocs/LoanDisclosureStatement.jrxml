@@ -42,6 +42,11 @@
 	<field name="ledger.dailyPayment" class="java.math.BigDecimal"/>
 	<field name="PRINTDATE" class="java.lang.String"/>
 	<field name="amount" class="java.math.BigDecimal"/>
+	<field name="notarial" class="java.math.BigDecimal"/>
+	<field name="docstamp" class="java.math.BigDecimal"/>
+	<field name="chatrealreg" class="java.math.BigDecimal"/>
+	<field name="affidavit" class="java.math.BigDecimal"/>
+	<field name="name2" class="java.lang.String"/>
 
 		<background>
 			<band height="0"  isSplitAllowed="true" >
@@ -383,7 +388,7 @@
 				</line>
 				<line direction="TopDown">
 					<reportElement
-						x="327"
+						x="266"
 						y="206"
 						width="5"
 						height="1"
@@ -391,6 +396,58 @@
 						key="line-6"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="285"
+						y="261"
+						width="114"
+						height="19"
+						key="textField-11"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{notarial}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="285"
+						y="240"
+						width="114"
+						height="19"
+						key="textField-13"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{docstamp}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="285"
+						y="219"
+						width="114"
+						height="19"
+						key="textField-14"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{chatrealreg}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="285"
+						y="199"
+						width="114"
+						height="19"
+						key="textField-15"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{affidavit}]]></textFieldExpression>
+				</textField>
 			</band>
 		</title>
 		<pageHeader>

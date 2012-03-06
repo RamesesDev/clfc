@@ -192,7 +192,7 @@
                 report = [
                     getReportName: {
                         if( "Loan Disclosure".equals(printOut) )
-                            return 'loan/loandocs/LoanDisclosureStatement.jasper';
+                            return 'loan/loandocs/LoanDisclosureStatement (copy).jasper';
                         else if( "Loan Release Voucher".equals(printOut) )
                             return 'loan/loandocs/LoanReleaseVoucher.jasper';
                         else if( "Affidavit Of Ownership".equals(printOut) )

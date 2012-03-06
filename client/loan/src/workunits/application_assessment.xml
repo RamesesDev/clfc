@@ -192,7 +192,7 @@
                 report = [
                     getReportName: {
                         if( "Loan Disclosure".equals(printOut) )
-                            return 'loan/loandocs/LoanDisclosureStatement.jasper';
+                            return 'loan/loandocs/LoanDisclosureStatement (copy).jasper';
                         else if( "Loan Release Voucher".equals(printOut) )
                             return 'loan/loandocs/LoanReleaseVoucher.jasper';
                         else if( "Affidavit Of Ownership".equals(printOut) )
@@ -253,24 +253,26 @@
                             return ReportUtil.print(reportModel.report, true);
                         }*/
                         
-                        if ( data.startDate ==null )
+                        if( data.startDate ==null )
                             data.startDate = '';
                         else
-                            //data.startDate = application.ledger.startDate;
-                            data.startDate = '';
+                            data.startDate = application.ledger.startDate;
+                            //data.startDate = '';
                             
-                        if ( data.maturityDate ==null )    
+                        if( data.maturityDate ==null )    
                             data.maturityDate = '';
                         else
-                            //data.maturityDate = application.ledger.maturityDate;
-                            data.maturityDate = '';
+                            data.maturityDate = application.ledger.maturityDate;
+                            //data.maturityDate = '';
                         
-                        if ( data.dailyPayment ==null )
+                        if( data.dailyPayment ==null )
                             data.dailyPayment = new BigDecimal(0);
                         else   
                             //data.dailyPayment = application.ledger.dailyPayment;
                             data.dailyPayment = new BigDecimal(application.ledger.dailyPayment);
-                            
+                        if( data.ledger.term ){
+                        
+                        }
                         data.bankname = application.bankname;
                         data.checkno = application.checkno;
                         

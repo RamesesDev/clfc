@@ -66,6 +66,7 @@ public class ApplicationReportModel extends ReportModel {
     
     public Object getReportData(){ 
         def data=[:]
+        def accts;
         if ( entity.loancount == 1 )
             data.apptype = "NEW APPLICATION";
         else
@@ -79,10 +80,6 @@ public class ApplicationReportModel extends ReportModel {
         if( entity.clientType=='WALK-IN' ){
             data.marketed = '-';
         }
-        data.appno = data.appno;
-        data.contactno = data.borrower.contactno+'';
-        data.name = getCustName( data.borrower );
-        data.address = getCustAddress( data.borrower );
         data.borrowerName = getCustName( data.borrower );
         data.borrower.contactno = data.borrower.contactno+'';
         if( data.borrower.otherAccnts !=null ){
@@ -93,7 +90,19 @@ public class ApplicationReportModel extends ReportModel {
             data.otherAccts = " ";
         }
         
-        /*-----For Loan Releasing-----
+        /*-----For Loan Releasing-----*/
+        data.appno = data.appno;
+        data.contactno = data.borrower.contactno+'';
+        data.name = [data.borrower.firstname + ' ' + data.borrower.lastname];
+        data.name2 = [data.borrower.firstname + ' ' + data.borrower.lastname];
+        data.jointBorrowerList?.each {
+            data.name << it.firstname + ' ' + it.lastname;
+            data.name2 << it.firstname + ' ' + it.lastname;
+        }
+        data.name = data.name.join(' and ');
+        data.address = getCustAddress( data.borrower );
+        
+        /*
         if ( data.ledger.startDate ==null )
             data.ledger.startDate = '';
         else
@@ -118,11 +127,12 @@ public class ApplicationReportModel extends ReportModel {
         //data.charges = accts;
 
         //data.insurance = '';
-        //data.notarial = accts.find{ it.title == 'NOTARIAL FEE' }?.amount;
-        //data.docstamp = accts.find{ it.title == 'DOCUMENTARY STAMP' }?.amount;
-        //data.chatrealreg = accts.find{ it.title == 'CHAT/REAL REGISTRATION' }?.amount;
-        //data.affidavit = accts.find{ it.title == 'AFFIDAVIT' }?.amount;
-        //data.totalCharges =  data.notarial + data.docstamp + data.chatrealreg + data.affidavit;
+        
+        data.notarial = accts.find{ it.title == 'NOTARIAL FEE' }?.amount;
+        data.docstamp = accts.find{ it.title == 'DOCUMENTARY STAMP' }?.amount;
+        data.chatrealreg = accts.find{ it.title == 'CHAT/REAL REGISTRATION' }?.amount;
+        data.affidavit = accts.find{ it.title == 'AFFIDAVIT' }?.amount;
+        data.totalCharges =  data.notarial + data.docstamp + data.chatrealreg + data.affidavit;
         /*----------------*/
         
         data.mainBorrowerAge = data.borrower.age;
@@ -336,7 +346,7 @@ public class ApplicationReportModel extends ReportModel {
         };
         
         if( data.jointBorrowerList ){
-            data.jointBorrowerNames = data.jointBorrowerList.collect { getCustName(it) }.join(' and '); 
+            data.jointBorrowerNames = data.jointBorrowerList.collect { getCustName(it) }.join(' and ');
             data.jointBorrowerAddress = getCustAddress( data.jointBorrowerList[0] );
             data.jointBorrowerBirthDate = data.jointBorrowerList.collect{ it.birthdate? it.birthdate : ' - ' }.join('/');
             data.jointBorrowerAge = data.jointBorrowerList.collect{ it.age? it.age: ' - ' }.join('/');
