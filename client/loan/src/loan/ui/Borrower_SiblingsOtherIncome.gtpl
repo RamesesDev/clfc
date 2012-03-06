@@ -13,15 +13,10 @@
        .teal { color: teal; font-size: 9px; font-weight:bold;}
     </style>
     <body>
-        <% if(!data.principalSpouseSiblingsList) { %>
+        <% if(!data.principalSpouseSiblingsList.otherSourcesOfIncomeList) { %>
             <h3>No other income specified for this application</h3>
         <% } else { %>
             <table width="100%">
-                <tr>
-                    <td bgcolor="gray">
-                        <h3 class="white"><b>Other Source(s) of Income Information</b></h3>
-                    </td>
-                </tr>
                 <tr>
                     <td width ="50%" valign="top">
                         <% data.principalSpouseSiblingsList.each { pssl -> %>

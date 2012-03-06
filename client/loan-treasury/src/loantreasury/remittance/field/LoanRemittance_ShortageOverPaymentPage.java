@@ -39,9 +39,12 @@ public class LoanRemittance_ShortageOverPaymentPage extends javax.swing.JPanel {
         xTextArea1.setColumns(20);
         xTextArea1.setRows(5);
         xTextArea1.setWrapStyleWord(true);
+        xTextArea1.setCaption("Remarks");
+        xTextArea1.setHint("Specify your remarks here.");
         xTextArea1.setName("entity.reasons");
         xTextArea1.setRequired(true);
         xTextArea1.setShowCaption(false);
+        xTextArea1.setToolTipText("Type your remarks here.");
         jScrollPane1.setViewportView(xTextArea1);
 
         formPanel1.setCaptionWidth(102);

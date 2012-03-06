@@ -18,11 +18,6 @@
         <% } else { %>
             <table width="100%">
                 <tr>
-                    <td bgcolor="gray">
-                        <h3 class="white"><b>Employment Information</b></h3>
-                    </td>
-                </tr>
-                <tr>
                     <td width="50%" valign="top">
                         <% data.principalSpouseSiblingsList.each { pssl -> %>
                             <% pssl.employmentList.each { employment -> %>    
