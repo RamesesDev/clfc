@@ -3,9 +3,15 @@
 */*/dist
 **cvs*
 
+#-- dev common
 dev\ common/*/*/build
 dev\ common/*/*/dist
 
+#-- platform
 platform/*/build
 platform/*/dist
 platform/*/osiris2
+
+#-- platform modules
+platform/*/*/build
+platform/*/*/dist
