@@ -6,7 +6,6 @@ import com.rameses.osiris2.reports.*;
 import com.rameses.common.*;
 import java.util.regex.*;
 
-
 public class CheckPrintScript
 {
     def printFormat;

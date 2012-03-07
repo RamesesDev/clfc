@@ -1,11 +1,13 @@
 <workunit>
     <invokers>
-        <invoker type="application:approved_action" caption="Submit For Release" action="init" mnemonic="s" index="10"/>
+        <invoker type="application:approved_action" caption="Submit For Release" icon="images/submit16.png" 
+            action="init" mnemonic="s" index="10"/>
         
         <invoker type="formActions" caption="Back"   action="_close" mnemonic="c" icon="images/back16.png"/>
-        <invoker type="formActions" caption="Next"   action="next"   mnemonic="n" icon="images/next16.png" visibleWhen="#{mode=='amountOption'}" tooltip="Proceed?"/>
-        <invoker type="formActions" caption="Submit" action="submit" mnemonic="s" visibleWhen="#{mode=='charges'}" tooltip="Submit for Releasing"/>
-        
+        <invoker type="formActions" caption="Next"   action="next"   mnemonic="n" icon="images/next16.png" 
+                 visibleWhen="#{mode=='amountOption'}" tooltip="Proceed?"/>
+        <invoker type="formActions" caption="Submit" action="submit" mnemonic="s" visibleWhen="#{mode=='charges'}" 
+                 tooltip="Submit for Releasing"/>
         <invoker type="formPrintActions" caption="Close" icon="images/exit16.png" action="_close" mnemonic="c"/>
     </invokers>
     <code>
@@ -257,22 +259,22 @@
                             data.startDate = '';
                         else
                             data.startDate = application.ledger.startDate;
-                            //data.startDate = '';
                             
                         if( data.maturityDate ==null )    
                             data.maturityDate = '';
                         else
                             data.maturityDate = application.ledger.maturityDate;
-                            //data.maturityDate = '';
-                        
+                            
                         if( data.dailyPayment ==null )
                             data.dailyPayment = new BigDecimal(0);
-                        else   
-                            //data.dailyPayment = application.ledger.dailyPayment;
+                        else
                             data.dailyPayment = new BigDecimal(application.ledger.dailyPayment);
-                        if( data.ledger.term ){
+                            
+                        if( data.term ==null )
+                            data.term = 0;
+                        else
+                            data.term = application.ledger.term;
                         
-                        }
                         data.bankname = application.bankname;
                         data.checkno = application.checkno;
                         
@@ -280,7 +282,7 @@
                         
                         data.insurance = '';
                         data.notarial = accts.find{ it.title == 'NOTARIAL FEE' }?.amount;
-                        data.docstamp = accts.find{ it.title == 'DOCUMENTARY STAMP' }?.amount;
+                        data.docstamp = accts.find{ it.title == 'DOCUMENTARY STAMP FEE' }?.amount;
                         data.chatrealreg = accts.find{ it.title == 'CHAT/REAL REGISTRATION' }?.amount;
                         data.affidavit = accts.find{ it.title == 'AFFIDAVIT' }?.amount;
                         //data.totalCharges =  data.notarial + data.docstamp + data.chatrealreg + data.affidavit;
@@ -294,7 +296,7 @@
                             User: OsirisContext.env.USERINFO.firstname + ' ' + OsirisContext.env.USERINFO.lastname
                         ]
                     }
-                ] as ReportModel;
+                ]as ReportModel;
                 
                 report.viewReport();
             }
