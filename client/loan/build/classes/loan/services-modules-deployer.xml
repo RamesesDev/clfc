@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="mlglobal-services-deployer" basedir=".">
+<project name="services-deployer" basedir=".">
     
     <target name="deploy-loan-services">
         <antcall target="zz-do-deploy">

@@ -122,7 +122,7 @@ class LoanPaymentService
 			
 			def svc = svcInvoker.create( postingHandlers[mode] );
 			if( !svc ) throw new Exception("No posting handler found for ledger mode ${mode}.");
-
+			
 			return svc.postPayment( param );
 		}
 		catch(e) {

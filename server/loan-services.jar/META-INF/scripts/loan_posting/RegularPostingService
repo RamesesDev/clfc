@@ -24,7 +24,6 @@ public class RegularPostingService
 		assert param.appid;
 		assert param.amount;
 		assert param.billno;
-		//assert param.mode
 
 		param.amount = fixDecimal( param.amount );
 		def paydate = param.date? param.date : dateSvc.serverDate;

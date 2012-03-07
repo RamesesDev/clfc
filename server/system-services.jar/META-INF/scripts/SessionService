@@ -36,4 +36,9 @@ class SessionService {
     public def logout(o) {
     	em.delete( "usersession", o );
     }
+	
+	@ProxyMethod
+	public def checkSession() {
+		
+	}
 }
