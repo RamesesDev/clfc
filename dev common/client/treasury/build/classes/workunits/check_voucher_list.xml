@@ -32,11 +32,11 @@
             def listHandler = [
                 getColumns:{
                     return [
-                        new Column(name:"voucherno",caption:"Voucher No.", width: 60),
-                        new Column(name:"refno",caption:"Ref. No.", width: 60),
+                        new Column(name:"voucherno",caption:"Voucher No.", width: 80),
+                        new Column(name:"refno",caption:"Ref. No.", width: 100),
                         new Column(name:"payeename",caption:"Payee", width: 300),
                         new Column(name:"amount",caption:"Amount", width: 90),
-                        new Column(name:"state",caption:"State", width: 80),
+                        new Column(name:"state",caption:"State", width: 90),
                     ]
                 },
                 fetchList:{o->

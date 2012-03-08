@@ -263,9 +263,11 @@
                 {
                     entity.encodedBy = OsirisContext.env.USERINFO.firstname+ ' '+OsirisContext.env.USERINFO.lastname;
                     entity.objid="LAPP-" + new java.rmi.server.UID();
+                    //entity.loancount = 1;
                 }
                 else
                 {   
+                    //entity.loancount = 
                     if(entity.clientType=="MARKETED"){
                         if(!entity.encodedBy)
                             entity.encodedBy = OsirisContext.env.USERINFO.firstname+ ' '+OsirisContext.env.USERINFO.lastname;

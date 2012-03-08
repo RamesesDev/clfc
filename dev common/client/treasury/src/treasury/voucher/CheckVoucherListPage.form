@@ -19,7 +19,7 @@
                       <Component id="xPanel1" min="-2" max="-2" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
-                  <Component id="xActionBar1" alignment="0" pref="692" max="32767" attributes="1"/>
+                  <Component id="xActionBar1" alignment="0" pref="796" max="32767" attributes="1"/>
               </Group>
           </Group>
       </Group>
@@ -51,8 +51,8 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="xDataTable1" alignment="1" pref="586" max="32767" attributes="0"/>
-                      <Component id="formPanel1" alignment="0" pref="586" max="32767" attributes="0"/>
+                      <Component id="xDataTable1" alignment="1" pref="727" max="32767" attributes="0"/>
+                      <Component id="formPanel1" alignment="0" pref="727" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
