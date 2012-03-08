@@ -92,6 +92,9 @@
 "emp" [mode!='read']{ enabled: true; }
 "emp" [mode=='read']{ enabled: false; }
 
+"emp2" [mode!='read']{ enabled: true; }
+"emp2" [mode=='read']{ enabled: false; }
+
 "entity.clientType" [mode!='read']{ enabled: true; }
 "entity.clientType" [mode=='read']{ enabled: false; }
 

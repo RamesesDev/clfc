@@ -47,6 +47,9 @@
 	<field name="insurance" class="java.math.BigDecimal"/>
 	<field name="chatrealreg" class="java.math.BigDecimal"/>
 	<field name="docstamp" class="java.math.BigDecimal"/>
+	<field name="totalCharges" class="java.math.BigDecimal"/>
+	<field name="netrelease" class="java.math.BigDecimal"/>
+	<field name="releaseamount" class="java.math.BigDecimal"/>
 
 		<background>
 			<band height="0"  isSplitAllowed="true" >
@@ -145,45 +148,6 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{startDate}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="239"
-						y="514"
-						width="137"
-						height="13"
-						key="textField"/>
-					<box></box>
-					<textElement>
-						<font size="8"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{maturityDate}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" pattern="##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="256"
-						y="672"
-						width="22"
-						height="11"
-						key="textField"/>
-					<box></box>
-					<textElement>
-						<font size="8"/>
-					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{underpaymentpenalty}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" pattern="##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="256"
-						y="687"
-						width="22"
-						height="11"
-						key="textField"/>
-					<box></box>
-					<textElement>
-						<font size="8"/>
-					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{pastduerate}]]></textFieldExpression>
-				</textField>
 				<staticText>
 					<reportElement
 						x="293"
@@ -196,84 +160,6 @@
 						<font/>
 					</textElement>
 				<text><![CDATA[% in every daily default/underpayment]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="276"
-						y="671"
-						width="257"
-						height="13"
-						key="staticText-2"/>
-					<box></box>
-					<textElement>
-						<font size="10"/>
-					</textElement>
-				<text><![CDATA[% in every daily default/underpayment]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="275"
-						y="685"
-						width="258"
-						height="13"
-						key="staticText-3"/>
-					<box></box>
-					<textElement>
-						<font size="10"/>
-					</textElement>
-				<text><![CDATA[% after maturity date based on outstanding balance]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="93"
-						y="677"
-						width="84"
-						height="22"
-						key="staticText-4"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font size="12"/>
-					</textElement>
-				<text><![CDATA[PENALTY]]></text>
-				</staticText>
-				<textField isStretchWithOverflow="true" pattern="MMMMM dd, yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="29"
-						y="829"
-						width="191"
-						height="13"
-						key="textField"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[(new SimpleDateFormat("MMMM dd, yyyy").format($P{PRINTDATE}) )]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" pattern="##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="185"
-						y="541"
-						width="40"
-						height="13"
-						key="textField"/>
-					<box></box>
-					<textElement>
-						<font size="8"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{term}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement
-						x="218"
-						y="541"
-						width="24"
-						height="13"
-						key="staticText-5"/>
-					<box></box>
-					<textElement>
-						<font size="10"/>
-					</textElement>
-				<text><![CDATA[days]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -288,19 +174,6 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{phone}]]></textFieldExpression>
 				</textField>
-				<staticText>
-					<reportElement
-						x="269"
-						y="741"
-						width="147"
-						height="13"
-						key="staticText-6"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font size="10"/>
-					</textElement>
-				<text><![CDATA[REYNA A. MITRA]]></text>
-				</staticText>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="251"
@@ -314,32 +187,6 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{startDate}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" pattern="##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="152"
-						y="565"
-						width="28"
-						height="11"
-						key="textField"/>
-					<box></box>
-					<textElement>
-						<font size="8"/>
-					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{dailyPayment}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement
-						x="178"
-						y="564"
-						width="47"
-						height="13"
-						key="staticText-7"/>
-					<box></box>
-					<textElement>
-						<font size="10"/>
-					</textElement>
-				<text><![CDATA[per day]]></text>
-				</staticText>
 				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="412"
@@ -351,7 +198,7 @@
 					<textElement>
 						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{amountapproved}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{totalCharges}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -364,7 +211,7 @@
 					<textElement>
 						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{amountapproved}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{netrelease}]]></textFieldExpression>
 				</textField>
 				<line direction="TopDown">
 					<reportElement
@@ -389,7 +236,7 @@
 				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="293"
-						y="200"
+						y="260"
 						width="114"
 						height="19"
 						key="textField-11"/>
@@ -428,7 +275,7 @@
 				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="293"
-						y="260"
+						y="200"
 						width="114"
 						height="19"
 						key="textField-14"/>
@@ -438,6 +285,19 @@
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{notarial}]]></textFieldExpression>
 				</textField>
+				<staticText>
+					<reportElement
+						x="209"
+						y="259"
+						width="60"
+						height="16"
+						key="staticText-8"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Affidavit]]></text>
+				</staticText>
 			</band>
 		</title>
 		<pageHeader>

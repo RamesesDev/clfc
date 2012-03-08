@@ -44,7 +44,7 @@
                   <Component id="jTabbedPane2" alignment="0" min="0" pref="0" max="32767" attributes="1"/>
                   <Component id="jPanel5" alignment="0" min="-2" max="-2" attributes="1"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -55,8 +55,8 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel5" min="-2" max="-2" attributes="3"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jTabbedPane2" pref="444" max="32767" attributes="3"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jTabbedPane2" min="-2" pref="456" max="-2" attributes="3"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -177,7 +177,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jTabbedPane6" pref="966" max="32767" attributes="0"/>
+                      <Component id="jTabbedPane6" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -185,7 +185,7 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="jTabbedPane6" pref="393" max="32767" attributes="0"/>
+                      <Component id="jTabbedPane6" pref="399" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -230,7 +230,7 @@
                                       <Component id="jPanel32" alignment="0" max="32767" attributes="1"/>
                                   </Group>
                               </Group>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace pref="15" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -513,7 +513,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jScrollPane20" alignment="0" pref="287" max="32767" attributes="0"/>
+                                      <Component id="jScrollPane20" alignment="0" pref="293" max="32767" attributes="0"/>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="xImageViewer4" min="-2" pref="99" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
@@ -650,7 +650,7 @@
                                       <Component id="xButton30" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="22" max="32767" attributes="0"/>
+                              <EmptySpace pref="28" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -664,7 +664,7 @@
                                   <Component id="xButton29" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="xButton30" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="31" max="32767" attributes="0"/>
+                              <EmptySpace pref="37" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -754,7 +754,7 @@
                                       <Component id="xButton26" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="21" max="32767" attributes="0"/>
+                              <EmptySpace pref="27" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -769,7 +769,7 @@
                                   <Component id="xButton24" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="xButton26" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="15" max="32767" attributes="0"/>
+                              <EmptySpace pref="21" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -863,32 +863,28 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="xRadio6" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="xRadio5" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="xRadio4" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="xRadio7" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="xRadio8" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="xButton11" min="-2" pref="90" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="xButton7" min="-2" pref="91" max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="xRadio6" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="xRadio5" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="xRadio4" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="xRadio7" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="xRadio8" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="jScrollPane15" pref="411" max="32767" attributes="1"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="xButton11" min="-2" pref="90" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="xButton7" min="-2" pref="91" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="formPanel9" min="-2" pref="193" max="-2" attributes="0"/>
                                   <Component id="xSubFormPanel3" min="-2" pref="526" max="-2" attributes="0"/>
+                                  <Component id="formPanel9" min="-2" pref="193" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="32767" attributes="0"/>
                           </Group>
@@ -907,23 +903,18 @@
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jScrollPane15" max="32767" attributes="1"/>
-                                  <Component id="xSubFormPanel3" alignment="0" pref="304" max="32767" attributes="1"/>
+                                  <Component id="xSubFormPanel3" max="32767" attributes="1"/>
+                                  <Component id="jScrollPane15" alignment="0" pref="290" max="32767" attributes="1"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="xButton7" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="xButton11" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="xButton7" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="xButton11" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Group type="102" attributes="0">
-                                      <Component id="formPanel9" pref="25" max="32767" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="formPanel9" min="-2" max="-2" attributes="0"/>
                               </Group>
+                              <EmptySpace pref="16" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1149,7 +1140,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jTabbedPane1" min="-2" pref="384" max="-2" attributes="0"/>
-                      <EmptySpace pref="15" max="32767" attributes="0"/>
+                      <EmptySpace pref="27" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -2862,7 +2853,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="xActionBar2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="72" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -5716,7 +5707,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jTabbedPane17" min="-2" pref="381" max="-2" attributes="0"/>
-                      <EmptySpace pref="18" max="32767" attributes="0"/>
+                      <EmptySpace pref="30" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -6440,7 +6431,7 @@
                           <Component id="xButton17" min="-2" max="-2" attributes="0"/>
                           <Component id="xActionBar7" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="18" max="32767" attributes="0"/>
+                      <EmptySpace pref="30" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -6523,7 +6514,7 @@
                       <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jScrollPane1" min="-2" pref="348" max="-2" attributes="0"/>
-                      <EmptySpace pref="19" max="32767" attributes="0"/>
+                      <EmptySpace pref="31" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -6589,39 +6580,41 @@
                       <Component id="formPanel28" alignment="0" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="formPanel26" alignment="1" max="32767" attributes="1"/>
-                      <Component id="formPanel2" alignment="1" max="32767" attributes="1"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="formPanel26" max="32767" attributes="1"/>
+                      <Component id="formPanel2" alignment="1" min="-2" max="-2" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="formPanel6" min="-2" pref="234" max="-2" attributes="0"/>
-                  <EmptySpace pref="12" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="formPanel12" min="-2" pref="234" max="-2" attributes="0"/>
+                      <Component id="formPanel6" min="-2" pref="234" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="formPanel10" alignment="0" min="-2" max="-2" attributes="1"/>
-                              <Component id="formPanel7" min="-2" pref="47" max="-2" attributes="1"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="formPanel29" alignment="0" max="32767" attributes="1"/>
-                              <Component id="formPanel28" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="formPanel2" min="-2" max="-2" attributes="1"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="formPanel26" min="0" pref="0" max="32767" attributes="1"/>
-                      </Group>
-                      <Component id="formPanel6" alignment="0" min="-2" max="-2" attributes="1"/>
+                      <Component id="formPanel10" alignment="0" min="-2" max="-2" attributes="1"/>
+                      <Component id="formPanel7" min="-2" pref="47" max="-2" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="formPanel29" alignment="0" max="32767" attributes="1"/>
+                      <Component id="formPanel28" min="-2" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <Group type="102" alignment="0" attributes="0">
+                  <Component id="formPanel2" min="-2" max="-2" attributes="1"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="formPanel26" min="-2" max="-2" attributes="1"/>
+              </Group>
+              <Group type="102" alignment="0" attributes="0">
+                  <Component id="formPanel12" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="formPanel6" min="-2" max="-2" attributes="1"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -6734,26 +6727,6 @@
                 <Property name="required" type="boolean" value="true"/>
               </Properties>
             </Component>
-            <Component class="com.rameses.rcp.control.XComboBox" name="xComboBox2">
-              <Properties>
-                <Property name="toolTipText" type="java.lang.String" value="Click to select Interviewed By"/>
-                <Property name="caption" type="java.lang.String" value="Interviewed By"/>
-                <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
-                  <StringArray count="1">
-                    <StringItem index="0" value="clientType"/>
-                  </StringArray>
-                </Property>
-                <Property name="dynamic" type="boolean" value="true"/>
-                <Property name="emptyText" type="java.lang.String" value="Select Employee"/>
-                <Property name="expression" type="java.lang.String" value="#{name}"/>
-                <Property name="immediate" type="boolean" value="true"/>
-                <Property name="items" type="java.lang.String" value="employeeList"/>
-                <Property name="name" type="java.lang.String" value="emp"/>
-                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[165, 22]"/>
-                </Property>
-              </Properties>
-            </Component>
           </SubComponents>
         </Container>
         <Container class="com.rameses.rcp.util.FormPanel" name="formPanel6">
@@ -6863,6 +6836,58 @@
                 </Property>
                 <Property name="required" type="boolean" value="true"/>
                 <Property name="toolTipText" type="java.lang.String" value="Amount Applied"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="com.rameses.rcp.util.FormPanel" name="formPanel12">
+          <Properties>
+            <Property name="captionWidth" type="int" value="90"/>
+          </Properties>
+          <SubComponents>
+            <Component class="com.rameses.rcp.control.XComboBox" name="xComboBox7">
+              <Properties>
+                <Property name="toolTipText" type="java.lang.String" value="Click to select Interviewed By"/>
+                <Property name="caption" type="java.lang.String" value="Interviewed By"/>
+                <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+                  <StringArray count="1">
+                    <StringItem index="0" value="clientType"/>
+                  </StringArray>
+                </Property>
+                <Property name="dynamic" type="boolean" value="true"/>
+                <Property name="emptyText" type="java.lang.String" value="Select Employee"/>
+                <Property name="expression" type="java.lang.String" value="#{name}"/>
+                <Property name="immediate" type="boolean" value="true"/>
+                <Property name="items" type="java.lang.String" value="employeeList"/>
+                <Property name="name" type="java.lang.String" value="emp"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[165, 22]"/>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="com.rameses.rcp.control.XComboBox" name="xComboBox8">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="1">
+                    <StringItem index="0" value="emp2"/>
+                  </StringArray>
+                </Property>
+                <Property name="toolTipText" type="java.lang.String" value="Click to select Interviewed By"/>
+                <Property name="caption" type="java.lang.String" value=""/>
+                <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+                  <StringArray count="1">
+                    <StringItem index="0" value="clientType"/>
+                  </StringArray>
+                </Property>
+                <Property name="dynamic" type="boolean" value="true"/>
+                <Property name="emptyText" type="java.lang.String" value="Select Employee"/>
+                <Property name="expression" type="java.lang.String" value="#{name}"/>
+                <Property name="immediate" type="boolean" value="true"/>
+                <Property name="items" type="java.lang.String" value="employeeList"/>
+                <Property name="name" type="java.lang.String" value="emp2"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[165, 22]"/>
+                </Property>
               </Properties>
             </Component>
           </SubComponents>

@@ -1,13 +1,12 @@
 <workunit>
     <invokers>
-        <invoker type="application:approved_action" caption="Submit For Release" icon="images/submit16.png" 
-            action="init" mnemonic="s" index="10"/>
+        <invoker type="application:approved_action" caption="Submit For Release" action="init" mnemonic="s" index="10"/>
         
         <invoker type="formActions" caption="Back"   action="_close" mnemonic="c" icon="images/back16.png"/>
         <invoker type="formActions" caption="Next"   action="next"   mnemonic="n" icon="images/next16.png" 
                  visibleWhen="#{mode=='amountOption'}" tooltip="Proceed?"/>
         <invoker type="formActions" caption="Submit" action="submit" mnemonic="s" visibleWhen="#{mode=='charges'}" 
-                 tooltip="Submit for Releasing"/>
+                 tooltip="Submit for Releasing" icon="images/submit16.png"/>
         <invoker type="formPrintActions" caption="Close" icon="images/exit16.png" action="_close" mnemonic="c"/>
     </invokers>
     <code>
@@ -196,7 +195,7 @@
                         if( "Loan Disclosure".equals(printOut) )
                             return 'loan/loandocs/LoanDisclosureStatement (copy).jasper';
                         else if( "Loan Release Voucher".equals(printOut) )
-                            return 'loan/loandocs/LoanReleaseVoucher.jasper';
+                            return 'loan/loandocs/LoanReleaseVoucher (Copy).jasper';
                         else if( "Affidavit Of Ownership".equals(printOut) )
                             return 'loan/loandocs/AffidavitOfOwnership.jasper';
                         else if( "Deed Of Voluntary Deposit".equals(printOut) )
@@ -216,6 +215,8 @@
                     },
                     getReportData: {
                         def data = [:];
+                        
+                        /*****For Loan Disclosure & Cash Voucher*****/
                         data.name = [application.borrower.firstname + ' ' + application.borrower.lastname];
                         data.name2 = [application.borrower.firstname + ' ' + application.borrower.lastname];
                         application.jointBorrowerList?.each {
@@ -244,6 +245,39 @@
                         data.underpaymentpenalty = application.loaninfo.producttype.underpaymentpenalty as BigDecimal;
                         data.pastduerate = application.loaninfo.producttype.pastduerate as BigDecimal;
                         
+                        /*      ledger data      */
+                        if( data.startDate ==null )
+                            data.startDate = '';
+                        else
+                            data.startDate = parseDate(application.ledger.startDate);
+                            
+                        if( data.maturityDate ==null )    
+                            data.maturityDate = '';
+                        else
+                            data.maturityDate = parseDate(application.ledger.maturityDate);
+                            
+                        if( data.dailyPayment ==null )
+                            data.dailyPayment = new BigDecimal(0);
+                        else
+                            data.dailyPayment = new BigDecimal(application.ledger.dailyPayment);
+                            
+                        if( data.term ==null )
+                            data.term = 0;
+                        else
+                            data.term = application.ledger.term;
+                        /*  =============================  */
+                        
+                        data.charges = accts;
+                        data.insurance = '';
+                        data.notarial = accts.find{ it.title == 'NOTARIAL FEE' }?.amount;
+                        data.docstamp = accts.find{ it.title == 'DOCUMENTARY STAMP FEE' }?.amount;
+                        data.chatrealreg = accts.find{ it.title == 'CHAT/REAL REGISTRATION' }?.amount;
+                        data.affidavit = accts.find{ it.title == 'AFFIDAVIT' }?.amount;
+			data.totalCharges =  data.notarial + data.docstamp + data.chatrealreg + data.affidavit;
+                        data.netrelease = data.amountapproved + data.totalCharges;
+                        /***********************************************/
+                        
+                        // For Loan Release Voucher
                         /*
                         boolean print( param ) {
         
@@ -255,37 +289,12 @@
                             return ReportUtil.print(reportModel.report, true);
                         }*/
                         
-                        if( data.startDate ==null )
-                            data.startDate = '';
-                        else
-                            data.startDate = application.ledger.startDate;
-                            
-                        if( data.maturityDate ==null )    
-                            data.maturityDate = '';
-                        else
-                            data.maturityDate = application.ledger.maturityDate;
-                            
-                        if( data.dailyPayment ==null )
-                            data.dailyPayment = new BigDecimal(0);
-                        else
-                            data.dailyPayment = new BigDecimal(application.ledger.dailyPayment);
-                            
-                        if( data.term ==null )
-                            data.term = 0;
-                        else
-                            data.term = application.ledger.term;
-                        
-                        data.bankname = application.bankname;
-                        data.checkno = application.checkno;
-                        
-                        data.charges = accts;
-                        
-                        data.insurance = '';
-                        data.notarial = accts.find{ it.title == 'NOTARIAL FEE' }?.amount;
-                        data.docstamp = accts.find{ it.title == 'DOCUMENTARY STAMP FEE' }?.amount;
-                        data.chatrealreg = accts.find{ it.title == 'CHAT/REAL REGISTRATION' }?.amount;
-                        data.affidavit = accts.find{ it.title == 'AFFIDAVIT' }?.amount;
-                        //data.totalCharges =  data.notarial + data.docstamp + data.chatrealreg + data.affidavit;
+                        //data.bankname = application.bankname;
+                        //data.checkno = application.checkno;
+                        //data.refno = refs;
+                        //data.lenTerm = application.ledger.term / 30;
+                        //data.checkno = accts.find{ it.checkno }?.checkno;
+                        //data.bankname = accts.find{ it.bankname }?.bankname;
                         
                         return data;
                     },

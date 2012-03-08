@@ -94,9 +94,14 @@
                         <th>Client Type : </th> 
                         <%if(data.clientType=='WALK-IN'){%>
                             <td>${data.clientType}</td>
-                        <%}%>    
+                        <%}%>
                         <%if(data.clientType=='MARKETED'){%>
-                            <td>${data.clientType} by ${data.marketedby? data.marketedby: '-' }</td>
+                            <td>
+                                ${data.clientType} by ${data.marketedby? data.marketedby: '-' }
+                                <%if(data.marketedby2){%>
+                                    and ${data.marketedby2}
+                                <%}%>
+                            </td>
                         <%}%>        
                     </tr>
                 <%}%>

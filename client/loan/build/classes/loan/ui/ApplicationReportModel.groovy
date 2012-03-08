@@ -75,7 +75,13 @@ public class ApplicationReportModel extends ReportModel {
         /*--Principal Borrower Info--*/
         data.putAll(entity);
         if( entity.clientType=='MARKETED' ){
-            data.marketed = '';
+            if( entity.marketedby !=null )
+                data.marketedby = data.marketedby;
+            else data.marketedby = '';
+            if( entity.marketedby2 !=null )
+                data.marketedby2 = data.marketedby2;
+            else data.marketedby2 = '';
+            data.marketed = data.marketedby +" and "+ data.marketedby2;
         }
         if( entity.clientType=='WALK-IN' ){
             data.marketed = '-';
@@ -127,7 +133,7 @@ public class ApplicationReportModel extends ReportModel {
         //data.charges = accts;
 
         //data.insurance = '';
-        
+        data.lenTerm = data.ledger.term / 30.00;
         data.notarial = accts.find{ it.title == 'NOTARIAL FEE' }?.amount;
         data.docstamp = accts.find{ it.title == 'DOCUMENTARY STAMP' }?.amount;
         data.chatrealreg = accts.find{ it.title == 'CHAT/REAL REGISTRATION' }?.amount;

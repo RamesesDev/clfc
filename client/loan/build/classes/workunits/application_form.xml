@@ -15,7 +15,7 @@
         <invoker type="formActions" caption="Submit for Approval" action="forApproval" icon="images/submit16.png" mnemonic="s" visibleWhen="#{mode=='read' and entity.state=='FOR_FLA'}" permission="application.submitForApproval"/> 
         <invoker type="formActions" caption="Return to Pending" action="returnPending" icon="images/undo16.png" mnemonic="r" visibleWhen="#{mode=='read' and entity.state=='CANCELED' || entity.state=='BACK_OUT' || entity.state=='DISQUALIFIED_OUT'}" permission="application.submitForApproval"/>
         <invoker type="formActions" caption="Return For CI" action="returnForCI" icon="images/undo16.png" mnemonic="r" visibleWhen="#{mode=='read' and entity.state=='FOR_FLA'}" permission="application.submitForInspection"/>        
-        <invoker type="formActions" caption="Submit for Inspection" action="forInspection" icon="images/submit16.png" mnemonic="s" visibleWhen="#{mode=='read' and entity.loancount == 1 || entity.state=='PENDING'}" permission="application.submitForInspection"/>
+        <invoker type="formActions" caption="Submit for Inspection" action="forInspection" icon="images/submit16.png" mnemonic="s" visibleWhen="#{mode=='read' and entity.state=='PENDING'}" permission="application.submitForInspection"/>
         
         <!--<invoker type="formActions" caption="Back" action="_default" icon="images/back16.png" immediate="true" mnemonic="b" visibleWhen="#{mode=='edit'}"/>-->
         <invoker type="formActions" caption="Edit" action="editData" mnemonic="e" icon="images/edit16.png" visibleWhen="#{(mode=='read' and entity.state!='FOR_APPROVAL') and !empty entity or (entity.state=='PENDING' and entity.state=='FOR_INSPECTION')}"/>
@@ -370,17 +370,30 @@
                 }
             }
                         
-            def emp;           
+            def emp;
             def getEmp() {
                 if(!emp && entity.marketedbyid)
                     emp=[objid:entity.marketedbyid, name:entity.marketedby]
-                
+                    
                 return emp;
             }
             void setEmp(d){
                 entity.marketedbyid = d?.objid;
                 entity.marketedby = d?.name;
                 emp = d;
+            }
+            
+            def emp2;
+            def getEmp2() {
+                if(!emp2 && entity.marketedbyid)
+                    emp2=[objid:entity.marketedbyid, name:entity.marketedby2]
+                    
+                return emp2;
+            }
+            void setEmp2(d){
+                entity.marketedbyid = d?.objid;
+                entity.marketedby2 = d?.name;
+                emp2 = d;
             }
             
             def captureInfo;
@@ -461,10 +474,10 @@
 
                 if(mode=='renew'){
                     if( entity.clientType=="WALK-IN" ){
-                        if( emp )MsgBox.alert("Marketed By Employee is not allowed");
+                        if( emp || emp2 )MsgBox.alert("Marketed By Employee is not allowed");
                     }
                     if( entity.clientType=="MARKETED" ){
-                        if( !emp ){
+                        if( !emp || !emp2 ){
                             MsgBox.alert('Loan Application no. '+ entity.appno +' Client Type is Marketed \nPls. select a Marketed By employee name');
                             return;
                         }    
@@ -474,10 +487,10 @@
                 }
                 else{               
                     if( entity.clientType=="WALK-IN" ){
-                        if( emp )MsgBox.alert("Marketed By Employee is not allowed");
+                        if( emp || emp2 )MsgBox.alert("Marketed By Employee is not allowed");
                     }
                     if( entity.clientType=="MARKETED" ){
-                        if( !emp ){
+                        if( !emp || !emp2 ){
                             MsgBox.alert('Loan Application Client Type is Marketed \nPls. select a Marketed By employee name');
                             return;
                         }

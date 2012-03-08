@@ -382,7 +382,6 @@ public class ApplicationForm extends javax.swing.JPanel {
         xTextField3 = new com.rameses.rcp.control.XTextField();
         formPanel2 = new com.rameses.rcp.util.FormPanel();
         xComboBox1 = new com.rameses.rcp.control.XComboBox();
-        xComboBox2 = new com.rameses.rcp.control.XComboBox();
         formPanel6 = new com.rameses.rcp.util.FormPanel();
         xTextField26 = new com.rameses.rcp.control.XTextField();
         xTextField27 = new com.rameses.rcp.control.XTextField();
@@ -393,6 +392,9 @@ public class ApplicationForm extends javax.swing.JPanel {
         formPanel29 = new com.rameses.rcp.util.FormPanel();
         xComboBox15 = new com.rameses.rcp.control.XComboBox();
         xNumberField27 = new com.rameses.rcp.control.XNumberField();
+        formPanel12 = new com.rameses.rcp.util.FormPanel();
+        xComboBox7 = new com.rameses.rcp.control.XComboBox();
+        xComboBox8 = new com.rameses.rcp.control.XComboBox();
 
         org.jdesktop.layout.GroupLayout jPanel7Layout = new org.jdesktop.layout.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -635,7 +637,7 @@ public class ApplicationForm extends javax.swing.JPanel {
             .add(jPanel47Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel47Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane20, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
+                    .add(jScrollPane20, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE)
                     .add(jPanel47Layout.createSequentialGroup()
                         .add(xImageViewer4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 99, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -685,7 +687,7 @@ public class ApplicationForm extends javax.swing.JPanel {
                     .add(jPanel36Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
                         .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel47, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel32, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         jTabbedPane6.addTab("Borrower Information", jPanel36);
 
@@ -738,7 +740,7 @@ public class ApplicationForm extends javax.swing.JPanel {
                         .add(xButton29, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(xButton30, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
         jPanel46Layout.setVerticalGroup(
             jPanel46Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -749,7 +751,7 @@ public class ApplicationForm extends javax.swing.JPanel {
                 .add(jPanel46Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(xButton29, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(xButton30, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
         jTabbedPane6.addTab("Business Info", jPanel46);
 
@@ -814,7 +816,7 @@ public class ApplicationForm extends javax.swing.JPanel {
                         .add(xButton24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(xButton26, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
         jPanel40Layout.setVerticalGroup(
             jPanel40Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -826,7 +828,7 @@ public class ApplicationForm extends javax.swing.JPanel {
                     .add(xButton23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(xButton24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(xButton26, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         jTabbedPane6.addTab("Other Loan Record ", jPanel40);
 
@@ -918,26 +920,24 @@ public class ApplicationForm extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(jPanel28Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel28Layout.createSequentialGroup()
-                        .add(jPanel28Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jPanel28Layout.createSequentialGroup()
-                                .add(xRadio6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(xRadio5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(xRadio4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(xRadio7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(xRadio8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                            .add(jPanel28Layout.createSequentialGroup()
-                                .add(xButton11, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 90, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(xButton7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 91, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED))
-                    .add(jScrollPane15, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE))
+                        .add(xRadio6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(xRadio5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(xRadio4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(xRadio7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(xRadio8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jScrollPane15, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
+                    .add(jPanel28Layout.createSequentialGroup()
+                        .add(xButton11, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 90, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(xButton7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 91, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel28Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(formPanel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 193, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(xSubFormPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 526, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(xSubFormPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 526, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(formPanel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 193, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel28Layout.setVerticalGroup(
@@ -952,18 +952,15 @@ public class ApplicationForm extends javax.swing.JPanel {
                     .add(xRadio8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel28Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(jScrollPane15)
-                    .add(xSubFormPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE))
+                    .add(xSubFormPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jScrollPane15, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel28Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel28Layout.createSequentialGroup()
-                        .add(jPanel28Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(xButton7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(xButton11, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(12, 12, 12))
-                    .add(jPanel28Layout.createSequentialGroup()
-                        .add(formPanel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, Short.MAX_VALUE)
-                        .addContainerGap())))
+                    .add(jPanel28Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                        .add(xButton7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(xButton11, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(formPanel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         jTabbedPane6.addTab("Properties owned / Acquired / Appraised", jPanel28);
 
@@ -973,13 +970,13 @@ public class ApplicationForm extends javax.swing.JPanel {
             jPanel33Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel33Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jTabbedPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 966, Short.MAX_VALUE)
+                .add(jTabbedPane6)
                 .addContainerGap())
         );
         jPanel33Layout.setVerticalGroup(
             jPanel33Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel33Layout.createSequentialGroup()
-                .add(jTabbedPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
+                .add(jTabbedPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 399, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jTabbedPane2.addTab("Primary Loan Information", jPanel33);
@@ -1936,7 +1933,7 @@ public class ApplicationForm extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel2Layout.createSequentialGroup()
                 .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 384, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
         jTabbedPane2.addTab("Principal Borrower", jPanel2);
 
@@ -3001,7 +2998,7 @@ public class ApplicationForm extends javax.swing.JPanel {
                     .add(jTabbedPane5, 0, 0, Short.MAX_VALUE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(xActionBar2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(25, 25, 25))
+                .add(72, 72, 72))
         );
         jTabbedPane2.addTab("Joint Borrower", jPanel34);
 
@@ -3654,7 +3651,7 @@ public class ApplicationForm extends javax.swing.JPanel {
             jPanel94Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel94Layout.createSequentialGroup()
                 .add(jTabbedPane17, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 381, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         jTabbedPane2.addTab("Loan History", jPanel94);
 
@@ -3959,7 +3956,7 @@ public class ApplicationForm extends javax.swing.JPanel {
                 .add(jPanel21Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(xButton17, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(xActionBar7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         jTabbedPane2.addTab("Comments/Remarks", jPanel21);
 
@@ -3989,7 +3986,7 @@ public class ApplicationForm extends javax.swing.JPanel {
                 .add(jLabel7)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 348, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         jTabbedPane2.addTab("Transaction Log", jPanel11);
 
@@ -4055,18 +4052,6 @@ public class ApplicationForm extends javax.swing.JPanel {
         xComboBox1.setRequired(true);
         formPanel2.add(xComboBox1);
 
-        xComboBox2.setToolTipText("Click to select Interviewed By");
-        xComboBox2.setCaption("Interviewed By");
-        xComboBox2.setDepends(new String[] {"clientType"});
-        xComboBox2.setDynamic(true);
-        xComboBox2.setEmptyText("Select Employee");
-        xComboBox2.setExpression("#{name}");
-        xComboBox2.setImmediate(true);
-        xComboBox2.setItems("employeeList");
-        xComboBox2.setName("emp");
-        xComboBox2.setPreferredSize(new java.awt.Dimension(165, 22));
-        formPanel2.add(xComboBox2);
-
         xTextField26.setEditable(false);
         xTextField26.setCaption("Recorded By");
         xTextField26.setCaptionWidth(80);
@@ -4126,6 +4111,32 @@ public class ApplicationForm extends javax.swing.JPanel {
         xNumberField27.setToolTipText("Amount Applied");
         formPanel29.add(xNumberField27);
 
+        formPanel12.setCaptionWidth(90);
+        xComboBox7.setToolTipText("Click to select Interviewed By");
+        xComboBox7.setCaption("Interviewed By");
+        xComboBox7.setDepends(new String[] {"clientType"});
+        xComboBox7.setDynamic(true);
+        xComboBox7.setEmptyText("Select Employee");
+        xComboBox7.setExpression("#{name}");
+        xComboBox7.setImmediate(true);
+        xComboBox7.setItems("employeeList");
+        xComboBox7.setName("emp");
+        xComboBox7.setPreferredSize(new java.awt.Dimension(165, 22));
+        formPanel12.add(xComboBox7);
+
+        xComboBox8.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "emp2" }));
+        xComboBox8.setToolTipText("Click to select Interviewed By");
+        xComboBox8.setCaption("");
+        xComboBox8.setDepends(new String[] {"clientType"});
+        xComboBox8.setDynamic(true);
+        xComboBox8.setEmptyText("Select Employee");
+        xComboBox8.setExpression("#{name}");
+        xComboBox8.setImmediate(true);
+        xComboBox8.setItems("employeeList");
+        xComboBox8.setName("emp2");
+        xComboBox8.setPreferredSize(new java.awt.Dimension(165, 22));
+        formPanel12.add(xComboBox8);
+
         org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -4140,31 +4151,33 @@ public class ApplicationForm extends javax.swing.JPanel {
                     .add(formPanel7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(formPanel28, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, formPanel26, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, formPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(formPanel26, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(formPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(formPanel6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 234, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(formPanel12, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 234, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(formPanel6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 234, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel5Layout.createSequentialGroup()
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel5Layout.createSequentialGroup()
-                        .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(formPanel10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(formPanel7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 47, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                            .add(formPanel29, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .add(formPanel28, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                    .add(jPanel5Layout.createSequentialGroup()
-                        .add(formPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(formPanel26, 0, 0, Short.MAX_VALUE))
-                    .add(formPanel6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .add(formPanel10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(formPanel7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 47, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(formPanel29, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(formPanel28, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+            .add(jPanel5Layout.createSequentialGroup()
+                .add(formPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(formPanel26, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+            .add(jPanel5Layout.createSequentialGroup()
+                .add(formPanel12, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(formPanel6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
@@ -4177,7 +4190,7 @@ public class ApplicationForm extends javax.swing.JPanel {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jTabbedPane2, 0, 0, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -4186,8 +4199,8 @@ public class ApplicationForm extends javax.swing.JPanel {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jTabbedPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
-                .addContainerGap())
+                .add(jTabbedPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 456, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     
@@ -4196,6 +4209,7 @@ public class ApplicationForm extends javax.swing.JPanel {
     private com.rameses.rcp.util.FormPanel formPanel1;
     private com.rameses.rcp.util.FormPanel formPanel10;
     private com.rameses.rcp.util.FormPanel formPanel11;
+    private com.rameses.rcp.util.FormPanel formPanel12;
     private com.rameses.rcp.util.FormPanel formPanel15;
     private com.rameses.rcp.util.FormPanel formPanel16;
     private com.rameses.rcp.util.FormPanel formPanel17;
@@ -4444,10 +4458,11 @@ public class ApplicationForm extends javax.swing.JPanel {
     private com.rameses.rcp.control.XButton xButton9;
     private com.rameses.rcp.control.XComboBox xComboBox1;
     private com.rameses.rcp.control.XComboBox xComboBox15;
-    private com.rameses.rcp.control.XComboBox xComboBox2;
     private com.rameses.rcp.control.XComboBox xComboBox3;
     private com.rameses.rcp.control.XComboBox xComboBox4;
     private com.rameses.rcp.control.XComboBox xComboBox5;
+    private com.rameses.rcp.control.XComboBox xComboBox7;
+    private com.rameses.rcp.control.XComboBox xComboBox8;
     private com.rameses.rcp.control.XComboBox xComboBox9;
     private com.rameses.rcp.control.XDataTable xDataTable1;
     private com.rameses.rcp.control.XDataTable xDataTable11;

@@ -1,6 +1,6 @@
 package loan.ui;
 /*
- * ApplicationForm_1.java
+ * ApplicationForm.java
  *
  * Created on March 4, 2011, 8:05 AM
  */
@@ -15,7 +15,7 @@ import com.rameses.rcp.ui.annotations.StyleSheet;
 public class ApplicationForm_2 extends javax.swing.JPanel {
     
     /**
-     * Creates new form ApplicationForm_1
+     * Creates new form ApplicationForm
      */
     public ApplicationForm_2() {
         initComponents();
@@ -71,6 +71,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         xDataTable4 = new com.rameses.rcp.control.XDataTable();
         xButton23 = new com.rameses.rcp.control.XButton();
         xButton24 = new com.rameses.rcp.control.XButton();
+        xButton26 = new com.rameses.rcp.control.XButton();
         jPanel28 = new javax.swing.JPanel();
         xRadio4 = new com.rameses.rcp.control.XRadio();
         xRadio5 = new com.rameses.rcp.control.XRadio();
@@ -80,6 +81,10 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         xButton7 = new com.rameses.rcp.control.XButton();
         xButton11 = new com.rameses.rcp.control.XButton();
         xSubFormPanel3 = new com.rameses.rcp.control.XSubFormPanel();
+        xRadio7 = new com.rameses.rcp.control.XRadio();
+        xRadio8 = new com.rameses.rcp.control.XRadio();
+        formPanel9 = new com.rameses.rcp.util.FormPanel();
+        xNumberField47 = new com.rameses.rcp.control.XNumberField();
         jPanel2 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel50 = new javax.swing.JPanel();
@@ -89,6 +94,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         jPanel52 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         formPanel32 = new com.rameses.rcp.util.FormPanel();
+        xButton19 = new com.rameses.rcp.control.XButton();
         jPanel96 = new javax.swing.JPanel();
         xImageViewer10 = new com.rameses.rcp.control.XImageViewer();
         xButton56 = new com.rameses.rcp.control.XButton();
@@ -98,7 +104,6 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         formPanel33 = new com.rameses.rcp.util.FormPanel();
         xButton64 = new com.rameses.rcp.control.XButton();
         xButton66 = new com.rameses.rcp.control.XButton();
-        xButton65 = new com.rameses.rcp.control.XButton();
         jPanel95 = new javax.swing.JPanel();
         xDataTable25 = new com.rameses.rcp.control.XDataTable();
         xLabel18 = new com.rameses.rcp.control.XLabel();
@@ -323,38 +328,41 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         jPanel99 = new javax.swing.JPanel();
         xTable10 = new com.rameses.rcp.control.XTable();
         xButton59 = new com.rameses.rcp.control.XButton();
-        jPanel115 = new javax.swing.JPanel();
-        jPanel104 = new javax.swing.JPanel();
-        formPanel12 = new com.rameses.rcp.util.FormPanel();
-        xTextArea12 = new com.rameses.rcp.control.XTextArea();
-        xTextArea13 = new com.rameses.rcp.control.XTextArea();
-        jLabel27 = new javax.swing.JLabel();
-        jLabel28 = new javax.swing.JLabel();
-        formPanel13 = new com.rameses.rcp.util.FormPanel();
-        xDateField14 = new com.rameses.rcp.control.XDateField();
-        xTextField31 = new com.rameses.rcp.control.XTextField();
-        xNumberField5 = new com.rameses.rcp.control.XNumberField();
-        formPanel9 = new com.rameses.rcp.util.FormPanel();
-        xComboBox8 = new com.rameses.rcp.control.XComboBox();
-        formPanel14 = new com.rameses.rcp.util.FormPanel();
-        xDateField17 = new com.rameses.rcp.control.XDateField();
-        xTextField34 = new com.rameses.rcp.control.XTextField();
-        xImageViewer7 = new com.rameses.rcp.control.XImageViewer();
-        xImageViewer9 = new com.rameses.rcp.control.XImageViewer();
-        xButton5 = new com.rameses.rcp.control.XButton();
-        xLabel4 = new com.rameses.rcp.control.XLabel();
-        xNumberField4 = new com.rameses.rcp.control.XNumberField();
-        xButton12 = new com.rameses.rcp.control.XButton();
-        jLabel31 = new javax.swing.JLabel();
-        jScrollPane21 = new javax.swing.JScrollPane();
-        xEditorPane15 = new com.rameses.rcp.control.XEditorPane();
-        jSeparator2 = new javax.swing.JSeparator();
-        xActionBar8 = new com.rameses.rcp.control.XActionBar();
-        jPanel112 = new javax.swing.JPanel();
-        jLabel23 = new javax.swing.JLabel();
-        jScrollPane17 = new javax.swing.JScrollPane();
-        xEditorPane14 = new com.rameses.rcp.control.XEditorPane();
-        xActionBar10 = new com.rameses.rcp.control.XActionBar();
+        jPanel37 = new javax.swing.JPanel();
+        jTabbedPane9 = new javax.swing.JTabbedPane();
+        jPanel110 = new javax.swing.JPanel();
+        jPanel13 = new javax.swing.JPanel();
+        formPanel11 = new com.rameses.rcp.util.FormPanel();
+        xComboBox9 = new com.rameses.rcp.control.XComboBox();
+        formPanel15 = new com.rameses.rcp.util.FormPanel();
+        xTextArea14 = new com.rameses.rcp.control.XTextArea();
+        xTextArea15 = new com.rameses.rcp.control.XTextArea();
+        jLabel30 = new javax.swing.JLabel();
+        jLabel32 = new javax.swing.JLabel();
+        formPanel17 = new com.rameses.rcp.util.FormPanel();
+        xDateField15 = new com.rameses.rcp.control.XDateField();
+        xTextField32 = new com.rameses.rcp.control.XTextField();
+        xNumberField6 = new com.rameses.rcp.control.XNumberField();
+        formPanel18 = new com.rameses.rcp.util.FormPanel();
+        xDateField18 = new com.rameses.rcp.control.XDateField();
+        xTextField35 = new com.rameses.rcp.control.XTextField();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        xEditorPane20 = new com.rameses.rcp.control.XEditorPane();
+        jLabel33 = new javax.swing.JLabel();
+        xActionBar9 = new com.rameses.rcp.control.XActionBar();
+        jSeparator5 = new javax.swing.JSeparator();
+        jPanel101 = new javax.swing.JPanel();
+        jLabel24 = new javax.swing.JLabel();
+        jScrollPane18 = new javax.swing.JScrollPane();
+        xEditorPane16 = new com.rameses.rcp.control.XEditorPane();
+        xActionBar11 = new com.rameses.rcp.control.XActionBar();
+        formPanel3 = new com.rameses.rcp.util.FormPanel();
+        xNumberField42 = new com.rameses.rcp.control.XNumberField();
+        xNumberField44 = new com.rameses.rcp.control.XNumberField();
+        xNumberField43 = new com.rameses.rcp.control.XNumberField();
+        xNumberField41 = new com.rameses.rcp.control.XNumberField();
+        xNumberField45 = new com.rameses.rcp.control.XNumberField();
+        jSeparator4 = new javax.swing.JSeparator();
         jPanel21 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane14 = new javax.swing.JScrollPane();
@@ -370,13 +378,14 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         xTextField13 = new com.rameses.rcp.control.XTextField();
         xActionTextField1 = new com.rameses.rcp.control.XActionTextField();
         formPanel10 = new com.rameses.rcp.util.FormPanel();
-        xLabel1 = new com.rameses.rcp.control.XLabel();
+        xComboBox5 = new com.rameses.rcp.control.XComboBox();
         xTextField3 = new com.rameses.rcp.control.XTextField();
         formPanel2 = new com.rameses.rcp.util.FormPanel();
         xComboBox1 = new com.rameses.rcp.control.XComboBox();
         xComboBox2 = new com.rameses.rcp.control.XComboBox();
         formPanel6 = new com.rameses.rcp.util.FormPanel();
         xTextField26 = new com.rameses.rcp.control.XTextField();
+        xTextField27 = new com.rameses.rcp.control.XTextField();
         formPanel26 = new com.rameses.rcp.util.FormPanel();
         xTextArea7 = new com.rameses.rcp.control.XTextArea();
         formPanel28 = new com.rameses.rcp.util.FormPanel();
@@ -480,7 +489,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
             .add(jPanel26Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel26Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane12, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane12, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
                     .add(jPanel26Layout.createSequentialGroup()
                         .add(xImageViewer2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 99, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -626,7 +635,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
             .add(jPanel47Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel47Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane20, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
+                    .add(jScrollPane20, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
                     .add(jPanel47Layout.createSequentialGroup()
                         .add(xImageViewer4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 99, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -651,20 +660,20 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
                         .add(xComboBox4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jScrollPane20, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 214, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         org.jdesktop.layout.GroupLayout jPanel36Layout = new org.jdesktop.layout.GroupLayout(jPanel36);
         jPanel36.setLayout(jPanel36Layout);
         jPanel36Layout.setHorizontalGroup(
             jPanel36Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel36Layout.createSequentialGroup()
+            .add(jPanel36Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel26, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel32, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel47, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jPanel47, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel36Layout.setVerticalGroup(
@@ -673,15 +682,17 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(jPanel36Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel26, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel47, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(jPanel32, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .add(jPanel36Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                        .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel47, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel32, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jTabbedPane6.addTab("Borrower Information", jPanel36);
 
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder4 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder4.setTitle("Business Information");
         jPanel27.setBorder(xTitledBorder4);
+        xDataTable3.setToolTipText(" Business List");
         xDataTable3.setHandler("principalMainBusinessHandler");
         xDataTable3.setName("principalMainBusinessInfo");
 
@@ -691,13 +702,13 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
             jPanel27Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel27Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(xDataTable3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 909, Short.MAX_VALUE)
+                .add(xDataTable3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 899, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel27Layout.setVerticalGroup(
             jPanel27Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel27Layout.createSequentialGroup()
-                .add(xDataTable3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 272, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(xDataTable3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 256, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -722,29 +733,30 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
             .add(jPanel46Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel46Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel27, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jPanel27, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jPanel46Layout.createSequentialGroup()
                         .add(xButton29, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(xButton30, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         jPanel46Layout.setVerticalGroup(
             jPanel46Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel46Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel27, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel46Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(xButton29, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(xButton30, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         jTabbedPane6.addTab("Business Info", jPanel46);
 
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder5 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder5.setTitle("Lending Information");
         jPanel51.setBorder(xTitledBorder5);
+        xDataTable4.setToolTipText("Other Lending List");
         xDataTable4.setHandler("otherLendingHandler");
         xDataTable4.setName("otherLendingInfo");
 
@@ -754,7 +766,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
             jPanel51Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel51Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(xDataTable4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 909, Short.MAX_VALUE)
+                .add(xDataTable4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 900, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel51Layout.setVerticalGroup(
@@ -780,6 +792,14 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         xButton24.setName("removeOtherLending");
         xButton24.setVisibleWhen("#{mode!='read'}");
 
+        xButton26.setMnemonic('e');
+        xButton26.setText("Edit");
+        xButton26.setToolTipText("Edit Other Lending");
+        xButton26.setCaption("Edit Other Lending");
+        xButton26.setImmediate(true);
+        xButton26.setName("editOtherLending");
+        xButton26.setVisibleWhen("#{mode!='read'}");
+
         org.jdesktop.layout.GroupLayout jPanel40Layout = new org.jdesktop.layout.GroupLayout(jPanel40);
         jPanel40.setLayout(jPanel40Layout);
         jPanel40Layout.setHorizontalGroup(
@@ -787,12 +807,14 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
             .add(jPanel40Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel40Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel51, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jPanel51, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jPanel40Layout.createSequentialGroup()
                         .add(xButton23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(xButton24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .add(xButton24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(xButton26, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         jPanel40Layout.setVerticalGroup(
             jPanel40Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -802,13 +824,15 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel40Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(xButton23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(xButton24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(xButton24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(xButton26, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         jTabbedPane6.addTab("Other Loan Record ", jPanel40);
 
         xRadio4.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         xRadio4.setText("Real Estate");
+        xRadio4.setToolTipText("Click to add real estate(s)");
         xRadio4.setIndex(2);
         xRadio4.setMargin(new java.awt.Insets(0, 0, 0, 0));
         xRadio4.setName("assettype");
@@ -816,6 +840,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
 
         xRadio5.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         xRadio5.setText("Vehicles");
+        xRadio5.setToolTipText("Click to add vehicle(s)");
         xRadio5.setIndex(1);
         xRadio5.setMargin(new java.awt.Insets(0, 0, 0, 0));
         xRadio5.setName("assettype");
@@ -823,6 +848,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
 
         xRadio6.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         xRadio6.setText("Appliances");
+        xRadio6.setToolTipText("Click to add appliance(s)");
         xRadio6.setMargin(new java.awt.Insets(0, 0, 0, 0));
         xRadio6.setName("assettype");
         xRadio6.setOptionValue("appliance");
@@ -833,6 +859,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         xList5.setExpression("#{subject}");
         xList5.setItems("assetsList");
         xList5.setName("selectedAsset");
+        xList5.setToolTipText("Assets List");
         jScrollPane15.setViewportView(xList5);
 
         xButton7.setMnemonic('r');
@@ -853,17 +880,35 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         xButton11.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
         xButton11.setVisibleWhen("#{mode!='read'}");
 
+        xSubFormPanel3.setLayout(null);
+
+        xSubFormPanel3.setToolTipText("Asset");
         xSubFormPanel3.setHandler("assetOpener");
-        org.jdesktop.layout.GroupLayout xSubFormPanel3Layout = new org.jdesktop.layout.GroupLayout(xSubFormPanel3);
-        xSubFormPanel3.setLayout(xSubFormPanel3Layout);
-        xSubFormPanel3Layout.setHorizontalGroup(
-            xSubFormPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 631, Short.MAX_VALUE)
-        );
-        xSubFormPanel3Layout.setVerticalGroup(
-            xSubFormPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 296, Short.MAX_VALUE)
-        );
+
+        xRadio7.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        xRadio7.setText("Other Collateral(s)");
+        xRadio7.setToolTipText("Click to add other collateral(s)");
+        xRadio7.setIndex(3);
+        xRadio7.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        xRadio7.setName("assettype");
+        xRadio7.setOptionValue("others");
+
+        xRadio8.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        xRadio8.setText("Attachments");
+        xRadio8.setToolTipText("Click to add attachment(s)");
+        xRadio8.setIndex(4);
+        xRadio8.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        xRadio8.setName("assettype");
+        xRadio8.setOptionValue("attachments");
+
+        formPanel9.setCaptionWidth(70);
+        xNumberField47.setCaption("Total CAV");
+        xNumberField47.setDepends(new String[] {"assettype"});
+        xNumberField47.setFieldType(java.math.BigDecimal.class);
+        xNumberField47.setName("entity.totalCAV");
+        xNumberField47.setPattern("#,##0.00");
+        xNumberField47.setPreferredSize(new java.awt.Dimension(0, 19));
+        formPanel9.add(xNumberField47);
 
         org.jdesktop.layout.GroupLayout jPanel28Layout = new org.jdesktop.layout.GroupLayout(jPanel28);
         jPanel28.setLayout(jPanel28Layout);
@@ -873,21 +918,27 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(jPanel28Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel28Layout.createSequentialGroup()
-                        .add(xButton11, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 90, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(xButton7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 91, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jPanel28Layout.createSequentialGroup()
-                        .add(jPanel28Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                            .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel28Layout.createSequentialGroup()
+                        .add(jPanel28Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jPanel28Layout.createSequentialGroup()
                                 .add(xRadio6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .add(42, 42, 42)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                 .add(xRadio5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 57, Short.MAX_VALUE)
-                                .add(xRadio4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                            .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane15, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(xSubFormPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 631, Short.MAX_VALUE)))
-                .addContainerGap())
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(xRadio4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(xRadio7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(xRadio8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(jPanel28Layout.createSequentialGroup()
+                                .add(xButton11, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 90, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(xButton7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 91, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED))
+                    .add(jScrollPane15, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE))
+                .add(jPanel28Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(formPanel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 193, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(xSubFormPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 526, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel28Layout.setVerticalGroup(
             jPanel28Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -895,17 +946,24 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(jPanel28Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(xRadio6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(xRadio5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(xRadio4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(xRadio5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(xRadio7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(xRadio8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel28Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, xSubFormPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane15, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 296, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(jPanel28Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(xButton7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(xButton11, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .add(55, 55, 55))
+                .add(jPanel28Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(jScrollPane15)
+                    .add(xSubFormPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel28Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel28Layout.createSequentialGroup()
+                        .add(jPanel28Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(xButton7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(xButton11, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .add(12, 12, 12))
+                    .add(jPanel28Layout.createSequentialGroup()
+                        .add(formPanel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         jTabbedPane6.addTab("Properties owned / Acquired / Appraised", jPanel28);
 
@@ -921,23 +979,25 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         jPanel33Layout.setVerticalGroup(
             jPanel33Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel33Layout.createSequentialGroup()
-                .add(jTabbedPane6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 387, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(jTabbedPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jTabbedPane2.addTab("Primary Loan Information", jPanel33);
 
         xImageViewer8.setBackground(new java.awt.Color(255, 255, 255));
         xImageViewer8.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        xImageViewer8.setToolTipText("Photo");
         xImageViewer8.setDynamic(true);
         xImageViewer8.setEmptyImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/nophoto.png")));
         xImageViewer8.setName("entity.borrower.photo");
 
         xButton21.setText("Browse Photo");
-        xButton21.setToolTipText("Browse to insert photo");
+        xButton21.setToolTipText("Browse Photo");
         xButton21.setImmediate(true);
         xButton21.setName("browsePic");
 
         xButton25.setText("Capture");
+        xButton25.setToolTipText("Take a Photo");
         xButton25.setEnabled(false);
         xButton25.setImmediate(true);
         xButton25.setName("capturePic");
@@ -952,23 +1012,36 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         formPanel32.setEmptyText("Please specify Principal Borrower.");
         formPanel32.setName("borrowerControls");
         formPanel32.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        formPanel32.setToolTipText("Borrower's Information");
         formPanel32.setViewType("html");
         jScrollPane4.setViewportView(formPanel32);
+
+        xButton19.setToolTipText("Add Principal Borrower");
+        xButton19.setDepends(new String[] {"borrowerControls", "connectionControls"});
+        xButton19.setExpression("#{!empty (entity.borrower)? 'Change' : 'Add'}");
+        xButton19.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        xButton19.setImmediate(true);
+        xButton19.setName("lookupBorrower");
+        xButton19.setVisibleWhen("#{mode!='read'}");
 
         org.jdesktop.layout.GroupLayout jPanel52Layout = new org.jdesktop.layout.GroupLayout(jPanel52);
         jPanel52.setLayout(jPanel52Layout);
         jPanel52Layout.setHorizontalGroup(
             jPanel52Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel52Layout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel52Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 471, Short.MAX_VALUE)
+                .add(jPanel52Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(xButton19, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 99, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 471, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel52Layout.setVerticalGroup(
             jPanel52Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel52Layout.createSequentialGroup()
-                .add(26, 26, 26)
-                .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel52Layout.createSequentialGroup()
+                .addContainerGap(29, Short.MAX_VALUE)
+                .add(xButton19, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jScrollPane4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 259, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -978,10 +1051,10 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
             jPanel50Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel50Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel50Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, xImageViewer8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, xButton21, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, xButton25, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE))
+                .add(jPanel50Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(xImageViewer8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(xButton21, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(xButton25, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel52, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(319, Short.MAX_VALUE))
@@ -1010,11 +1083,12 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         xImageViewer10.setName("entity.spouse.photo");
 
         xButton56.setText("Browse Photo");
-        xButton56.setToolTipText("Browse to insert photo");
+        xButton56.setToolTipText("Browse Photo");
         xButton56.setImmediate(true);
         xButton56.setName("browseSpousePic");
 
         xButton57.setText("Capture");
+        xButton57.setToolTipText("Take a Photo");
         xButton57.setEnabled(false);
         xButton57.setImmediate(true);
         xButton57.setName("capturePic");
@@ -1029,6 +1103,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         formPanel33.setEmptyText("No Spouse specified.");
         formPanel33.setName("connectionControls");
         formPanel33.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        formPanel33.setToolTipText("Spouse Information");
         formPanel33.setViewType("html");
         jScrollPane5.setViewportView(formPanel33);
 
@@ -1072,11 +1147,6 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        xButton65.setText("Preview");
-        xButton65.setToolTipText("Click to view enlarge photo");
-        xButton65.setImmediate(true);
-        xButton65.setName("browseSpousePic");
-
         org.jdesktop.layout.GroupLayout jPanel96Layout = new org.jdesktop.layout.GroupLayout(jPanel96);
         jPanel96.setLayout(jPanel96Layout);
         jPanel96Layout.setHorizontalGroup(
@@ -1084,10 +1154,9 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
             .add(jPanel96Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel96Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(xImageViewer10, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(xButton56, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(xButton57, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
-                    .add(xButton65, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(xImageViewer10, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(xButton57, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 128, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel65, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(319, Short.MAX_VALUE))
@@ -1101,8 +1170,6 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
                     .add(jPanel96Layout.createSequentialGroup()
                         .add(xImageViewer10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 117, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(xButton65, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(xButton56, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(xButton57, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
@@ -1110,6 +1177,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         );
         jTabbedPane1.addTab("Spouse", jPanel96);
 
+        xDataTable25.setToolTipText("Children's List");
         xDataTable25.setDepends(new String[] {"borrowerControls"});
         xDataTable25.setHandler("childrenHandler");
         xDataTable25.setName("childrenInfo");
@@ -1172,6 +1240,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder8 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder8.setTitle("Highest Educational Attainment");
         jPanel14.setBorder(xTitledBorder8);
+        xDataTable14.setToolTipText("Professional Background List");
         xDataTable14.setHandler("principalProfessionalBackgroundHandler");
         xDataTable14.setName("principalProfessionalBackgroundInfo");
 
@@ -1181,8 +1250,8 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
             jPanel14Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel14Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(xDataTable14, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 908, Short.MAX_VALUE)
-                .addContainerGap())
+                .add(xDataTable14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 900, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1228,6 +1297,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder9 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder9.setTitle("Present/Previous Employment");
         jPanel39.setBorder(xTitledBorder9);
+        xDataTable13.setToolTipText("Employment's List");
         xDataTable13.setHandler("principalEmploymentHandler");
         xDataTable13.setName("principalEmploymentInfo");
 
@@ -1235,10 +1305,10 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         jPanel39.setLayout(jPanel39Layout);
         jPanel39Layout.setHorizontalGroup(
             jPanel39Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel39Layout.createSequentialGroup()
+            .add(jPanel39Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(xDataTable13, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 908, Short.MAX_VALUE)
-                .addContainerGap())
+                .add(xDataTable13, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 900, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel39Layout.setVerticalGroup(
             jPanel39Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1364,6 +1434,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder11 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder11.setTitle("Siblings");
         jPanel48.setBorder(xTitledBorder11);
+        xDataTable12.setToolTipText("Siblings List");
         xDataTable12.setDepends(new String[] {"borrowerControls"});
         xDataTable12.setHandler("principalsiblingsHandler");
         xDataTable12.setName("principalsiblingsInfo");
@@ -1504,6 +1575,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder13 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder13.setTitle("Siblings");
         jPanel49.setBorder(xTitledBorder13);
+        xDataTable11.setToolTipText("Siblings List");
         xDataTable11.setDepends(new String[] {"connectionControls"});
         xDataTable11.setHandler("principalSpouseSiblingsHandler");
         xDataTable11.setName("principalSpouseSiblingsInfo");
@@ -1588,6 +1660,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder14 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder14.setTitle("Other Source(s) of income");
         jPanel64.setBorder(xTitledBorder14);
+        xDataTable9.setToolTipText("Other Sources of Income List");
         xDataTable9.setHandler("principalOtherSourcesOfIncomeHandler");
         xDataTable9.setName("principalOtherSourcesOfIncomeInfo");
 
@@ -1648,9 +1721,11 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         );
         jTabbedPane1.addTab("Other Source(s) of Income", jPanel63);
 
+        jTabbedPane10.setToolTipText("Checking Accounts List");
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder15 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder15.setTitle("Savings Accounts");
         jPanel60.setBorder(xTitledBorder15);
+        xDataTable16.setToolTipText("Savings Accunts List");
         xDataTable16.setHandler("principalSavingsAccountHandler");
         xDataTable16.setName("principalSavingsInfo");
 
@@ -1784,6 +1859,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         xTextArea1.setName("entity.borrower.otherAccnts");
         xTextArea1.setRequired(true);
         xTextArea1.setShowCaption(false);
+        xTextArea1.setToolTipText("Other Accounts");
         jScrollPane8.setViewportView(xTextArea1);
 
         org.jdesktop.layout.GroupLayout jPanel22Layout = new org.jdesktop.layout.GroupLayout(jPanel22);
@@ -1860,22 +1936,25 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel2Layout.createSequentialGroup()
                 .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 384, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         jTabbedPane2.addTab("Principal Borrower", jPanel2);
 
         xImageViewer5.setBackground(new java.awt.Color(255, 255, 255));
         xImageViewer5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        xImageViewer5.setToolTipText("Join Borrower's Photo");
         xImageViewer5.setDepends(new String[] {"selectedJointBorrower"});
         xImageViewer5.setDynamic(true);
         xImageViewer5.setEmptyImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/nophoto.png")));
         xImageViewer5.setName("selectedJointBorrower.photo");
 
         xButton31.setText("Browse Photo");
+        xButton31.setToolTipText("Browse Photo");
         xButton31.setImmediate(true);
         xButton31.setName("browseJointPic");
 
         xButton32.setText("Capture");
+        xButton32.setToolTipText("Take a Photo");
         xButton32.setImmediate(true);
         xButton32.setName("capturePic");
 
@@ -1887,6 +1966,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         formPanel1.setEmptyText("No Joint Borrower specified.");
         formPanel1.setName("jointBorrowerControls");
         formPanel1.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        formPanel1.setToolTipText("Joint Borrower's Information");
         formPanel1.setViewType("html");
         jScrollPane3.setViewportView(formPanel1);
 
@@ -1939,17 +2019,19 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
 
         xImageViewer15.setBackground(new java.awt.Color(255, 255, 255));
         xImageViewer15.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        xImageViewer15.setToolTipText("Joint Borrower's Spouse Photo");
         xImageViewer15.setDepends(new String[] {"selectedJointBorrower"});
         xImageViewer15.setDynamic(true);
         xImageViewer15.setEmptyImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/nophoto.png")));
         xImageViewer15.setName("selectedJointBorrower.spouse.photo");
 
         xButton80.setText("Browse Photo");
-        xButton80.setToolTipText("Browse to insert photo");
+        xButton80.setToolTipText("Browse Photo");
         xButton80.setImmediate(true);
         xButton80.setName("browseJBSpousePic");
 
         xButton81.setText("Capture");
+        xButton81.setToolTipText("Take a Photo");
         xButton81.setImmediate(true);
         xButton81.setName("capturePic");
 
@@ -1962,6 +2044,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         formPanel45.setEmptyText("No Spouse specified.");
         formPanel45.setName("jointBorrowerConnectionControls");
         formPanel45.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        formPanel45.setToolTipText("Joint Borrower's Spouse Information");
         formPanel45.setViewType("html");
         jScrollPane22.setViewportView(formPanel45);
 
@@ -1983,14 +2066,12 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         jPanel118Layout.setHorizontalGroup(
             jPanel118Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel118Layout.createSequentialGroup()
-                .add(jPanel118Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel118Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(jScrollPane22, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel118Layout.createSequentialGroup()
-                        .add(241, 241, 241)
-                        .add(xButton82, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 7, Short.MAX_VALUE)
+                .addContainerGap()
+                .add(jPanel118Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane22, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel118Layout.createSequentialGroup()
+                        .add(xButton82, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 93, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(xButton67, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 93, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -1998,8 +2079,8 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
             jPanel118Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel118Layout.createSequentialGroup()
                 .add(jPanel118Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(xButton82, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(xButton67, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(xButton67, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(xButton82, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jScrollPane22, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                 .addContainerGap())
@@ -2038,6 +2119,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder20 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder20.setTitle("Business Information");
         jPanel20.setBorder(xTitledBorder20);
+        xDataTable5.setToolTipText("Business List");
         xDataTable5.setDepends(new String[] {"selectedJointBorrower"});
         xDataTable5.setDynamic(true);
         xDataTable5.setHandler("jbMainBusinessHandler");
@@ -2113,6 +2195,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder21 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder21.setTitle("Source(s) of Income");
         jPanel15.setBorder(xTitledBorder21);
+        xDataTable2.setToolTipText("Other Sources of Income List");
         xDataTable2.setDepends(new String[] {"selectedJointBorrower"});
         xDataTable2.setDynamic(true);
         xDataTable2.setHandler("jbOtherSourcesOfIncomeHandler");
@@ -2217,6 +2300,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder22 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder22.setTitle("Highest Educational Attainment");
         jPanel19.setBorder(xTitledBorder22);
+        xDataTable17.setToolTipText("Professional Background List");
         xDataTable17.setDepends(new String[] {"selectedJointBorrower"});
         xDataTable17.setDynamic(true);
         xDataTable17.setHandler("jbProfBackgroundHandler");
@@ -2292,6 +2376,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder23 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder23.setTitle("Present/Previous Employment");
         jPanel42.setBorder(xTitledBorder23);
+        xDataTable18.setToolTipText("Employment's List");
         xDataTable18.setDepends(new String[] {"selectedJointBorrower"});
         xDataTable18.setDynamic(true);
         xDataTable18.setHandler("jbEmploymentHandler");
@@ -2321,7 +2406,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         xButton49.setName("addJointBorrowerEmployment");
         xButton49.setVisibleWhen("#{mode!='read'}");
 
-        xButton50.setMnemonic('a');
+        xButton50.setMnemonic('r');
         xButton50.setText("Remove");
         xButton50.setToolTipText("Remove this selected employment?");
         xButton50.setDepends(new String[] {"selectedJointBorrower"});
@@ -2432,6 +2517,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder25 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder25.setTitle("Siblings");
         jPanel76.setBorder(xTitledBorder25);
+        xDataTable21.setToolTipText("Joint Borrower Siblings List");
         xDataTable21.setDepends(new String[] {"selectedJointBorrower"});
         xDataTable21.setDynamic(true);
         xDataTable21.setHandler("jbSiblingsHandler");
@@ -2506,47 +2592,47 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
 
         formPanel25.setCaptionWidth(60);
         xTextField71.setCaption("Father");
-        xTextField71.setDepends(new String[] {"selectedJointBorrower"});
+        xTextField71.setDepends(new String[] {"jointBorrowerConnectionControls"});
         xTextField71.setName("selectedJointBorrower.spouseFathersName");
         xTextField71.setPreferredSize(new java.awt.Dimension(165, 19));
         formPanel25.add(xTextField71);
 
         xDateField8.setCaption("Birthdate");
-        xDateField8.setDepends(new String[] {"selectedJointBorrower"});
+        xDateField8.setDepends(new String[] {"jointBorrowerConnectionControls"});
         xDateField8.setName("selectedJointBorrower.spouseFathersBDate");
         xDateField8.setPreferredSize(new java.awt.Dimension(165, 19));
         xDateField8.setUseDatePickerModel(true);
         formPanel25.add(xDateField8);
 
         xNumberField35.setCaption("Age");
-        xNumberField35.setDepends(new String[] {"selectedJointBorrower"});
+        xNumberField35.setDepends(new String[] {"jointBorrowerConnectionControls"});
         xNumberField35.setFieldType(Integer.class);
         xNumberField35.setName("selectedJointBorrower.spouseFathersAge");
         xNumberField35.setPreferredSize(new java.awt.Dimension(168, 19));
         formPanel25.add(xNumberField35);
 
         xTextField73.setCaption("Mother");
-        xTextField73.setDepends(new String[] {"selectedJointBorrower"});
+        xTextField73.setDepends(new String[] {"jointBorrowerConnectionControls"});
         xTextField73.setName("selectedJointBorrower.spouseMothersName");
         xTextField73.setPreferredSize(new java.awt.Dimension(165, 19));
         formPanel25.add(xTextField73);
 
         xDateField9.setCaption("Birthdate");
-        xDateField9.setDepends(new String[] {"selectedJointBorrower"});
+        xDateField9.setDepends(new String[] {"jointBorrowerConnectionControls"});
         xDateField9.setName("selectedJointBorrower.spouseMothersBDate");
         xDateField9.setPreferredSize(new java.awt.Dimension(165, 19));
         xDateField9.setUseDatePickerModel(true);
         formPanel25.add(xDateField9);
 
         xNumberField36.setCaption("Age");
-        xNumberField36.setDepends(new String[] {"selectedJointBorrower"});
+        xNumberField36.setDepends(new String[] {"jointBorrowerConnectionControls"});
         xNumberField36.setFieldType(Integer.class);
         xNumberField36.setName("selectedJointBorrower.spouseMothersAge");
         xNumberField36.setPreferredSize(new java.awt.Dimension(168, 19));
         formPanel25.add(xNumberField36);
 
         xTextField75.setCaption("Address");
-        xTextField75.setDepends(new String[] {"selectedJointBorrower"});
+        xTextField75.setDepends(new String[] {"jointBorrowerConnectionControls"});
         xTextField75.setName("selectedJointBorrower.spouseAddress");
         xTextField75.setPreferredSize(new java.awt.Dimension(165, 19));
         formPanel25.add(xTextField75);
@@ -2554,7 +2640,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         xTextArea11.setColumns(20);
         xTextArea11.setRows(5);
         xTextArea11.setCaption("Others");
-        xTextArea11.setDepends(new String[] {"selectedJointBorrower"});
+        xTextArea11.setDepends(new String[] {"jointBorrowerConnectionControls"});
         xTextArea11.setHint("Specify your specifications here.");
         xTextArea11.setName("selectedJointBorrower.spouseOthersSpecs");
         formPanel25.add(xTextArea11);
@@ -2578,7 +2664,8 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder27 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder27.setTitle("Siblings");
         jPanel75.setBorder(xTitledBorder27);
-        xDataTable20.setDepends(new String[] {"selectedJointBorrower"});
+        xDataTable20.setToolTipText("Joint Borrower Spouse Siblings List");
+        xDataTable20.setDepends(new String[] {});
         xDataTable20.setDynamic(true);
         xDataTable20.setHandler("jbSpouseSiblingsHandler");
         xDataTable20.setName("jbSpouseSiblings");
@@ -2590,7 +2677,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         xButton84.setName("addJointBorrowerSpouseSiblings");
         xButton84.setVisibleWhen("#{mode!='read'}");
 
-        xButton85.setMnemonic('a');
+        xButton85.setMnemonic('r');
         xButton85.setText("Remove");
         xButton85.setToolTipText("Remove this selected sibling(s)?");
         xButton85.setDepends(new String[] {"selectedJointBorrower"});
@@ -2665,6 +2752,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder28 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder28.setTitle("Saving Accounts");
         jPanel80.setBorder(xTitledBorder28);
+        xDataTable23.setToolTipText("Joint Borrower Savings Accounts LIst");
         xDataTable23.setDepends(new String[] {"selectedJointBorrower"});
         xDataTable23.setDynamic(true);
         xDataTable23.setHandler("jbSavingsAccountHandler");
@@ -2732,6 +2820,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder29 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder29.setTitle("Checking Accounts");
         jPanel82.setBorder(xTitledBorder29);
+        xDataTable24.setToolTipText("Joint Borrower Checking Accounts List");
         xDataTable24.setDepends(new String[] {"selectedJointBorrower"});
         xDataTable24.setDynamic(true);
         xDataTable24.setHandler("jbCheckingAccountHandler");
@@ -2806,6 +2895,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         xTextArea2.setName("selectedJointBorrower.otherAccnts");
         xTextArea2.setRequired(true);
         xTextArea2.setShowCaption(false);
+        xTextArea2.setToolTipText("Joint Borrower Other Accounts");
         jScrollPane6.setViewportView(xTextArea2);
 
         org.jdesktop.layout.GroupLayout jPanel18Layout = new org.jdesktop.layout.GroupLayout(jPanel18);
@@ -2873,6 +2963,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         xList2.setExpression("#{name}");
         xList2.setItems("entity.jointBorrowerList");
         xList2.setName("selectedJointBorrower");
+        xList2.setToolTipText("Joint Borrower's List");
         jScrollPane10.setViewportView(xList2);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12));
@@ -2918,20 +3009,24 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         xList3.setExpression("#{name}");
         xList3.setItems("entity.coMakerList");
         xList3.setName("selectedCoMaker");
+        xList3.setToolTipText("Co-Maker's List");
         jScrollPane11.setViewportView(xList3);
 
         xImageViewer6.setBackground(new java.awt.Color(255, 255, 255));
         xImageViewer6.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        xImageViewer6.setToolTipText("Co-Makers Photo");
         xImageViewer6.setDepends(new String[] {"selectedCoMaker"});
         xImageViewer6.setDynamic(true);
         xImageViewer6.setEmptyImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/nophoto.png")));
         xImageViewer6.setName("selectedCoMaker.photo");
 
         xButton33.setText("Browse Photo");
+        xButton33.setToolTipText("Browse Photo");
         xButton33.setImmediate(true);
         xButton33.setName("browseCoMakerPic");
 
         xButton34.setText("Capture");
+        xButton34.setToolTipText("Take a Photo");
         xButton34.setImmediate(true);
         xButton34.setName("capturePic");
 
@@ -2943,6 +3038,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         formPanel8.setEmptyText("No CoMaker specified.");
         formPanel8.setName("coMakerControls");
         formPanel8.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        formPanel8.setToolTipText("Co-Maker's Information");
         formPanel8.setViewType("html");
         jScrollPane7.setViewportView(formPanel8);
 
@@ -2995,16 +3091,19 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
 
         xImageViewer12.setBackground(new java.awt.Color(255, 255, 255));
         xImageViewer12.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        xImageViewer12.setToolTipText("Co-Maker's Spouse Photo");
         xImageViewer12.setDepends(new String[] {"selectedCoMaker"});
         xImageViewer12.setDynamic(true);
         xImageViewer12.setEmptyImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/nophoto.png")));
         xImageViewer12.setName("selectedCoMaker.spouse.photo");
 
         xButton61.setText("Browse Photo");
+        xButton61.setToolTipText("Browse Photo");
         xButton61.setImmediate(true);
         xButton61.setName("browseCMSpousePic");
 
         xButton62.setText("Capture");
+        xButton62.setToolTipText("Take a Photo");
         xButton62.setImmediate(true);
         xButton62.setName("capturePic");
 
@@ -3017,6 +3116,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         formPanel42.setEmptyText("No Spouse specified.");
         formPanel42.setName("coMakerConnectionControls");
         formPanel42.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        formPanel42.setToolTipText("Co-Maker's Spouse Information");
         formPanel42.setViewType("html");
         jScrollPane2.setViewportView(formPanel42);
 
@@ -3042,7 +3142,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .add(xButton63, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 94, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(xButton63, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 93, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(xButton68, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 93, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -3091,6 +3191,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder33 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder33.setTitle("Business Information");
         jPanel25.setBorder(xTitledBorder33);
+        xDataTable6.setToolTipText("Business List");
         xDataTable6.setDepends(new String[] {"selectedCoMaker"});
         xDataTable6.setDynamic(true);
         xDataTable6.setHandler("cmMainBusinessHandler");
@@ -3164,6 +3265,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder34 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder34.setTitle("Source(s) of Income");
         jPanel1.setBorder(xTitledBorder34);
+        xDataTable1.setToolTipText("Other Sources of Income List");
         xDataTable1.setDepends(new String[] {"selectedCoMaker"});
         xDataTable1.setDynamic(true);
         xDataTable1.setHandler("cmOtherSourcesOfIncomeHandler");
@@ -3265,6 +3367,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder35 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder35.setTitle("Highest Educational Attainment");
         jPanel31.setBorder(xTitledBorder35);
+        xDataTable19.setToolTipText("Professional Background List");
         xDataTable19.setDepends(new String[] {"selectedCoMaker"});
         xDataTable19.setDynamic(true);
         xDataTable19.setHandler("cmProfBackgroundHandler");
@@ -3338,6 +3441,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder36 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder36.setTitle("Present/Previous Employment");
         jPanel43.setBorder(xTitledBorder36);
+        xDataTable22.setToolTipText("Employment's List");
         xDataTable22.setDepends(new String[] {"selectedCoMaker"});
         xDataTable22.setDynamic(true);
         xDataTable22.setHandler("cmEmploymentHandler");
@@ -3442,6 +3546,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder37 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder37.setTitle("");
         jPanel98.setBorder(xTitledBorder37);
+        xTable9.setToolTipText("Loan History List");
         xTable9.setHandler("listLoanHistory");
         xTable9.setName("selectedLoanHistory");
 
@@ -3490,12 +3595,13 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder38 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder38.setTitle("");
         jPanel99.setBorder(xTitledBorder38);
+        xTable10.setToolTipText("Ledger Evaluation List");
         xTable10.setHandler("ledgerEvaluationHandler");
         xTable10.setName("ledgerEvaluationList");
 
         xButton59.setText("View Info");
         xButton59.setImmediate(true);
-        xButton59.setName("viewLoanHistory");
+        xButton59.setName("viewLedgerEvaluation");
 
         org.jdesktop.layout.GroupLayout jPanel99Layout = new org.jdesktop.layout.GroupLayout(jPanel99);
         jPanel99.setLayout(jPanel99Layout);
@@ -3548,268 +3654,272 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
             jPanel94Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel94Layout.createSequentialGroup()
                 .add(jTabbedPane17, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 381, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         jTabbedPane2.addTab("Loan History", jPanel94);
 
-        com.rameses.rcp.control.border.XTitledBorder xTitledBorder39 = new com.rameses.rcp.control.border.XTitledBorder();
-        xTitledBorder39.setTitle("Credit Investigation");
-        jPanel104.setBorder(xTitledBorder39);
+        jPanel13.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        formPanel12.setCaptionWidth(92);
-        xTextArea12.setColumns(20);
-        xTextArea12.setRows(5);
-        xTextArea12.setCaption("Business");
-        xTextArea12.setDepends(new String[] {"selectedBusinessInfo"});
-        xTextArea12.setHint("Specify business here.");
-        xTextArea12.setName("selectedBusinessInfo.businessEvaluation");
-        formPanel12.add(xTextArea12);
+        formPanel11.setCaptionWidth(93);
+        xComboBox9.setCaption("Firm/Trade Name");
+        xComboBox9.setDepends(new String[] {"principalMainBusinessInfo"});
+        xComboBox9.setDynamic(true);
+        xComboBox9.setEmptyText("Select Business Name");
+        xComboBox9.setExpression("#{tradename}");
+        xComboBox9.setImmediate(true);
+        xComboBox9.setItems("entity.principalMainBusinessList");
+        xComboBox9.setName("selectedBusinessInfo");
+        xComboBox9.setPreferredSize(new java.awt.Dimension(164, 23));
+        formPanel11.add(xComboBox9);
 
-        xTextArea13.setColumns(20);
-        xTextArea13.setRows(5);
-        xTextArea13.setCaption("Physical Outlook");
-        xTextArea13.setDepends(new String[] {"selectedBusinessInfo"});
-        xTextArea13.setHint("Specify physical outlook here.");
-        xTextArea13.setName("selectedBusinessInfo.ciPhysicalOutlook");
-        formPanel12.add(xTextArea13);
+        formPanel15.setCaptionWidth(92);
+        xTextArea14.setColumns(20);
+        xTextArea14.setRows(5);
+        xTextArea14.setCaption("Business");
+        xTextArea14.setDepends(new String[] {"selectedBusinessInfo"});
+        xTextArea14.setHint("Specify business here.");
+        xTextArea14.setName("selectedBusinessInfo.businessEvaluation");
+        formPanel15.add(xTextArea14);
 
-        jLabel27.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel27.setText("CI Report");
-        formPanel12.add(jLabel27);
+        xTextArea15.setColumns(20);
+        xTextArea15.setRows(5);
+        xTextArea15.setCaption("Physical Outlook");
+        xTextArea15.setDepends(new String[] {"selectedBusinessInfo"});
+        xTextArea15.setHint("Specify physical outlook here.");
+        xTextArea15.setName("selectedBusinessInfo.ciPhysicalOutlook");
+        formPanel15.add(xTextArea15);
 
-        jLabel28.setText("Cash Count");
+        jLabel30.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel30.setText("CI Report");
+        formPanel15.add(jLabel30);
 
-        formPanel13.setCaptionWidth(70);
-        xDateField14.setCaption("Date");
-        xDateField14.setDepends(new String[] {"selectedBusinessInfo"});
-        xDateField14.setName("selectedBusinessInfo.cicashCountDate");
-        xDateField14.setPreferredSize(new java.awt.Dimension(164, 19));
-        xDateField14.setUseDatePickerModel(true);
-        formPanel13.add(xDateField14);
+        jLabel32.setText("Cash Count");
 
-        xTextField31.setCaption("Time");
-        xTextField31.setDepends(new String[] {"selectedBusinessInfo"});
-        xTextField31.setName("selectedBusinessInfo.cicashCountTime");
-        xTextField31.setPreferredSize(new java.awt.Dimension(164, 19));
-        formPanel13.add(xTextField31);
+        formPanel17.setCaptionWidth(70);
+        xDateField15.setCaption("Date");
+        xDateField15.setDepends(new String[] {"selectedBusinessInfo"});
+        xDateField15.setName("selectedBusinessInfo.cicashCountDate");
+        xDateField15.setPreferredSize(new java.awt.Dimension(164, 19));
+        xDateField15.setUseDatePickerModel(true);
+        formPanel17.add(xDateField15);
 
-        xNumberField5.setCaption("Amount");
-        xNumberField5.setDepends(new String[] {"selectedBusinessInfo"});
-        xNumberField5.setFieldType(java.math.BigDecimal.class);
-        xNumberField5.setName("selectedBusinessInfo.cicashCountAmount");
-        xNumberField5.setPattern("#,##0.00");
-        xNumberField5.setPreferredSize(new java.awt.Dimension(164, 19));
-        formPanel13.add(xNumberField5);
+        xTextField32.setCaption("Time");
+        xTextField32.setDepends(new String[] {"selectedBusinessInfo"});
+        xTextField32.setName("selectedBusinessInfo.cicashCountTime");
+        xTextField32.setPreferredSize(new java.awt.Dimension(164, 19));
+        formPanel17.add(xTextField32);
 
-        formPanel9.setCaptionWidth(93);
-        xComboBox8.setCaption("Firm/Trade Name");
-        xComboBox8.setDepends(new String[] {"principalMainBusinessInfo"});
-        xComboBox8.setDynamic(true);
-        xComboBox8.setEmptyText("Select Business Name");
-        xComboBox8.setExpression("#{tradename}");
-        xComboBox8.setImmediate(true);
-        xComboBox8.setItems("entity.principalMainBusinessList");
-        xComboBox8.setName("selectedBusinessInfo");
-        xComboBox8.setPreferredSize(new java.awt.Dimension(164, 23));
-        formPanel9.add(xComboBox8);
+        xNumberField6.setCaption("Amount");
+        xNumberField6.setDepends(new String[] {"selectedBusinessInfo"});
+        xNumberField6.setFieldType(java.math.BigDecimal.class);
+        xNumberField6.setName("selectedBusinessInfo.cicashCountAmount");
+        xNumberField6.setPattern("#,##0.00");
+        xNumberField6.setPreferredSize(new java.awt.Dimension(164, 19));
+        formPanel17.add(xNumberField6);
 
-        formPanel14.setCaptionWidth(92);
-        xDateField17.setCaption("Date CI");
-        xDateField17.setDepends(new String[] {"selectedBusinessInfo"});
-        xDateField17.setName("selectedBusinessInfo.ciDate");
-        xDateField17.setPreferredSize(new java.awt.Dimension(164, 19));
-        xDateField17.setUseDatePickerModel(true);
-        formPanel14.add(xDateField17);
+        formPanel18.setCaptionWidth(67);
+        xDateField18.setCaption("Date CI");
+        xDateField18.setDepends(new String[] {"selectedBusinessInfo"});
+        xDateField18.setName("selectedBusinessInfo.ciDate");
+        xDateField18.setPreferredSize(new java.awt.Dimension(164, 19));
+        xDateField18.setUseDatePickerModel(true);
+        formPanel18.add(xDateField18);
 
-        xTextField34.setCaption("CI By");
-        xTextField34.setDepends(new String[] {"selectedBusinessInfo"});
-        xTextField34.setName("selectedBusinessInfo.ciBy");
-        xTextField34.setPreferredSize(new java.awt.Dimension(164, 19));
-        formPanel14.add(xTextField34);
+        xTextField35.setCaption("CI By");
+        xTextField35.setDepends(new String[] {"selectedBusinessInfo"});
+        xTextField35.setName("selectedBusinessInfo.ciBy");
+        xTextField35.setPreferredSize(new java.awt.Dimension(164, 19));
+        formPanel18.add(xTextField35);
 
-        xImageViewer7.setBackground(new java.awt.Color(255, 255, 255));
-        xImageViewer7.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        xImageViewer7.setDepends(new String[] {"selectedBusinessInfo"});
-        xImageViewer7.setDynamic(true);
-        xImageViewer7.setName("selectedBusinessInfo.photo1");
-
-        xImageViewer9.setBackground(new java.awt.Color(255, 255, 255));
-        xImageViewer9.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        xImageViewer9.setDepends(new String[] {"selectedBusinessInfo"});
-        xImageViewer9.setDynamic(true);
-        xImageViewer9.setName("selectedBusinessInfo.photo2");
-
-        xButton5.setText("Browse Business Picture");
-        xButton5.setToolTipText("Add Business Photo");
-        xButton5.setDepends(new String[] {"selectedBusinessInfo"});
-        xButton5.setImmediate(true);
-        xButton5.setName("addBusinessPhoto1");
-        xButton5.setVisibleWhen("#{mode!='read'}");
-
-        xLabel4.setText("No. of Photo(s) :");
-
-        xNumberField4.setCaption("No. of photo");
-        xNumberField4.setFieldType(java.math.BigInteger.class);
-        xNumberField4.setName("photonum");
-        xNumberField4.setPreferredSize(new java.awt.Dimension(60, 18));
-        xNumberField4.setReadonly(true);
-
-        xButton12.setText("Browse Business Picture");
-        xButton12.setToolTipText("Add Business Photo");
-        xButton12.setDepends(new String[] {"selectedBusinessInfo"});
-        xButton12.setImmediate(true);
-        xButton12.setName("addBusinessPhoto2");
-        xButton12.setVisibleWhen("#{mode!='read'}");
-
-        org.jdesktop.layout.GroupLayout jPanel104Layout = new org.jdesktop.layout.GroupLayout(jPanel104);
-        jPanel104.setLayout(jPanel104Layout);
-        jPanel104Layout.setHorizontalGroup(
-            jPanel104Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel104Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel104Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, formPanel9, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE)
-                    .add(jPanel104Layout.createSequentialGroup()
-                        .add(jPanel104Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(formPanel12, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 268, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(jPanel104Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
-                                .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel104Layout.createSequentialGroup()
-                                    .add(22, 22, 22)
-                                    .add(formPanel13, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel104Layout.createSequentialGroup()
-                                    .add(jLabel28, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 84, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                    .add(184, 184, 184)))
-                            .add(formPanel14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 270, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(jPanel104Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jPanel104Layout.createSequentialGroup()
-                                .add(76, 76, 76)
-                                .add(xLabel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(xNumberField4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                            .add(jPanel104Layout.createSequentialGroup()
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(jPanel104Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
-                                    .add(org.jdesktop.layout.GroupLayout.LEADING, xButton5, 0, 0, Short.MAX_VALUE)
-                                    .add(org.jdesktop.layout.GroupLayout.LEADING, xImageViewer7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE))
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(jPanel104Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(org.jdesktop.layout.GroupLayout.TRAILING, xImageViewer9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 115, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                    .add(xButton12, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 117, Short.MAX_VALUE))))))
+        org.jdesktop.layout.GroupLayout jPanel13Layout = new org.jdesktop.layout.GroupLayout(jPanel13);
+        jPanel13.setLayout(jPanel13Layout);
+        jPanel13Layout.setHorizontalGroup(
+            jPanel13Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel13Layout.createSequentialGroup()
+                .add(jPanel13Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(formPanel11, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 270, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel32, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 84, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(formPanel15, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 268, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel13Layout.createSequentialGroup()
+                        .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(jPanel13Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, formPanel17, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, formPanel18, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .add(3, 3, 3)))
                 .addContainerGap())
         );
-        jPanel104Layout.setVerticalGroup(
-            jPanel104Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel104Layout.createSequentialGroup()
-                .add(formPanel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+        jPanel13Layout.setVerticalGroup(
+            jPanel13Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel13Layout.createSequentialGroup()
+                .add(formPanel11, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(formPanel15, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jLabel32)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(jPanel104Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(jPanel104Layout.createSequentialGroup()
-                        .add(formPanel12, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jLabel28)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(formPanel13, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(0, 0, 0)
-                        .add(formPanel14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .add(jPanel104Layout.createSequentialGroup()
-                        .add(jPanel104Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                            .add(xImageViewer7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 117, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(xImageViewer9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 117, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jPanel104Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(xButton5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(xButton12, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(35, 35, 35)
-                        .add(jPanel104Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(xLabel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(xNumberField4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(26, 26, 26))))
+                .add(formPanel17, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(formPanel18, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(11, 11, 11))
         );
 
-        jLabel31.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel31.setText("CI Recommendation");
+        xEditorPane20.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(231, 223, 223)));
+        xEditorPane20.setToolTipText("CI Recommendation");
+        xEditorPane20.setName("cirecommendation");
+        jScrollPane9.setViewportView(xEditorPane20);
 
-        xEditorPane15.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(231, 223, 223)));
-        xEditorPane15.setName("cirecommendation");
-        jScrollPane21.setViewportView(xEditorPane15);
+        jLabel33.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel33.setText("CI Recommendation");
 
-        jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        xActionBar9.setName("addCIRecommendationActions");
+        xActionBar9.setUseToolBar(false);
 
-        xActionBar8.setName("addCIRecommendationActions");
-        xActionBar8.setUseToolBar(false);
+        jSeparator5.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        org.jdesktop.layout.GroupLayout jPanel115Layout = new org.jdesktop.layout.GroupLayout(jPanel115);
-        jPanel115.setLayout(jPanel115Layout);
-        jPanel115Layout.setHorizontalGroup(
-            jPanel115Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel115Layout.createSequentialGroup()
+        org.jdesktop.layout.GroupLayout jPanel110Layout = new org.jdesktop.layout.GroupLayout(jPanel110);
+        jPanel110.setLayout(jPanel110Layout);
+        jPanel110Layout.setHorizontalGroup(
+            jPanel110Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel110Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel104, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jPanel13, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 272, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(9, 9, 9)
+                .add(jSeparator5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jSeparator2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jPanel110Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jLabel33, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 224, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(xActionBar9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jScrollPane9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 645, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+        jPanel110Layout.setVerticalGroup(
+            jPanel110Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel110Layout.createSequentialGroup()
+                .add(jPanel110Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jSeparator5)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel110Layout.createSequentialGroup()
+                        .add(jLabel33)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jScrollPane9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 301, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(xActionBar9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel13, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jTabbedPane9.addTab("Credit Investigation", jPanel110);
+
+        jLabel24.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel24.setText("Crecom Summary");
+
+        xEditorPane16.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(231, 223, 223)));
+        xEditorPane16.setToolTipText("Crecom Recommendation");
+        xEditorPane16.setName("crecomrecommendation");
+        jScrollPane18.setViewportView(xEditorPane16);
+
+        xActionBar11.setName("addCrecomRecommendationActions");
+        xActionBar11.setUseToolBar(false);
+
+        com.rameses.rcp.control.border.XTitledBorder xTitledBorder39 = new com.rameses.rcp.control.border.XTitledBorder();
+        xTitledBorder39.setTitle("Recommendation");
+        formPanel3.setBorder(xTitledBorder39);
+        formPanel3.setCaptionWidth(75);
+        xNumberField42.setCaption("MARKETER");
+        xNumberField42.setFieldType(java.math.BigDecimal.class);
+        xNumberField42.setName("entity.marketerRecomAmt");
+        xNumberField42.setPattern("#,##0.00");
+        xNumberField42.setPreferredSize(new java.awt.Dimension(0, 19));
+        xNumberField42.setToolTipText("Marketer amount Recommendation");
+        formPanel3.add(xNumberField42);
+
+        xNumberField44.setCaption("CI");
+        xNumberField44.setFieldType(java.math.BigDecimal.class);
+        xNumberField44.setName("entity.ciRecomAmt");
+        xNumberField44.setPattern("#,##0.00");
+        xNumberField44.setPreferredSize(new java.awt.Dimension(0, 19));
+        xNumberField44.setToolTipText("CI amount Recommendation");
+        formPanel3.add(xNumberField44);
+
+        xNumberField43.setCaption("FCA");
+        xNumberField43.setFieldType(java.math.BigDecimal.class);
+        xNumberField43.setName("entity.fcaRecomAmt");
+        xNumberField43.setPattern("#,##0.00");
+        xNumberField43.setPreferredSize(new java.awt.Dimension(0, 19));
+        xNumberField43.setToolTipText("FCA amount Recommendation");
+        formPanel3.add(xNumberField43);
+
+        xNumberField41.setCaption("CAO");
+        xNumberField41.setFieldType(java.math.BigDecimal.class);
+        xNumberField41.setName("entity.caoRecomAmt");
+        xNumberField41.setPattern("#,##0.00");
+        xNumberField41.setPreferredSize(new java.awt.Dimension(0, 19));
+        xNumberField41.setToolTipText("CAO amount Recommendation");
+        formPanel3.add(xNumberField41);
+
+        xNumberField45.setCaption("BCOH");
+        xNumberField45.setFieldType(java.math.BigDecimal.class);
+        xNumberField45.setName("entity.bcohRecomAmt");
+        xNumberField45.setPattern("#,##0.00");
+        xNumberField45.setPreferredSize(new java.awt.Dimension(0, 19));
+        xNumberField45.setToolTipText("BCOH amount Recommendation");
+        formPanel3.add(xNumberField45);
+
+        jSeparator4.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        org.jdesktop.layout.GroupLayout jPanel101Layout = new org.jdesktop.layout.GroupLayout(jPanel101);
+        jPanel101.setLayout(jPanel101Layout);
+        jPanel101Layout.setHorizontalGroup(
+            jPanel101Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel101Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(formPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel115Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel31, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 224, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(xActionBar8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jScrollPane21, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 414, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(jSeparator4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel101Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jLabel24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 193, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jScrollPane18, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 720, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(xActionBar11, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(20, 20, 20))
+        );
+        jPanel101Layout.setVerticalGroup(
+            jPanel101Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel101Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jLabel24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jScrollPane18, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 273, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(xActionBar11, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(48, Short.MAX_VALUE))
+            .add(jSeparator4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
+            .add(jPanel101Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(formPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(235, Short.MAX_VALUE))
+        );
+        jTabbedPane9.addTab("Crecom ", jPanel101);
+
+        org.jdesktop.layout.GroupLayout jPanel37Layout = new org.jdesktop.layout.GroupLayout(jPanel37);
+        jPanel37.setLayout(jPanel37Layout);
+        jPanel37Layout.setHorizontalGroup(
+            jPanel37Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel37Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jTabbedPane9, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 977, Short.MAX_VALUE))
+        );
+        jPanel37Layout.setVerticalGroup(
+            jPanel37Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel37Layout.createSequentialGroup()
+                .add(jTabbedPane9, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jPanel115Layout.setVerticalGroup(
-            jPanel115Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel115Layout.createSequentialGroup()
-                .add(jPanel104, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 370, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
-            .add(jPanel115Layout.createSequentialGroup()
-                .add(jLabel31)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane21, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 325, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(xActionBar8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jSeparator2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
-        );
-        jTabbedPane2.addTab("CI Report", jPanel115);
-
-        jLabel23.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel23.setText("Crecom Summary");
-
-        xEditorPane14.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(231, 223, 223)));
-        xEditorPane14.setName("crecomrecommendation");
-        jScrollPane17.setViewportView(xEditorPane14);
-
-        xActionBar10.setName("addCrecomRecommendationActions");
-        xActionBar10.setUseToolBar(false);
-
-        org.jdesktop.layout.GroupLayout jPanel112Layout = new org.jdesktop.layout.GroupLayout(jPanel112);
-        jPanel112.setLayout(jPanel112Layout);
-        jPanel112Layout.setHorizontalGroup(
-            jPanel112Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel112Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel112Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 224, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(xActionBar10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jScrollPane17, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 965, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel112Layout.setVerticalGroup(
-            jPanel112Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel112Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jLabel23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane17, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 283, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(xActionBar10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(58, 58, 58))
-        );
-        jTabbedPane2.addTab("Crecom", jPanel112);
+        jTabbedPane2.addTab("Recommendations", jPanel37);
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel10.setText("Comments");
 
         xEditorPane7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(231, 223, 223)));
+        xEditorPane7.setToolTipText("Coments/Remarks");
         xEditorPane7.setName("comments");
         jScrollPane14.setViewportView(xEditorPane7);
 
@@ -3849,7 +3959,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
                 .add(jPanel21Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(xButton17, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(xActionBar7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         jTabbedPane2.addTab("Comments/Remarks", jPanel21);
 
@@ -3857,6 +3967,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         jLabel7.setText("Transaction Log");
 
         xEditorPane4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(231, 223, 223)));
+        xEditorPane4.setToolTipText("Transaction Log File(s)");
         xEditorPane4.setName("translog");
         jScrollPane1.setViewportView(xEditorPane4);
 
@@ -3878,7 +3989,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
                 .add(jLabel7)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 348, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         jTabbedPane2.addTab("Transaction Log", jPanel11);
 
@@ -3892,10 +4003,10 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         xTextField13.setName("entity.state");
         xTextField13.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField13.setReadonly(true);
+        xTextField13.setToolTipText("Loan Application Status");
         formPanel7.add(xTextField13);
 
         xActionTextField1.setEditable(false);
-        xActionTextField1.setToolTipText("Search Route");
         xActionTextField1.setActionName("lookupRoute");
         xActionTextField1.setCaption("Route");
         xActionTextField1.setHint("Search Route");
@@ -3903,24 +4014,36 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         xActionTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xActionTextField1.setReadonly(true);
         xActionTextField1.setRequired(true);
+        xActionTextField1.setToolTipText("Search Route");
         formPanel7.add(xActionTextField1);
 
         formPanel10.setPadding(new java.awt.Insets(5, 5, 10, 5));
-        xLabel1.setExpression("<html><b>#{applicationType}</b></html>");
-        xLabel1.setFont(new java.awt.Font("Arial", 1, 12));
-        xLabel1.setPreferredSize(new java.awt.Dimension(250, 21));
-        xLabel1.setShowCaption(false);
-        formPanel10.add(xLabel1);
+        xComboBox5.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "entity.appType" }));
+        xComboBox5.setToolTipText("Loan Application Type");
+        xComboBox5.setCaption("App. Type");
+        xComboBox5.setDynamic(true);
+        xComboBox5.setEmptyText("Select App Type");
+        xComboBox5.setExpression("#{type}");
+        xComboBox5.setImmediate(true);
+        xComboBox5.setItemKey("type");
+        xComboBox5.setItems("appTypeList");
+        xComboBox5.setName("entity.appType");
+        xComboBox5.setPreferredSize(new java.awt.Dimension(165, 22));
+        xComboBox5.setRequired(true);
+        formPanel10.add(xComboBox5);
 
         xTextField3.setCaption("App. No");
         xTextField3.setHint("Application No");
         xTextField3.setName("entity.appno");
         xTextField3.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField3.setReadonly(true);
+        xTextField3.setToolTipText("Application Number");
         formPanel10.add(xTextField3);
 
         formPanel2.setCaptionWidth(100);
+        xComboBox1.setToolTipText("Click to select a Client Type");
         xComboBox1.setCaption("Client Type");
+        xComboBox1.setDepends(new String[] {"entity.appType"});
         xComboBox1.setDynamic(true);
         xComboBox1.setEmptyText("Select Client Type");
         xComboBox1.setExpression("#{code}");
@@ -3932,6 +4055,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         xComboBox1.setRequired(true);
         formPanel2.add(xComboBox1);
 
+        xComboBox2.setToolTipText("Click to select Interviewed By");
         xComboBox2.setCaption("Interviewed By");
         xComboBox2.setDepends(new String[] {"clientType"});
         xComboBox2.setDynamic(true);
@@ -3949,7 +4073,17 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         xTextField26.setEnabled(false);
         xTextField26.setName("entity.encodedBy");
         xTextField26.setPreferredSize(new java.awt.Dimension(0, 19));
+        xTextField26.setToolTipText("Recorded By");
         formPanel6.add(xTextField26);
+
+        xTextField27.setEditable(false);
+        xTextField27.setCaption("Updated By");
+        xTextField27.setCaptionWidth(80);
+        xTextField27.setEnabled(false);
+        xTextField27.setName("entity.updatedBy");
+        xTextField27.setPreferredSize(new java.awt.Dimension(0, 19));
+        xTextField27.setToolTipText("Updated/Edited By");
+        formPanel6.add(xTextField27);
 
         formPanel26.setCaptionWidth(100);
         xTextArea7.setColumns(20);
@@ -3958,6 +4092,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         xTextArea7.setHint("Specify your specifications here.");
         xTextArea7.setName("entity.loaninfo.loanpurpose");
         xTextArea7.setRequired(true);
+        xTextArea7.setToolTipText("Purpose of Loan");
         formPanel26.add(xTextArea7);
 
         formPanel28.setCaptionWidth(70);
@@ -3967,9 +4102,11 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         xNumberField28.setName("entity.loaninfo.producttype.term");
         xNumberField28.setPreferredSize(new java.awt.Dimension(120, 19));
         xNumberField28.setRequired(true);
+        xNumberField28.setToolTipText("Product Term");
         formPanel28.add(xNumberField28);
 
         formPanel29.setCaptionWidth(100);
+        xComboBox15.setToolTipText("Product Type");
         xComboBox15.setAllowNull(false);
         xComboBox15.setCaption("Product Type");
         xComboBox15.setExpression("#{code}");
@@ -3986,6 +4123,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
         xNumberField27.setPattern("#,##0.00");
         xNumberField27.setPreferredSize(new java.awt.Dimension(0, 19));
         xNumberField27.setRequired(true);
+        xNumberField27.setToolTipText("Amount Applied");
         formPanel29.add(xNumberField27);
 
         org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
@@ -4036,9 +4174,9 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
             .add(jPanel10, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 1018, Short.MAX_VALUE)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jTabbedPane2, 0, 0, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -4046,9 +4184,10 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
             .add(layout.createSequentialGroup()
                 .add(jPanel10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 51, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 125, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jTabbedPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE))
+                .add(jTabbedPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
     
@@ -4056,10 +4195,11 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.rameses.rcp.util.FormPanel formPanel1;
     private com.rameses.rcp.util.FormPanel formPanel10;
-    private com.rameses.rcp.util.FormPanel formPanel12;
-    private com.rameses.rcp.util.FormPanel formPanel13;
-    private com.rameses.rcp.util.FormPanel formPanel14;
+    private com.rameses.rcp.util.FormPanel formPanel11;
+    private com.rameses.rcp.util.FormPanel formPanel15;
     private com.rameses.rcp.util.FormPanel formPanel16;
+    private com.rameses.rcp.util.FormPanel formPanel17;
+    private com.rameses.rcp.util.FormPanel formPanel18;
     private com.rameses.rcp.util.FormPanel formPanel2;
     private com.rameses.rcp.util.FormPanel formPanel22;
     private com.rameses.rcp.util.FormPanel formPanel23;
@@ -4068,6 +4208,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
     private com.rameses.rcp.util.FormPanel formPanel26;
     private com.rameses.rcp.util.FormPanel formPanel28;
     private com.rameses.rcp.util.FormPanel formPanel29;
+    private com.rameses.rcp.util.FormPanel formPanel3;
     private com.rameses.rcp.util.FormPanel formPanel32;
     private com.rameses.rcp.util.FormPanel formPanel33;
     private com.rameses.rcp.util.FormPanel formPanel4;
@@ -4080,24 +4221,24 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
     private com.rameses.rcp.util.FormPanel formPanel9;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel27;
-    private javax.swing.JLabel jLabel28;
-    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
-    private javax.swing.JPanel jPanel104;
+    private javax.swing.JPanel jPanel101;
     private javax.swing.JPanel jPanel106;
     private javax.swing.JPanel jPanel109;
     private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel112;
+    private javax.swing.JPanel jPanel110;
     private javax.swing.JPanel jPanel114;
-    private javax.swing.JPanel jPanel115;
     private javax.swing.JPanel jPanel118;
     private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
@@ -4121,6 +4262,7 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel34;
     private javax.swing.JPanel jPanel35;
     private javax.swing.JPanel jPanel36;
+    private javax.swing.JPanel jPanel37;
     private javax.swing.JPanel jPanel38;
     private javax.swing.JPanel jPanel39;
     private javax.swing.JPanel jPanel4;
@@ -4186,11 +4328,10 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane12;
     private javax.swing.JScrollPane jScrollPane14;
     private javax.swing.JScrollPane jScrollPane15;
-    private javax.swing.JScrollPane jScrollPane17;
+    private javax.swing.JScrollPane jScrollPane18;
     private javax.swing.JScrollPane jScrollPane19;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane20;
-    private javax.swing.JScrollPane jScrollPane21;
     private javax.swing.JScrollPane jScrollPane22;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -4198,7 +4339,9 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
-    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JScrollPane jScrollPane9;
+    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane10;
     private javax.swing.JTabbedPane jTabbedPane11;
@@ -4211,27 +4354,29 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
     private javax.swing.JTabbedPane jTabbedPane6;
     private javax.swing.JTabbedPane jTabbedPane7;
     private javax.swing.JTabbedPane jTabbedPane8;
+    private javax.swing.JTabbedPane jTabbedPane9;
     private com.rameses.rcp.control.XActionBar xActionBar1;
-    private com.rameses.rcp.control.XActionBar xActionBar10;
+    private com.rameses.rcp.control.XActionBar xActionBar11;
     private com.rameses.rcp.control.XActionBar xActionBar2;
     private com.rameses.rcp.control.XActionBar xActionBar3;
     private com.rameses.rcp.control.XActionBar xActionBar7;
-    private com.rameses.rcp.control.XActionBar xActionBar8;
+    private com.rameses.rcp.control.XActionBar xActionBar9;
     private com.rameses.rcp.control.XActionTextField xActionTextField1;
     private com.rameses.rcp.control.XButton xButton10;
     private com.rameses.rcp.control.XButton xButton11;
-    private com.rameses.rcp.control.XButton xButton12;
     private com.rameses.rcp.control.XButton xButton13;
     private com.rameses.rcp.control.XButton xButton14;
     private com.rameses.rcp.control.XButton xButton15;
     private com.rameses.rcp.control.XButton xButton16;
     private com.rameses.rcp.control.XButton xButton17;
+    private com.rameses.rcp.control.XButton xButton19;
     private com.rameses.rcp.control.XButton xButton2;
     private com.rameses.rcp.control.XButton xButton21;
     private com.rameses.rcp.control.XButton xButton22;
     private com.rameses.rcp.control.XButton xButton23;
     private com.rameses.rcp.control.XButton xButton24;
     private com.rameses.rcp.control.XButton xButton25;
+    private com.rameses.rcp.control.XButton xButton26;
     private com.rameses.rcp.control.XButton xButton27;
     private com.rameses.rcp.control.XButton xButton28;
     private com.rameses.rcp.control.XButton xButton29;
@@ -4256,7 +4401,6 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
     private com.rameses.rcp.control.XButton xButton47;
     private com.rameses.rcp.control.XButton xButton48;
     private com.rameses.rcp.control.XButton xButton49;
-    private com.rameses.rcp.control.XButton xButton5;
     private com.rameses.rcp.control.XButton xButton50;
     private com.rameses.rcp.control.XButton xButton51;
     private com.rameses.rcp.control.XButton xButton52;
@@ -4273,7 +4417,6 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
     private com.rameses.rcp.control.XButton xButton62;
     private com.rameses.rcp.control.XButton xButton63;
     private com.rameses.rcp.control.XButton xButton64;
-    private com.rameses.rcp.control.XButton xButton65;
     private com.rameses.rcp.control.XButton xButton66;
     private com.rameses.rcp.control.XButton xButton67;
     private com.rameses.rcp.control.XButton xButton68;
@@ -4304,7 +4447,8 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
     private com.rameses.rcp.control.XComboBox xComboBox2;
     private com.rameses.rcp.control.XComboBox xComboBox3;
     private com.rameses.rcp.control.XComboBox xComboBox4;
-    private com.rameses.rcp.control.XComboBox xComboBox8;
+    private com.rameses.rcp.control.XComboBox xComboBox5;
+    private com.rameses.rcp.control.XComboBox xComboBox9;
     private com.rameses.rcp.control.XDataTable xDataTable1;
     private com.rameses.rcp.control.XDataTable xDataTable11;
     private com.rameses.rcp.control.XDataTable xDataTable12;
@@ -4327,8 +4471,8 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
     private com.rameses.rcp.control.XDataTable xDataTable5;
     private com.rameses.rcp.control.XDataTable xDataTable6;
     private com.rameses.rcp.control.XDataTable xDataTable9;
-    private com.rameses.rcp.control.XDateField xDateField14;
-    private com.rameses.rcp.control.XDateField xDateField17;
+    private com.rameses.rcp.control.XDateField xDateField15;
+    private com.rameses.rcp.control.XDateField xDateField18;
     private com.rameses.rcp.control.XDateField xDateField2;
     private com.rameses.rcp.control.XDateField xDateField3;
     private com.rameses.rcp.control.XDateField xDateField4;
@@ -4337,8 +4481,8 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
     private com.rameses.rcp.control.XDateField xDateField7;
     private com.rameses.rcp.control.XDateField xDateField8;
     private com.rameses.rcp.control.XDateField xDateField9;
-    private com.rameses.rcp.control.XEditorPane xEditorPane14;
-    private com.rameses.rcp.control.XEditorPane xEditorPane15;
+    private com.rameses.rcp.control.XEditorPane xEditorPane16;
+    private com.rameses.rcp.control.XEditorPane xEditorPane20;
     private com.rameses.rcp.control.XEditorPane xEditorPane4;
     private com.rameses.rcp.control.XEditorPane xEditorPane7;
     private com.rameses.rcp.control.XImageViewer xImageViewer10;
@@ -4349,17 +4493,13 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
     private com.rameses.rcp.control.XImageViewer xImageViewer4;
     private com.rameses.rcp.control.XImageViewer xImageViewer5;
     private com.rameses.rcp.control.XImageViewer xImageViewer6;
-    private com.rameses.rcp.control.XImageViewer xImageViewer7;
     private com.rameses.rcp.control.XImageViewer xImageViewer8;
-    private com.rameses.rcp.control.XImageViewer xImageViewer9;
-    private com.rameses.rcp.control.XLabel xLabel1;
     private com.rameses.rcp.control.XLabel xLabel18;
     private com.rameses.rcp.control.XLabel xLabel27;
     private com.rameses.rcp.control.XLabel xLabel28;
     private com.rameses.rcp.control.XLabel xLabel29;
     private com.rameses.rcp.control.XLabel xLabel3;
     private com.rameses.rcp.control.XLabel xLabel30;
-    private com.rameses.rcp.control.XLabel xLabel4;
     private com.rameses.rcp.control.XLabel xLabel7;
     private com.rameses.rcp.control.XLabel xLabel8;
     private com.rameses.rcp.control.XList xList2;
@@ -4375,19 +4515,26 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
     private com.rameses.rcp.control.XNumberField xNumberField34;
     private com.rameses.rcp.control.XNumberField xNumberField35;
     private com.rameses.rcp.control.XNumberField xNumberField36;
-    private com.rameses.rcp.control.XNumberField xNumberField4;
-    private com.rameses.rcp.control.XNumberField xNumberField5;
+    private com.rameses.rcp.control.XNumberField xNumberField41;
+    private com.rameses.rcp.control.XNumberField xNumberField42;
+    private com.rameses.rcp.control.XNumberField xNumberField43;
+    private com.rameses.rcp.control.XNumberField xNumberField44;
+    private com.rameses.rcp.control.XNumberField xNumberField45;
+    private com.rameses.rcp.control.XNumberField xNumberField47;
+    private com.rameses.rcp.control.XNumberField xNumberField6;
     private com.rameses.rcp.control.XRadio xRadio4;
     private com.rameses.rcp.control.XRadio xRadio5;
     private com.rameses.rcp.control.XRadio xRadio6;
+    private com.rameses.rcp.control.XRadio xRadio7;
+    private com.rameses.rcp.control.XRadio xRadio8;
     private com.rameses.rcp.control.XSubFormPanel xSubFormPanel3;
     private com.rameses.rcp.control.XTable xTable10;
     private com.rameses.rcp.control.XTable xTable9;
     private com.rameses.rcp.control.XTextArea xTextArea1;
     private com.rameses.rcp.control.XTextArea xTextArea10;
     private com.rameses.rcp.control.XTextArea xTextArea11;
-    private com.rameses.rcp.control.XTextArea xTextArea12;
-    private com.rameses.rcp.control.XTextArea xTextArea13;
+    private com.rameses.rcp.control.XTextArea xTextArea14;
+    private com.rameses.rcp.control.XTextArea xTextArea15;
     private com.rameses.rcp.control.XTextArea xTextArea2;
     private com.rameses.rcp.control.XTextArea xTextArea3;
     private com.rameses.rcp.control.XTextArea xTextArea7;
@@ -4395,9 +4542,10 @@ public class ApplicationForm_2 extends javax.swing.JPanel {
     private com.rameses.rcp.control.XTextArea xTextArea9;
     private com.rameses.rcp.control.XTextField xTextField13;
     private com.rameses.rcp.control.XTextField xTextField26;
+    private com.rameses.rcp.control.XTextField xTextField27;
     private com.rameses.rcp.control.XTextField xTextField3;
-    private com.rameses.rcp.control.XTextField xTextField31;
-    private com.rameses.rcp.control.XTextField xTextField34;
+    private com.rameses.rcp.control.XTextField xTextField32;
+    private com.rameses.rcp.control.XTextField xTextField35;
     private com.rameses.rcp.control.XTextField xTextField55;
     private com.rameses.rcp.control.XTextField xTextField57;
     private com.rameses.rcp.control.XTextField xTextField59;

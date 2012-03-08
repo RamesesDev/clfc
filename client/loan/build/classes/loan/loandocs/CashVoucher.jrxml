@@ -32,8 +32,8 @@
 	<field name="cvControlNo" class="java.lang.String"/>
 	<field name="User" class="java.lang.String"/>
 	<field name="amount" class="java.math.BigDecimal"/>
-	<field name="name2" class="java.lang.String"/>
 	<field name="address" class="java.lang.String"/>
+	<field name="name2" class="java.lang.String"/>
 
 		<background>
 			<band height="0"  isSplitAllowed="true" >
@@ -69,14 +69,14 @@
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="343"
+						x="318"
 						y="344"
-						width="189"
+						width="214"
 						height="9"
 						key="textField-1"/>
 					<box></box>
-					<textElement>
-						<font size="8"/>
+					<textElement textAlignment="Left">
+						<font size="7"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{name2}]]></textFieldExpression>
 				</textField>

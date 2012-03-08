@@ -21,7 +21,11 @@
 						return "_close";	
 				}
 			};
-
+            
+            this.close = function() {
+				return "_close";
+			};
+			        
 			/*	
 			<!-- Begin
 			function checkAll(field)
@@ -113,15 +117,15 @@
 	<i context="collateralInfo" visibleWhen="#{!selected.appliancelist.length > 0}" class="maroon">
 		No appliance(s) specified.<br/><br/>
 	</i>
-	<!--<j context="collateralInfo" visibleWhen="#{selected.otherslist.length >0}">-->
-    <b class="maroon" context="collateralInfo" visibleWhen="#{!appraisedvalue}">Appliance(s)</b>
-            <j context="collateralInfo" visibleWhen="#{!appraisedvalue}"> ( Total Appraised = <b>Php</b></j>
-	    <j class="teal2" context="collateralInfo" visibleWhen="#{!appraisedvalue}"> 0.00</j> )
+    <b class="maroon" context="collateralInfo" visibleWhen="#{selected.appliancelist.length >0 && !appraisedvalue}">Vehicle(s)</b>
+            <j context="collateralInfo" visibleWhen="#{selected.appliancelist.length >0 && !appraisedvalue}"> ( Total Appraised = <b>Php</b></j>
+	    <j class="teal2" context="collateralInfo" visibleWhen="#{selected.appliancelist.length >0 && !appraisedvalue}"> 0.00</j>
+	        <j context="loan" visibleWhen="#{selected.appliancelist.length >0 && !appraisedvalue}"> )</j><br/>
 	    
-	<b class="maroon" context="collateralInfo" visibleWhen="#{appraisedvalue}">Appliance(s)</b> 
-	        <j context="collateralInfo"  visibleWhen="#{appraisedvalue}">( Total Appraised = <b>Php</b></j>
-	    <j class="teal2" context="collateralInfo" visibleWhen="#{appraisedvalue}">
-	    <label context="collateralInfo"  visibleWhen="#{appraisedvalue}">#{appraisedvalue.formatDecimal()}</label><j> )
+	<b class="maroon" context="collateralInfo" visibleWhen="#{selected.appliancelist.length >0 && appraisedvalue}">Vehicle(s)</b> 
+	        <j context="collateralInfo"  visibleWhen="#{selected.appliancelist.length >0 && appraisedvalue}">( Total Appraised = <b>Php</b></j>
+	    <j class="teal2" context="collateralInfo" visibleWhen="#{selected.appliancelist.length >0 && appraisedvalue}">
+	    <label context="collateralInfo"  visibleWhen="#{selected.appliancelist.length >0 && appraisedvalue}">#{appraisedvalue.formatDecimal()}</label><j> )
 </div>
 <table context="collateralInfo" items="selected.appliancelist" varStatus="stat"
 	   visibleWhen="#{selected.appliancelist.length >0}" name="selectedObj.appliance"
@@ -152,9 +156,9 @@
 			<td valign="top" class="${idx%2==0? 'even' : 'odd'}"  context="collateralInfo" action="viewAppliance">
 				<a>#{brand} <b>/</b> #{serial} <b>/</b> #{model}</a>
 			</td>
-			<!--<td valign="top" class="${idx%2==0? 'even' : 'odd'}" context="collateralInfo" action="viewAppliance"  visibleWhen="#{!appraisedvalue}">
+			<td valign="top" class="${idx%2==0? 'even' : 'odd'}" context="collateralInfo" action="viewAppliance"  visibleWhen="#{!appraisedvalue}">
 				<a  context="collateralInfo" visibleWhen="#{!appraisedvalue}"><b class="gray">Php</b> <j class="teal2">0.00</j></a>
-			</td>-->
+			</td>
 			<td valign="top" class="${idx%2==0? 'even' : 'odd'}" context="collateralInfo" action="viewAppliance"  visibleWhen="#{appraisedvalue}">
 				<a context="collateralInfo" visibleWhen="#{appraisedvalue}"><b class="gray">Php</b> <j class="teal2">#{appraisedvalue.formatDecimal()}</j></a>
 			</td>
@@ -171,15 +175,15 @@
 	<i context="collateralInfo" visibleWhen="#{!selected.vehiclelist.length > 0}" class="maroon">
 		No vehicle(s) specified.<br/><br/>
 	</i>
-	<!--<j context="collateralInfo" visibleWhen="#{selected.vehiclelist.length >0}">-->
-    <b class="maroon" context="collateralInfo" visibleWhen="#{!appraisedvalue}">Vehicle(s)</b>
-            <j context="collateralInfo" visibleWhen="#{!appraisedvalue}"> ( Total Appraised = <b>Php</b></j>
-	    <j class="teal2" context="collateralInfo" visibleWhen="#{!appraisedvalue}"> 0.00</j> )
+    <b class="maroon" context="collateralInfo" visibleWhen="#{selected.vehiclelist.length >0 && !appraisedvalue}">Vehicle(s)</b>
+            <j context="collateralInfo" visibleWhen="#{selected.vehiclelist.length >0 && !appraisedvalue}"> ( Total Appraised = <b>Php</b></j>
+	    <j class="teal2" context="collateralInfo" visibleWhen="#{selected.vehiclelist.length >0 && !appraisedvalue}"> 0.00</j>
+	        <j context="loan" visibleWhen="#{selected.vehiclelist.length >0 && !appraisedvalue}"> )</j><br/>
 	    
-	<b class="maroon" context="collateralInfo" visibleWhen="#{appraisedvalue}">Vehicle(s)</b> 
-	        <j context="collateralInfo"  visibleWhen="#{appraisedvalue}">( Total Appraised = <b>Php</b></j>
-	    <j class="teal2" context="collateralInfo" visibleWhen="#{appraisedvalue}">
-	    <label context="collateralInfo"  visibleWhen="#{appraisedvalue}">#{appraisedvalue.formatDecimal()}</label><j> )
+	<b class="maroon" context="collateralInfo" visibleWhen="#{selected.vehiclelist.length >0 && appraisedvalue}">Vehicle(s)</b> 
+	        <j context="collateralInfo"  visibleWhen="#{selected.vehiclelist.length >0 && appraisedvalue}">( Total Appraised = <b>Php</b></j>
+	    <j class="teal2" context="collateralInfo" visibleWhen="#{selected.vehiclelist.length >0 && appraisedvalue}">
+	    <label context="collateralInfo"  visibleWhen="#{selected.vehiclelist.length >0 && appraisedvalue}">#{appraisedvalue.formatDecimal()}</label><j> )
 </div>
 <table context="collateralInfo" items="selected.vehiclelist" varStatus="stat" 
 		visibleWhen="#{selected.vehiclelist.length >0}" name="selectedObj.vehicle"		
@@ -210,12 +214,6 @@
 			<td valign="top" class="${idx%2==0? 'even' : 'odd'}" context="collateralInfo" action="viewVehicle">
 				<a>#{type} <b>/</b> #{engineno} <b>/</b> #{chassisno} <b>/</b> #{plateno} <b>/</b> #{regno}</a>
 			</td>
-			<!--<td valign="top" class="${idx%2==0? 'even' : 'odd'}" context="collateralInfo" action="viewVehicle">
-				<a>#{plateno}</a>
-			</td>
-			<td valign="top" class="${idx%2==0? 'even' : 'odd'}" context="collateralInfo" action="viewVehicle">
-				<a>#{regno}</a>
-			</td>-->
             <td valign="top" class="${idx%2==0? 'even' : 'odd'}" context="collateralInfo" action="viewVehicle" align="center">
 				<a><b class="gray">Php</b> <j class="teal2">#{appraisedvalue.formatDecimal()}</j></a>
 			</td>
@@ -229,15 +227,15 @@
 	<i context="collateralInfo" visibleWhen="#{!selected.propertylist.length > 0}" class="maroon">
 		No property(s) specified.<br/><br/>
 	</i>
-   <!-- <j context="collateralInfo" visibleWhen="#{selected.propertylist.length >0}">-->
-    <b class="maroon" context="collateralInfo" visibleWhen="#{!appraisedvalue}">Property/Properties</b>
-            <j context="collateralInfo" visibleWhen="#{!appraisedvalue}"> ( Total Appraised = <b>Php</b></j>
-	    <j class="teal2" context="collateralInfo" visibleWhen="#{!appraisedvalue}"> 0.00</j> )
+	    <b class="maroon" context="collateralInfo" visibleWhen="#{selected.propertylist.length >0 && !appraisedvalue}">Property/Properties</b>
+            <j context="collateralInfo" visibleWhen="#{selected.propertylist.length >0 && !appraisedvalue}"> ( Total Appraised = <b>Php</b></j>
+	    <j class="teal2" context="collateralInfo" visibleWhen="#{selected.propertylist.length >0 && !appraisedvalue}"> 0.00</j>
+	        <j context="loan" visibleWhen="#{selected.propertylist.length >0 && !appraisedvalue}"> )</j><br/>
 	    
-	<b class="maroon" context="collateralInfo" visibleWhen="#{appraisedvalue}">Property/Properties</b> 
-	        <j context="collateralInfo"  visibleWhen="#{appraisedvalue}">( Total Appraised = <b>Php</b></j>
-	    <j class="teal2" context="collateralInfo" visibleWhen="#{appraisedvalue}">
-	    <label context="collateralInfo"  visibleWhen="#{appraisedvalue}">#{appraisedvalue.formatDecimal()}</label></j> )
+	<b class="maroon" context="collateralInfo" visibleWhen="#{selected.propertylist.length >0 && appraisedvalue}">Property/Properties</b> 
+	        <j context="collateralInfo"  visibleWhen="#{selected.propertylist.length >0 && appraisedvalue}">( Total Appraised = <b>Php</b></j>
+	    <j class="teal2" context="collateralInfo" visibleWhen="#{selected.propertylist.length >0 && appraisedvalue}">
+	    <label context="collateralInfo"  visibleWhen="#{selected.propertylist.length >0 && appraisedvalue}">#{appraisedvalue.formatDecimal()}</label><j> )
 </div>
 <table context="collateralInfo" items="selected.propertylist" varStatus="stat" 
 		class="grid" width="100%" cellspacing="0"
@@ -294,15 +292,15 @@
 	<i context="collateralInfo" visibleWhen="#{!selected.otherslist.length > 0}" class="maroon">
 		No other collateral(s) specified.<br/><br/>
 	</i>
-	<!--<j context="collateralInfo" visibleWhen="#{selected.otherslist.length >0}">-->
-	    <b class="maroon" context="collateralInfo" visibleWhen="#{!appraisedvalue}">Other Collateral(s)</b>
-	            <j context="collateralInfo" visibleWhen="#{!appraisedvalue}"> ( Total Appraised = <b>Php</b></j>
-		    <j class="teal2" context="collateralInfo" visibleWhen="#{!appraisedvalue}"> 0.00</j> )
-		    
-		<b class="maroon" context="collateralInfo" visibleWhen="#{appraisedvalue}">Other Collateral(s)</b> 
-		        <j context="collateralInfo"  visibleWhen="#{appraisedvalue}">( Total Appraised = <b>Php</b></j>
-		    <j class="teal2" context="collateralInfo" visibleWhen="#{appraisedvalue}">
-		    <label context="collateralInfo"  visibleWhen="#{appraisedvalue}">#{appraisedvalue.formatDecimal()}</label><j> )
+	<b class="maroon" context="collateralInfo" visibleWhen="#{selected.otherslist.length >0 && !appraisedvalue}">Vehicle(s)</b>
+            <j context="collateralInfo" visibleWhen="#{selected.otherslist.length >0 && !appraisedvalue}"> ( Total Appraised = <b>Php</b></j>
+	    <j class="teal2" context="collateralInfo" visibleWhen="#{selected.otherslist.length >0 && !appraisedvalue}"> 0.00</j>
+	        <j context="loan" visibleWhen="#{selected.otherslist.length >0 && !appraisedvalue}"> )</j><br/>
+	    
+	<b class="maroon" context="collateralInfo" visibleWhen="#{selected.otherslist.length >0 && appraisedvalue}">Vehicle(s)</b> 
+	        <j context="collateralInfo"  visibleWhen="#{selected.otherslist.length >0 && appraisedvalue}">( Total Appraised = <b>Php</b></j>
+	    <j class="teal2" context="collateralInfo" visibleWhen="#{selected.otherslist.length >0 && appraisedvalue}">
+	    <label context="collateralInfo"  visibleWhen="#{selected.otherslist.length >0 && appraisedvalue}">#{appraisedvalue.formatDecimal()}</label><j> )
 	</j>
 </div>
 <table context="collateralInfo" items="selected.otherslist" varStatus="stat" 
@@ -373,4 +371,5 @@
 <div class="dialog-buttons" alignment="right">
 	<input type="button"  context="collateralInfo" name="doOk" value="Ok and continue"
 		onClick="confirm( 'Continue adding collateral(s). Proceed?' )"/>
+	<input type="button" context="collateralInfo" name="close"   value="Cancel"  immediate="true"/>	
 </div>

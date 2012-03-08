@@ -327,10 +327,14 @@
 	<label class="doc-title2" context="loan">
 		<span style="float: left">
 			<h2 class="navy">#{getAppType()}<br/>
-			<b class="black" context="loan">Client Type :</b>
+			    <b class="black" context="loan">Client Type :</b>
 				<b context="loan" class="maroon2">#{selected.clientType}</b> <b class="black" context="loan" 
 						visibleWhen="#{selected.marketedby}">by</b>
-				<b context="loan" visibleWhen="#{selected.marketedby}" class="fuchsia">#{selected.marketedby}</b><br/>
+				<b context="loan" visibleWhen="#{selected.marketedby}" class="fuchsia">#{selected.marketedby}</b>
+				<j context="loan" visibleWhen="#{selected.marketedby2}"><br/></j>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<b class="black" context="loan" visibleWhen="#{selected.marketedby2}">and</b>
+				<b context="loan" visibleWhen="#{selected.marketedby2}" class="fuchsia">#{selected.marketedby2}</b><br/>
 			</h2>	
 		</span>
 		<span style="float: right">
