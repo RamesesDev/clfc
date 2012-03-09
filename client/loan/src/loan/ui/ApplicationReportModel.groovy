@@ -66,7 +66,7 @@ public class ApplicationReportModel extends ReportModel {
     
     public Object getReportData(){ 
         def data=[:]
-        def accts;
+        //def accts;
         if ( entity.loancount == 1 )
             data.apptype = "NEW APPLICATION";
         else
@@ -133,12 +133,14 @@ public class ApplicationReportModel extends ReportModel {
         //data.charges = accts;
 
         //data.insurance = '';
-        data.lenTerm = data.ledger.term / 30.00;
-        data.notarial = accts.find{ it.title == 'NOTARIAL FEE' }?.amount;
-        data.docstamp = accts.find{ it.title == 'DOCUMENTARY STAMP' }?.amount;
-        data.chatrealreg = accts.find{ it.title == 'CHAT/REAL REGISTRATION' }?.amount;
-        data.affidavit = accts.find{ it.title == 'AFFIDAVIT' }?.amount;
-        data.totalCharges =  data.notarial + data.docstamp + data.chatrealreg + data.affidavit;
+        
+        //data.lenTerm = data.ledger.term / 30.00;
+        
+        //data.notarial = accts.find{ it.title == 'NOTARIAL FEE' }?.amount;
+        //data.docstamp = accts.find{ it.title == 'DOCUMENTARY STAMP' }?.amount;
+        //data.chatrealreg = accts.find{ it.title == 'CHAT/REAL REGISTRATION' }?.amount;
+        //data.affidavit = accts.find{ it.title == 'AFFIDAVIT' }?.amount;
+        //data.totalCharges =  data.notarial + data.docstamp + data.chatrealreg + data.affidavit;
         /*----------------*/
         
         data.mainBorrowerAge = data.borrower.age;

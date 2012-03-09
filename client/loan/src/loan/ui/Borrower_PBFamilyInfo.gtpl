@@ -66,11 +66,10 @@
                                 <%}%>
                                 <%if(family.address) { %>
                                     <tr><td><b>Address :</b></td><td> ${family.address}</td></tr>
-                                <%}%><hr>
-                            </table>
+                                <%}%>
+                            </table><hr>
                         <%}%>
                         <%if (data.childrenList) {%>
-                            <hr>
                             <table>
                                 <%if (data.childrenList.employmentList && data.childrenList.otherSourcesOfIncomeList) {%>
                                     <tr>
@@ -99,7 +98,10 @@
                 </tr>
             </table>
         <%}%>
-        <%if(data.borrower.principalFathersName){%>
+        <%if(!data.borrower.principalFathersName){%>
+            <h3>No Principal Parents Information</h3>
+            <br>
+        <%}else{%>
             <table width="100%">
                 <tr>
                     <td bgcolor="gray">

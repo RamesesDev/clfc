@@ -476,7 +476,9 @@
 
                 if(mode=='renew'){
                     if( entity.clientType=="WALK-IN" ){
-                        if( emp || emp2 )MsgBox.alert("Marketed By Employee is not allowed");
+                        if( emp || emp2 )
+                            MsgBox.alert("Marketed By Employee is not allowed");
+                            return;
                     }
                     if( entity.clientType=="MARKETED" ){
                         if( !emp || !emp2 ){
@@ -489,7 +491,9 @@
                 }
                 else{               
                     if( entity.clientType=="WALK-IN" ){
-                        if( emp || emp2 )MsgBox.alert("Marketed By Employee is not allowed");
+                        if( emp || emp2 )
+                            MsgBox.alert("Marketed By Employee is not allowed");
+                            return;
                     }
                     if( entity.clientType=="MARKETED" ){
                         if( !emp || !emp2 ){

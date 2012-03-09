@@ -33,11 +33,6 @@
         <%}else{%>
             <table width="100%">
                 <tr>
-                    <td bgcolor="gray">
-                        <h3 class="white"><b>Other Source(s) of Income Information</b></h3>
-                    </td>
-                </tr>
-                <tr>
                     <td width ="50%" valign="top">
                         <% data.childrenList.each { child -> %>
                             <% child.otherSourcesOfIncomeList.each { otherIncome -> %>
