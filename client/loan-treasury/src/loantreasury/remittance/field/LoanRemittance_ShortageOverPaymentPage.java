@@ -70,7 +70,7 @@ public class LoanRemittance_ShortageOverPaymentPage extends javax.swing.JPanel {
         formPanel1.add(xTextField3);
 
         xTextField2.setCaption("Time of Arrival");
-        xTextField2.setName("entity.timeOfArrival");
+        xTextField2.setName("entity.arrivaltime");
         xTextField2.setPreferredSize(new java.awt.Dimension(150, 19));
         xTextField2.setRequired(true);
         xTextField2.setToolTipText("Time of Arrival");

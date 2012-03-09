@@ -71,7 +71,7 @@
 			</band>
 		</background>
 		<title>
-			<band height="44"  isSplitAllowed="true" >
+			<band height="50"  isSplitAllowed="true" >
 				<line direction="TopDown">
 					<reportElement
 						x="143"

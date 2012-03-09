@@ -56,6 +56,14 @@
 	<field name="ledger.mode" class="java.lang.String"/>
 	<field name="ledger.checkInfo.bankname" class="java.lang.String"/>
 	<field name="bank" class="java.lang.String"/>
+	<field name="notarial" class="java.math.BigDecimal"/>
+	<field name="docstamp" class="java.math.BigDecimal"/>
+	<field name="chatrealreg" class="java.math.BigDecimal"/>
+	<field name="affidavit" class="java.math.BigDecimal"/>
+	<field name="others" class="java.math.BigDecimal"/>
+	<field name="loadingSun" class="java.math.BigDecimal"/>
+	<field name="loadingGlobe" class="java.math.BigDecimal"/>
+	<field name="totalCharges" class="java.math.BigDecimal"/>
 
 
 		<group  name="principalMainBusinessList" >
@@ -739,51 +747,6 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="347"
-						y="143"
-						width="78"
-						height="13"
-						key="staticText-51"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Helvetica" size="10" isBold="false"/>
-					</textElement>
-				<text><![CDATA[Total Charges:]]></text>
-				</staticText>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="434"
-						y="144"
-						width="100"
-						height="11"
-						key="textField-12"/>
-					<box>					<pen lineWidth="0.25"/>
-					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.0"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.0"/>
-</box>
-					<textElement>
-						<font size="8"/>
-					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{ledger.loanAmount}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement
-						x="426"
-						y="144"
-						width="9"
-						height="11"
-						key="staticText-52"/>
-					<box>					<bottomPen lineWidth="0.5"/>
-</box>
-					<textElement>
-						<font pdfFontName="Helvetica" size="8" isBold="false"/>
-					</textElement>
-				<text><![CDATA[P]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
 						x="352"
 						y="68"
 						width="73"
@@ -946,6 +909,51 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ledger.checkInfo.bankname}]]></textFieldExpression>
 				</textField>
+				<staticText>
+					<reportElement
+						x="346"
+						y="144"
+						width="79"
+						height="13"
+						key="staticText-58"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica" size="10" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Total Charges:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="435"
+						y="145"
+						width="100"
+						height="11"
+						key="textField-28"/>
+					<box>					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{totalCharges}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="427"
+						y="145"
+						width="9"
+						height="11"
+						key="staticText-59"/>
+					<box>					<bottomPen lineWidth="0.5"/>
+</box>
+					<textElement>
+						<font pdfFontName="Helvetica" size="8" isBold="false"/>
+					</textElement>
+				<text><![CDATA[P]]></text>
+				</staticText>
 			</band>
 		</pageHeader>
 		<columnHeader>

@@ -199,6 +199,15 @@
                 return cust.lastname + ', ' + cust.firstname + (cust.middlename? " ( $cust.middlename )" : "")
             }
             
+            def getTotalCharges() {
+                if( !accts ) return 0.00;
+
+                def ch = accts*.amount.sum();
+                def och = otherCharges*.amount.sum();
+
+                return (ch? ch : 0.00) + (och? och : 0.00);
+            }
+                        
             void print(){
                 //MsgBox.alert('Print ledger not yet supported.');
                 setPrintOut();
@@ -225,11 +234,13 @@
                             return 'loan/printout/Ledger.jasper';
                     },
                     getReportData:{
-                    
                         //it.objid = entity.objid;
                         //return svc.getDetails(it)
                         
-                        def data = [ledger:ledger];
+                        def appid = entity.objid;
+                        def borrower = entity.objid;
+                        def accts = [];
+                        def data = [objid:appid, ledger:ledger, accts:accts, borrower:borrower];
                         
                         data.appno = data.appno;
                         data.borrowername = data.borrowername;
@@ -261,6 +272,43 @@
                         if (data.ledger.totalPrincipalPaid !=null) data.ledger.totalPrincipalPaid =  data.ledger.totalPrincipalPaid as BigDecimal;
                         if (data.ledger.principalBalance !=null) data.ledger.principalBalance =  data.ledger.principalBalance as BigDecimal;
                         if (data.ledger.principalBalance !=null) data.ledger.principalBalance =  data.ledger.principalBalance as BigDecimal;
+                        
+                        /**** Accounts ****/
+                        data.notarial = accts.find{ it.title == 'NOTARIAL FEE' }?.amount;
+                        data.docstamp = accts.find{ it.title == 'DOCUMENTARY STAMP FEE' }?.amount;
+                        data.chatrealreg = accts.find{ it.title == 'CHAT/REAL REGISTRATION' }?.amount;
+                        data.affidavit = accts.find{ it.title == 'AFFIDAVIT' }?.amount;
+                        data.others = accts.find{ it.title == 'OTHERS' }?.amount;
+                        data.loadingSun = accts.find{ it.title == 'LOADING SUN' }?.amount;
+                        data.loadingGlobe = accts.find{ it.title == 'LOADING GLOBE' }?.amount;
+                        
+                        //data.totalCharges = getTotalCharges;
+                        
+                        //data.totalCharges = data.notarial + data.docstamp + data.chatrealreg + data.affidavit + data.others + data.loadingSun + data.loadingGlobe;
+                        //data.netrelease = data.amountapproved + data.totalCharges;
+                        
+			/*data.totalCharges =  accts.find({data.notarial? data.notarial: '0.00'} + {data.docstamp? data.docstamp: '0.00'} 
+                                             + {data.chatrealreg? data.chatrealreg: '0.00'}
+                                             + {data.affidavit? data.affidavit: '0.00'} + {data.others? data.others: '0.00'} 
+                                             + {data.loadingSun? data.loadingSun: '0.00'} 
+                                             + {data.loadingGlobe? data.loadingGlobe: '0.00'});
+                        */
+                        //def getTotalCharges( accts ){
+                            //def total = [];
+                            
+                            //if( !accts.total ) return '';
+
+                            //if( accts.notarial )  total << accts.notarial;
+                            //if( accts.docstamp )  total << accts.docstamp;
+                            //if( accts.chatrealreg )  total << accts.chatrealreg;
+                            //if( accts.affidavit )  total << accts.affidavit;
+                            //if( accts.others )  total << accts.others;
+                            //if( accts.loadingSun )  total << accts.loadingSun;
+                            //if( accts.loadingGlobe )  total << accts.loadingGlobe;
+
+                            //return total.join(', ');
+                        //}
+                        //data.totalCharges = getTotalCharges(accts);
                         
                         return data;
                     },

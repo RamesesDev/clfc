@@ -67,7 +67,7 @@
                 //if(printOut=='Summary of Loan Releases')
                     //return "loan/reports/release/SummaryOfLoanReleases_Daily.jasper"; 
                 //else if(printOut=='Daily Releases')    
-                    //return "loan/reports/release/Loan_Releases.jasper";    
+                    //return "loan/reports/release/Loan_Releases.jasper";
             }
             
             def getParameters() {

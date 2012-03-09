@@ -31,7 +31,7 @@
             def filter = [date: OsirisContext.env.LOCALE_TIME];
             
             def getReportName() {
-                return 'loan/reports/application/SummaryOfLoanCollections.jasper';
+                return 'loan/reports/collection/SummaryOfLoanCollections.jasper';
             }
             
             def getParameters() {

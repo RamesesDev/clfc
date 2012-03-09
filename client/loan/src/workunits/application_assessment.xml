@@ -273,6 +273,9 @@
                         data.docstamp = accts.find{ it.title == 'DOCUMENTARY STAMP FEE' }?.amount;
                         data.chatrealreg = accts.find{ it.title == 'CHAT/REAL REGISTRATION' }?.amount;
                         data.affidavit = accts.find{ it.title == 'AFFIDAVIT' }?.amount;
+                        data.others = accts.find{ it.title == 'OTHERS' }?.amount;
+                        data.loadingSun = accts.find{ it.title == 'LOADING SUN' }?.amount;
+                        data.loadingGlobe = accts.find{ it.title == 'LOADING GLOBE' }?.amount;
 			//data.totalCharges =  data.notarial + data.docstamp + data.chatrealreg + data.affidavit;
                         //data.netrelease = data.amountapproved + data.totalCharges;
                         /***********************************************/

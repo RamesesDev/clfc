@@ -1,6 +1,6 @@
 <workunit>
     <invokers>
-        <invoker folderid="report/loan" caption="Daily Summary of Loan Applications" permission00="" index="2"/>
+        <invoker folderid="report/loan" caption="Summary of Loan Applications(Daily)" permission00="" index="2"/>
             <!--permission00="application.createDailyAppReport"/>-->
             
         <invoker type="formPrintActions" caption="Back"  tooltip="Back" icon="images/back16.png" action="doBack" mnemonic="p"/>

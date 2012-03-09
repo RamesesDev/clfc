@@ -50,6 +50,9 @@
 	<field name="netrelease" class="java.math.BigDecimal"/>
 	<field name="totalCharges" class="java.math.BigDecimal"/>
 	<field name="releaseamount" class="java.math.BigDecimal"/>
+	<field name="others" class="java.math.BigDecimal"/>
+	<field name="loadingSun" class="java.math.BigDecimal"/>
+	<field name="loadingGlobe" class="java.math.BigDecimal"/>
 
 		<background>
 			<band height="0"  isSplitAllowed="true" >

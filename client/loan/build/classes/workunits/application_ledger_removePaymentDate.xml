@@ -1,6 +1,6 @@
 <workunit>
     <invokers>        
-        <invoker type="application:removePaymentDate" caption="Search Payment Date" permission="application.removePayment" target="popup"/>
+        <invoker type="application:removePaymentDate" caption="Remove Payment Date" permission="application.removePayment" target="popup"/>
     </invokers>
     <code> 
         <![CDATA[
@@ -25,6 +25,7 @@
                     MsgBox.alert("Date is required");
                     return;
                 }else
+                    filter = svc.removePayment();
                     MsgBox.alert("Payment Date has been successfully removed.");
                     binding.refresh();
                     return "_close";

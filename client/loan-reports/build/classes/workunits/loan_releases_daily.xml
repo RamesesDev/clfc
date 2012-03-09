@@ -1,6 +1,6 @@
 <workunit>
     <invokers>
-        <invoker folderid="report/loan" caption="Daily Summary of Loan Releases" permission00="" index="3"/>
+        <invoker folderid="report/loan" caption="Summary of Loan Releases(Daily)" permission00="" index="3"/>
         <!--permission="application.createDailyReleaseReport"/>-->
         <invoker type="formPrintActions" caption="Back"  tooltip="Back" icon="images/back16.png" action="doBack" mnemonic="p"/>
     </invokers>
@@ -67,7 +67,7 @@
                 //if(printOut=='Summary of Loan Releases')
                     //return "loan/reports/release/SummaryOfLoanReleases_Daily.jasper"; 
                 //else if(printOut=='Daily Releases')    
-                    //return "loan/reports/release/Loan_Releases.jasper";    
+                    //return "loan/reports/release/Loan_Releases.jasper";
             }
             
             def getParameters() {

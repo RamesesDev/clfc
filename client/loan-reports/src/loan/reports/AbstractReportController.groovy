@@ -37,8 +37,16 @@ public class AbstractReportController
         data.borrowerName2 = getCustName( data.borrower );
         if(data.routedescription != null)
                 data.routedescription = data.routedescription;
-        if(data.marketedby!=null)
-                data.marketedby = data.marketedby;
+        //if(data.marketedby!=null)
+          //      data.marketedby = data.marketedby;
+        
+        if( entity.marketedby !=null )
+            data.marketedby = data.marketedby;
+        else data.marketedby = '';
+        if( entity.marketedby2 !=null )
+            data.marketedby2 = data.marketedby2;
+        else data.marketedby2 = '';
+        data.marketed = data.marketedby +" and "+ data.marketedby2;
     }
     def getParameters() {}
     def getReportName() {}
