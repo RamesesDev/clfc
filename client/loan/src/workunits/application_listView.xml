@@ -1,18 +1,7 @@
 <workunit>
     <invokers>
         <invoker type="application:inboxView" caption="Loan Inbox Application" action="init" target="popup" permission="application.viewList" index="0" tooltip="Applications coming from server"/>
-        
         <invoker type="refreshAction" icon="images/refresh16.png" tooltip="Refresh" action="refreshList"/>
-        
-         <!-- allowed state codes -->
-        <!--
-        <invoker type="application:state-list" caption="Approved"         name="APPROVED"         permission="application.viewApprovedList"/>
-        <invoker type="application:state-list" caption="Disapproved"      name="DISAPPROVED"      permission="application.viewDisapprovedList"/>
-        <invoker type="application:state-list" caption="Disqualified-Out" name="DISQUALIFIED_OUT" permission="application.viewDisqualifiedOutList"/>
-        <invoker type="application:state-list" caption="Canceled-Out"     name="CANCELED_OUT"     permission="application.viewCanceledOutList"/>
-        <invoker type="application:state-list" caption="Back-Out"         name="BACK_OUT"         permission="application.viewBackOutList"/>
-        -->
-        <invoker type="application:state-list" caption="Ok and Close" name="_close"/>
     </invokers>    
     <code>
         <![CDATA[

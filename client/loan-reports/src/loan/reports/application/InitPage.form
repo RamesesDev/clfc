@@ -101,6 +101,7 @@
             <Component class="com.rameses.rcp.control.XComboBox" name="xComboBox2">
               <Properties>
                 <Property name="caption" type="java.lang.String" value="Client Type"/>
+                <Property name="emptyText" type="java.lang.String" value="All"/>
                 <Property name="itemsObject" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="new Object[]{&quot;MARKETED&quot;, &quot;WALK-IN&quot;}" type="code"/>
                 </Property>

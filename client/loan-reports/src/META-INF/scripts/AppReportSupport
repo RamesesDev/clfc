@@ -1,18 +1,16 @@
-
 public class AppReportSupport
 {
-
     def states = [
         [caption:"Pending", code:"PENDING"],
         [caption:"For Inspection", code:"FOR_INSPECTION"],
-        [caption:"Disapproved", code:"DISAPPROVED"],
+        [caption:"For FLA", code:"FOR_FLA"],
         [caption:"For Approval", code:"FOR_APPROVAL"],
         [caption:"Approved", code:"APPROVED"],
         [caption:"For Release", code:"FOR_RELEASE"],
-        [caption:"Closed", code:"CLOSED"],
-        [caption:"Canceled Out", code:"CANCELED"],
+        [caption:"Fully Paid", code:"CLOSED"],
+        [caption:"Disapproved", code:"DISAPPROVED"],
+        [caption:"Canceled Out", code:"CANCELED_OUT"],
         [caption:"Backed Out", code:"BACK_OUT"],
-        [caption:"Disqualified", code:"DISQUALIFIED_OUT"],
+        [caption:"Disqualified Out", code:"DISQUALIFIED_OUT"],
     ];
-
 }

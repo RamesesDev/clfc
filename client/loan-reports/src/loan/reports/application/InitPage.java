@@ -63,6 +63,7 @@ public class InitPage extends javax.swing.JPanel {
         formPanel1.add(xComboBox1);
 
         xComboBox2.setCaption("Client Type");
+        xComboBox2.setEmptyText("All");
         xComboBox2.setItemsObject(new Object[]{"MARKETED", "WALK-IN"});
         xComboBox2.setName("filter.clientType");
         xComboBox2.setPreferredSize(new java.awt.Dimension(0, 22));

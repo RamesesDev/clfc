@@ -26,16 +26,19 @@
             
             def filter = [date: OsirisContext.env.LOCALE_TIME];
             
-            def getReportName() {
+            def getReportName(){
                 return 'loan/reports/release/SummaryOfLoanReleases_Monthly.jasper';
             }
             
-            def getParameters() {
+            def getParameters(){
                 def env = OsirisContext.env;
+                def title = '';
+                if( filter.state ) title = ' - ' + filter.state.caption;
                 return [
                     BRANCH_NAME: env.CLIENT.name,
                     USER: "$env.USERINFO.firstname $env.USERINFO.lastname".toString(),
-                    PRINTDATE: Timestamp.valueOf( filter.date + ' 00:00:00')
+                    PRINTDATE: Timestamp.valueOf( filter.date + ' 00:00:00'),
+                     REPORT_TITLE: 'Summary of Annual Releases Report' + title
                 ];
             }
 
