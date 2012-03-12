@@ -27,6 +27,7 @@
        .gray { color: gray; font-size: 9px; font-weight: bold; }
     </style>
     <body>
+        
         <% if(!data.coMakerList) { %>
             <h3>No Co-Maker specified</h3>
         <%} else {%>
@@ -34,6 +35,7 @@
                 <tr>
                     <td width ="50%" valign="top">
                         <% data.coMakerList.each { cm -> %>
+                            <!--
                             <%if( data.coMakerList.hasPhoto ){%>
                                 <table>     
                                     <tr>
@@ -48,6 +50,7 @@
                             <%if( !data.coMakerList.hasPhoto ){%>
                                 <hr>
                             <%}%>
+                            -->
                             <table>
                                 <tr><td><b>Customer No. :</b></td><td> <b class="navy">${cm.contactno}</b></td></tr><br><br>
                                 <tr><td><b>Name :</b></td><td> ${cm.lastname}, ${cm.firstname} 

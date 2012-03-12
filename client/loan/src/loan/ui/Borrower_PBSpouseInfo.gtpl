@@ -27,9 +27,17 @@
        .fuchsia { color: fuchsia; font-size: 9px; font-weight: bold; }
     </style>
     <body>
+        <%
+            import com.rameses.util.*;
+
+            String tpl = "loan/ui/Borrower_PBSpouse_photo.gtpl";
+            println TemplateProvider.instance.getResult( tpl, [data:data] );
+        %>
+        <hr><br>
         <% if(!data.spouse) { %>
             <h3>No Spouse specified</h3>
         <%}else{%>
+            <!--
             <%if( !data.spouse.hasPhoto ){%>
                <table>     
                     <tr>
@@ -50,6 +58,7 @@
                     </tr>
                </table>
             <%}%>
+            -->
             <table>
                 <tr><td><b>Customer No. :</b></td><td> <b class="navy">${data.spouse.contactno}</b></td></tr><br><br>
                 <tr><td><b>Name :</b></td><td> ${data.spouse.lastname}, ${data.spouse.firstname} 

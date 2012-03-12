@@ -26,9 +26,18 @@
        .gray { color: gray; font-size: 9px; font-weight: bold; }
     </style>
     <body>
+        <%
+            import com.rameses.util.*;
+
+            String tpl = "loan/ui/Borrower_PB_photo.gtpl";
+            println TemplateProvider.instance.getResult( tpl, [data:data] );
+        %>
+        <hr><br>
+        
         <% if(!data.borrower) { %>
             <h3>No Borrower specified</h3>
         <% } else { %>
+            <!--
             <%if( !data.borrower.hasPhoto ){%>
                <table>     
                     <tr>
@@ -38,9 +47,12 @@
                         </tr>
                     </tr>
                </table>
+               <hr><br>
             <%}%>
-            <%if( data.borrower.hasPhoto ){%>
-               <table>     
+            -->
+            <!--
+            <%if( data.borrower.hasPhoto ){%>   
+                <table>
                     <tr>
                         <td valign="top"><b>Photo:</b></td>
                         <tr>
@@ -48,7 +60,9 @@
                         </tr>
                     </tr>
                </table>
+               
             <%}%>
+            -->
             <table>
                 <%if( data.borrower.contactno ){%>
                     <tr>

@@ -27,6 +27,7 @@
        .gray { color: gray; font-size: 9px; font-weight: bold;}
     </style>
     <body>
+        
         <% if(!data.jointBorrowerList) { %>
             <h3>No Joint Borrower specified</h3>
         <%}else{%>
@@ -34,6 +35,7 @@
                 <tr>
                     <td width ="50%" valign="top">
                         <% data.jointBorrowerList.each { jb -> %>
+                            <!--
                             <%if( data.jointBorrowerList.hasPhoto ){%>
                                 <table>
                                     <tr>
@@ -43,7 +45,11 @@
                                         </tr>
                                     </tr>
                                 </table>
-                             <%}%>
+                            <%}%>
+                            <%if( !data.jointBorrowerList.hasPhoto ){%>
+                                <hr>
+                            <%}%>
+                            -->
                             <table>
                                 <tr><td><b>Customer No. :</b></td><td> <b class="navy">${jb.contactno}</b></td></tr><br><br>
                                 <tr><td><b>Name :</b></td><td> ${jb.lastname}, ${jb.firstname} 

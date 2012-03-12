@@ -51,7 +51,6 @@ public class ApplicationReportModel extends ReportModel {
         else
             return "loan/printout/CashVoucher.jasper";
         */
-        
         if( printOut=='Client Information Sheet' )
             return "loan/printout/ClientInformationReport.jasper"; 
         else if( printOut=='Loan Application' )    

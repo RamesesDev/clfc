@@ -171,22 +171,6 @@
                 }
             }
             
-            //def changeMode(){
-                //if(MsgBox.confirm("Are you sure you want to change mode from online to capture?")){
-                    //MsgBox.alert("Mode successfully changed to capture payment(s).");
-                    //binding.refresh();
-                    //capturePayment();
-                    
-                    //return InvokerUtil.lookupOpener('application:capturePayment',[
-                        //appid: entity.objid,
-                        //handler:{
-                            //loadLedgerInfo();
-                            //listHandler.refresh();
-                        //}
-                    //]);
-                //}
-            //}
-            
             def searchPayment(){
                 return InvokerUtil.lookupOpener("application:searchPaymentDate",[:]);
             }
@@ -236,7 +220,7 @@
                     getReportData:{
                         //it.objid = entity.objid;
                         //return svc.getDetails(it)
-                        
+                        //def cv = checkSvc.openByRefid( [refid: it.objid] );
                         def appid = entity.objid;
                         def borrower = entity.objid;
                         def accts = [];

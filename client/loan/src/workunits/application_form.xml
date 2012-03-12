@@ -281,8 +281,9 @@
                     }
                     def photoids = [];
                     if( entity.borrower?.hasPhoto ) {
-                            if( entity.borrower.hasPhoto ) photoids << entity.borrower.objid;
-                        }
+                        if( entity.borrower.hasPhoto ) photoids << entity.borrower.objid;
+                    }
+                    
                     if( entity.spouse?.hasPhoto ){
                         photoids << entity.spouse.objid;					
                     }
@@ -295,7 +296,7 @@
                     entity.coMakerList?.each { cm->
                         if( cm.hasPhoto ) photoids << cm.objid;
                         if( cm.spouse?.hasPhoto ) photoids << cm.spouse.objid;
-                    } 
+                    }
                 
                     if(entity.jointBorrowerList==null)
                         entity.jointBorrowerList=[];
