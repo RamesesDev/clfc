@@ -51,6 +51,7 @@
 	<field name="affidavit" class="java.math.BigDecimal"/>
 	<field name="totalCharges" class="java.math.BigDecimal"/>
 	<field name="lenTerm" class="java.lang.Integer"/>
+	<field name="netrelease" class="java.math.BigDecimal"/>
 
 		<background>
 			<band height="0"  isSplitAllowed="true" >
@@ -105,7 +106,7 @@
 						height="18"
 						key="textField"/>
 					<box></box>
-					<textElement>
+					<textElement textAlignment="Right">
 						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{amountapproved}]]></textFieldExpression>
@@ -139,7 +140,7 @@
 				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="428"
-						y="180"
+						y="171"
 						width="93"
 						height="18"
 						key="textField-2"/>
@@ -188,6 +189,19 @@
 						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{totalCharges}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="428"
+						y="191"
+						width="93"
+						height="26"
+						key="textField-4"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="11" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{netrelease}]]></textFieldExpression>
 				</textField>
 			</band>
 		</title>

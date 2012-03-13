@@ -1,8 +1,8 @@
 <workunit>
     <invokers>
-        
+        <!--
         <invoker folderid="menu/services/loan" caption="For Releasing" action="init" permission="application.viewList" index="0"/>
-        
+        -->
     </invokers>    
     <code>
         <![CDATA[
