@@ -1,7 +1,7 @@
 import com.rameses.annotations.*;
 import com.rameses.invoker.client.*;
 import com.rameses.util.*;
-
+import java.sql.Timestamp;
 
 class LoanApplicationService
 {
@@ -136,6 +136,7 @@ class LoanApplicationService
 		old.loaninfo = entity.loaninfo;
 		old.state = 'APPROVED';
 		old.approvedate=datesvc.serverDate;
+		old.expirydate=DateUtil.add(old.approvedate, '30d');
 		old.dtreleased = null;
 		old.approvalAnnotation = [
 			author: env.USER, date: datesvc.serverDate, 
