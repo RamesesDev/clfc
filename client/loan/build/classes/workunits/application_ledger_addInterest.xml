@@ -20,12 +20,12 @@
             def entity = [:];
             def handler;
             
-            
             def add(){
-                MsgBox.alert("Account has been successfully added.");
-                return '_close';
+                if(!MsgBox.confirm("Are you sure you want to add this +" +entity.interest+ " day(s) \nof interest on this account. proceed?"))return;
+                else
+                    MsgBox.alert("Account has been successfully added of +" +entity.interest+ " day(s) of interest.");
+                    return '_close';
                 
-                //if(!MsgBox.confirm("Are you sure you want to add this?"))return;
                 //entity.appid = appid;
                 //entity.mode = 'CAPTURE';
                 //svc.postPayment( entity );

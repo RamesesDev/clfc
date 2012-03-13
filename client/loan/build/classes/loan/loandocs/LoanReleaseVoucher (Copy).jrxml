@@ -178,9 +178,9 @@
 				</line>
 				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="282"
+						x="308"
 						y="121"
-						width="107"
+						width="81"
 						height="18"
 						key="textField-3"/>
 					<box></box>
@@ -189,58 +189,6 @@
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{totalCharges}]]></textFieldExpression>
 				</textField>
-				<staticText>
-					<reportElement
-						x="315"
-						y="121"
-						width="6"
-						height="19"
-						key="staticText-1"/>
-					<box></box>
-					<textElement>
-						<font/>
-					</textElement>
-				<text><![CDATA[(]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="394"
-						y="120"
-						width="6"
-						height="19"
-						key="staticText-2"/>
-					<box></box>
-					<textElement>
-						<font/>
-					</textElement>
-				<text><![CDATA[)]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="440"
-						y="179"
-						width="6"
-						height="19"
-						key="staticText-3"/>
-					<box></box>
-					<textElement>
-						<font/>
-					</textElement>
-				<text><![CDATA[(]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="516"
-						y="179"
-						width="6"
-						height="19"
-						key="staticText-4"/>
-					<box></box>
-					<textElement>
-						<font/>
-					</textElement>
-				<text><![CDATA[)]]></text>
-				</staticText>
 			</band>
 		</title>
 		<pageHeader>

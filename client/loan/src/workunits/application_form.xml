@@ -263,22 +263,25 @@
                 {
                     entity.encodedBy = OsirisContext.env.USERINFO.firstname+ ' '+OsirisContext.env.USERINFO.lastname;
                     entity.objid="LAPP-" + new java.rmi.server.UID();
-                    //entity.loancount = 1;
                 }
                 else
                 {   
-                    //entity.loancount = 
                     if(entity.clientType=="MARKETED"){
                         if(!entity.encodedBy)
                             entity.encodedBy = OsirisContext.env.USERINFO.firstname+ ' '+OsirisContext.env.USERINFO.lastname;
                         else
                             entity.updatedBy = OsirisContext.env.USERINFO.firstname+ ' '+OsirisContext.env.USERINFO.lastname;
+                            
+                        if(entity.marketedby!=null)
+                            emp = entity.marketedby    
+                                
                     }else if(entity.clientType=="WALK-IN"){
                         if(!entity.encodedBy)
                             entity.encodedBy = OsirisContext.env.USERINFO.firstname+ ' '+OsirisContext.env.USERINFO.lastname;
                         else
                             entity.updatedBy = OsirisContext.env.USERINFO.firstname+ ' '+OsirisContext.env.USERINFO.lastname;
                     }
+                    
                     def photoids = [];
                     if( entity.borrower?.hasPhoto ) {
                         if( entity.borrower.hasPhoto ) photoids << entity.borrower.objid;

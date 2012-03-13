@@ -13,8 +13,11 @@
         <![CDATA[
         import com.rameses.rcp.annotations.*;
         import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
         import com.rameses.osiris2.client.*;
         import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
+        import java.util.regex.*;
         
         class ApplicationForReleaseController{        
             @Service("LoanApplicationService")
@@ -211,7 +214,7 @@
                         else if( "Deed of Chattel Mortgage Page4".equals(printOut) )
                             return 'loan/loandocs/DeedOfChattelMortgagePage4.jasper';
                         else
-                            return 'loan/loandocs/CashVoucher.jasper';
+                            return 'loan/loandocs/CashVoucher (copy).jasper';
                     },
                     getReportData: {
                         def data = [:];
@@ -267,6 +270,7 @@
                             data.term = application.ledger.term;
                         /*  =============================  */
                         
+                        /*** Displaying of Charges ***/
                         data.charges = accts;
                         data.insurance = '';
                         data.notarial = accts.find{ it.title == 'NOTARIAL FEE' }?.amount;
@@ -276,8 +280,11 @@
                         data.others = accts.find{ it.title == 'OTHERS' }?.amount;
                         data.loadingSun = accts.find{ it.title == 'LOADING SUN' }?.amount;
                         data.loadingGlobe = accts.find{ it.title == 'LOADING GLOBE' }?.amount;
-			//data.totalCharges =  data.notarial + data.docstamp + data.chatrealreg + data.affidavit;
-                        //data.netrelease = data.amountapproved + data.totalCharges;
+			data.totalCharges =  data.notarial + data.docstamp + data.chatrealreg + data.affidavit;
+                        data.netrelease = data.amountapproved + data.totalCharges;
+                        
+                        /*****Conversion Number to words****/
+                        data.amount = NumberToWords.instance.convert(data.netrelease).toUpperCase() + " pesos and 00/100 only";
                         /***********************************************/
                         
                         // For Loan Release Voucher

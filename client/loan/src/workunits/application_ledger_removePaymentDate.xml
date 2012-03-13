@@ -25,10 +25,13 @@
                     MsgBox.alert("Date is required");
                     return;
                 }else
-                    filter = svc.removePayment();
-                    MsgBox.alert("Payment Date has been successfully removed.");
-                    binding.refresh();
-                    return "_close";
+                    //filter = svc.removePayment([objid: appid.objid]);
+                    if(!MsgBox.confirm("Are you sure you want to remove this payment date " +filter.date+ " \non this account. proceed?"))return;
+                    else
+                        filter = svc.removePayment();
+                        MsgBox.alert("Payment Date on " +filter.date+ " has been successfully removed.");
+                        binding.refresh();
+                        return "_close";
             }
         }    
         ]]>

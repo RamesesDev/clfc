@@ -57,10 +57,12 @@ public class ApplicationReportModel extends ReportModel {
             return "loan/printout/loanApplicationReport.jasper";
         else if( printOut=='Loan Disclosure' )  
             return "loan/loandocs/LoanDisclosureStatement.jasper";
-        else if( printOut=='Loan Release Voucher' )
-            return "loan/loandocs/LoanReleaseVoucher.jasper";
         else
-            return "loan/loandocs/CashVoucher.jasper";
+            return "loan/loandocs/LoanReleaseVoucher.jasper";
+        //else if( printOut=='Loan Release Voucher' )
+            //return "loan/loandocs/LoanReleaseVoucher.jasper";
+        //else
+            //return "loan/loandocs/CashVoucher.jasper";
     }
     
     public Object getReportData(){ 

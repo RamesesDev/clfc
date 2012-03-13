@@ -15,7 +15,8 @@ import com.rameses.io.*;
 public abstract class AbstractLoanAppController {
 
     def report;
-    def itemReport=["Client Information Sheet", "Loan Application", "Loan Disclosure", "Loan Release Voucher", "Cash Voucher"];
+    def itemReport=["Client Information Sheet", "Loan Application", "Loan Disclosure", "Loan Release Voucher"];
+    //def itemReport=["Client Information Sheet", "Loan Application", "Loan Disclosure", "Loan Release Voucher", "Cash Voucher"];
     //def itemReport=["Client Information Sheet", "Loan Application" ];
     def _printOut;
     def entity;
