@@ -8,6 +8,9 @@ public class ApplicationReportModel extends ReportModel {
     def printOut;
     def entity;
     
+    //static def dt_formatter = new java.text.SimpleDateFormat('yyyy-MM-dd');
+    static def dt_formatter = new java.text.SimpleDateFormat('MMMM dd, yyyy');
+        
     def getCustName( cust ){
         return cust.lastname + ', ' + cust.firstname + (cust.middlename? " ( $cust.middlename )" : "")
     }
@@ -108,6 +111,14 @@ public class ApplicationReportModel extends ReportModel {
         }
         data.name = data.name.join(' and ');
         data.address = getCustAddress( data.borrower );
+        
+        //*** Ledger Data  ***//
+        //if( p.checkdate instanceof String )
+            //p.checkdate = dt_formatter.parse( p.checkdate );
+        //if( data.ledger.startdate ==null )
+            //data.ledger.startdate ='';
+        //else if( data.ledger.startdate instanceof String )
+            //data.ledger.startdate = dt_formatter.parse( data.ledger.startdate );
         
         /*
         if ( data.ledger.startDate ==null )

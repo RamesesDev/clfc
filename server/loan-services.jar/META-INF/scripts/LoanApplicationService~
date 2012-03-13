@@ -178,6 +178,68 @@ class LoanApplicationService
 			em.save("loan_borrower_index", data);
 		};
 	}
+	
+	/******* Saving to Loan Marketing Table  *******/
+	private void addToLoanMarketing( list, app, cust ) {
+		list.each { emp ->
+			def data = [
+				objid: emp.objid,
+				dtreleased: app.dtreleased,
+				marketedby: getEmpName ( emp ),
+				marketedbyid: emp.objid,
+				appid: app.objid,
+				appno:  app.appno,
+				borrowername: getCustName( cust )
+			];
+			
+			em.save("loan_marketing_incentive", data);
+			
+		};
+	}
+	/*********************************************************************/
+	
+	//***** Not Included ******//
+	/*
+	    def remittance = [
+			    type: 'loan_collection',
+			    amount: colSheet.total,
+			    breakdown: colSheet.breakdown,
+			    details: rmDetails,
+			    collectionno: colSheet.collectionno,
+			    collectiondate: colSheet.date,
+			    collector: colSheet.collector
+		    ];
+
+		    remittance = remittanceSvc.post( remittance );
+
+		    em.delete("collectionsheet", colSheet);
+		*/
+		/*
+			name: getCustName( cust ),
+			firstname: cust.firstname,
+			lastname: cust.lastname,
+			middlename: cust.middlename,
+			borrowertype: borrowertype
+			
+			def voucher = [
+		        refid: app.objid,
+		        refno: app.appno,
+		        reftype: 'loan',
+		        payeeid: app.borrower.objid,
+		        //payeename: app.fullborrowername,
+		        payeename: app.borrowername,
+		        currency: 'PHP',
+		        particulars: 'Loan',
+		        amount: assessment.netAmount,
+		        details: details.collect {
+			        [acctid: it.objid, acctcode: it.code, accttitle: it.title, amount: it.amount]
+		        }
+	        ];
+	        voucherSvc.post( voucher );
+	        
+		*/
+	//**************************************************************//
+	
 	/*
 	private void removeFromLoanapplicationBranchInbox( list, app ) {
 		list.each { cust ->
@@ -199,49 +261,6 @@ class LoanApplicationService
 		};
 	}
 	*/
-	private void addToLoanMarketing( list, app, cust ) {
-		list.each { emp ->
-			def data = [
-				objid: emp.objid,
-				dtreleased: app.dtreleased,
-				marketedby: getEmpName ( emp ),
-				marketedbyid: emp.objid,
-				appid: app.objid,
-				appno:  app.appno,
-				borrowername: getCustName( cust ),
-				//business:
-				//amountreleased:
-				//incentive:
-				/*
-				name: getCustName( cust ),
-				firstname: cust.firstname,
-				lastname: cust.lastname,
-				middlename: cust.middlename,
-				borrowertype: borrowertype
-				
-				def voucher = [
-			        refid: app.objid,
-			        refno: app.appno,
-			        reftype: 'loan',
-			        payeeid: app.borrower.objid,
-			        //payeename: app.fullborrowername,
-			        payeename: app.borrowername,
-			        currency: 'PHP',
-			        particulars: 'Loan',
-			        amount: assessment.netAmount,
-			        details: details.collect {
-				        [acctid: it.objid, acctcode: it.code, accttitle: it.title, amount: it.amount]
-			        }
-		        ];
-		        voucherSvc.post( voucher );
-		        
-				*/
-			];
-			
-			em.save("loan_marketing_incentive", data);
-			
-		};
-	}
 	
 	@ProxyMethod
 	public def createRenewal(def o){
@@ -296,8 +315,8 @@ class LoanApplicationService
 				jb.relation = contactSvc.getConnection(relParam).relationship;
 				println o.jointBorrowerList.name + " "+ jb.relation +" of the Principal Borrower";
 				
-				//if( !jb.residency.since )jb.resLenOfStay = 0;
-				//else if( jb.residency.since ) jb.resLenOfStay = getAge ( jb.residency.since );
+				if( !jb.residency.since )jb.resLenOfStay = 0;
+				else if( jb.residency.since ) jb.resLenOfStay = getAge ( jb.residency.since );
 
 				//if( !jb.residency.rentamount ) jb.residency.rentamount = 0.00;
 				//else if( jb.residency.rentamount !=null) jb.residency.rentamount = new BigDecimal( jb.residency.rentamount );
@@ -343,7 +362,7 @@ class LoanApplicationService
 
 				//if( cm.spouse && cm.spouse.residency.since )    cm.spouse.resLenOfStay = getAge ( cm.spouse.residency.since );
 				//if( cm.spouse && cm.spouse.lotoccupancy.since ) cm.spouse.lotLenOfStay = getAge ( cm.spouse.lotoccupancy.since );
-			}
+			};
 		
 			return o;
 

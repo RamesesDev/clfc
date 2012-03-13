@@ -1,0 +1,50 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+import java.math.BigDecimal;
+
+class PastDueCollectionReportService
+{
+	@PersistenceContext('treasury')
+	def em;
+		
+	@ProxyMethod
+	def buildReport( param ) {
+		def p = [:];
+		
+		p.datefrom = param.date + ' 00:00:00';
+		p.dateto = param.date + ' 23:59:59';
+		
+		def result = em.sqlContext.createNamedQuery('report:get-remitted-collection')
+		               .setParameters(p).resultList;
+		               
+		def report = [:];
+		result.each 
+		{			
+			def item = report[it.receiptno];
+			if( !item ) {
+				def r_info = em.serializer.read( it.receipt_info );
+				item = [
+					appno: r_info.refno,
+					orno: it.receiptno,
+					borrower: it.payername,
+					total: it.total,
+					date: it.dtfiled,
+				];
+				report[it.receiptno] = item;
+			}
+			
+			def info = it.info? em.serializer.read( it.info ) : [:];
+			if( info.type == 'principal' )
+				item.principal = it.amount;
+			else if( info.type == 'interest' )
+				item.interest = it.amount;
+			else if( info.type == 'penalty' )
+				item.penalty = it.amount;
+			else if( info.type == 'pastdue' )
+				item.pastdue = it.amount;
+
+		};
+				
+		return report.values() as List;
+	}	
+}

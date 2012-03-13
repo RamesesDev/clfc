@@ -2,16 +2,16 @@ import com.rameses.annotations.*;
 import com.rameses.invoker.client.*;
 import java.math.BigDecimal;
 
-
 class LoanReleaseReportService 
 {
-
 	@PersistenceContext('loan')
 	def em;
 	
 	@Service('CheckVoucherService')
 	def checkSvc;
 	
+	@Service('LoanApplicationService')
+	def loanSvc;
 
 	@ProxyMethod
 	def buildReport( param ) {
@@ -27,7 +27,7 @@ class LoanReleaseReportService
 		
 		def list = em.sqlContext.createNamedQuery('loanrelease.sql').setVars([filter:filter]).setParameters(p).resultList;
 		if( !list ) throw new Exception("No such applicable type in loan releases for $param.date.");
-		
+        
 		def report = [];
 		list.each {
 			def item = [
@@ -35,26 +35,50 @@ class LoanReleaseReportService
 				loanno: it.appno, 
 				borrowername: it.borrowername,
 				borrowername2: it.borrowername2,
-				//refno: it.refno + 1,
 				appType: it.appType,
 				loancount: it.loancount,
 				routedescription: it.routedescription,
 				marketedby: it.marketedby,
+				marketedby2: it.marketedby2,
+				clientType: it.clientType,
+				dtreleased: it.dtcreated,
 				total: it.total,
 				charges: 0.00,
 				prepinterest: 0.00,
 			];
-			//def ext = em.serializer.read( it.ext );
-			//item.marketedby = ext.marketedby;	
 			
 			def ldg = em.serializer.read( it.ledger );
 			item.loandate = ldg.dtcreated;
-
+			item.dtreleased = ldg.dtcreated;
+			
+			def ext = em.serializer.read( it.extended );
+			//item.marketedby = (ext.marketedby? ext.marketedby: '') + " and " + (ext.marketedby2? ext.marketedby2: '');
+			item.marketedby = (ext.marketedby? ext.marketedby: '' + " and " + ext.marketedby2? ext.marketedby2: '');
+			item.clientType = ext.clientType;
+		
 			item.principal = ldg.loanAmount as BigDecimal;
             item.total = ldg.loanAmount  as BigDecimal;
+           
 			if( item ) {
 				if( item.loanAmount > 0 )
 					item.loanAmount += it.loanAmount;
+				if( item.loancount >1 )	
+				    item.appType = "R";
+					item.clientType = "";
+					item.marketedby = "";
+				if( item.loancount <2 )
+				    item.appType ="NEW";
+				if( item.clientType=="MARKETED" ){
+					if( item.marketedby && item.marktedby2 )
+						item.marketedby = ext.marketedby + " and " + ext.marketedby2;
+					else if( item.marketedby && !item.marketedby2 )
+						item.marketedby = ext.marketedby;
+					else if( !item.marketedby && item.marketedby2 )
+						item.marketedby = ext.marketedby2;
+				}
+				if( item.clientType=="WALK-IN"){
+					item.marketedby = ext.clientType;
+				}
 			}
 
 			if( item.loandate.length() > 10 )
@@ -74,6 +98,5 @@ class LoanReleaseReportService
 		};
 		
 		return report;
-	}
-	
+	}	
 }

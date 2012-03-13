@@ -292,12 +292,12 @@
 	<i context="collateralInfo" visibleWhen="#{!selected.otherslist.length > 0}" class="maroon">
 		No other collateral(s) specified.<br/><br/>
 	</i>
-	<b class="maroon" context="collateralInfo" visibleWhen="#{selected.otherslist.length >0 && !appraisedvalue}">Vehicle(s)</b>
+	<b class="maroon" context="collateralInfo" visibleWhen="#{selected.otherslist.length >0 && !appraisedvalue}">Other Collateral(s)</b>
             <j context="collateralInfo" visibleWhen="#{selected.otherslist.length >0 && !appraisedvalue}"> ( Total Appraised = <b>Php</b></j>
 	    <j class="teal2" context="collateralInfo" visibleWhen="#{selected.otherslist.length >0 && !appraisedvalue}"> 0.00</j>
 	        <j context="loan" visibleWhen="#{selected.otherslist.length >0 && !appraisedvalue}"> )</j><br/>
 	    
-	<b class="maroon" context="collateralInfo" visibleWhen="#{selected.otherslist.length >0 && appraisedvalue}">Vehicle(s)</b> 
+	<b class="maroon" context="collateralInfo" visibleWhen="#{selected.otherslist.length >0 && appraisedvalue}">Other Collateral(s)</b> 
 	        <j context="collateralInfo"  visibleWhen="#{selected.otherslist.length >0 && appraisedvalue}">( Total Appraised = <b>Php</b></j>
 	    <j class="teal2" context="collateralInfo" visibleWhen="#{selected.otherslist.length >0 && appraisedvalue}">
 	    <label context="collateralInfo"  visibleWhen="#{selected.otherslist.length >0 && appraisedvalue}">#{appraisedvalue.formatDecimal()}</label><j> )

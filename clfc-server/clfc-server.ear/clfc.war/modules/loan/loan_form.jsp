@@ -776,22 +776,20 @@
 <div class="box">
 	COLLATERALS
 </div>
-<i class="maroon" context="loan" visibleWhen="#{!selected.propertylist.length}"> No property specified.</i>
-<j context="loan" visibleWhen="#{!selected.propertylist}">
-    <br/><br/>
-</j><br/>
-<label context="loan" visibleWhen="#{!selected.propertylist.length && 
-	!selected.appliancelist.length && !selected.vehiclelist.length}">
-	<i class="maroon">No Collateral Specified.</i><br/>
-</label>
-<b class="maroon"  context="loan" visibleWhen="#{!appraisedvalue}">Property/Properties</b> 
-       <j context="loan" visibleWhen="#{!appraisedvalue}"> ( Total Appraised =</j> <b context="loan" visibleWhen="#{!appraisedvalue}">Php</b>
-        <j class="teal2" context="loan" visibleWhen="#{!appraisedvalue}"> 0.00</j> <j  context="loan" visibleWhen="#{!appraisedvalue}">)</j>
-        <br/>
-<b class="maroon" context="loan" visibleWhen="#{appraisedvalue}">Property/Properties</b> 
-	   <j context="loan" visibleWhen="#{appraisedvalue}"> ( Total Appraised = </j><b context="loan" visibleWhen="#{appraisedvalue}">Php</b> 
-	     <b class="teal" context="loan" visibleWhen="#{appraisedvalue}"> 
-	     <label context="loan" visibleWhen="#{appraisedvalue}">#{appraisedvalue.formatDecimal()}</label></b> <j  context="loan" visibleWhen="#{appraisedvalue}">)</j>
+<i class="maroon" context="loan" visibleWhen="#{!selected.propertylist.length >0}">
+    No property(ies) specified. <br/>
+</i>
+<b class="maroon"  context="loan" visibleWhen="#{selected.propertylist.length >0 && !appraisedvalue}">Property(ies)</b> 
+       <j context="loan" visibleWhen="#{selected.propertylist.length >0 && !appraisedvalue}"> ( Total Appraised =</j> 
+       <b context="loan" visibleWhen="#{selected.propertylist.length >0 && !appraisedvalue}">Php</b>
+        <j class="teal2" context="loan" visibleWhen="#{selected.propertylist.length >0 && !appraisedvalue}"> 0.00</j> 
+        <j  context="loan" visibleWhen="#{selected.propertylist.length >0 && !appraisedvalue}">)</j>
+<b class="maroon" context="loan" visibleWhen="#{selected.propertylist.length >0 && appraisedvalue}">Property(ies)</b> 
+	   <j context="loan" visibleWhen="#{selected.propertylist.length >0 && appraisedvalue}"> ( Total Appraised = </j>
+	   <b context="loan" visibleWhen="#{selected.propertylist.length >0 && appraisedvalue}">Php</b> 
+	     <b class="teal" context="loan" visibleWhen="#{selected.propertylist.length >0 && appraisedvalue}"> 
+	     <label context="loan" visibleWhen="#{selected.propertylist.length >0 && appraisedvalue}">#{appraisedvalue.formatDecimal()}</label></b> 
+	     <j  context="loan" visibleWhen="#{selected.propertylist.length >0 && appraisedvalue}">)</j>
 
 <!--
 <label context="loan" visibleWhen="#{selected.propertylist.length >0}">
@@ -860,17 +858,22 @@
 </div>
 <!-------------------->
 
-<j context="loan" visibleWhen="#{selected.appliancelist.length >0}">
-    <b class="maroon"  context="loan" visibleWhen="#{!appraisedvalue}">Appliance(s)</b> 
-        <j context="loan" visibleWhen="#{!appraisedvalue}"> ( Total Appraised =</j> <b context="loan" visibleWhen="#{!appraisedvalue}">Php</b>
-        <j class="teal2" context="loan" visibleWhen="#{!appraisedvalue}"> 0.00</j> <j  context="loan" visibleWhen="#{!appraisedvalue}">)</j>    
-    <br/>    
-	<b class="maroon" context="loan" visibleWhen="#{appraisedvalue}">Appliance(s)</b> 
-	   <j context="loan" visibleWhen="#{appraisedvalue}"> ( Total Appraised = </j><b context="loan" visibleWhen="#{appraisedvalue}">Php</b> 
-	     <b class="teal" context="loan" visibleWhen="#{appraisedvalue}"> 
-	     <label context="loan" visibleWhen="#{appraisedvalue}">#{appraisedvalue.formatDecimal()}</label></b> <j  context="loan" visibleWhen="#{appraisedvalue}">)</j>
-</j>
-
+<i class="maroon" context="loan" visibleWhen="#{!selected.appliancelist.length >0}">
+    No appliance(s) specified. <br/>
+</i>
+<b class="maroon"  context="loan" visibleWhen="#{selected.appliancelist.length >0 && !appraisedvalue}">Appliance(s)</b> 
+       <j context="loan" visibleWhen="#{selected.appliancelist.length >0 && !appraisedvalue}"> ( Total Appraised =</j> 
+       <b context="loan" visibleWhen="#{selected.appliancelist.length >0 && !appraisedvalue}">Php</b>
+        <j class="teal2" context="loan" visibleWhen="#{selected.appliancelist.length >0 && !appraisedvalue}"> 0.00</j> 
+        <j  context="loan" visibleWhen="#{selected.appliancelist.length >0 && !appraisedvalue}">)</j>
+<br/>
+<b class="maroon" context="loan" visibleWhen="#{selected.appliancelist.length >0 && appraisedvalue}">Appliance(s)</b> 
+	   <j context="loan" visibleWhen="#{selected.appliancelist.length >0 && appraisedvalue}"> ( Total Appraised = </j>
+	   <b context="loan" visibleWhen="#{selected.appliancelist.length >0 && appraisedvalue}">Php</b> 
+	     <b class="teal" context="loan" visibleWhen="#{selected.appliancelist.length >0 && appraisedvalue}"> 
+	     <label context="loan" visibleWhen="#{selected.appliancelist.length >0 && appraisedvalue}">#{appraisedvalue.formatDecimal()}</label></b> 
+	     <j  context="loan" visibleWhen="#{selected.appliancelist.length >0 && appraisedvalue}">)</j>
+	     
 <table context="loan" items="selected.appliancelist" class="grid" width="100%" cellspacing="0"
        visibleWhen="#{selected.appliancelist.length >0}" name="selectedObj.appliance">
 	<thead>
@@ -886,7 +889,9 @@
 			<td valign="top" class="${idx%2==0? 'even' : 'odd'}">#{type}</td>
 			<td valign="top" class="${idx%2==0? 'even' : 'odd'}">#{brand} <b>/</b> #{serial} <b>/</b> #{model}</td>
 			<td valign="top" class="${idx%2==0? 'even' : 'odd'}" align="center">
-			    <b class="gray" context="loan" visibleWhen="#{appraisedvalue}">Php</b> 
+			    <!--<b class="gray" context="loan" visibleWhen="#{!appraisedvalue}" visibleWhen="#{!appraisedvalue}">Php</b> 
+			    <j class="teal2" context="loan" visibleWhen="#{!appraisedvalue}">0.00</j> -->
+			    <j class="gray" context="loan" visibleWhen="{appraisedvalue}">Php</j>
 				<j class="teal2" context="loan" visibleWhen="#{appraisedvalue}">#{appraisedvalue.formatDecimal()}</j>
 			</td>
 			<td valign="top" class="${idx%2==0? 'even' : 'odd'}">#{remarks.toUpperCase()}</td>
@@ -897,22 +902,20 @@
 	<b class="maroon">Vehicle(s)</b> ( Total Appraised = <b>Php</b> <b class="teal">
 		<label context="loan">#{appraisedvalue.formatDecimal()}</label></b> )
 </j>-->
-<i class="maroon" context="loan" visibleWhen="#{!selected.vehiclelist.length}"> No Vehicle specified.</i>
-<j context="loan" visibleWhen="#{!selected.vehiclelist}">
-    <br/><br/>
-</j>
-<b class="maroon"  context="loan" visibleWhen="#{!appraisedvalue}">Vehicle(s)</b> 
-       <j context="loan" visibleWhen="#{!appraisedvalue}">
-        ( Total Appraised =</j> <b context="loan" visibleWhen="#{!appraisedvalue}">Php</b>
-        <j class="teal2" context="loan" visibleWhen="#{!appraisedvalue}">
-         0.00</j> <j  context="loan" visibleWhen="#{!appraisedvalue}">)</j>
-    <br/>
-<b class="maroon" context="loan" visibleWhen="#{appraisedvalue}">Vehicle(s)</b> 
-	   <j context="loan" visibleWhen="#{appraisedvalue}">
-	    ( Total Appraised = </j><b context="loan" visibleWhen="#{appraisedvalue}">Php</b> 
-	     <b class="teal" context="loan" visibleWhen="#{appraisedvalue}"> 
-	     <label context="loan" visibleWhen="#{appraisedvalue}">
-	     #{appraisedvalue.formatDecimal()}</label></b> <j  context="loan" visibleWhen="#{appraisedvalue}">)</j>
+<i class="maroon" context="loan" visibleWhen="#{!selected.vehiclelist.length >0}">
+    No vehicle(s) specified. <br/>
+</i>
+<b class="maroon"  context="loan" visibleWhen="#{selected.vehiclelist.length >0 && !appraisedvalue}">Vehicle(s)</b> 
+       <j context="loan" visibleWhen="#{selected.vehiclelist.length >0 && !appraisedvalue}"> ( Total Appraised =</j> 
+       <b context="loan" visibleWhen="#{selected.vehiclelist.length >0 && !appraisedvalue}">Php</b>
+        <j class="teal2" context="loan" visibleWhen="#{selected.vehiclelist.length >0 && !appraisedvalue}"> 0.00</j> 
+        <j  context="loan" visibleWhen="#{selected.vehiclelist.length >0 && !appraisedvalue}">)</j> <br/>
+<b class="maroon" context="loan" visibleWhen="#{selected.vehiclelist.length >0 && appraisedvalue}">Vehicle(s)</b> 
+	   <j context="loan" visibleWhen="#{selected.vehiclelist.length >0 && appraisedvalue}"> ( Total Appraised = </j>
+	   <b context="loan" visibleWhen="#{selected.vehiclelist.length >0 && appraisedvalue}">Php</b> 
+	     <b class="teal" context="loan" visibleWhen="#{selected.vehiclelist.length >0 && appraisedvalue}"> 
+	     <label context="loan" visibleWhen="#{selected.vehiclelist.length >0 && appraisedvalue}">#{appraisedvalue.formatDecimal()}</label></b> 
+	     <j  context="loan" visibleWhen="#{selected.vehiclelist.length >0 && appraisedvalue}">)</j>
 	     
 <table context="loan" items="selected.vehiclelist" class="grid" width="100%" cellspacing="0"
 			visibleWhen="#{selected.vehiclelist.length >0}" name="selectedObj.vehicle">
@@ -937,6 +940,22 @@
 		</tr>
 	</tbody>
 </table>
+<i class="maroon" context="loan" visibleWhen="#{!selected.otherslist.length >0}">
+    No other collateral specified. <br/>
+</i>
+<b class="maroon"  context="loan" visibleWhen="#{selected.otherslist.length >0 && !appraisedvalue}">Other Collateral(s)</b> 
+       <j context="loan" visibleWhen="#{selected.otherslist.length >0 && !appraisedvalue}"> ( Total Appraised =</j> 
+       <b context="loan" visibleWhen="#{selected.otherslist.length >0 && !appraisedvalue}">Php</b>
+        <j class="teal2" context="loan" visibleWhen="#{selected.otherslist.length >0 && !appraisedvalue}"> 0.00</j> 
+        <j  context="loan" visibleWhen="#{selected.otherslist.length >0 && !appraisedvalue}">)</j> <br/>
+<b class="maroon" context="loan" visibleWhen="#{selected.otherslist.length >0 && appraisedvalue}">Other Collateral(s)</b> 
+	   <j context="loan" visibleWhen="#{selected.otherslist.length >0 && appraisedvalue}"> ( Total Appraised = </j>
+	   <b context="loan" visibleWhen="#{selected.otherslist.length >0 && appraisedvalue}">Php</b> 
+	     <b class="teal" context="loan" visibleWhen="#{selected.otherslist.length >0 && appraisedvalue}"> 
+	     <label context="loan" visibleWhen="#{selected.otherslist.length >0 && appraisedvalue}">#{appraisedvalue.formatDecimal()}</label></b> 
+	     <j  context="loan" visibleWhen="#{selected.otherslist.length >0 && appraisedvalue}">)</j>
+	     
+<!--
 <i class="maroon" context="loan" visibleWhen="#{!selected.otherslist}">
     No other collateral specified. <br/>
 </i>
@@ -948,7 +967,8 @@
 	   <j context="loan" visibleWhen="#{appraisedvalue}"> ( Total Appraised = </j><b context="loan" visibleWhen="#{appraisedvalue}">Php</b> 
 	     <b class="teal" context="loan" visibleWhen="#{appraisedvalue}"> 
 	     <label context="loan" visibleWhen="#{appraisedvalue}">#{appraisedvalue.formatDecimal()}</label></b> <j  context="loan" visibleWhen="#{appraisedvalue}">)</j>
-        
+-->
+    
 <table context="loan" items="selected.otherslist" class="grid" width="100%" cellspacing="0"
 			visibleWhen="#{selected.otherslist.length >0}" name="selectedObj.others">
 	<thead>

@@ -1,0 +1,105 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+import java.math.BigDecimal;
+
+class LoanReleaseReportService 
+{
+
+	@PersistenceContext('loan')
+	def em;
+	
+	@Service('CheckVoucherService')
+	def checkSvc;
+	
+	@Service('LoanApplicationService')
+	def loanSvc;
+
+	@ProxyMethod
+	def buildReport( param ) {
+		def p = [:];
+		p.dtfrom = param.date + ' 00:00:00';
+		p.dtto = param.date + ' 23:59:59';
+		p.newcount = 1;
+		
+		def filter = '';		
+		if( !param.type ) {}
+		else if( param.type == 'NEW' )   filter = ' and loancount = $P{newcount} ';
+		else if( param.type == 'RENEW' ) filter = ' and loancount > $P{newcount} ';
+		
+		def list = em.sqlContext.createNamedQuery('loanrelease.sql').setVars([filter:filter]).setParameters(p).resultList;
+		if( !list ) throw new Exception("No such applicable type in loan releases for $param.date.");
+        //if(!newApp.appno) newApp.appno = env.CLIENTCODE + docSvc.getFormattedNextNo('loan_app', '00000000');
+		
+		def report = [];
+		list.each {
+			def item = [
+				appno: it.appno, 
+				loanno: it.appno, 
+				borrowername: it.borrowername,
+				borrowername2: it.borrowername2,
+				refno: it.refno,
+				appType: it.appType,
+				loancount: it.loancount,
+				routedescription: it.routedescription,
+				marketedby: it.marketedby,
+				marketedby2: it.marketedby2,
+				clientType:it.clientType,
+				total: it.total,
+				charges: 0.00,
+				prepinterest: 0.00,
+			];
+			
+			def refno = [];
+						
+			def ldg = em.serializer.read( it.ledger );
+			item.loandate = ldg.dtcreated;
+			
+			def ext = em.serializer.read( it.extended );
+			item.marketedby = ext.marketedby + " and " + ext.marketedby2;
+			item.clientType = ext.clientType;
+		
+			item.principal = ldg.loanAmount as BigDecimal;
+            item.total = ldg.loanAmount  as BigDecimal;
+           
+			if( item ) {
+				if( item.loanAmount > 0 )
+					item.loanAmount += it.loanAmount;
+	
+				if( item.loancount >1 )	
+				    item.appType = "R";
+				if( item.loancount <2 )
+				    item.appType ="NEW";
+				
+				 if( item.clientType=="MARKETED" ){
+			        if( item.marketedby && item.marktedby2 )
+			            item.marketedby = ext.marketedby + " and " + ext.marketedby2;
+			        else if( item.marketedby && !item.marketedby2 )
+			            item.marketedby = ext.marketedby;
+			        else if( !item.marketedby && item.marketedby2 )
+			            item.marketedby = ext.marketedby2;
+			     }
+			     if( item.clientType=="WALK-IN"){
+			        item.marketedby = ext.clientType;
+			     }
+			}
+
+			if( item.loandate.length() > 10 )
+				item.loandate = item.loandate[0..9];
+			
+			def cv = checkSvc.openByRefid( [refid: it.objid] );
+			if( cv ) {
+				cv.details.each {
+					if( it.amount < 0 )
+						item.charges += it.amount;
+				}
+			}
+			
+			item.netrelease = item.principal + item.charges;
+			println item;
+			report << item;
+		};
+		
+		return report;
+	}
+	
+}

@@ -1,9 +1,10 @@
 import com.rameses.annotations.*;
 import com.rameses.invoker.client.*;
+import java.math.BigDecimal;
 
-class DailyCollectionReportService {
-
-	@PersistenceContext('java:treasury')
+class DailyCollectionReportService
+{
+	@PersistenceContext('treasury')
 	def em;
 		
 	@ProxyMethod
@@ -45,6 +46,5 @@ class DailyCollectionReportService {
 		};
 				
 		return report.values() as List;
-	}
-	
+	}	
 }

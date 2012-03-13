@@ -271,6 +271,11 @@ class LoanLedgerService
 		};
 	}
 	
+	@ProxyMethod
+	public def removePayment(){
+	    //("Successfully Removed");
+	}
+	
 	
 	/****************************************************************
 	 *	helper methods
