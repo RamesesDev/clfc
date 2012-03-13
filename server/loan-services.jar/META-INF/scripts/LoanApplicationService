@@ -1,6 +1,7 @@
 import com.rameses.annotations.*;
 import com.rameses.invoker.client.*;
 import com.rameses.util.*;
+import java.sql.Timestamp;
 
 class LoanApplicationService
 {
@@ -474,7 +475,9 @@ class LoanApplicationService
 	@ProxyMethod
 	public def approveApp( param ){
 		def entity = param.entity;
-		
+		def loanInfo = app.loaninfo;
+		def prodType = loanInfo.producttype;
+			
 	    def state = getState( entity.objid );
 	    if( state == 'APPROVED' )
 	        throw new Exception("Application's state is already APPROVED.");
@@ -487,7 +490,6 @@ class LoanApplicationService
 
 		entity.state = 'APPROVED';
 		entity.approvedate=datesvc.serverDate;
-		entity.expirydate=datesvc.serverDate;
 		entity.comments.add([
 			author:  env.USER, remarks: param.comment, date: datesvc.serverDate
 		]);

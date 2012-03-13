@@ -1,0 +1,360 @@
+import com.rameses.annotations.*;
+import com.rameses.invoker.client.*;
+import com.rameses.util.*;
+import java.sql.Timestamp;
+
+class LoanApplicationService
+{
+	@PersistenceContext('java:loan')
+	def em;
+
+	@Service('DateService')
+	def datesvc;
+
+	@Service('Var')
+    def vars;
+
+    @Service('LoanDocNoService')
+    def docSvc;
+    
+    @Service('LoanLedgerService')
+    def ledgerSvc;
+	
+	@Service('LoanBorrowerService')    
+	def loanBorrowerSvc;
+
+    @Env
+    def env;
+
+	@ProxyMethod
+	public def save(def newApp) {
+		if( !newApp.date )  newApp.dtfiled = datesvc.serverDate;
+		if( !newApp.appno ) newApp.appno = docSvc.getFormattedNextNo('loan_app', '00000000');
+		if( !newApp.mode )  newApp.mode = 'ONLINE';
+
+		newApp.borrowername = getCustName( newApp.borrower );
+		def names = [newApp.borrowername];
+		names.addAll( newApp.jointBorrowerList.collect{ getCustName(it) } );
+		newApp.fullborrowername = names.join(' and ');
+		
+		def old = em.read("loanapplication", newApp);
+		if( old ) {
+			def removed = old.jointBorrowerList - newApp.jointBorrowerList;
+			def added = newApp.jointBorrowerList - old.jointBorrowerList;
+			removeFromBorrowerIndex( removed, newApp );
+			addToBorrowerIndex( added, newApp, 'joint' );
+			
+			removed = old.coMakerList - newApp.coMakerList;
+			added = newApp.coMakerList - old.coMakerList;
+			removeFromBorrowerIndex( removed, newApp );
+			addToBorrowerIndex( added, newApp, 'co-maker' );
+		}
+		else {
+			addToBorrowerIndex( [newApp.borrower], newApp, 'principal' );
+			addToBorrowerIndex( newApp.jointBorrowerList, newApp, 'joint' );
+			addToBorrowerIndex( newApp.coMakerList, newApp, 'co-maker' );
+		}
+
+		//def relParam=[principal:newApp.borrower.objid]
+		//if( newApp.spouse ){		
+			//relParam.relater = newApp.spouse.objid;		
+			//newApp.spouse.relation = contactSvc.getConnection(relParam).relationship;
+		//}
+
+		return em.save("loanapplication", newApp);
+	}
+	
+	private void removeFromBorrowerIndex( list, app ) {
+		list.each { cust ->
+			em.delete('loan_borrower_index', [custid: cust.objid, appid: app.objid]);
+		}
+	}
+	
+	private void addToBorrowerIndex( list, app, borrowertype ) {
+		list.each { cust ->
+			def data = [
+				custid: cust.objid,
+				appid:  app.objid,
+				contactno: cust.contactno,
+				appno:  app.appno,
+				name: getCustName( cust ),
+				firstname: cust.firstname,
+				lastname: cust.lastname,
+				middlename: cust.middlename,
+				borrowertype: borrowertype
+			];
+			
+			em.save("loan_borrower_index", data);
+		};
+	}
+	
+	@ProxyMethod
+	public def read(def param) {		
+		def o = em.read("loanapplication",param);
+		
+		if( !o.fullborrowername ) {
+			def names = [o.borrowername];
+			names.addAll( o.jointBorrowerList.collect{ getCustName(it) } );
+			o.fullborrowername = names.join(' and ');
+		}
+		
+		o?.each {k,v->
+			if( v instanceof Date ) o[k] = v.toString();
+		}
+		
+		return o;
+	}
+	
+	@ProxyMethod
+	public def readHistory(def param){
+		def o=em.sqlContext.createQuery('SELECT objid FROM loan_history WHERE appno=$P{appno}').setParameters(param).resultList;
+		def list=[];
+		o.each(){
+			list.add(em.read("loanapplication:loanhistory",it));
+		}
+		return list;
+	}
+
+
+	/*------ loan application actions -----------*/
+	
+	@ProxyMethod
+	public def approveApp( param ) {
+		def entity = param.entity;
+		
+		def state = getState( entity.objid );
+		if( state == 'APPROVED' )
+			throw new Exception("Application's state is already APPROVED.");
+
+		if( entity.loaninfo.amountapproved <=0 ){
+			throw new Exception("Amount approved must be greater than zero.");
+		}
+		if( !entity.loaninfo.amountapproved )
+				throw new Exception("Amount approved is required.");
+
+		def old = read(entity);
+		old.loaninfo = entity.loaninfo;
+		old.state = 'APPROVED';
+		old.approvedate=datesvc.serverDate;
+		//entity.expirydate=DateUtil.add(approvedate, '30d');
+		old.expirydate=DateUtil.add(old.approvedate, '30d');
+		old.dtreleased = null;
+		old.approvalAnnotation = [
+			author: env.USER, date: datesvc.serverDate, 
+			remarks: param.approvalAnnotation? param.approvalAnnotation : ''
+		];
+		old.offeralAnnotation = [
+			author: env.USER, date: datesvc.serverDate, 
+			remarks: param.offeralAnnotation? param.offeralAnnotation : ''
+		];
+
+		save( old );
+		return old;
+
+		/*old.annotation = [
+			author: env.USER, date: datesvc.serverDate, 
+			remarks: param.annotation? param.annotation : ''
+		];*/
+
+		/*if( entity.loaninfo.approvalType == 'fixed' ) {
+			if( !entity.loaninfo.amountapproved )
+				throw new Exception("Amount approved is required.");
+
+			if( entity.loaninfo.amountapproved <= 0 )
+				throw new Exception("Amount approved must be greater than zero.");
+		}
+		else if( entity.loaninfo.approvalType == 'conditional' ) {
+			if( !entity.loaninfo.amountapprovedOptions )
+				throw new Exception('Amount options is required for conditional approval.');
+			if( entity.loaninfo.amountapprovedOptions.size() < 2 )
+				throw new Exception('Amount options must have at least two entries.');
+			for( itm in entity.loaninfo.amountapprovedOptions ) {
+				if( !itm.remarks ) throw new Exception("Remarks is required for amount ${itm.amount}.");
+			}
+		}
+		else {
+			throw new Exception('Loan approval type not yet supported.');
+		}*/
+	}
+
+	// Disapproved application
+	@ProxyMethod
+	public def disapproveApp( param ) {
+		def entity = param.entity;
+		
+		def state = getState( entity.objid );
+		if( state == 'DISAPPROVED' )
+			throw new Exception("Application's state is already DISAPPROVED.");
+		
+		def old = read(entity);
+		old.loaninfo = entity.loaninfo;
+		entity.state = 'DISAPPROVED';
+		entity.disapprovedate=datesvc.serverDate;
+		entity.approvedate = null;
+		entity.dtreleased = null;
+		entity.comments.add([
+			author:  env.USER, remarks: param.comment, date: datesvc.serverDate
+		]);
+		save( entity );
+		return entity;
+	}
+
+	// Back to FLA ( client side )
+	@ProxyMethod
+	public def resendApp( param ) {
+		def entity = param.entity;
+		
+		def state = getState( entity.objid );
+		if( state == 'FOR_FLA' )
+			throw new Exception("Application's state is already FOR FLA.");
+		
+		def old = read(entity);
+		old.loaninfo = entity.loaninfo;
+		entity.state = 'FOR_FLA';
+		entity.resenddate=datesvc.serverDate;
+		entity.approvedate = null;
+		entity.dtreleased = null;
+		entity.comments.add([
+			author:  env.USER, remarks: param.comment, date: datesvc.serverDate
+		]);
+		save( entity );
+		return entity;
+	}
+	
+	@ProxyMethod
+	public def disqualifiedOutApp( param ) {
+		def entity = param.entity;
+		
+		def state = getState( entity.objid );
+		if( state == 'DISQUALIFIED_OUT' )
+			throw new Exception("Application's state is already DISQUALIFIED OUT.");
+		
+		def old = read(entity);
+		old.loaninfo = entity.loaninfo;
+		entity.state = 'DISQUALIFIED_OUT';
+		entity.disqualifieddate=datesvc.serverDate;
+		entity.approvedate = null;
+		entity.dtreleased = null;
+		entity.comments.add([
+			author:  env.USER, remarks: param.comment, date: datesvc.serverDate
+		]);
+		save( entity );
+		return entity;
+	}
+
+	@ProxyMethod
+	public def canceledOutApp( param ) {
+		def entity = param.entity;
+		
+		def state = getState( entity.objid );
+		if( state == 'CANCELED_OUT' )
+			throw new Exception("Application's state is already CANCELED OUT.");
+		
+		def old = read(entity);
+		old.loaninfo = entity.loaninfo;
+		entity.state = 'CANCELED_OUT';
+		entity.canceleddate=datesvc.serverDate;
+		entity.approvedate = null;
+		entity.dtreleased = null;
+		entity.comments.add([
+			author:  env.USER, remarks: param.comment, date: datesvc.serverDate
+		]);
+		save( entity );
+		return entity;
+	}
+
+	@ProxyMethod
+	public def addComment( param ){
+		def p = [objid: param.objid, comment: param.comment];
+		def app = updateFields( p );
+		if( app.comments )
+			return app.comments;
+
+		return [];
+	}
+
+	@ProxyMethod
+	public def addCollateralComment(def o){
+		def dt=datesvc.serverDate;
+		return [remarks:o,author:env.USER,date:dt];
+	}
+
+	@ProxyMethod
+	public void removeData(def o){
+		em.delete("loanapplication",o);
+	}
+	
+	@ProxyMethod
+	public def getList(def param){
+		def sql;
+		if (param.state) sql = 'select * from loanapplication where state=$P{state} order by state,appno ';
+		else sql = 'select * from loanapplication order by appno'
+		return em.sqlContext.createQuery(sql)
+		         .setParameters(param)
+		         .setFirstResult(param._start)
+		         .setMaxResults(param._limit)
+		         .resultList;
+	}
+	
+	/*--- HELPER METHOD ----*/
+	
+	private def getCustName( cust ) {
+		return cust.lastname + ', ' + cust.firstname + (cust.middlename? ' ' + cust.middlename : '')
+	}
+	
+	private def getEmpName( emp ) {
+		return emp.lastname + ', ' + emp.firstname + (emp.middlename? ' ' + emp.middlename : '')
+	}
+	
+	private def getState( objid ) {
+	    def app = em.sqlContext.createQuery('select state from loanapplication where objid=?')
+	                .setParameter(1, objid).singleResult;
+
+	    return app.state;
+	}
+	
+    private def updateFields( param ) {
+		def app = em.sqlContext.createQuery('select objid,appno,comments from loanapplication where objid=?')
+		            .setParameter(1, param.objid).singleResult;
+
+		if( !app ) throw new Exception('Application record not found.');
+
+		def sql = new StringBuffer();
+		if( param.comment ) {
+			def comment = [author:  env.USER, remarks: param.remove('comment'), date: datesvc.serverDate]
+			def orig = app.comments[0..-2];
+			if( !orig.endsWith(',') && !orig.equals('[') ) orig += ',';
+			app.comments = orig + em.serializer.write( comment ) + ',]';
+			sql.append('comments=$P{comments}');
+		}
+		if ( param.cirecommendation ) {
+			def ci_recom = [author:  env.USER, remarks: param.remove('cirecommendation'), date: datesvc.serverDate]
+			app.cirecommendation = em.serializer.write( ci_recom )
+			sql.append('cirecommendation=$P{cirecommendation}');
+		}
+		if ( param.crecomrecommendation ) {
+			def crecom_recom = [author:  env.USER, remarks: param.remove('crecomrecommendation'), date: datesvc.serverDate]
+			app.crecomrecommendation = em.serializer.write( crecom_recom )
+			sql.append('crecomrecommendation=$P{crecomrecommendation}');
+		}
+		param.each { k,v ->
+			app[k] = v;
+			sql.append( (sql.length()>0? ', ' : '') + k + '=$P{' + k + '}');
+		}
+		if( sql.length() > 0 ) {
+			sql.insert(0, 'update loanapplication set ')
+			   .append(' where objid=$P{objid}');
+
+			em.sqlContext.createExecutor( sql.toString() ).setParameters( app ).execute();
+		}
+		if( app.comments )
+			app.comments = em.serializer.read( app.comments );
+		if( app.cirecommendation )
+			app.cirecommendation = em.serializer.read( app.cirecommendation );
+		if( app.crecomrecommendation )
+			app.crecomrecommendation = em.serializer.read( app.crecomrecommendation );
+
+		return app;
+	}
+
+}

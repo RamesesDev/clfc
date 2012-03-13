@@ -61,6 +61,12 @@
                 //calculateCharges();
                 //return (mode="charges");
                 
+                if( entity.approvedate ) entity.approvedate = parseDate( entity.approvedate + ' 00:00:00' );
+                if( entity.expirydate ) entity.expirydate = parseDate( entity.expirydate + ' 00:00:00' );
+                if( entity.approvedate > entity.expirydate ){
+                    MsgBix.alert("Account on this approval has already been expired.");
+                    return;
+                }
                 
                 mode="showCharges";
                 if( application.loaninfo.approvalType=="conditional" ){
@@ -69,6 +75,13 @@
                 calculateCharges();
                 return (mode="charges");
                 
+            }
+            
+            def parseDate( date ) {
+                if( date.length() == 19 )
+                    return java.sql.Timestamp.valueOf( date );
+                
+                return java.sql.Date.valueOf( date );
             }
             
             def listHandler=[
