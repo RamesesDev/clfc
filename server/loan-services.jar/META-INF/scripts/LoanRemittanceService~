@@ -48,11 +48,11 @@ class LoanRemittanceService {
             reasons: colSheet.reasons
         ];
         /*********************************************************/
-        remittance = remittanceSvc.post( remittance );
-		//remittance = remittanceSvc.post( remittance, difference );
+        //remittance = remittanceSvc.post( remittance );
+		remittance = remittanceSvc.post( remittance, difference );
 
         //post the difference
-		difference = remittanceSvc.save( difference );
+		//difference = remittanceSvc.post( difference );
 
 		em.delete("collectionsheet", colSheet);
 	}

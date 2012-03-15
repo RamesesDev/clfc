@@ -36,7 +36,7 @@
             def entity = [ date: OsirisContext.env.LOCALE_TIME ];
             
             def Ok(){
-                if(MsgBox.confirm("Are you sure you want to post this \nshort payment remittance, proceed.?")){
+               if(MsgBox.confirm("Are you sure you want to post this \nover payment remittance, proceed.?")){
                     return "_close";
                }
             }

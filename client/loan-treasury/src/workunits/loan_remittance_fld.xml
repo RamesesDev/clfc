@@ -77,12 +77,12 @@
                 getRows:{return 21;},
                 getColumns:{
                     return[ 
-                            new Column(name:"billno",       caption:"Bill No.", width:100),
-                            new Column(name:"name",         caption:"Name", width:250),
-                            new Column(name:"totalDaysDue", caption:"Days Due", width:90),
-                            new Column(name:"totalDue",     caption:"Total Due", width:90),
-                            new Column(name:"dailyPayment", caption:"Daily Pyt", width:100),
-                            new Column(name:"amountpaid",   caption:"Amount Paid", editable:true, type:"decimal", width: 110),
+                            new Column(name:"billno",       caption:"Bill No.",  width:90),
+                            new Column(name:"name",         caption:"Name",      width:295),
+                            new Column(name:"totalDaysDue", caption:"Days Due",  width:80),
+                            new Column(name:"totalDue",     caption:"Total Due", width:85),
+                            new Column(name:"dailyPayment", caption:"Daily Pyt", width:90),
+                            new Column(name:"amountpaid",   caption:"Amount Paid", editable:true, type:"decimal", width: 100),
                           ]
                 },
                 fetchList:{o-> 
@@ -128,34 +128,32 @@
             def save(){
                 def brkHandle = breakDownOpener.handle;
                 if(brkHandle.totalBreakdown != entity.total){
-                    //throw new Exception("Total breakdown and Total Amount is not equal.");
-                    
                     //Getting the differences of total amount paid and cash breakdown
                     difference = brkHandle.totalBreakdown - entity.total;
                     entity.amount = difference;
                     
-                    MsgBox.alert("Total Amount " +entity.total+ " and Total Cash Breakdown " +brkHandle.totalBreakdown+ 
-                        " is not equal.\nwith a Total Difference of " +difference+ ".");
-                    
                     //For Short Payment/Remittance
                     if(brkHandle.totalBreakdown < entity.total){
+                        MsgBox.alert("Total Amount " +entity.total+ " and Total Cash Breakdown " +brkHandle.totalBreakdown+ 
+                        " is not equal.\nwith a Total Difference of " +difference+ ".");                    
                         return InvokerUtil.lookupOpener("collection:shortagePayment",[
                             entity:entity, shortHandler:shortSelectHandler
                             ]);
-
-                        print();
-                    }
-                    
-                    MsgBox.alert("Total Amount " +entity.total+ " and Total Cash Breakdown " +brkHandle.totalBreakdown+ 
-                            " is not equal.\nwith an overpayment of " +difference+ ".");
                             
+                        mode = "print";
+                        //print();
+                    }    
+                    
                     //For Over Payment/Remittance
                     if(brkHandle.totalBreakdown > entity.total){
+                        MsgBox.alert("Total Amount " +entity.total+ " and Total Cash Breakdown " +brkHandle.totalBreakdown+ 
+                            " is not equal.\nwith an overpayment of " +difference+ ".");
                         return InvokerUtil.lookupOpener("collection:overPayment",[ 
                             entity:entity, overHandler:overSelectHandler
                             ]);
                             
-                        print();
+                        mode = "print";
+                        //print();
                     }
                 }    
                 if( entity.total <= 0 ){
@@ -272,5 +270,6 @@
     <pages>
         <page template="loantreasury.remittance.field.LoanRemittanceInitPage"/>
         <page name="form" template="loantreasury.remittance.field.LoanRemittancePage"/>
+        <page name="print" template="loantreasury.collectionsheet.CollectionSheetPrintPage"/>
     </pages>
 </workunit>

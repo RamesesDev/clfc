@@ -1,3 +1,6 @@
 "selected" [ mode!="read" ] { readonly:false; }
 "selected" [ mode=="read" ] { readonly:true; }
 
+"entity.arrivaltime" [ mode!="read" ] { readonly:false; }
+"entity.arrivaltime" [ mode=="read" ] { readonly:true; }
+

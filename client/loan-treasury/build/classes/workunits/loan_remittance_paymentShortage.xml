@@ -38,7 +38,7 @@
             def Ok(){
                if(MsgBox.confirm("Are you sure you want to post this \nshort payment remittance, proceed.?")){
                     return "_close";
-               }  
+               }
             }
         }    
         ]]>

@@ -166,8 +166,8 @@
         ]]>
     </code>
     <pages>
-        <page template="loantreasury.collectionsheet.CollectionSheetInitPage" />
-        <page name="list" template="loantreasury.collectionsheet.CollectionSheetPage" />
-        <page name="print" template="loantreasury.collectionsheet.CollectionSheetPrintPage" />
+        <page template="loantreasury.collectionsheet.CollectionSheetInitPage"/>
+        <page name="list" template="loantreasury.collectionsheet.CollectionSheetPage"/>
+        <page name="print" template="loantreasury.collectionsheet.CollectionSheetPrintPage"/>
     </pages>
 </workunit>

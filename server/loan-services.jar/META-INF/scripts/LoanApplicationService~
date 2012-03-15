@@ -490,16 +490,34 @@ class LoanApplicationService
 
 		entity.state = 'APPROVED';
 		entity.approvedate=datesvc.serverDate;
-		//entity.expirydate=DateUtil.add(approvedate, prodType.term + 'd');
-		//entity.expirydate=DateUtil.add(approvedate, '30d');
-        //def start_date = DateUtil.add(dtreleased, '1d');
-        //entity.expirydate=datesvc.serverDate;
 		entity.comments.add([
 			author:  env.USER, remarks: param.comment, date: datesvc.serverDate
 		]);
 		entity = save( entity );
 		return entity;
 	}
+	
+   //**********************************************************//
+	@ProxyMethod
+	public def checkApprovalDate( param ){
+	    def entity = param.entity
+	   
+	    def state = getState( entity.objid );
+	    if( state !='APPROVED')
+	        throw new Exception("Application's state is not APPROVED.");
+	   
+	   param.approvedate = param.approvedate;
+	   param.expirydate = param.expirydate;
+	   
+	    if( !param.approvedate )
+	        throw new Exception("Approved date is invalid.");
+	    if( !param.expirydate )    
+	        throw new Exception("Expiry date is invlaid.");
+	        
+	    if( param.approvedate > param.expirydate)
+	        throw new Exception("Approval on this account is already expired.")
+	}   
+	//**********************************************************//
 	
 	@ProxyMethod
 	public def backOutApp( param ) {
