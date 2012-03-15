@@ -33,12 +33,12 @@
                 binding.refresh("entity.route");
             };
             
-            def entity = [ date: OsirisContext.env.LOCALE_TIME
-            
-                          ];
+            def entity = [ date: OsirisContext.env.LOCALE_TIME ];
             
             def Ok(){
-                return "_close";
+               if(MsgBox.confirm("Are you sure you want to post this \nshort payment remittance, proceed.?")){
+                    return "_close";
+               }  
             }
         }    
         ]]>

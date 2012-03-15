@@ -125,33 +125,37 @@
             };
             
             def difference;
-            def save() {
+            def save(){
                 def brkHandle = breakDownOpener.handle;
                 if(brkHandle.totalBreakdown != entity.total){
                     //throw new Exception("Total breakdown and Total Amount is not equal.");
-                    MsgBox.alert("Total Cash Breakdown " +brkHandle.totalBreakdown+ " and Total Amount " +entity.total+ " is not equal.");
+                    
+                    //Getting the differences of total amount paid and cash breakdown
+                    difference = brkHandle.totalBreakdown - entity.total;
+                    entity.amount = difference;
+                    
+                    MsgBox.alert("Total Amount " +entity.total+ " and Total Cash Breakdown " +brkHandle.totalBreakdown+ 
+                        " is not equal.\nwith a Total Difference of " +difference+ ".");
+                    
                     //For Short Payment/Remittance
                     if(brkHandle.totalBreakdown < entity.total){
                         return InvokerUtil.lookupOpener("collection:shortagePayment",[
-                            entity:entity, shortHandler:shortSelectHandler  
+                            entity:entity, shortHandler:shortSelectHandler
                             ]);
-                            
-                            //Getting the differences of total amount paid and cash breakdown
-                            difference = brkHandle.totalBreakdown - entity.total;
 
-                            print();
+                        print();
                     }
                     
+                    MsgBox.alert("Total Amount " +entity.total+ " and Total Cash Breakdown " +brkHandle.totalBreakdown+ 
+                            " is not equal.\nwith an overpayment of " +difference+ ".");
+                            
                     //For Over Payment/Remittance
                     if(brkHandle.totalBreakdown > entity.total){
                         return InvokerUtil.lookupOpener("collection:overPayment",[ 
                             entity:entity, overHandler:overSelectHandler
                             ]);
                             
-                            //Getting the differences of total amount paid and cash breakdown
-                            difference = brkHandle.totalBreakdown - entity.total;
-                            
-                            print();
+                        print();
                     }
                 }    
                 if( entity.total <= 0 ){

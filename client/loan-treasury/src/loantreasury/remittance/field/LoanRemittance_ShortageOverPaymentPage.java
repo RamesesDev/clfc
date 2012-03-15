@@ -78,12 +78,12 @@ public class LoanRemittance_ShortageOverPaymentPage extends javax.swing.JPanel {
 
         xNumberField1.setCaption("Amount");
         xNumberField1.setFieldType(java.math.BigDecimal.class);
-        xNumberField1.setFont(new java.awt.Font("Arial", 1, 18));
+        xNumberField1.setFont(new java.awt.Font("Arial", 1, 20));
         xNumberField1.setForeground(new java.awt.Color(204, 0, 0));
         xNumberField1.setName("entity.amount");
         xNumberField1.setPattern("#,##0.00");
         xNumberField1.setPreferredSize(new java.awt.Dimension(150, 40));
-        xNumberField1.setRequired(true);
+        xNumberField1.setReadonly(true);
         xNumberField1.setToolTipText("Amount Shortage");
         formPanel1.add(xNumberField1);
 
