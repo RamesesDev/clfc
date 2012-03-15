@@ -4113,7 +4113,7 @@ public class ApplicationForm extends javax.swing.JPanel {
 
         formPanel12.setCaptionWidth(90);
         xComboBox7.setToolTipText("Click to select Interviewed By");
-        xComboBox7.setCaption("Marketed By");
+        xComboBox7.setCaption("Interviewed By");
         xComboBox7.setDepends(new String[] {"clientType"});
         xComboBox7.setDynamic(true);
         xComboBox7.setEmptyText("Select Employee");
@@ -4123,7 +4123,6 @@ public class ApplicationForm extends javax.swing.JPanel {
         xComboBox7.setName("emp");
         xComboBox7.setPreferredSize(new java.awt.Dimension(165, 22));
         formPanel12.add(xComboBox7);
-        xComboBox7.getAccessibleContext().setAccessibleName("Marketed By:");
 
         xComboBox8.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "emp2" }));
         xComboBox8.setToolTipText("Click to select Interviewed By");

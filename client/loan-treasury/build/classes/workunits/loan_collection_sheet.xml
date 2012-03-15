@@ -19,9 +19,7 @@
         import com.rameses.osiris2.reports.*;
         import com.rameses.common.*;
         
-        public class LoanCollectionSheetController 
-        {
-                    
+        public class LoanCollectionSheetController{
             @Service('LoanCollectionSheetService')
             def svc;
             

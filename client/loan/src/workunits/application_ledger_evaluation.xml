@@ -21,7 +21,7 @@
             def svc;
             
             @Service('LoanLedgerService')
-            def ledgerSvc;
+            def legerSvc;
             
             @Binding
             def binding;
@@ -37,8 +37,7 @@
                 },
                 getColumns:{
                     return[ 
-                            new Column(name:'appno',          caption:"App No.",         width:250),
-                            new Column(name:'amountapproved', caption:"Amount",          width:200),          
+                            new Column(name:'amountapproved', caption:"Amount",          width:200),
                             new Column(name:'dtreleased',     caption:"Date Released",   width:250),
                             new Column(name:'maturitydate',   caption:"Maturity Date",   width:250),
                             new Column(name:'fullyPaidAmt',   caption:"Amt Fully Paid",  width:300),

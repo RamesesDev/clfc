@@ -18,6 +18,7 @@
         import com.rameses.osiris2.reports.*;
         import com.rameses.common.*;
         import java.util.regex.*;
+        import java.sql.Timestamp;
         
         class ApplicationForReleaseController{        
             @Service("LoanApplicationService")
@@ -25,9 +26,6 @@
             
             @Service("CheckVoucherService")
             def checkSvc;
-            
-            @Script('ReleaseVoucherScript')
-            def printSupport;
             
             @Binding
             def binding;
@@ -61,27 +59,40 @@
                 //calculateCharges();
                 //return (mode="charges");
                 
-                if( entity.approvedate ) entity.approvedate = parseDate( entity.approvedate + ' 00:00:00' );
-                if( entity.expirydate ) entity.expirydate = parseDate( entity.expirydate + ' 00:00:00' );
-                if( entity.approvedate > entity.expirydate ){
-                    MsgBix.alert("Account on this approval has already been expired.");
-                    return;
-                }
-                
-                mode="showCharges";
-                if( application.loaninfo.approvalType=="conditional" ){
+                checkApprovalDate(); //Checking for Approval Date and Expiry Date
+                if( application.loaninfo.offeredamount ){
                     return (mode="amountOption");
-                }
-                calculateCharges();
-                return (mode="charges");
+                }else if( !application.loaninfo.offeredamount ){
                 
+                    mode="showCharges";
+                    if( application.loaninfo.approvalType=="conditional" ){
+                        return (mode="amountOption");
+                    }
+                    calculateCharges();
+                    return (mode="charges");
+                }
             }
             
-            def parseDate( date ) {
+            def checkApprovalDate(){
+                //param=appSvc.checkApproval(param);
+                
+                //if( entity.approvedate ) entity.approvedate = parseDate( entity.approvedate + ' 00:00:00' );
+                //if( entity.expirydate ) entity.expirydate = parseDate( entity.expirydate + ' 00:00:00' );
+                
+                //MsgBox.alert("Approval Date is "  +entity.approvedate+ " and Expiry Date is " +entity.expirydate);
+                
+                
+                //if( entity.approvedate > entity.expirydate ){
+                    //MsgBox.alert("Approval Date on this account has already been expired.");
+                    //return;
+                //}
+            }
+            
+            def parseDate( date ){
                 if( date.length() == 19 )
                     return java.sql.Timestamp.valueOf( date );
-                
-                return java.sql.Date.valueOf( date );
+
+                    return java.sql.Date.valueOf( date );
             }
             
             def listHandler=[
@@ -325,7 +336,8 @@
     </code>
     <pages>
         <page name="charges" template="loan.assessment.ui.LoanAssessmentPage"/>
-        <page name="amountOption" template="loan.assessment.ui.ApprovedAmountPage"/>
+        <!--<page name="amountOption" template="loan.assessment.ui.ApprovedAmountPage"/>-->
+        <page name="amountOption" template="loan.assessment.ui.ApprovedAmountPage_2"/>
         <page name="printPage" template="loan.ui.LoanAppReport"/>
     </pages>
 </workunit>

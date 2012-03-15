@@ -14,7 +14,7 @@
         
         class LoanRemittanceShortagePaymentController{
             @Service("LoanRemittanceService")
-            def svc;
+            def remitSvc;
             
             @Service("LoanCollectionSheetService")
             def colSheetSvc;
@@ -22,12 +22,15 @@
             @Service( "LoanApplicationSearchService" )
             def searchSvc;
             
-            def sSelectHandler;
+            def difference;
+            def shortSelectHandler;
             def shortHandler={o->
-                o.routecode=entity.code;
-                o.collector=entity.collector;
-                o.routedescription=entity.description;
-                //binding.refresh("entity.routecode");
+                entity.routecode=o.code;
+                entity.collector=o.collector;
+                entity.routedescription=o.description;
+                //entity.route = entity.routecode + " - " + entity.routedescription;
+                entity.amount = difference;
+                binding.refresh("entity.route");
             };
             
             def entity = [ date: OsirisContext.env.LOCALE_TIME

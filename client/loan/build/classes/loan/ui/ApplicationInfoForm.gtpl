@@ -145,7 +145,7 @@
                 </tr>
                 <br>
                 <tr>
-                    <th>Date Applied: </th>
+                    <th>Date Applied : </th>
                     <td class="teal">${formatDate2(data.dtfiled)}</td>
                 </tr> 
                 <%if ( data.state=="PENDING" ) {%>
@@ -217,7 +217,7 @@
                     </tr>
                     <%if ( data.expirydate ) {%>
                         <tr>
-                            <th>Date Expiry : </th>
+                            <th>Approval Date of Expiry : </th>
                             <td>
                                 <b class="maroon">${formatDate(data.expirydate)}</b>
                             </td>

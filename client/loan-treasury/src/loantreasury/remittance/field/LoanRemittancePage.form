@@ -16,7 +16,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="xActionBar1" alignment="0" pref="938" max="32767" attributes="1"/>
+          <Component id="xActionBar1" alignment="0" pref="950" max="32767" attributes="1"/>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel2" max="32767" attributes="0"/>
@@ -33,9 +33,9 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jPanel1" min="-2" max="-2" attributes="1"/>
-                  <Component id="jPanel2" min="-2" max="-2" attributes="1"/>
+                  <Component id="jPanel2" max="32767" attributes="1"/>
               </Group>
-              <EmptySpace pref="36" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -113,10 +113,10 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="xDataTable1" alignment="0" pref="568" max="32767" attributes="0"/>
-                      <Group type="102" alignment="0" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
                           <Component id="formPanel2" min="-2" pref="302" max="-2" attributes="0"/>
-                          <EmptySpace pref="45" max="32767" attributes="0"/>
-                          <Component id="formPanel3" min="-2" pref="221" max="-2" attributes="0"/>
+                          <EmptySpace pref="31" max="32767" attributes="0"/>
+                          <Component id="formPanel3" min="-2" pref="235" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -127,11 +127,11 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="formPanel3" pref="52" max="32767" attributes="1"/>
-                      <Component id="formPanel2" alignment="0" min="-2" max="-2" attributes="1"/>
+                      <Component id="formPanel2" min="-2" max="-2" attributes="1"/>
+                      <Component id="formPanel3" min="-2" max="-2" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="xDataTable1" pref="412" max="32767" attributes="0"/>
+                  <Component id="xDataTable1" pref="417" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -186,6 +186,17 @@
                   <Dimension value="[0, 19]"/>
                 </Property>
                 <Property name="readonly" type="boolean" value="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.rameses.rcp.control.XTextField" name="xTextField4">
+              <Properties>
+                <Property name="caption" type="java.lang.String" value="Arrival Time"/>
+                <Property name="horizontalAlignment" type="int" value="2"/>
+                <Property name="name" type="java.lang.String" value="entity.arrivaltime"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[0, 19]"/>
+                </Property>
+                <Property name="required" type="boolean" value="true"/>
               </Properties>
             </Component>
           </SubComponents>

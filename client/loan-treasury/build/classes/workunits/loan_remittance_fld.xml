@@ -104,46 +104,55 @@
                 if(pos!=-1) prevRAmount = entity.list.amountpaid[pos];
             }
     
-            def sSelectHandler;
+            def shortSelectHandler;
             def shortHandler={o->
                 entity.routecode=o.code;
                 entity.collector=o.collector;
                 entity.routedescription=o.description;
-                binding.refresh("entity.routecode");
+                //entity.route = entity.routecode + " - " + entity.routedescription;
+                entity.amount = difference;
+                binding.refresh("entity.route");
             };
-                        
+            
+            def overSelectHandler;
+            def overHandler={o->
+                entity.routecode=o.code;
+                entity.collector=o.collector;
+                entity.routedescription=o.description;
+                //entity.route = entity.routecode + " - " + entity.routedescription;
+                entity.amount = difference;
+                binding.refresh("entity.route");
+            };
+            
+            def difference;
             def save() {
                 def brkHandle = breakDownOpener.handle;
                 if(brkHandle.totalBreakdown != entity.total){
                     //throw new Exception("Total breakdown and Total Amount is not equal.");
-                    
                     MsgBox.alert("Total Cash Breakdown " +brkHandle.totalBreakdown+ " and Total Amount " +entity.total+ " is not equal.");
-                    //if(!MsgBox.confirm('Are you sure you want to remit this collection \nwith the Total breakdown and Total Amount is not equal?')){
-                        //return confirm({ entity ->
-                            //For Over Payment/Remittance
-                            if(brkHandle.totalBreakdown > entity.total){
-                                return InvokerUtil.lookupOpener("collection:overPayment",[entity:entity, shortHandler:sSelectHandler]);
-                                print();
-                            }
+                    //For Short Payment/Remittance
+                    if(brkHandle.totalBreakdown < entity.total){
+                        return InvokerUtil.lookupOpener("collection:shortagePayment",[
+                            entity:entity, shortHandler:shortSelectHandler  
+                            ]);
+                            
+                            //Getting the differences of total amount paid and cash breakdown
+                            difference = brkHandle.totalBreakdown - entity.total;
 
-                            //For Short Payment/Remittance
-                            if(brkHandle.totalBreakdown < entity.total){
-                                return InvokerUtil.lookupOpener("collection:shortagePayment",[ : ]);
-                                print();
-                            }
-                        //});
-                    //}
-                    
-                    /*
-                    if(MsgBox.confirm("You are about to return this application to pending, proceed?")){
-                        return confirm({ message ->
-                            def p = [comment: message, objid: entity.objid];
-                            entity.putAll( service.returnApp(p) ); 
-                            if( selectHandler ) selectHandler(entity);
-                                binding.refresh();
-                        });
+                            print();
                     }
-                    */
+                    
+                    //For Over Payment/Remittance
+                    if(brkHandle.totalBreakdown > entity.total){
+                        return InvokerUtil.lookupOpener("collection:overPayment",[ 
+                            entity:entity, overHandler:overSelectHandler
+                            ]);
+                            
+                            //Getting the differences of total amount paid and cash breakdown
+                            difference = brkHandle.totalBreakdown - entity.total;
+                            
+                            print();
+                    }
                 }    
                 if( entity.total <= 0 ){
                     if(!MsgBox.confirm('Are you sure you want to remit this collection sheet with 0(zero) amount?')) return;

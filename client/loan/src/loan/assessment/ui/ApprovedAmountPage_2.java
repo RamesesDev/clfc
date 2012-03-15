@@ -49,7 +49,7 @@ public class ApprovedAmountPage_2 extends javax.swing.JPanel {
         xRadio2.setOpaque(false);
 
         xLabel28.setForeground(new java.awt.Color(255, 51, 51));
-        xLabel28.setText("Select type of the approved provided");
+        xLabel28.setText("Select the type of the approval provided below");
         xLabel28.setFont(new java.awt.Font("Arial", 1, 16));
         xLabel28.setShowCaption(false);
 
@@ -79,6 +79,7 @@ public class ApprovedAmountPage_2 extends javax.swing.JPanel {
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(0, 250));
         xTextArea1.setCaption("Approval Type");
+        xTextArea1.setDepends(new String[] {"entity.ApprovalType"});
         xTextArea1.setName("approvalType");
         xTextArea1.setRequired(true);
         xTextArea1.setShowCaption(false);

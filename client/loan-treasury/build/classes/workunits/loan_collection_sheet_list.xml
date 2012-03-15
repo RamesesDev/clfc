@@ -2,12 +2,12 @@
     <invokers>
         <invoker folderid="menu/services/loan" caption="Pending Collection Sheet" permission="collection_sheet.view"/>
         
-        <invoker type="formActions" mnemonic="c" caption="Close" action="_close"/>
+        <invoker type="formActions" mnemonic="c" caption="Close"   icon="images/cancel16.png" action="_close"/>
         <invoker type="formActions" mnemonic="p" caption="Reprint" icon="images/print16.png" action="print" permission="collection_sheet.reprint" visibleWhen="#{! empty selected}"/>
+        <invoker type="formActions" mnemonic="p" caption="Refresh" icon="images/refresh16.png" action="refresh" permission="collection_sheet.reprint"/>
         
         <invoker type="formReportActions" mnemonic="b" caption="Back" icon="images/back16.png" action="_default"/>
     </invokers>
-    
     <code>
         <![CDATA[
         import com.rameses.rcp.annotations.*;
@@ -24,6 +24,9 @@
             def selected;
             def report;
             
+            @Binding
+            def binding;
+            
             def listHandler =[
                 getRows:{ return 20; },
                 getColumns :{ 
@@ -39,6 +42,11 @@
                     return svc.list;
                 }
             ]as SubListModel;
+            
+            def refresh(){
+                return null;
+                binding?.refresh("selected");
+            }
             
             def print() {
                 report = [   

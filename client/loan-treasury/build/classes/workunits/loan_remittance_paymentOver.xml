@@ -14,7 +14,7 @@
         
         class LoanRemittanceOverPaymentController{
             @Service("LoanRemittanceService")
-            def svc;
+            def remitSvc;
             
             @Service("LoanCollectionSheetService")
             def colSheetSvc;
@@ -22,11 +22,15 @@
             @Service( "LoanApplicationSearchService" )
             def searchSvc;
             
-            def sSelectHandler;
-            def shortSelectHandler={o->
+            def difference;
+            def overSelectHandler;
+            def overHandler={o->
                 entity.routecode=o.code;
+                entity.collector=o.collector;
                 entity.routedescription=o.description;
-                binding.refresh("entity.routecode");
+                //entity.route = entity.routecode + " - " + entity.routedescription;
+                entity.amount = difference;
+                binding.refresh("entity.route");
             };
             
             def entity = [ date: OsirisContext.env.LOCALE_TIME

@@ -17,8 +17,11 @@
         import com.rameses.io.*;
         
         class LoanHistoryController{
-            @Service( "LoanApplicationService" )
+            @Service('LoanApplicationService')
             def svc;
+            
+            @Service('LoanLedgerService')
+            def legerSvc;
             
             @Binding
             def binding;
@@ -38,7 +41,7 @@
                           ]
                 },
                 fetchList:{o-> 
-                    return svc.getList();
+                    return ledgerSvc.getList();
                 },
                 getRows:{
                     return 15;
