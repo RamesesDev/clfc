@@ -149,7 +149,7 @@
                         MsgBox.alert("Total Amount " +entity.total+ " and Total Cash Breakdown " +brkHandle.totalBreakdown+ 
                             " is not equal.\nwith an overpayment of " +difference+ ".");
                         return InvokerUtil.lookupOpener("collection:overPayment",[ 
-                            entity:entity, overHandler:overSelectHandler
+                            entity:entity, overHandler:overSelectHandler, mode: mode
                             ]);
                             
                         mode = "print";
@@ -169,32 +169,14 @@
             }
 
             def print(){
-                MsgBox.alert("Printing is not supported at this time.");
-                //setPrintOut();
+                //MsgBox.alert("Printing is not supported at this time.");
+                report();
             }
-            
-             //--- Report Support -----//
-            def itemReport = [ "Shortage Payment", "Over Payment" ]
-            def report;    
-            def printOut;
-
-            void setPrintOut( po ) {
-                this.printOut = po;
-                initReportModel();
-            }
-            
-            void initReportModel() {
-                if( !printOut ) printOut = itemReport[0];
-                
-                report = [
-                    getReportName: {
-                        if( "Shortage Payment".equals(printOut) )
-                            return 'loantreasury/printout/ShortagePayment.jasper';
-                        else
-                            return 'loantreasury/printout/OverPayment.jasper';
-                    },
-                    getReportData: {
-                        def data = [:];
+            def collectionSheet;
+            def report = [   
+                getReportName:{ return 'loantreasury/printout/OveragePayment.jasper'; },
+                getReportData:{ //return collectionSheet.list;
+                        def data = [entity:entity];
                         
                         data.collector = data.collector;
                         data.date = data.date;
@@ -215,20 +197,26 @@
                         data.reasons = data.reasons;
                         data.srno = data.srno;
                         data.orno = data.orno;
+                        
                         return data;
-                    },
-                    getParameters:{ 
-                        return [ 
+                },
+                getParameters:{
+                    return [
+                            //COLLECTION_NO: collectionSheet.collectionno,
+                            
+                            //DATE: collectionSheet.date,
+                            //COLLECTOR: collectionSheet.collector,
+                            //ROUTE_NO:  collectionSheet.routecode,
+                            //ROUTE_DES: collectionSheet.routedescription,
+                            //AMOUNT: collectionSheet.amount,
+                            
                             BRANCH_NAME: OsirisContext.env.CLIENT.name ,
                             PRINTDATE: new Date(), 
                             User: OsirisContext.env.USERINFO.firstname + ' ' + OsirisContext.env.USERINFO.lastname
-                        ]
-                    }
-                ] as ReportModel;
-                
-                report.viewReport();
-            }
-            
+                            ]
+                }
+            ] as ReportModel;
+    
             def routeSelectHandler={o->
                 entity.routecode=o.code;
                 entity.routedescription=o.description;

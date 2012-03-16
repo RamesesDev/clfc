@@ -73,6 +73,7 @@ public class CollectionSheetInitPage extends javax.swing.JPanel {
         xDateField1.setName("filter.date");
         xDateField1.setPreferredSize(new java.awt.Dimension(100, 25));
         xDateField1.setRequired(true);
+        xDateField1.setUseDatePickerModel(true);
         formPanel1.add(xDateField1);
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);

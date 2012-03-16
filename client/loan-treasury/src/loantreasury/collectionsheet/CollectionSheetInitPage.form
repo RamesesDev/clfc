@@ -128,6 +128,7 @@
                   <Dimension value="[100, 25]"/>
                 </Property>
                 <Property name="required" type="boolean" value="true"/>
+                <Property name="useDatePickerModel" type="boolean" value="true"/>
               </Properties>
             </Component>
           </SubComponents>

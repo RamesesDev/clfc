@@ -11,6 +11,8 @@
         import com.rameses.rcp.annotations.*;
         import com.rameses.rcp.common.*;
         import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;;
         
         class LoanRemittanceShortagePaymentController{
             @Service("LoanRemittanceService")
@@ -37,7 +39,8 @@
             
             def Ok(){
                if(MsgBox.confirm("Are you sure you want to post this \nshort payment remittance, proceed.?")){
-                    return "_close";
+                    return "print";
+                    //return "_close";
                }
             }
         }    
@@ -45,5 +48,6 @@
     </code>
     <pages>
         <page template="loantreasury.remittance.field.LoanRemittance_ShortageOverPaymentPage"/>
+        <page name="print" template="loantreasury.collectionsheet.CollectionSheetPrintPage"/>
     </pages>    
 </workunit>

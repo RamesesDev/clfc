@@ -2,7 +2,7 @@
 <!-- Created with iReport - A designer for JasperReports -->
 <!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
 <jasperReport
-		 name="OverPayment"
+		 name="OveragePayment"
 		 columnCount="1"
 		 printOrder="Vertical"
 		 orientation="Portrait"
@@ -23,6 +23,14 @@
 	<import value="net.sf.jasperreports.engine.*" />
 	<import value="net.sf.jasperreports.engine.data.*" />
 
+	<parameter name="DATE" isForPrompting="false" class="java.util.Date"/>
+	<parameter name="ROUTE_NO" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="ROUTE_DES" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="COLLECTOR" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="COLLECTION_NO" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="AMOUNT" isForPrompting="false" class="java.math.BigDecimal"/>
+	<parameter name="REASONS" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="ORNO" isForPrompting="false" class="java.lang.Integer"/>
 
 	<field name="colllector" class="java.lang.String"/>
 	<field name="date" class="java.util.Date"/>
@@ -76,7 +84,7 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{route}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="128"
 						y="159"

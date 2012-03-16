@@ -4,13 +4,15 @@
         
         <invoker type="formActions" action="Ok"     caption="Ok and continue" mnemonic="o" tooltip="Ok and Continue"/>
         <invoker type="formActions" action="_close" caption="Cancel" mnemonic="c" tooltip="Cancel" immediate="true"/>
-        
+        <invoker type="formReportActions" caption="Close" icon="images/exit16.png" action="_close" mnemonic="c"/>
     </invokers>
     <code> 
         <![CDATA[
         import com.rameses.rcp.annotations.*;
         import com.rameses.rcp.common.*;
         import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.reports.*;
+        import com.rameses.common.*;
         
         class LoanRemittanceOverPaymentController{
             @Service("LoanRemittanceService")
@@ -21,6 +23,11 @@
 
             @Service( "LoanApplicationSearchService" )
             def searchSvc;
+            
+            @Binding
+            def binding;
+            
+            def mode;
             
             def difference;
             def overSelectHandler;
@@ -37,13 +44,66 @@
             
             def Ok(){
                if(MsgBox.confirm("Are you sure you want to post this \nover payment remittance, proceed.?")){
-                    return "_close";
+                    //MsgBox.alert("Printing currently not supported.");
+                    //binding.fireNavigation( (mode='printPage') );
+                    MsgBox.alert("Now Printing Data of" + "\nRoute Code: " +entity.routecode+
+                            "\nDescription: " +entity.routedescription+ "\nCollector: " +entity.collector+
+                            "\nAmount of over of: " +entity.amount+ "\nReason(s): " +entity.reasons);
+                    report.viewReport();
+                    return "printPage";
+                    //return "_close";
                }
             }
-        }    
+            
+            def collectionSheet;
+            def report = [
+                getReportName:{ return 'loantreasury/printout/OveragePayment.jasper'; },
+                getReportData:{ //return collectionSheet.list;
+                        def data = [entity:entity];
+                        
+                        data.collector = data.collector;
+                        data.date = data.date;
+                        
+                        if( data.routecode ==null )
+                            data.routecode = '';
+                        else data.routecode = data.routecode;
+                        if( data.routedescription ==null )
+                            data.routedescription = '';
+                        else data.routedescription = data.routedescription;
+                        data.route = data.routecode + " - " + data.routedescription;
+                        
+                        if(data.amount!=null)    
+                            data.amount = new BigDecimal(data.amount);
+                        else
+                            data.amount = new BigDecimal(0.00);
+                            
+                        data.reasons = data.reasons;
+                        data.srno = data.srno;
+                        data.orno = data.orno;
+                        
+                        return data;
+                },
+                getParameters:{
+                    return [
+                            //COLLECTION_NO: collectionSheet.collectionno,
+                            
+                            //DATE: collectionSheet.date,
+                            //COLLECTOR: collectionSheet.collector,
+                            //ROUTE_NO:  collectionSheet.routecode,
+                            //ROUTE_DES: collectionSheet.routedescription,
+                            //AMOUNT: collectionSheet.amount,
+                            
+                            BRANCH_NAME: OsirisContext.env.CLIENT.name ,
+                            PRINTDATE: new Date(), 
+                            User: OsirisContext.env.USERINFO.firstname + ' ' + OsirisContext.env.USERINFO.lastname
+                            ]
+                }
+            ] as ReportModel;
+        }
         ]]>
     </code>
     <pages>
         <page template="loantreasury.remittance.field.LoanRemittance_ShortageOverPaymentPage"/>
+        <page name="printPage" template="loantreasury.collectionsheet.CollectionSheetPrintPage"/>
     </pages>    
 </workunit>
