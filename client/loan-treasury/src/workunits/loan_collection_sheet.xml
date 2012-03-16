@@ -32,6 +32,9 @@
             @Script('User')
             def user;
             
+            @Service('LoanApplicationService')
+            def loanSvc;
+            
             @Binding
             def binding;
             
@@ -53,6 +56,8 @@
                     filter.date = dtSvc.getLocaleTime(user.env.CLIENT.timezone);
                 else
                     filter.date = dt_formatter.format(dtSvc.serverDate);
+                    
+                employeeList=loanSvc.getEmployeeList().collect{[objid:it.objid, name:it.name]};
             }
             
             def cancel() {
