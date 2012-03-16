@@ -109,7 +109,6 @@
                 entity.routecode=o.code;
                 entity.collector=o.collector;
                 entity.routedescription=o.description;
-                //entity.route = entity.routecode + " - " + entity.routedescription;
                 entity.amount = difference;
                 binding.refresh("entity.route");
             };
@@ -119,7 +118,6 @@
                 entity.routecode=o.code;
                 entity.collector=o.collector;
                 entity.routedescription=o.description;
-                //entity.route = entity.routecode + " - " + entity.routedescription;
                 entity.amount = difference;
                 binding.refresh("entity.route");
             };
@@ -149,7 +147,7 @@
                         MsgBox.alert("Total Amount " +entity.total+ " and Total Cash Breakdown " +brkHandle.totalBreakdown+ 
                             " is not equal.\nwith an overpayment of " +difference+ ".");
                         return InvokerUtil.lookupOpener("collection:overPayment",[ 
-                            entity:entity, overHandler:overSelectHandler, mode: mode
+                            entity:entity, overHandler:overSelectHandler, mode:mode
                             ]);
                             
                         mode = "print";

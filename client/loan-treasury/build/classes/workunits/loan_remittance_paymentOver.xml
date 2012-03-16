@@ -2,9 +2,9 @@
     <invokers>        
         <invoker type="collection:overPayment" caption="Over Payment Form" target="popup"/>         
         
-        <invoker type="formActions" action="Ok"     caption="Ok and continue" mnemonic="o" tooltip="Ok and Continue"/>
-        <invoker type="formActions" action="_close" caption="Cancel" mnemonic="c" tooltip="Cancel" immediate="true"/>
-        <invoker type="formReportActions" caption="Close" icon="images/exit16.png" action="_close" mnemonic="c"/>
+        <invoker type="formActions"       action="Ok"     caption="Ok and continue" mnemonic="o" tooltip="Ok and Continue"/>
+        <invoker type="formActions"       action="_close" caption="Cancel" mnemonic="c" tooltip="Cancel" immediate="true"/>
+        <invoker type="formReportActions" action="_close" caption="Close"  mnemonic="c" tooltip="Click to close" icon="images/exit16.png"/>
     </invokers>
     <code> 
         <![CDATA[
@@ -17,7 +17,7 @@
         import java.util.regex.*;
         import java.sql.Timestamp;
         
-        class LoanRemittanceOverPaymentController{
+        class LoanRemittanceOveragePaymentController{
             @Service("LoanRemittanceService")
             def remitSvc;
             
@@ -32,26 +32,24 @@
             
             def mode;
             def entity;
-            //def entity = [ date: OsirisContext.env.LOCALE_TIME ];
-            
             def difference;
+            
             def overSelectHandler;
             def overHandler={o->
                 entity.routecode=o.code;
                 entity.collector=o.collector;
                 entity.routedescription=o.description;
-                //entity.route = entity.routecode + " - " + entity.routedescription;
                 entity.amount = difference;
                 binding.refresh("entity.route");
             };
             
             def Ok(){
                if(MsgBox.confirm("Are you sure you want to post this \nover payment remittance, proceed.?")){
-                    //MsgBox.alert("Printing currently not supported.");
                     //binding.fireNavigation( (mode='printPage') );
-                    MsgBox.alert("Now Printing Data of" + "\nRoute Code: " +entity.routecode+
-                            "\nDescription: " +entity.routedescription+ "\nCollector: " +entity.collector+
-                            "\nAmount of over of: " +entity.amount+ "\nReason(s): " +entity.reasons);
+                    MsgBox.alert("Now Printing Data of" + "\nCollector's Name: " +entity.collector+ 
+                            "\n Collection Date: " +entity.date+ "\nRoute Code: " +entity.routecode+
+                            "\nDescription: " +entity.routedescription+ "\nAmount of over of: " +entity.amount+ 
+                            "\nReason(s): " +entity.reasons);
                     report.viewReport();
                     return "printPage";
                     //return "_close";
@@ -62,9 +60,10 @@
             def report = [
                 getReportName:{ return 'loantreasury/printout/OveragePayment.jasper'; },
                 getReportData:{ //return collectionSheet.list;
-                        entity.orno = 1;
-                        entity.srno = 1;
                         def data = [entity:entity];
+                        
+                        entity.orno = 1;
+                        entity.lastorno = 1;
                         
                         data.collector = entity.collector;
                         data.date = entity.date;
@@ -85,21 +84,12 @@
                             data.amount = new BigDecimal(0.00);
                          
                         data.reasons = entity.reasons;
-                        data.srno = entity.srno;
                         data.orno = entity.orno;
                         
                         return data;
                 },
                 getParameters:{
                     return [
-                            //COLLECTION_NO: collectionSheet.collectionno,
-                            
-                            //DATE: collectionSheet.date,
-                            //COLLECTOR: collectionSheet.collector,
-                            //ROUTE_NO:  collectionSheet.routecode,
-                            //ROUTE_DES: collectionSheet.routedescription,
-                            //AMOUNT: collectionSheet.amount,
-                            
                             BRANCH_NAME: OsirisContext.env.CLIENT.name ,
                             PRINTDATE: new Date(), 
                             User: OsirisContext.env.USERINFO.firstname + ' ' + OsirisContext.env.USERINFO.lastname
