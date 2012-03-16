@@ -10,9 +10,12 @@
         <![CDATA[
         import com.rameses.rcp.annotations.*;
         import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
         import com.rameses.osiris2.client.*;
         import com.rameses.osiris2.reports.*;
         import com.rameses.common.*;
+        import java.util.regex.*;
+        import java.sql.Timestamp;
         
         class LoanRemittanceOverPaymentController{
             @Service("LoanRemittanceService")
@@ -28,6 +31,8 @@
             def binding;
             
             def mode;
+            def entity;
+            //def entity = [ date: OsirisContext.env.LOCALE_TIME ];
             
             def difference;
             def overSelectHandler;
@@ -39,8 +44,6 @@
                 entity.amount = difference;
                 binding.refresh("entity.route");
             };
-            
-            def entity = [ date: OsirisContext.env.LOCALE_TIME ];
             
             def Ok(){
                if(MsgBox.confirm("Are you sure you want to post this \nover payment remittance, proceed.?")){
@@ -59,27 +62,31 @@
             def report = [
                 getReportName:{ return 'loantreasury/printout/OveragePayment.jasper'; },
                 getReportData:{ //return collectionSheet.list;
+                        entity.orno = 1;
+                        entity.srno = 1;
                         def data = [entity:entity];
                         
-                        data.collector = data.collector;
-                        data.date = data.date;
+                        data.collector = entity.collector;
+                        data.date = entity.date;
                         
-                        if( data.routecode ==null )
+                        if( entity.routecode ==null )
                             data.routecode = '';
-                        else data.routecode = data.routecode;
-                        if( data.routedescription ==null )
+                        else data.routecode = entity.routecode;
+                        if( entity.routedescription ==null )
                             data.routedescription = '';
-                        else data.routedescription = data.routedescription;
-                        data.route = data.routecode + " - " + data.routedescription;
+                        else data.routedescription = entity.routedescription;
+                        data.route = entity.routecode + " - " + entity.routedescription;
                         
-                        if(data.amount!=null)    
-                            data.amount = new BigDecimal(data.amount);
-                        else
+                        if(entity.amount!=null){
+                            data.amount = new BigDecimal(entity.amount);
+                             /*****Conversion Number to words****/
+                             data.amount2 = NumberToWords.instance.convert(data.amount).toUpperCase() + " pesos and 00/100 only";
+                        }else
                             data.amount = new BigDecimal(0.00);
-                            
-                        data.reasons = data.reasons;
-                        data.srno = data.srno;
-                        data.orno = data.orno;
+                         
+                        data.reasons = entity.reasons;
+                        data.srno = entity.srno;
+                        data.orno = entity.orno;
                         
                         return data;
                 },

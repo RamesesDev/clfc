@@ -24,12 +24,12 @@
 	<import value="net.sf.jasperreports.engine.data.*" />
 
 
-	<field name="colllector" class="java.lang.String"/>
+	<field name="collector" class="java.lang.String"/>
 	<field name="date" class="java.util.Date"/>
 	<field name="route" class="java.lang.String"/>
 	<field name="amount" class="java.math.BigDecimal"/>
 	<field name="reasons" class="java.lang.String"/>
-	<field name="srno" class="java.lang.String"/>
+	<field name="srno" class="java.lang.Integer"/>
 
 		<background>
 			<band height="0"  isSplitAllowed="true" >
@@ -48,7 +48,7 @@
 					<textElement>
 						<font/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{colllector}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{collector}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -76,7 +76,7 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{route}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="128"
 						y="159"
@@ -113,7 +113,7 @@
 					<textElement>
 						<font/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{colllector}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{collector}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -126,7 +126,7 @@
 					<textElement>
 						<font/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{srno}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{srno}]]></textFieldExpression>
 				</textField>
 			</band>
 		</title>
