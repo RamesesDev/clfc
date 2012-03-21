@@ -127,6 +127,22 @@
                                     <b class="amount">${format(ledger.totalPrincipalPaid)}</b>
                                 </td>
                             </tr>
+                            <%if(!ledger.addedInterest || ledger.addedInterest==null){%>
+                                <tr>
+                                    <th>Additional Interest Payment:</th>
+                                    <td align="right">
+                                        <b class="amount">0.00</b>
+                                    </td>
+                                </tr>
+                            <%}%>
+                            <%if(ledger.addedInterest){%>
+                                <tr>
+                                    <th>Additional Interest Payment:</th>
+                                    <td align="right">
+                                        <b class="amount">${format(ledger.addedInterest)}</b>
+                                    </td>
+                                </tr>
+                            <%}%>
                             <tr>
                                 <th>Total Interest Payment:</th>
                                 <td align="right">

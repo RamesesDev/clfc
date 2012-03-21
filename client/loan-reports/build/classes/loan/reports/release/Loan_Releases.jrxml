@@ -37,7 +37,6 @@
 	<field name="charges" class="java.math.BigDecimal"/>
 	<field name="netrelease" class="java.math.BigDecimal"/>
 	<field name="totalAmount" class="java.math.BigDecimal"/>
-	<field name="refno" class="java.lang.Integer"/>
 	<field name="appType" class="java.lang.String"/>
 	<field name="loanAmount" class="java.math.BigDecimal"/>
 	<field name="routedescription" class="java.lang.String"/>
@@ -50,6 +49,12 @@
 		<variableExpression><![CDATA[$F{principal}]]></variableExpression>
 	</variable>
 	<variable name="TOTAL_ACCT_RELEASED" class="java.lang.Integer" resetType="Report" calculation="Count">
+		<variableExpression><![CDATA[$F{appno}]]></variableExpression>
+	</variable>
+	<variable name="SUB_TOTAL_PRINCIPAL" class="java.math.BigDecimal" resetType="Page" calculation="Sum">
+		<variableExpression><![CDATA[$F{principal}]]></variableExpression>
+	</variable>
+	<variable name="SUB_TOTAL_ACCT_RELEASED" class="java.lang.Integer" resetType="Page" calculation="Count">
 		<variableExpression><![CDATA[$F{appno}]]></variableExpression>
 	</variable>
 		<background>
@@ -95,13 +100,13 @@
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="50"  isSplitAllowed="true" >
+			<band height="37"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="41"
 						y="0"
 						width="382"
-						height="50"
+						height="37"
 						key="textField"/>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -118,14 +123,14 @@
 						x="0"
 						y="0"
 						width="41"
-						height="50"
+						height="37"
 						key="textField"/>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 </box>
-					<textElement>
+					<textElement textAlignment="Center">
 						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="20" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
@@ -135,7 +140,7 @@
 						x="423"
 						y="0"
 						width="54"
-						height="50"
+						height="37"
 						key="textField-7"/>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -152,14 +157,14 @@
 						x="476"
 						y="0"
 						width="103"
-						height="50"
+						height="37"
 						key="textField-8"/>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 </box>
-					<textElement textAlignment="Center">
+					<textElement textAlignment="Right">
 						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="20" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{principal}]]></textFieldExpression>
@@ -169,7 +174,7 @@
 						x="578"
 						y="0"
 						width="71"
-						height="50"
+						height="37"
 						key="textField-9"/>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -186,7 +191,7 @@
 						x="648"
 						y="0"
 						width="134"
-						height="50"
+						height="37"
 						key="textField-10"/>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -201,16 +206,82 @@
 			</band>
 		</detail>
 		<columnFooter>
-			<band height="0"  isSplitAllowed="true" >
+			<band height="50"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="49"
+						y="31"
+						width="113"
+						height="13"
+						key="staticText-16"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font fontName="Tahoma" size="8"/>
+					</textElement>
+				<text><![CDATA[No. of Accounts on this page :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="267"
+						y="8"
+						width="155"
+						height="36"
+						key="staticText-17"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="18" isBold="true"/>
+					</textElement>
+				<text><![CDATA[     Sub-Total :]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="161"
+						y="31"
+						width="50"
+						height="12"
+						key="textField-19"/>
+					<box>					<bottomPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{SUB_TOTAL_ACCT_RELEASED}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00 ;(#,##0.00)" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="476"
+						y="8"
+						width="108"
+						height="36"
+						key="textField-20"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="20" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{SUB_TOTAL_PRINCIPAL}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="422"
+						y="8"
+						width="54"
+						height="36"
+						key="staticText-18"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" pdfFontName="Helvetica" size="18" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Php]]></text>
+				</staticText>
 			</band>
 		</columnFooter>
 		<pageFooter>
-			<band height="19"  isSplitAllowed="true" >
+			<band height="13"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						mode="Transparent"
 						x="0"
-						y="8"
+						y="2"
 						width="412"
 						height="10"
 						forecolor="#000000"
@@ -231,7 +302,7 @@
 					<reportElement
 						mode="Transparent"
 						x="666"
-						y="8"
+						y="2"
 						width="81"
 						height="10"
 						forecolor="#000000"
@@ -251,7 +322,7 @@
 					<reportElement
 						mode="Transparent"
 						x="747"
-						y="8"
+						y="2"
 						width="35"
 						height="10"
 						forecolor="#000000"
@@ -270,7 +341,7 @@
 			</band>
 		</pageFooter>
 		<lastPageFooter>
-			<band height="81"  isSplitAllowed="true" >
+			<band height="62"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
 						x="321"
@@ -282,13 +353,13 @@
 					<textElement textAlignment="Center">
 						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="18" isBold="true"/>
 					</textElement>
-				<text><![CDATA[TOTAL]]></text>
+				<text><![CDATA[TOTAL :]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" pattern="#,##0.00 ;(#,##0.00)" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="476"
 						y="0"
-						width="102"
+						width="108"
 						height="37"
 						key="textField-11"/>
 					<box></box>
@@ -313,7 +384,7 @@
 				<staticText>
 					<reportElement
 						x="62"
-						y="23"
+						y="17"
 						width="105"
 						height="13"
 						key="staticText-15"/>
@@ -321,36 +392,27 @@
 					<textElement>
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
-				<text><![CDATA[Total of Accounts Released:]]></text>
+				<text><![CDATA[Total of Accounts Released : ]]></text>
 				</staticText>
 				<line direction="TopDown">
 					<reportElement
 						x="162"
-						y="35"
+						y="30"
 						width="50"
 						height="1"
 						forecolor="#999999"
 						key="line-1"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
-				<line direction="TopDown">
-					<reportElement
-						x="162"
-						y="35"
-						width="50"
-						height="1"
-						forecolor="#999999"
-						key="line-2"/>
-					<graphicElement stretchType="NoStretch"/>
-				</line>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="162"
-						y="24"
+						y="18"
 						width="50"
 						height="12"
 						key="textField-12"/>
-					<box></box>
+					<box>					<bottomPen lineWidth="0.5"/>
+</box>
 					<textElement textAlignment="Right">
 						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
 					</textElement>
@@ -360,7 +422,7 @@
 					<reportElement
 						mode="Transparent"
 						x="0"
-						y="69"
+						y="51"
 						width="412"
 						height="10"
 						forecolor="#000000"
@@ -381,7 +443,7 @@
 					<reportElement
 						mode="Transparent"
 						x="666"
-						y="69"
+						y="51"
 						width="81"
 						height="10"
 						forecolor="#000000"
@@ -401,7 +463,7 @@
 					<reportElement
 						mode="Transparent"
 						x="747"
-						y="69"
+						y="51"
 						width="35"
 						height="10"
 						forecolor="#000000"

@@ -42,7 +42,7 @@
                 return [
                     BRANCH_NAME: env.CLIENT.name,
                     USER: "$env.USERINFO.firstname $env.USERINFO.lastname".toString(),
-                    PRINTDATE: new Date(),
+                    PRINTDATE: Timestamp.valueOf( filter.date + ' 00:00:00'),
                     REPORT_TITLE: 'Summary of Loan Applications' + title,
                 ];
             }

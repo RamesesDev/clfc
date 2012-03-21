@@ -2,7 +2,7 @@
 <!-- Created with iReport - A designer for JasperReports -->
 <!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
 <jasperReport
-		 name="SummaryOfCollections"
+		 name="SummaryOfLoanCollections"
 		 columnCount="1"
 		 printOrder="Vertical"
 		 orientation="Portrait"
@@ -132,7 +132,7 @@
 						x="0"
 						y="0"
 						width="44"
-						height="13"
+						height="12"
 						key="staticText-6"/>
 					<box>					<pen lineWidth="0.75" lineStyle="Dashed"/>
 					<topPen lineWidth="0.75" lineStyle="Dashed"/>
@@ -279,32 +279,6 @@
 		</detail>
 		<columnFooter>
 			<band height="59"  isSplitAllowed="true" >
-				<staticText>
-					<reportElement
-						x="102"
-						y="8"
-						width="66"
-						height="13"
-						key="staticText-13"/>
-					<box></box>
-					<textElement>
-						<font fontName="Tahoma" size="8"/>
-					</textElement>
-				<text><![CDATA[No. of Accounts:]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="63"
-						y="22"
-						width="105"
-						height="13"
-						key="staticText-14"/>
-					<box></box>
-					<textElement>
-						<font fontName="Tahoma" size="8"/>
-					</textElement>
-				<text><![CDATA[Total of Accounts Released:]]></text>
-				</staticText>
 				<staticText>
 					<reportElement
 						x="259"
@@ -532,6 +506,32 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER} + ""]]></textFieldExpression>
 				</textField>
+				<staticText>
+					<reportElement
+						x="34"
+						y="21"
+						width="128"
+						height="13"
+						key="staticText-18"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font fontName="Tahoma" size="8"/>
+					</textElement>
+				<text><![CDATA[Total of Accounts Released:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="40"
+						y="6"
+						width="122"
+						height="13"
+						key="staticText-19"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font fontName="Tahoma" size="8"/>
+					</textElement>
+				<text><![CDATA[No. of Accounts on this page:]]></text>
+				</staticText>
 			</band>
 		</columnFooter>
 		<pageFooter>

@@ -411,19 +411,6 @@
 			<band height="30"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
-						x="102"
-						y="12"
-						width="66"
-						height="13"
-						key="staticText-13"/>
-					<box></box>
-					<textElement>
-						<font fontName="Tahoma" size="8"/>
-					</textElement>
-				<text><![CDATA[No. of Accounts:]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
 						x="259"
 						y="12"
 						width="66"
@@ -540,6 +527,19 @@
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{SUB_TOTAL_PRINCIPAL}]]></textFieldExpression>
 				</textField>
+				<staticText>
+					<reportElement
+						x="42"
+						y="12"
+						width="122"
+						height="13"
+						key="staticText-18"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font fontName="Tahoma" size="8"/>
+					</textElement>
+				<text><![CDATA[No. of Accounts on this page:]]></text>
+				</staticText>
 			</band>
 		</columnFooter>
 		<pageFooter>
@@ -611,16 +611,16 @@
 			<band height="34"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
-						x="63"
+						x="62"
 						y="3"
 						width="105"
 						height="13"
 						key="staticText-14"/>
 					<box></box>
-					<textElement>
+					<textElement textAlignment="Right">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
-				<text><![CDATA[Total of Accounts Released:]]></text>
+				<text><![CDATA[Total No. of Accounts: Released:]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -794,7 +794,8 @@
 						width="50"
 						height="12"
 						key="textField"/>
-					<box></box>
+					<box>					<bottomPen lineWidth="0.5"/>
+</box>
 					<textElement textAlignment="Right">
 						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
 					</textElement>

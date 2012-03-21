@@ -22,7 +22,7 @@
             def support;
             
             @FormTitle
-            def formTitle = 'Summary of Past Due Applications';
+            def formTitle = 'Summary of Past Due Loans';
             
             @Service('LoanApplicationReportService')
             def svc;
@@ -42,7 +42,7 @@
                     BRANCH_NAME: env.CLIENT.name,
                     USER: "$env.USERINFO.firstname $env.USERINFO.lastname".toString(),
                     PRINTDATE: new Date(),
-                    REPORT_TITLE: 'Summary of Loan Applications' + title,
+                    REPORT_TITLE: 'Summary of Past Due Loans' + title,
                 ];
             }
 

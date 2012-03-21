@@ -77,13 +77,13 @@
 			</band>
 		</background>
 		<title>
-			<band height="70"  isSplitAllowed="true" >
+			<band height="71"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
 						x="144"
 						y="41"
 						width="245"
-						height="17"
+						height="18"
 						key="staticText-2"/>
 					<box></box>
 					<textElement textAlignment="Center">
@@ -126,6 +126,19 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$P{BRANCH_NAME}+ " " + "Business Office"]]></textFieldExpression>
 				</textField>
+				<textField isStretchWithOverflow="false" pattern="yyyy-MM-dd" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="53"
+						width="535"
+						height="11"
+						key="textField-7"/>
+					<box></box>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$P{PRINTDATE}]]></textFieldExpression>
+				</textField>
 			</band>
 		</title>
 		<pageHeader>
@@ -133,7 +146,7 @@
 				<staticText>
 					<reportElement
 						x="440"
-						y="-157"
+						y="-158"
 						width="95"
 						height="13"
 						key="staticText-4"/>
@@ -146,7 +159,7 @@
 				<staticText>
 					<reportElement
 						x="514"
-						y="-126"
+						y="-127"
 						width="0"
 						height="0"
 						key="staticText-5"/>
@@ -159,7 +172,7 @@
 				<staticText>
 					<reportElement
 						x="462"
-						y="-144"
+						y="-145"
 						width="73"
 						height="13"
 						key="staticText-6"/>
@@ -172,7 +185,7 @@
 				<staticText>
 					<reportElement
 						x="469"
-						y="-131"
+						y="-132"
 						width="133"
 						height="14"
 						key="staticText-7"/>
@@ -185,7 +198,7 @@
 				<staticText>
 					<reportElement
 						x="469"
-						y="-131"
+						y="-132"
 						width="133"
 						height="14"
 						key="staticText-8"/>
@@ -198,7 +211,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="655"
-						y="-117"
+						y="-118"
 						width="63"
 						height="0"
 						key="line-1"/>
@@ -207,7 +220,7 @@
 				<staticText>
 					<reportElement
 						x="807"
-						y="-144"
+						y="-145"
 						width="156"
 						height="12"
 						key="staticText-12"/>
@@ -224,7 +237,7 @@
 				<staticText>
 					<reportElement
 						x="807"
-						y="-132"
+						y="-133"
 						width="78"
 						height="15"
 						key="staticText-13"/>
@@ -241,7 +254,7 @@
 				<staticText>
 					<reportElement
 						x="451"
-						y="-144"
+						y="-145"
 						width="11"
 						height="12"
 						key="staticText-20"/>
@@ -254,7 +267,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="655"
-						y="-130"
+						y="-131"
 						width="63"
 						height="12"
 						key="textField"/>
@@ -267,7 +280,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="655"
-						y="-117"
+						y="-118"
 						width="63"
 						height="0"
 						key="line-46"/>
@@ -276,7 +289,7 @@
 				<textField isStretchWithOverflow="false" pattern="##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="885"
-						y="-132"
+						y="-133"
 						width="77"
 						height="15"
 						key="textField"/>

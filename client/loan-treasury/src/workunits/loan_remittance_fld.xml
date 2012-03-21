@@ -200,14 +200,6 @@
                 },
                 getParameters:{
                     return [
-                            //COLLECTION_NO: collectionSheet.collectionno,
-                            
-                            //DATE: collectionSheet.date,
-                            //COLLECTOR: collectionSheet.collector,
-                            //ROUTE_NO:  collectionSheet.routecode,
-                            //ROUTE_DES: collectionSheet.routedescription,
-                            //AMOUNT: collectionSheet.amount,
-                            
                             BRANCH_NAME: OsirisContext.env.CLIENT.name ,
                             PRINTDATE: new Date(), 
                             User: OsirisContext.env.USERINFO.firstname + ' ' + OsirisContext.env.USERINFO.lastname

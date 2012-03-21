@@ -65,21 +65,25 @@
 	<field name="ral3" class="java.lang.Integer"/>
 	<field name="aNew" class="java.math.BigDecimal"/>
 	<field name="aRenewal" class="java.math.BigDecimal"/>
+	<field name="appno" class="java.lang.String"/>
 
 	<variable name="total" class="java.math.BigDecimal" resetType="Report" calculation="Nothing">
+	</variable>
+	<variable name="TOTAL_ACCT_RELEASED" class="java.lang.Integer" resetType="Report" calculation="Count">
+		<variableExpression><![CDATA[$F{appno}]]></variableExpression>
 	</variable>
 		<background>
 			<band height="0"  isSplitAllowed="true" >
 			</band>
 		</background>
 		<title>
-			<band height="70"  isSplitAllowed="true" >
+			<band height="71"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
 						x="144"
 						y="41"
 						width="245"
-						height="17"
+						height="18"
 						key="staticText-2"/>
 					<box></box>
 					<textElement textAlignment="Center">
@@ -122,6 +126,19 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$P{BRANCH_NAME}+ " " + "Business Office"]]></textFieldExpression>
 				</textField>
+				<textField isStretchWithOverflow="false" pattern="yyyy-MM-dd" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="53"
+						width="535"
+						height="11"
+						key="textField-7"/>
+					<box></box>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$P{PRINTDATE}]]></textFieldExpression>
+				</textField>
 			</band>
 		</title>
 		<pageHeader>
@@ -129,7 +146,7 @@
 				<staticText>
 					<reportElement
 						x="440"
-						y="-157"
+						y="-158"
 						width="95"
 						height="13"
 						key="staticText-4"/>
@@ -142,7 +159,7 @@
 				<staticText>
 					<reportElement
 						x="514"
-						y="-126"
+						y="-127"
 						width="0"
 						height="0"
 						key="staticText-5"/>
@@ -155,7 +172,7 @@
 				<staticText>
 					<reportElement
 						x="462"
-						y="-144"
+						y="-145"
 						width="73"
 						height="13"
 						key="staticText-6"/>
@@ -168,7 +185,7 @@
 				<staticText>
 					<reportElement
 						x="469"
-						y="-131"
+						y="-132"
 						width="133"
 						height="14"
 						key="staticText-7"/>
@@ -181,7 +198,7 @@
 				<staticText>
 					<reportElement
 						x="469"
-						y="-131"
+						y="-132"
 						width="133"
 						height="14"
 						key="staticText-8"/>
@@ -194,7 +211,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="655"
-						y="-117"
+						y="-118"
 						width="63"
 						height="0"
 						key="line-1"/>
@@ -203,7 +220,7 @@
 				<staticText>
 					<reportElement
 						x="807"
-						y="-144"
+						y="-145"
 						width="156"
 						height="12"
 						key="staticText-12"/>
@@ -220,7 +237,7 @@
 				<staticText>
 					<reportElement
 						x="807"
-						y="-132"
+						y="-133"
 						width="78"
 						height="15"
 						key="staticText-13"/>
@@ -237,7 +254,7 @@
 				<staticText>
 					<reportElement
 						x="451"
-						y="-144"
+						y="-145"
 						width="11"
 						height="12"
 						key="staticText-20"/>
@@ -250,7 +267,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="655"
-						y="-130"
+						y="-131"
 						width="63"
 						height="12"
 						key="textField"/>
@@ -263,7 +280,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="655"
-						y="-117"
+						y="-118"
 						width="63"
 						height="0"
 						key="line-46"/>
@@ -272,7 +289,7 @@
 				<textField isStretchWithOverflow="false" pattern="##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="885"
-						y="-132"
+						y="-133"
 						width="77"
 						height="15"
 						key="textField"/>
@@ -683,38 +700,30 @@
 				</line>
 				<staticText>
 					<reportElement
-						x="40"
-						y="495"
-						width="191"
+						x="50"
+						y="493"
+						width="152"
 						height="13"
 						key="staticText-69"/>
-					<box></box>
-					<textElement>
+					<box>					<bottomPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center">
 						<font pdfFontName="Helvetica" isBold="false"/>
 					</textElement>
 				<text><![CDATA[REYNAVIE D. FONZAGA]]></text>
 				</staticText>
-				<line direction="TopDown">
-					<reportElement
-						x="0"
-						y="507"
-						width="191"
-						height="1"
-						key="line-43"/>
-					<graphicElement stretchType="NoStretch"/>
-				</line>
 				<staticText>
 					<reportElement
-						x="1"
-						y="509"
-						width="253"
+						x="55"
+						y="506"
+						width="141"
 						height="13"
 						key="staticText-70"/>
 					<box></box>
-					<textElement>
+					<textElement textAlignment="Center">
 						<font pdfFontName="Helvetica" isBold="false"/>
 					</textElement>
-				<text><![CDATA[            Credit Account Officer]]></text>
+				<text><![CDATA[Credit Account Officer]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -732,37 +741,29 @@
 				<staticText>
 					<reportElement
 						x="344"
-						y="489"
-						width="191"
+						y="491"
+						width="134"
 						height="13"
 						key="staticText-72"/>
-					<box></box>
-					<textElement>
+					<box>					<bottomPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center">
 						<font pdfFontName="Helvetica" isBold="false"/>
 					</textElement>
-				<text><![CDATA[JUVELYN A. FORTUITO]]></text>
+				<text><![CDATA[REYNA A. MITRA]]></text>
 				</staticText>
-				<line direction="TopDown">
-					<reportElement
-						x="305"
-						y="503"
-						width="191"
-						height="1"
-						key="line-44"/>
-					<graphicElement stretchType="NoStretch"/>
-				</line>
 				<staticText>
 					<reportElement
-						x="279"
+						x="327"
 						y="504"
-						width="255"
+						width="167"
 						height="13"
 						key="staticText-73"/>
 					<box></box>
-					<textElement>
+					<textElement textAlignment="Center">
 						<font pdfFontName="Helvetica" isBold="false"/>
 					</textElement>
-				<text><![CDATA[                    Accounting Assistant]]></text>
+				<text><![CDATA[Accounting Assistant]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -772,10 +773,10 @@
 						height="13"
 						key="staticText-88"/>
 					<box></box>
-					<textElement>
+					<textElement textAlignment="Center">
 						<font pdfFontName="Helvetica" isBold="false"/>
 					</textElement>
-				<text><![CDATA[               APPROVED BY:]]></text>
+				<text><![CDATA[APPROVED BY:]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -785,10 +786,10 @@
 						height="13"
 						key="staticText-89"/>
 					<box></box>
-					<textElement>
+					<textElement textAlignment="Center">
 						<font pdfFontName="Helvetica" isBold="false"/>
 					</textElement>
-				<text><![CDATA[                   Business Center Head]]></text>
+				<text><![CDATA[Business Center Head]]></text>
 				</staticText>
 				<line direction="TopDown">
 					<reportElement
@@ -807,10 +808,10 @@
 						height="13"
 						key="staticText-90"/>
 					<box></box>
-					<textElement>
+					<textElement textAlignment="Center">
 						<font pdfFontName="Helvetica" isBold="false"/>
 					</textElement>
-				<text><![CDATA[         CRISTIELYN M. ABERGAS]]></text>
+				<text><![CDATA[CRISTIELYN M. ABERGAS]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -1863,6 +1864,19 @@
 					</textElement>
 				<text><![CDATA[]]></text>
 				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="219"
+						y="30"
+						width="60"
+						height="12"
+						key="textField-6"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{TOTAL_ACCT_RELEASED}]]></textFieldExpression>
+				</textField>
 			</band>
 		</columnHeader>
 		<detail>

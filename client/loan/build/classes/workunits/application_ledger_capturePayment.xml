@@ -20,7 +20,7 @@
             def entity = [:];
             def handler;
             
-            def postPayment() {
+            def postPayment(){
                 if( !MsgBox.confirm("Are you sure you want to post this payment?") ) return;
                 entity.appid = appid;
                 entity.mode = 'CAPTURE';

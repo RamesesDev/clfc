@@ -126,13 +126,13 @@
 			</band>
 		</pageHeader>
 		<columnHeader>
-			<band height="14"  isSplitAllowed="true" >
+			<band height="15"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
 						x="0"
 						y="0"
 						width="44"
-						height="13"
+						height="12"
 						key="staticText-6"/>
 					<box>					<pen lineWidth="0.75" lineStyle="Dashed"/>
 					<topPen lineWidth="0.75" lineStyle="Dashed"/>

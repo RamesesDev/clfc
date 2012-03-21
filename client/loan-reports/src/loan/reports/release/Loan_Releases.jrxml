@@ -100,13 +100,13 @@
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="32"  isSplitAllowed="true" >
+			<band height="37"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="41"
 						y="0"
 						width="382"
-						height="32"
+						height="37"
 						key="textField"/>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -123,7 +123,7 @@
 						x="0"
 						y="0"
 						width="41"
-						height="32"
+						height="37"
 						key="textField"/>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -140,7 +140,7 @@
 						x="423"
 						y="0"
 						width="54"
-						height="32"
+						height="37"
 						key="textField-7"/>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -157,7 +157,7 @@
 						x="476"
 						y="0"
 						width="103"
-						height="32"
+						height="37"
 						key="textField-8"/>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -174,7 +174,7 @@
 						x="578"
 						y="0"
 						width="71"
-						height="32"
+						height="37"
 						key="textField-9"/>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -191,7 +191,7 @@
 						x="648"
 						y="0"
 						width="134"
-						height="32"
+						height="37"
 						key="textField-10"/>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -209,16 +209,16 @@
 			<band height="50"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
-						x="100"
+						x="49"
 						y="31"
-						width="66"
+						width="113"
 						height="13"
 						key="staticText-16"/>
 					<box></box>
-					<textElement>
+					<textElement textAlignment="Right">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
-				<text><![CDATA[No. of Accounts:]]></text>
+				<text><![CDATA[No. of Accounts on this page :]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -231,7 +231,7 @@
 					<textElement textAlignment="Center">
 						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="18" isBold="true"/>
 					</textElement>
-				<text><![CDATA[     Sub-Total]]></text>
+				<text><![CDATA[     Sub-Total :]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -353,7 +353,7 @@
 					<textElement textAlignment="Center">
 						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="18" isBold="true"/>
 					</textElement>
-				<text><![CDATA[TOTAL]]></text>
+				<text><![CDATA[TOTAL :]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" pattern="#,##0.00 ;(#,##0.00)" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -392,7 +392,7 @@
 					<textElement>
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
-				<text><![CDATA[Total of Accounts Released:]]></text>
+				<text><![CDATA[Total of Accounts Released : ]]></text>
 				</staticText>
 				<line direction="TopDown">
 					<reportElement
@@ -404,16 +404,6 @@
 						key="line-1"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
-				<line direction="TopDown">
-					<reportElement
-						x="162"
-						y="31"
-						width="50"
-						height="1"
-						forecolor="#999999"
-						key="line-2"/>
-					<graphicElement stretchType="NoStretch"/>
-				</line>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="162"
@@ -421,7 +411,8 @@
 						width="50"
 						height="12"
 						key="textField-12"/>
-					<box></box>
+					<box>					<bottomPen lineWidth="0.5"/>
+</box>
 					<textElement textAlignment="Right">
 						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
 					</textElement>

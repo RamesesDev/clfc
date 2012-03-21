@@ -132,7 +132,7 @@
 						x="0"
 						y="0"
 						width="44"
-						height="13"
+						height="12"
 						key="staticText-6"/>
 					<box>					<pen lineWidth="0.75" lineStyle="Dashed"/>
 					<topPen lineWidth="0.75" lineStyle="Dashed"/>
@@ -263,13 +263,13 @@
 			<band height="59"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
-						x="102"
+						x="80"
 						y="8"
-						width="66"
+						width="89"
 						height="13"
 						key="staticText-13"/>
 					<box></box>
-					<textElement>
+					<textElement textAlignment="Right">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
 				<text><![CDATA[No. of Accounts:]]></text>

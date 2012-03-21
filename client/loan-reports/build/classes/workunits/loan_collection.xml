@@ -23,9 +23,9 @@
             def support;
             
             @FormTitle
-            def formTitle = 'Summary of Collection';
+            def formTitle = 'Summary of Loan Collection';
             
-            @Service('LoanApplicationReportService')
+            @Service('DailyCollectionReportService')
             def svc;
             
             def filter = [date: OsirisContext.env.LOCALE_TIME];
@@ -41,9 +41,9 @@
                 
                 return [
                     BRANCH_NAME: env.CLIENT.name,
-                    USER: "$env.USERINFO.firstname $env.USERINFO.lastname".toString(),
+                    USER: OsirisContext.env.USERINFO.firstname+ ' '+ OsirisContext.env.USERINFO.lastname,
                     PRINTDATE: new Date(),
-                    REPORT_TITLE: 'Summary of Loan Applications' + title,
+                    REPORT_TITLE: 'Summary of Loan Collections' + title,
                 ];
             }
 
@@ -52,7 +52,6 @@
                 if( p.state ) p.state = p.state.code;
                 return svc.buildReport( p );
             }
-
         }
         ]]>
     </code>

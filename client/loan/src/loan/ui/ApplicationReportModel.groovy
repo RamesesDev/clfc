@@ -69,7 +69,7 @@ public class ApplicationReportModel extends ReportModel {
     }
     
     public Object getReportData(){ 
-        def data=[:]
+        def data=[:];
         //def accts;
         if ( entity.loancount == 1 )
             data.apptype = "NEW APPLICATION";
@@ -567,7 +567,7 @@ public class ApplicationReportModel extends ReportModel {
                 new SubReport("COLLATERAL_VEHICLES", "loan/printout/subReportVehicles.jasper"),
                 new SubReport("COLLATERAL_PROPERTY", "loan/printout/subReportRealProperty.jasper"),
                 new SubReport("COLLATERAL_APPLIANCE", "loan/printout/subReportAppliance.jasper"),
-                new SubReport("COLLATERAL_OTHERS", "loan/printout/subReportOtherCollateral.jasper"),        
+                new SubReport("COLLATERAL_OTHERS", "loan/printout/subReportOtherCollateral.jasper"),
                 
                 /*Principal Borrower Information*/
                 new SubReport("SPOUSE", "loan/printout/subReportPrincipalSpouseInfo.jasper"),

@@ -9,7 +9,8 @@
                  permission="application.viewLedger"
                  target="window" action="init" icon="images/open16.png"/>
         
-        <invoker type="formActions" caption="Close" action="_close" icon="images/cancel16.png" visibleWhen="#{view!='details'}"/>
+        <invoker type="formActions" caption="Close" action="_close" icon="images/cancel16.png" 
+                 visibleWhen="#{view!='details'}"/>
         
         <invoker type="formActions" caption="Back" icon="images/back16.png" mnemonic="b" 
                  action="back" visibleWhen="#{view!='main'}"/>
@@ -44,8 +45,6 @@
                  
         <invoker type="formActions" caption="Refresh" icon="images/refresh16.png" 
                  mnemonic="r" action="loadLedgerInfo"/>
-        <!--<invoker type="formActions" caption="Change Mode" mnemonic="m"
-                 action="changeMode" tooltip="Change Mode" visibleWhen="#{view!='main'}"/>-->
     </invokers>
     <code>
         <![CDATA[
@@ -69,7 +68,6 @@
             @Binding
             def binding;
         
-            def entity;
             def selectHandler;
             def info;
             def ledger;
@@ -160,7 +158,8 @@
             }
             
             def addInterest(){
-                if(MsgBox.confirm("Adding an interest on this account may differ from its \noriginal Actual/Loan Balance. proceed?")){
+                if(MsgBox.confirm("Adding an interest on this account may differ from its" + 
+                                   "\noriginal Actual/Loan Balance. proceed?")){
                     return InvokerUtil.lookupOpener('application:addInterest',[
                         appid: entity.objid,
                         handler:{
@@ -179,6 +178,7 @@
                 return InvokerUtil.lookupOpener("application:removePaymentDate",[:]);
             }
             
+            /*                       */
             def getCustName( cust ){
                 return cust.lastname + ', ' + cust.firstname + (cust.middlename? " ( $cust.middlename )" : "")
             }
@@ -191,9 +191,27 @@
 
                 return (ch? ch : 0.00) + (och? och : 0.00);
             }
-                        
+            /*                       */
+            
             void print(){
                 //MsgBox.alert('Print ledger not yet supported.');
+                
+                MsgBox.alert("Now Printing..." + "\nApplication No. " +entity.appno+
+                        "\nFirst Name: " +entity.borrower.firstname+ "\nLast Name: " +entity.borrower.lastname+
+                        //"\nAddress: " +data.+
+                        "\nRoute Code: " +entity.routecode+ "\nRoute Description: " +entity.routedescription+
+                        "\nLedger Details" + "\nActual Loan Balance: " +ledger.loanBalance+
+                        "\nPrincipal Balance: " +ledger.principalBalance+ "\nTotal Principal Payment: " +ledger.totalPrincipalPaid+
+                        "\nAdded Interest " +addedInterest+ "\nTotal Interest Payment: " +ledger.totalInterestPaid+
+                        "\nTotal Penalty Payment: " +ledger.totalPenaltyPaid+ "\nTotal Payment: " +ledger.totalPaid+
+                        "\nLast Payment Date: " +ledger.lastDatePaid+ "\nTotal Absences: " +ledger.totalAbsent+
+                        "\nMode of Payment: " +ledger.totalAbsent+ 
+                        "\nLoan Information...Check No.: " +ledger.checkInfo.bankname+ " - " +ledger.checkno+
+                        "\nAmount Loaned: " +ledger.loanAmount+ "\nDate Granted: " +ledger.dtcreated+
+                        "\nMaturity Date: " +ledger.maturityDate+ "\nInterest Rate: " +ledger.interestrate+
+                        "\nTerm: " +ledger.term+ "\nTotal Charges: " +totalCharges+ "\nDaily Payment: " +ledger.dailyPayment
+                );
+                        
                 setPrintOut();
             }
             
@@ -201,7 +219,8 @@
             def itemReport = [  "Loan Ledger" ]            
             def report;            
             def printOut;
-            def mode="printPage";
+            def mode = "printPage";
+            def entity;
             
             void setPrintOut( po ){
                 this.printOut = po;
@@ -217,17 +236,29 @@
                         if( "Loan Ledger".equals(printOut) )
                             return 'loan/printout/Ledger.jasper';
                     },
-                    getReportData:{
+                    getReportData:{ //return collectionSheet.list;
                         //it.objid = entity.objid;
                         //return svc.getDetails(it)
                         //def cv = checkSvc.openByRefid( [refid: it.objid] );
-                        def appid = entity.objid;
-                        def borrower = entity.objid;
-                        def accts = [];
-                        def data = [objid:appid, ledger:ledger, accts:accts, borrower:borrower];
+                        
+                        //def appid = entity.objid;
+                        //def entity; //=[:];
+                        //def borrower;
+                        //def borrower = entity.objid;
+                        //def accts; // = [entity:entity];
+                        //def data = [:];
+                        //def data = [ ledger:ledger ];
+                        //def data = [ entity:entity, objid:appid, ledger:ledger, accts:accts ];
+                        //data.borrowername = data.borrower.lastname + ", " +data.borrower.firstname;
+                        //data.borrowername = getCustName( data.borrower );
+                        //data.borrowername = data.lastname+ ", " +data.firstname;
+                        
+                        def data = [ entity:entity, ledger:ledger ];
                         
                         data.appno = data.appno;
                         data.borrowername = data.borrowername;
+                        data.jointBorrowerName = data.fullborrowername;
+                        
                         if( data.routecode ==null )
                             data.routecode = '';
                         else data.routecode = data.routecode;
@@ -257,45 +288,19 @@
                         if (data.ledger.principalBalance !=null) data.ledger.principalBalance =  data.ledger.principalBalance as BigDecimal;
                         if (data.ledger.principalBalance !=null) data.ledger.principalBalance =  data.ledger.principalBalance as BigDecimal;
                         
-                        /**** Accounts ****/
-                        data.notarial = accts.find{ it.title == 'NOTARIAL FEE' }?.amount;
-                        data.docstamp = accts.find{ it.title == 'DOCUMENTARY STAMP FEE' }?.amount;
-                        data.chatrealreg = accts.find{ it.title == 'CHAT/REAL REGISTRATION' }?.amount;
-                        data.affidavit = accts.find{ it.title == 'AFFIDAVIT' }?.amount;
-                        data.others = accts.find{ it.title == 'OTHERS' }?.amount;
-                        data.loadingSun = accts.find{ it.title == 'LOADING SUN' }?.amount;
-                        data.loadingGlobe = accts.find{ it.title == 'LOADING GLOBE' }?.amount;
-                        
-                        //data.totalCharges = getTotalCharges;
-                        
-                        //data.totalCharges = data.notarial + data.docstamp + data.chatrealreg + data.affidavit + data.others + data.loadingSun + data.loadingGlobe;
-                        //data.netrelease = data.amountapproved + data.totalCharges;
-                        
-			/*data.totalCharges =  accts.find({data.notarial? data.notarial: '0.00'} + {data.docstamp? data.docstamp: '0.00'} 
-                                             + {data.chatrealreg? data.chatrealreg: '0.00'}
-                                             + {data.affidavit? data.affidavit: '0.00'} + {data.others? data.others: '0.00'} 
-                                             + {data.loadingSun? data.loadingSun: '0.00'} 
-                                             + {data.loadingGlobe? data.loadingGlobe: '0.00'});
-                        */
-                        //def getTotalCharges( accts ){
-                            //def total = [];
-                            
-                            //if( !accts.total ) return '';
-
-                            //if( accts.notarial )  total << accts.notarial;
-                            //if( accts.docstamp )  total << accts.docstamp;
-                            //if( accts.chatrealreg )  total << accts.chatrealreg;
-                            //if( accts.affidavit )  total << accts.affidavit;
-                            //if( accts.others )  total << accts.others;
-                            //if( accts.loadingSun )  total << accts.loadingSun;
-                            //if( accts.loadingGlobe )  total << accts.loadingGlobe;
-
-                            //return total.join(', ');
-                        //}
-                        //data.totalCharges = getTotalCharges(accts);
-                        
                         return data;
                     },
+                    //getSubReports:{
+                        //if( "Loan Ledger".equals(printOut) ){
+                            //return[
+                               // new SubReport("BUSINESS", "loan/printout/subReportPrincipalBusiness.jasper"),
+                                //new SubReport("COLLATERAL_VEHICLES", "loan/printout/subReportVehicles.jasper"),
+                                //new SubReport("COLLATERAL_PROPERTY", "loan/printout/subReportRealProperty.jasper"),
+                                //new SubReport("COLLATERAL_APPLIANCE", "loan/printout/subReportAppliance.jasper"),
+                                //new SubReport("COLLATERAL_OTHERS", "loan/printout/subReportOtherCollateral.jasper")
+                            //];
+                        //}
+                    //}
                     getParameters:{
                         return[
                             BRANCH_NAME: OsirisContext.env.CLIENT.name,

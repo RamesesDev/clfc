@@ -34,6 +34,7 @@ public class LedgerPage2 extends javax.swing.JPanel {
         xLabel8 = new com.rameses.rcp.control.XLabel();
         xLabel9 = new com.rameses.rcp.control.XLabel();
         xLabel10 = new com.rameses.rcp.control.XLabel();
+        xLabel15 = new com.rameses.rcp.control.XLabel();
         xLabel11 = new com.rameses.rcp.control.XLabel();
         xLabel12 = new com.rameses.rcp.control.XLabel();
         xLabel13 = new com.rameses.rcp.control.XLabel();
@@ -161,6 +162,15 @@ public class LedgerPage2 extends javax.swing.JPanel {
         xLabel10.setPreferredSize(new java.awt.Dimension(0, 22));
         formPanel2.add(xLabel10);
 
+        xLabel15.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        xLabel15.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        xLabel15.setCaption("Added Interest");
+        xLabel15.setFont(new java.awt.Font("Arial", 1, 12));
+        xLabel15.setFormat(new java.text.DecimalFormat("#,##0.00"));
+        xLabel15.setName("ledger.addedInterest");
+        xLabel15.setPreferredSize(new java.awt.Dimension(0, 22));
+        formPanel2.add(xLabel15);
+
         xLabel11.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         xLabel11.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         xLabel11.setCaption("Total Interest Paid");
@@ -232,7 +242,7 @@ public class LedgerPage2 extends javax.swing.JPanel {
                 .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(80, Short.MAX_VALUE))
+                .addContainerGap(86, Short.MAX_VALUE))
             .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
@@ -267,6 +277,7 @@ public class LedgerPage2 extends javax.swing.JPanel {
     private com.rameses.rcp.control.XLabel xLabel12;
     private com.rameses.rcp.control.XLabel xLabel13;
     private com.rameses.rcp.control.XLabel xLabel14;
+    private com.rameses.rcp.control.XLabel xLabel15;
     private com.rameses.rcp.control.XLabel xLabel2;
     private com.rameses.rcp.control.XLabel xLabel3;
     private com.rameses.rcp.control.XLabel xLabel4;

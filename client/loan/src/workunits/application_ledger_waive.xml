@@ -1,6 +1,6 @@
 <workunit>
     <invokers>
-        <invoker type="application:waiveLedger" caption="Waive Ledger" target="popup" 
+        <invoker type="application:waiveLedger" caption="Waive Ledger" target="popup"
                  action="init" permission="application.waiveLedger"/>
     </invokers>
     <code>
@@ -9,31 +9,33 @@
         import com.rameses.rcp.common.*;
         import com.rameses.osiris2.client.*;
         
-        public class WaiveLedgerController 
-        {
+        public class WaiveLedgerController{
             @Service('LoanLedgerService')
             def svc;
-        
+            
             def waiver = [:];
+           
+            //def entity;
+            //def loaninfo;
+            //def waiver = [entity:entity, loaninfo:loaninfo];
+            //def waiver=[loaninfo:loaninfo];
             
             //-- passed by the caller
             def appid;
             def borrowername;
             def handler;
             
-            void init(){    
+            void init(){
                
-                waiver = [  date: OsirisContext.env.LOCALE_TIME,
-                            //amount: ,
-                            //dtapproved: approvedate,
+                waiver = [ date: OsirisContext.env.LOCALE_TIME,
+                            //amount: loaninfo.loanamount,
+                            //dtapproved: entity.approvedate,
                             approvedby: OsirisContext.env.USERINFO.firstname+ ' '+OsirisContext.env.USERINFO.lastname
-                          ];
-                
+                         ];
             }    
             
             def save(){
-                if( MsgBox.confirm('You are about to waive this ledger.\nPlease verify that all entries are correct. Proceed?') ) 
-                {
+                if( MsgBox.confirm('You are about to waive this ledger.\nPlease verify that all entries are correct. Proceed?')){
                     waiver.appid = appid;
                     def ledger = svc.waive( waiver );
                     if( handler ) handler( ledger );

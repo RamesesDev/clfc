@@ -40,9 +40,9 @@
                 
                 return [
                     BRANCH_NAME: env.CLIENT.name,
-                    USER: "$env.USERINFO.firstname $env.USERINFO.lastname".toString(),
+                    USER: OsirisContext.env.USERINFO.firstname+ ' '+ OsirisContext.env.USERINFO.lastname,
                     PRINTDATE: new Date(),
-                    REPORT_TITLE: 'Summary of Loan Applications' + title,
+                    REPORT_TITLE: 'Summary of Outstanding Loans' + title,
                 ];
             }
 

@@ -90,7 +90,7 @@
                 },
                 getParameters:{
                     return [
-                            BRANCH_NAME: OsirisContext.env.CLIENT.name ,
+                            BRANCH_NAME: OsirisContext.env.CLIENT.name,
                             PRINTDATE: new Date(), 
                             User: OsirisContext.env.USERINFO.firstname + ' ' + OsirisContext.env.USERINFO.lastname
                             ]

@@ -5,14 +5,14 @@ import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.reports.*;
 import com.rameses.common.*;
 import java.util.regex.*;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
+import java.text.DecimalFormat.*;
+import java.text.NumberFormat.*;
 
 public class CheckPrintScript
 {
     def printFormat;
     static def dt_formatter = new java.text.SimpleDateFormat('MMMM dd, yyyy');
-    static def dec_formatter = new java.text.DecimalFormat('#,###,##0.00');
+    
     
     def reportModel=[
         getReportName:{
@@ -23,11 +23,10 @@ public class CheckPrintScript
         }
     ] as ReportModel;
 
-    boolean print( param ) {
-        param.amount = dec_formatter.format( param.amount );
-
+    boolean print( param ){
         param.amt_words = NumberToWords.instance.convert(param.amount).toUpperCase() + " pesos and 00/100 only";
         param.checkdate =  dt_formatter.format( param.checkdate );
+    
 
         printFormat = parse(param.format, param);
         reportModel.viewReport();
