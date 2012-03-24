@@ -249,7 +249,7 @@
 						x="293"
 						y="260"
 						width="114"
-						height="19"
+						height="11"
 						key="textField-11"/>
 					<box></box>
 					<textElement textAlignment="Left">
@@ -262,7 +262,7 @@
 						x="293"
 						y="220"
 						width="114"
-						height="19"
+						height="11"
 						key="textField-12"/>
 					<box></box>
 					<textElement textAlignment="Left">
@@ -275,7 +275,7 @@
 						x="293"
 						y="240"
 						width="114"
-						height="19"
+						height="11"
 						key="textField-13"/>
 					<box></box>
 					<textElement textAlignment="Left">
@@ -288,7 +288,7 @@
 						x="293"
 						y="200"
 						width="114"
-						height="19"
+						height="11"
 						key="textField-14"/>
 					<box></box>
 					<textElement textAlignment="Left">
@@ -299,10 +299,12 @@
 				<staticText>
 					<reportElement
 						x="209"
-						y="259"
+						y="260"
 						width="60"
-						height="16"
-						key="staticText-8"/>
+						height="13"
+						key="staticText-8">
+							<printWhenExpression><![CDATA[new Boolean(!$F{affidavit}.equals("assd"))]]></printWhenExpression>
+						</reportElement>
 					<box></box>
 					<textElement>
 						<font/>
@@ -312,9 +314,9 @@
 				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="293"
-						y="279"
+						y="275"
 						width="114"
-						height="19"
+						height="11"
 						key="textField-15"/>
 					<box></box>
 					<textElement textAlignment="Left">
@@ -327,7 +329,7 @@
 						x="293"
 						y="298"
 						width="61"
-						height="19"
+						height="11"
 						key="textField-16"/>
 					<box></box>
 					<textElement textAlignment="Left">
@@ -340,7 +342,7 @@
 						x="209"
 						y="298"
 						width="79"
-						height="19"
+						height="11"
 						key="textField-17"/>
 					<box></box>
 					<textElement textAlignment="Left">
@@ -353,7 +355,7 @@
 						x="363"
 						y="298"
 						width="61"
-						height="19"
+						height="11"
 						key="textField-18"/>
 					<box></box>
 					<textElement textAlignment="Left">
@@ -371,6 +373,21 @@
 						key="line-6"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
+				<staticText>
+					<reportElement
+						x="208"
+						y="274"
+						width="61"
+						height="13"
+						key="staticText-9">
+							<printWhenExpression><![CDATA[new Boolean(!$F{loanRenewal}.equals("assd"))]]></printWhenExpression>
+						</reportElement>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Renewal]]></text>
+				</staticText>
 			</band>
 		</title>
 		<pageHeader>

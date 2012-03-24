@@ -482,9 +482,10 @@
 
                 if(mode=='renew'){
                     if( entity.clientType=="WALK-IN" ){
-                        if( emp || emp2 )
+                        if( emp && emp2 ){
                             MsgBox.alert("Marketed By Employee is not allowed");
                             return;
+                        }
                     }
                     if( entity.clientType=="MARKETED" ){
                         if( !emp || !emp2 ){
@@ -497,12 +498,14 @@
                 }
                 else{               
                     if( entity.clientType=="WALK-IN" ){
-                        if( emp || emp2 )
+                        if( emp && emp2 ){
                             MsgBox.alert("Marketed By Employee is not allowed");
                             return;
+                         }
                     }
                     if( entity.clientType=="MARKETED" ){
-                        if( !emp || !emp2 ){
+                        //if( !emp || !emp2 ){
+                        if(!emp){
                             MsgBox.alert('Loan Application Client Type is Marketed \nPls. select a Marketed By employee name');
                             return;
                         }

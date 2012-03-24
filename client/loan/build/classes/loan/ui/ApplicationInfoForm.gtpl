@@ -560,7 +560,7 @@
                         </tr>
                     <%}%>
                 </table>
-                <div align="right">
+                <!--<div align="right">
                     <%if( !data.totalCAV ){%>
                         Total Property(s/ies) CAV :
                         Php <b class="maroon">0.00</b>
@@ -569,7 +569,7 @@
                         Total Property(s/ies) CAV :
                         Php <b class="green">${format(data.totalCAV)}</b>
                     <%}%>
-                </div><br>
+                </div><br>-->
                 <!--  Other related sites   -->
                 <!--<div width="220px" style="padding-left: 5px;">
                    <b class="green"> Click the following related sites</b>

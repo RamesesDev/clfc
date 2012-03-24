@@ -3800,7 +3800,7 @@
 		<group  name="collectionsite" >
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
-			<band height="441"  isSplitAllowed="true" >
+			<band height="443"  isSplitAllowed="true" >
 				<printWhenExpression><![CDATA[new Boolean((!$F{state}.equals("PENDING")))]]></printWhenExpression>
 				<line direction="BottomUp">
 					<reportElement

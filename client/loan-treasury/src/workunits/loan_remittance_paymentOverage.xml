@@ -47,7 +47,7 @@
                if(MsgBox.confirm("Are you sure you want to post this \nover payment remittance, proceed.?")){
                     //binding.fireNavigation( (mode='printPage') );
                     MsgBox.alert("Now Printing Data of" + "\nCollector's Name: " +entity.collector+ 
-                            "\n Collection Date: " +entity.date+ "\nRoute Code: " +entity.routecode+
+                            "\nCollection Date: " +entity.date+ "\nRoute Code: " +entity.routecode+
                             "\nDescription: " +entity.routedescription+ "\nAmount of overage of: " +entity.amount+ 
                             "\nReason(s): " +entity.reasons);
                     report.viewReport();

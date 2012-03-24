@@ -113,6 +113,15 @@ public class ApplicationReportModel extends ReportModel {
         data.address = getCustAddress( data.borrower );
         
         //*** Ledger Data  ***//
+        if( data.ledger ){
+            if( data.ledger.dailyPayment !=null ) data.ledger.dailyPayment = data.ledger.dailyPayment as BigDecimal;
+                else data.ledger.dailyPayment = new BigDecimal( 0.00 );
+            if( data.ledger.term !=null ) data.ledger.term = data.ledger.term as BigDecimal;
+                else data.ledger.term = new BigDecimal( 0.00 );
+            
+            data.lenTerm = data.ledger.term / 30.00;
+        }
+        
         //if( p.checkdate instanceof String )
             //p.checkdate = dt_formatter.parse( p.checkdate );
         //if( data.ledger.startdate ==null )
@@ -210,11 +219,6 @@ public class ApplicationReportModel extends ReportModel {
         if( data.loaninfo.producttype.term !=null ) data.loaninfo.producttype.term = data.loaninfo.producttype.term as BigDecimal;
         if( data.cicashCountAmount !=null ) data.cicashCountAmount = data.cicashCountAmount as BigDecimal;
         if( data.totalCAV !=null ) data.totalCAV = data.totalCAV as BigDecimal;
-        
-        if( data.ledger ){
-            if( data.ledger.dailyPayment !=null ) data.ledger.dailyPayment = data.ledger.dailyPayment as BigDecimal;
-                else data.ledger.dailyPayment = new BigDecimal( 0.00 );
-        }    
         
         if( data.routecode ==null )
             data.routecode = '';

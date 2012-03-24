@@ -44,7 +44,7 @@
 	<field name="amountinwords" class="java.lang.String"/>
 	<field name="ledger.checkInfo.bankname" class="java.lang.String"/>
 	<field name="ledger.checkno" class="java.lang.String"/>
-	<field name="ledger.term" class="java.lang.Integer"/>
+	<field name="ledger.term" class="java.math.BigDecimal"/>
 	<field name="notarial" class="java.math.BigDecimal"/>
 	<field name="docstamp" class="java.math.BigDecimal"/>
 	<field name="chatrealreg" class="java.math.BigDecimal"/>
@@ -122,31 +122,18 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ledger.checkno}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" pattern="##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="185"
-						y="250"
-						width="37"
-						height="13"
-						key="textField"/>
-					<box></box>
-					<textElement>
-						<font size="10"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{ledger.term}]]></textFieldExpression>
-				</textField>
 				<staticText>
 					<reportElement
 						x="221"
 						y="250"
-						width="83"
+						width="67"
 						height="13"
 						key="staticText-2"/>
 					<box></box>
 					<textElement>
 						<font size="10"/>
 					</textElement>
-				<text><![CDATA[days/month(s)]]></text>
+				<text><![CDATA[month(s)]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true" pattern="MMMMM dd, yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -252,6 +239,19 @@
 					</textElement>
 				<text><![CDATA[CAM]]></text>
 				</staticText>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="185"
+						y="250"
+						width="37"
+						height="13"
+						key="textField-1"/>
+					<box></box>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{lenTerm}]]></textFieldExpression>
+				</textField>
 			</band>
 		</title>
 		<pageHeader>

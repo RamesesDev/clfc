@@ -60,37 +60,22 @@
                 //calculateCharges();
                 //return (mode="charges");
                 
-                checkApprovalDate(); //Checking for Approval Date and Expiry Date
+                checkApprovalDate();//Checking for Approval Date and Expiry Date
                 //if( application.loaninfo.offeredamount ){
                     //return (mode="amountOption");
                 //}else if( !application.loaninfo.offeredamount ){
-                    
+
                     mode="showCharges";
-                    
+
                     calculateCharges();
                     return (mode="charges");
                 //}
             }
             
             def checkApprovalDate(){
-                //param=appSvc.checkApproval(param);
-                
-                //if( entity.approvedate ) entity.approvedate = parseDate( entity.approvedate + ' 00:00:00' );
-                //if( entity.expirydate ) entity.expirydate = parseDate( entity.expirydate + ' 00:00:00' );
-                
-                //MsgBox.alert("Approval Date is "  +entity.approvedate+ " and Expiry Date is " +entity.expirydate);
-                
-                //if( entity.approvedate > entity.expirydate ){
-                    //MsgBox.alert("Approval Date on this account has already been expired.");
-                    //return;
-                //}
-            }
-            
-            def parseDate( date ){
-                if( date.length() == 19 )
-                    return java.sql.Timestamp.valueOf( date );
-
-                    return java.sql.Date.valueOf( date );
+                if( application.approvedate.compareTo(application.expirydate) > 0 ){
+                    throw new Exception("Approval Date on this account has already been expired.");
+                }
             }
             
             def listHandler=[
@@ -177,12 +162,16 @@
                 return InvokerUtil.lookupOpener('application:assessment_charge',[
                     selectHandler: { charge ->
                         def acct = charge.account;
-                        acct.amount = -(charge.amount);
-                        otherCharges.add( acct );
-                        assessment.netAmount += acct.amount;
-                                                
-                        otherChargeHandler.load();
-                        binding.refresh('assessment.netAmount|totalCharges');
+                        
+                        if( acct ){
+                            acct.amount = -(charge.amount);
+                            otherCharges.add( acct );
+                            assessment.netAmount += acct.amount;
+
+                            otherChargeHandler.load();
+                            binding.refresh('assessment.netAmount|totalCharges');
+                        }else //if( acct == selectedOtherCharge )
+                            throw new Exception("Account Title/Code has already been in the list.");
                     }
                 ]);
             }
@@ -292,19 +281,21 @@
                             data.term = application.ledger.term;
                         /*  =============================  */
                         
-                        /*** Displaying of Loan Charges ***/
+                        /*** Displaying of Loan Charges/Non Finance Charges ***/
+                        def charges;
+                        data.otherCharges = data.charges;
                         data.charges = accts;
                         data.insurance = '';
                         data.notarial = accts.find{ it.title == 'NOTARIAL FEE' }?.amount;
                         data.docstamp = accts.find{ it.title == 'DOCUMENTARY STAMP FEE' }?.amount;
                         data.chatrealreg = accts.find{ it.title == 'CHAT/REAL REGISTRATION' }?.amount;
                         data.affidavit = accts.find{ it.title == 'AFFIDAVIT' }?.amount;
+                        data.loanRenewal = accts.find{ it.title == 'LOAN RENEWAL' }?.amount;
                         
-                        /*** Other Loan Charges ***/
+                        /*** Other Loan Charges/Non Finance Charges ***/
                         data.others = accts.find{ it.title == 'OTHERS' }?.amount;
                         data.loadingGlobe = accts.find{ it.title == 'LOADING GLOBE' }?.amount;
                         data.loadingSun = accts.find{ it.title == 'LOADING SUN' }?.amount;
-                        data.loanRenewal = accts.find{ it.title == 'LOAN RENEWAL' }?.amount;
                         data.loanReceivable = accts.find{ it.title == 'LOAN RECEIVABLE' }?.amount;
                         data.currentInterest = accts.find{ it.title == 'CURRENT INTEREST' }?.amount;
                         data.currentPrincipal = accts.find{ it.title == 'CURRENT PRINCIPAL' }?.amount;
@@ -329,22 +320,9 @@
                                      +"\nLoan Surcharge: " +data.loanSurcharge
                                      +"\nLoan Interest: " +data.loanInterest
                                      );
-                        data.totalCharges = (data.notarial==null? 0 : data.notarial) 
-                                            +(data.docstamp==null? 0 : data.docstamp)
-                                            +(data.chatrealreg==null? 0 : data.chatrealreg)
-                                            +(data.affidavit==null? 0 : data.affidavit)
-                                            +(data.others==null? 0 : data.others)
-                                            +(data.loadingGlobe==null? 0 : data.loadingGlobe)
-                                            +(data.loadingSun==null? 0 : data.loadingSun)
-                                            +(data.loanRenewal==null? 0 : data.loadingRenewal)
-                                            +(data.loanReceivable==null? 0 : data.loanReceivable)
-                                            +(data.currentInterest==null? 0 : data.currentInterest)
-                                            +(data.currentPrincipal==null? 0 : data.currentPrincipal)
-                                            +(data.pastDueInterest==null? 0 : data.pastDueInterest)
-                                            +(data.pastDuePrincipal==null? 0 : data.pastDuePrincipal)
-                                            +(data.loanSurcharge==null? 0 : data.loanSurcharge)
-                                            +(data.loanInterest==null? 0 : data.loanInterest);
-                        //data.totalCharges = data.notarial + data.docstamp + data.chatrealreg + data.affidavit; //+ data.loanRenewal;
+                                     
+                        data.totalCharges = (data.notarial==null? 0 : data.notarial) +(data.docstamp==null? 0 : data.docstamp)+(data.chatrealreg==null? 0 : data.chatrealreg)+(data.affidavit==null? 0 : data.affidavit)+(data.others==null? 0 : data.others)+(data.loadingGlobe==null? 0 : data.loadingGlobe)+(data.loadingSun==null? 0 : data.loadingSun)+(data.loanRenewal==null? 0 : data.loanRenewal)+(data.loanReceivable==null? 0 : data.loanReceivable)+(data.currentInterest==null? 0 : data.currentInterest)+(data.currentPrincipal==null? 0 : data.currentPrincipal)+(data.pastDueInterest==null? 0 : data.pastDueInterest)+(data.pastDuePrincipal==null? 0 : data.pastDuePrincipal)+(data.loanSurcharge==null? 0 : data.loanSurcharge)+(data.loanInterest==null? 0 : data.loanInterest);
+                        println data.totalCharges;
                         
                         data.netrelease = data.amountapproved + data.totalCharges;
                         
