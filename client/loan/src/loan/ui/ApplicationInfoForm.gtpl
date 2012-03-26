@@ -833,27 +833,39 @@
                     <%}%>
                 </table><br>
             <%}%>
-        <%}%>    
+        <%}%>
+        <!--<%if( data.loancount > 1 ){%>
+            <div class="box">
+                <b>LOAN HISTORY</b>
+            </div>
+            <div class="info">
+                <font color="blue">
+                    Renewal 1<br>
+                    Renewal 2<br>
+                    Renewal 3
+                </font>
+            </div>
+        <%}%>-->
         <div class="box">
             <b>CI RECOMMENDATION</b>
         </div>
         <div class="info">
-            <%if( data.state!="FOR_INSPECTION" ) {%>
-               <%if( !data.cirecommendation ) {%>
+            <%if( data.state!="FOR_INSPECTION" ){%>
+               <%if( !data.cirecommendation ){%>
                     <br>
                     <i class="red2">No CI Recommendation(s) yet.</i>
                 <%}%>    
             <% } %>
-            <% if( data.state=="FOR_INSPECTION" ) {%>
+            <% if( data.state=="FOR_INSPECTION" ){%>
                  <%if( !data.cirecommendation ) {%>
                     <a href="recommendation"> Add CI Recommendation</a>
                  <%}%>
-                 <%if( data.cirecommendation ) {%>
+                 <%if( data.cirecommendation ){%>
                     <a href="recommendation"> Edit CI Recommendation</a>
                  <%}%> 
             <%}%>
             <br>
-            <%if( data.cirecommendation ) {%>
+            <%if( data.cirecommendation ){%>
                 <div class="sender">
                     posted by ${data.cirecommendation.author} @ ${data.cirecommendation.date}
                 </div>
@@ -866,23 +878,23 @@
             <b>CRECOM RECOMMENDATION</b>
         </div> 
         <div class="info">
-            <%if( data.state!="FOR_FLA" ) {%>
-               <%if( !data.crecomrecommendation ) {%>
+            <%if( data.state!="FOR_FLA" ){%>
+               <%if( !data.crecomrecommendation ){%>
                     <br>
                     <i class="red2">No Crecom Recommendation(s) yet.</i>
                 <%}%>     
             <%}%>
-            <%if( data.state=="FOR_FLA" ) {%>
-                <%if( !data.crecomrecommendation ) {%>
+            <%if( data.state=="FOR_FLA" ){%>
+                <%if( !data.crecomrecommendation ){%>
                     <a href="crecomrecommendation"> Add Crecom Recommendation</a>
                     <br>
                 <%}%>
-                <%if( data.crecomrecommendation ) {%>
+                <%if( data.crecomrecommendation ){%>
                     <a href="crecomrecommendation"> Edit Crecom Recommendation</a>
                     <br>
                 <%}%>    
             <%}%><br> 
-            <%if( data.crecomrecommendation ) {%>
+            <%if( data.crecomrecommendation ){%>
                 <div class="sender">
                     posted by ${data.crecomrecommendation.author} @ ${data.crecomrecommendation.date}
                 </div><br>
@@ -915,25 +927,13 @@
             <b>FLA</b>
         </div>
         <div class="info">
-            <%if( data.state=="PENDING" ) {%>
-                <br>
-                    <i class="red2">No FLA yet.</i>
+            <%if( data.state=="PENDING" ){%>
                 <%if( data.loaninfo.amountapproved || data.loaninfo.offeredamount ) {%>
                     <br>
                     <i class="red2">No FLA yet.</i>
                 <%}%>
             <%}%>
-            <%if( data.state=="FOR_INSPECTION" ) {%>
-                <%if( data.loaninfo.amountapproved || data.loaninfo.offeredamount ) {%>
-                    <br>
-                    <i class="red2">No FLA yet.</i>
-                <%}%>
-                <%if( !data.loaninfo.amountapproved || !data.loaninfo.offeredamount ) {%>
-                    <br>
-                    <i class="red2">No FLA yet.</i>
-                <%}%>
-            <%}%>
-            <%if( data.state=="FOR_FLA" ) {%>
+            <%if( data.state=="FOR_INSPECTION" ){%>
                 <%if( data.loaninfo.amountapproved || data.loaninfo.offeredamount ) {%>
                     <br>
                     <i class="red2">No FLA yet.</i>
@@ -943,7 +943,7 @@
                     <i class="red2">No FLA yet.</i>
                 <%}%>
             <%}%>
-            <%if( data.state=="FOR_APPROVAL" ) {%>
+            <%if( data.state=="FOR_FLA" ){%>
                 <%if( data.loaninfo.amountapproved || data.loaninfo.offeredamount ) {%>
                     <br>
                     <i class="red2">No FLA yet.</i>
@@ -953,10 +953,21 @@
                     <i class="red2">No FLA yet.</i>
                 <%}%>
             <%}%>
-            <%if( data.state=="APPROVED" ) {%>
+            <%if( data.state=="FOR_APPROVAL" ){%>
+                <%if( data.loaninfo.amountapproved || data.loaninfo.offeredamount ) {%>
+                    <br>
+                    <i class="red2">No FLA yet.</i>
+                <%}%>
+                <%if( !data.loaninfo.amountapproved || !data.loaninfo.offeredamount ) {%>
+                    <br>
+                    <i class="red2">No FLA yet.</i>
+                <%}%>
+            <%}%>
+            <%if( data.state=="APPROVED" ){%>
                 <div class="info">
                     <fieldset>
-                        <%if( data.loaninfo.amountapproved ) {%>
+                        <h2><font color="blue">CURRENT FLA</font></h2>
+                        <%if( data.loaninfo.amountapproved ){%>
                             <legend>
                                 <b class="green">LOAN APPROVAL</b> 
                                 ( <b>Amount Applied</b> : Php <b class="teal">${format(data.loaninfo.loanamount)}</b> )
@@ -970,7 +981,7 @@
                                 <%}%>
                             </table>
                             <table>
-                                <%if( data.loaninfo.policy ) {%>    
+                                <%if( data.loaninfo.policy ){%>    
                                     <tr>
                                         <td valign="top"><b>Absences</b></td>
                                         <tr>
@@ -983,13 +994,13 @@
                                 <%}%>
                             </table>
                             <table>
-                                <%if( data.loaninfo.creditLimit ) {%>
+                                <%if( data.loaninfo.creditLimit ){%>
                                     <tr>
                                         <th>Credit Limit:</th>
                                         <td>Php <b class="maroon">${format(data.loaninfo.creditLimit)}</b></td>
                                     </tr>
                                 <%}%>
-                                <%if( data.loaninfo.increase ) {%>    
+                                <%if( data.loaninfo.increase ){%>    
                                     <tr>
                                         <th>Increase:</th>
                                         <td>Php <b class="maroon">${format(data.loaninfo.increase)}</b></td>
@@ -1097,6 +1108,9 @@
                                 </div>
                             <%}%>
                         </fieldset>
+                        <hr>
+                        <h2><font color="maroon">PREVIOUS FLA</font></h2>
+                            &nbsp;<i class="maroon">no previous FLA record yet.</i>
                     <%}%>
                     <%if ( !data.loaninfo.amountapproved  && !data.loaninfo.offeredamount && !data.loaninfo.approvalAnnotation ) {%>
                         <br><i class="red2">No FLA yet.</i><br>

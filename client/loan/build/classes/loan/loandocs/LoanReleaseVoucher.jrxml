@@ -122,31 +122,18 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ledger.checkno}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="143"
-						y="373"
-						width="37"
-						height="13"
-						key="textField"/>
-					<box></box>
-					<textElement>
-						<font size="10"/>
-					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{ledger.term}]]></textFieldExpression>
-				</textField>
 				<staticText>
 					<reportElement
 						x="221"
 						y="250"
-						width="83"
+						width="67"
 						height="13"
 						key="staticText-2"/>
 					<box></box>
 					<textElement>
 						<font size="10"/>
 					</textElement>
-				<text><![CDATA[days/month(s)]]></text>
+				<text><![CDATA[month(s)]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true" pattern="MMMMM dd, yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement

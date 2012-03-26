@@ -37,14 +37,14 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jPanel10" alignment="0" pref="1018" max="32767" attributes="1"/>
+          <Component id="jPanel10" alignment="0" pref="1017" max="32767" attributes="1"/>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
+              <Group type="103" groupAlignment="1" max="-2" attributes="0">
                   <Component id="jTabbedPane2" alignment="0" min="0" pref="0" max="32767" attributes="1"/>
-                  <Component id="jPanel5" alignment="0" min="-2" max="-2" attributes="1"/>
+                  <Component id="jPanel5" alignment="0" max="32767" attributes="1"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -53,7 +53,7 @@
           <Group type="102" attributes="0">
               <Component id="jPanel10" min="-2" pref="51" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jPanel5" min="-2" max="-2" attributes="3"/>
+              <Component id="jPanel5" min="-2" pref="128" max="-2" attributes="3"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jTabbedPane2" min="-2" pref="456" max="-2" attributes="3"/>
               <EmptySpace max="32767" attributes="0"/>
@@ -133,7 +133,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel6" min="-2" pref="256" max="-2" attributes="0"/>
-                      <EmptySpace pref="750" max="32767" attributes="0"/>
+                      <EmptySpace pref="749" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1131,7 +1131,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jTabbedPane1" pref="965" max="32767" attributes="1"/>
+                      <Component id="jTabbedPane1" pref="964" max="32767" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -1171,7 +1171,7 @@
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jPanel52" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="319" max="32767" attributes="0"/>
+                              <EmptySpace pref="318" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1331,7 +1331,7 @@
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jPanel65" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="319" max="32767" attributes="0"/>
+                              <EmptySpace pref="318" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1510,7 +1510,7 @@
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="xDataTable25" alignment="0" pref="936" max="32767" attributes="0"/>
+                                  <Component id="xDataTable25" alignment="0" pref="935" max="32767" attributes="0"/>
                                   <Component id="xLabel18" alignment="0" min="-2" pref="613" max="-2" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="xButton40" min="-2" max="-2" attributes="0"/>
@@ -1652,7 +1652,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="xDataTable14" min="-2" pref="900" max="-2" attributes="0"/>
-                                  <EmptySpace pref="20" max="32767" attributes="0"/>
+                                  <EmptySpace pref="19" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1744,7 +1744,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="xDataTable13" min="-2" pref="900" max="-2" attributes="0"/>
-                                  <EmptySpace pref="20" max="32767" attributes="0"/>
+                                  <EmptySpace pref="19" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1803,7 +1803,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jTabbedPane8" pref="936" max="32767" attributes="0"/>
+                              <Component id="jTabbedPane8" pref="935" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -2027,7 +2027,7 @@
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="xDataTable12" alignment="0" pref="568" max="32767" attributes="0"/>
+                                              <Component id="xDataTable12" alignment="0" pref="567" max="32767" attributes="0"/>
                                               <Group type="102" alignment="0" attributes="0">
                                                   <Component id="xButton77" min="-2" max="-2" attributes="0"/>
                                                   <EmptySpace max="-2" attributes="0"/>
@@ -2293,7 +2293,7 @@
                                       <Group type="102" attributes="0">
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="xDataTable11" pref="568" max="32767" attributes="0"/>
+                                              <Component id="xDataTable11" pref="567" max="32767" attributes="0"/>
                                               <Group type="102" alignment="0" attributes="0">
                                                   <Component id="xButton86" min="-2" max="-2" attributes="0"/>
                                                   <EmptySpace max="-2" attributes="0"/>
@@ -2414,7 +2414,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="xDataTable9" pref="908" max="32767" attributes="0"/>
+                                  <Component id="xDataTable9" pref="907" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -2474,7 +2474,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jTabbedPane10" pref="936" max="32767" attributes="0"/>
+                              <Component id="jTabbedPane10" pref="935" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -2552,7 +2552,7 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="xDataTable16" pref="879" max="32767" attributes="0"/>
+                                          <Component id="xDataTable16" pref="878" max="32767" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -2654,7 +2654,7 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="xDataTable28" pref="879" max="32767" attributes="0"/>
+                                          <Component id="xDataTable28" pref="878" max="32767" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -2717,7 +2717,7 @@
                                           <Component id="jPanel22" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Component id="xLabel7" alignment="0" min="-2" pref="613" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace pref="306" max="32767" attributes="0"/>
+                                      <EmptySpace pref="305" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
@@ -2831,9 +2831,9 @@
                                   <Component id="jScrollPane10" min="-2" pref="233" max="-2" attributes="1"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jTabbedPane5" pref="726" max="32767" attributes="0"/>
+                              <Component id="jTabbedPane5" pref="725" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="xActionBar2" alignment="0" pref="965" max="32767" attributes="1"/>
+                          <Component id="xActionBar2" alignment="0" pref="964" max="32767" attributes="1"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -2884,7 +2884,7 @@
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jPanel16" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="105" max="32767" attributes="0"/>
+                              <EmptySpace pref="104" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -3020,7 +3020,7 @@
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jPanel118" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="114" max="32767" attributes="0"/>
+                              <EmptySpace pref="113" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -3193,7 +3193,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jTabbedPane14" pref="697" max="32767" attributes="0"/>
+                              <Component id="jTabbedPane14" pref="696" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -3271,7 +3271,7 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="xDataTable5" pref="640" max="32767" attributes="0"/>
+                                          <Component id="xDataTable5" pref="639" max="32767" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -3404,7 +3404,7 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="xDataTable2" pref="640" max="32767" attributes="0"/>
+                                          <Component id="xDataTable2" pref="639" max="32767" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -3566,7 +3566,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="xDataTable17" pref="669" max="32767" attributes="0"/>
+                                  <Component id="xDataTable17" pref="668" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -3684,7 +3684,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="xDataTable18" pref="669" max="32767" attributes="0"/>
+                                  <Component id="xDataTable18" pref="668" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -3760,7 +3760,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jTabbedPane11" pref="697" max="32767" attributes="0"/>
+                              <Component id="jTabbedPane11" pref="696" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -3984,7 +3984,7 @@
                                       <Group type="102" attributes="0">
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="xDataTable21" alignment="0" pref="371" max="32767" attributes="0"/>
+                                              <Component id="xDataTable21" alignment="0" pref="370" max="32767" attributes="0"/>
                                               <Group type="102" alignment="0" attributes="0">
                                                   <Component id="xButton79" min="-2" max="-2" attributes="0"/>
                                                   <EmptySpace max="-2" attributes="0"/>
@@ -4265,7 +4265,7 @@
                                       <Group type="102" attributes="0">
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="xDataTable20" alignment="0" pref="371" max="32767" attributes="0"/>
+                                              <Component id="xDataTable20" alignment="0" pref="370" max="32767" attributes="0"/>
                                               <Group type="102" alignment="0" attributes="0">
                                                   <Component id="xButton84" min="-2" max="-2" attributes="0"/>
                                                   <EmptySpace max="-2" attributes="0"/>
@@ -4353,7 +4353,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jTabbedPane12" pref="697" max="32767" attributes="0"/>
+                              <Component id="jTabbedPane12" pref="696" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -4428,7 +4428,7 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="xDataTable23" pref="640" max="32767" attributes="0"/>
+                                          <Component id="xDataTable23" pref="639" max="32767" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -4546,7 +4546,7 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="xDataTable24" pref="640" max="32767" attributes="0"/>
+                                          <Component id="xDataTable24" pref="639" max="32767" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -4626,7 +4626,7 @@
                                           <Component id="jPanel18" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Component id="xLabel8" alignment="0" min="-2" pref="613" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace pref="67" max="32767" attributes="0"/>
+                                      <EmptySpace pref="66" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
@@ -4773,9 +4773,9 @@
                                   <Component id="jScrollPane11" min="-2" pref="232" max="-2" attributes="1"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jTabbedPane7" pref="727" max="32767" attributes="0"/>
+                              <Component id="jTabbedPane7" pref="726" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="xActionBar3" alignment="0" pref="965" max="32767" attributes="1"/>
+                          <Component id="xActionBar3" alignment="0" pref="964" max="32767" attributes="1"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -4844,7 +4844,7 @@
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jPanel97" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="113" max="32767" attributes="0"/>
+                              <EmptySpace pref="112" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -4980,7 +4980,7 @@
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="118" max="32767" attributes="0"/>
+                              <EmptySpace pref="117" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -5153,7 +5153,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jTabbedPane13" pref="698" max="32767" attributes="0"/>
+                              <Component id="jTabbedPane13" pref="697" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -5231,7 +5231,7 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="xDataTable6" pref="641" max="32767" attributes="0"/>
+                                          <Component id="xDataTable6" pref="640" max="32767" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -5354,7 +5354,7 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="xDataTable1" pref="641" max="32767" attributes="0"/>
+                                          <Component id="xDataTable1" pref="640" max="32767" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -5505,7 +5505,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="xDataTable19" pref="670" max="32767" attributes="0"/>
+                                  <Component id="xDataTable19" pref="669" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -5613,7 +5613,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="xDataTable22" pref="670" max="32767" attributes="0"/>
+                                  <Component id="xDataTable22" pref="669" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -5899,7 +5899,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jTabbedPane9" pref="977" max="32767" attributes="0"/>
+                      <Component id="jTabbedPane9" pref="976" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -5940,7 +5940,7 @@
                                   <Component id="xActionBar9" min="-2" max="-2" attributes="0"/>
                                   <Component id="jScrollPane9" alignment="0" min="-2" pref="645" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="20" max="32767" attributes="0"/>
+                              <EmptySpace pref="19" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -6232,7 +6232,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="formPanel3" pref="200" max="32767" attributes="0"/>
+                              <Component id="formPanel3" pref="168" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jSeparator4" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
@@ -6241,7 +6241,7 @@
                                   <Component id="jScrollPane18" min="-2" pref="720" max="-2" attributes="0"/>
                                   <Component id="xActionBar11" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -6570,9 +6570,9 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="formPanel29" max="32767" attributes="1"/>
-                      <Component id="formPanel10" alignment="0" pref="239" max="32767" attributes="1"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="formPanel10" min="-2" pref="239" max="-2" attributes="1"/>
+                      <Component id="formPanel29" pref="239" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -6580,41 +6580,32 @@
                       <Component id="formPanel28" alignment="0" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="formPanel26" max="32767" attributes="1"/>
-                      <Component id="formPanel2" alignment="1" min="-2" max="-2" attributes="1"/>
-                  </Group>
+                  <Component id="formPanel2" min="-2" max="-2" attributes="1"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="formPanel12" min="-2" pref="234" max="-2" attributes="0"/>
-                      <Component id="formPanel6" min="-2" pref="234" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <Component id="formPanel26" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="formPanel10" alignment="0" min="-2" max="-2" attributes="1"/>
-                      <Component id="formPanel7" min="-2" pref="47" max="-2" attributes="1"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="formPanel29" alignment="0" max="32767" attributes="1"/>
-                      <Component id="formPanel28" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="formPanel10" min="-2" max="-2" attributes="1"/>
+                  <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+                  <Component id="formPanel29" max="32767" attributes="1"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="formPanel2" min="-2" max="-2" attributes="1"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="formPanel26" min="-2" max="-2" attributes="1"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <Component id="formPanel12" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="formPanel6" min="-2" max="-2" attributes="1"/>
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="formPanel26" alignment="0" max="32767" attributes="1"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="formPanel7" min="-2" pref="47" max="-2" attributes="1"/>
+                              <Component id="formPanel2" min="-2" max="-2" attributes="1"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="formPanel28" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <EmptySpace min="-2" pref="88" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -6702,7 +6693,7 @@
         </Container>
         <Container class="com.rameses.rcp.util.FormPanel" name="formPanel2">
           <Properties>
-            <Property name="captionWidth" type="int" value="100"/>
+            <Property name="captionWidth" type="int" value="90"/>
           </Properties>
           <SubComponents>
             <Component class="com.rameses.rcp.control.XComboBox" name="xComboBox1">
@@ -6727,52 +6718,49 @@
                 <Property name="required" type="boolean" value="true"/>
               </Properties>
             </Component>
-          </SubComponents>
-        </Container>
-        <Container class="com.rameses.rcp.util.FormPanel" name="formPanel6">
-          <SubComponents>
-            <Component class="com.rameses.rcp.control.XTextField" name="xTextField26">
+            <Component class="com.rameses.rcp.control.XComboBox" name="xComboBox7">
               <Properties>
-                <Property name="editable" type="boolean" value="false"/>
-                <Property name="caption" type="java.lang.String" value="Recorded By"/>
-                <Property name="captionWidth" type="int" value="80"/>
-                <Property name="enabled" type="boolean" value="false"/>
-                <Property name="name" type="java.lang.String" value="entity.encodedBy"/>
-                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[0, 19]"/>
+                <Property name="toolTipText" type="java.lang.String" value="Click to select Interviewed By"/>
+                <Property name="caption" type="java.lang.String" value="Interviewed By"/>
+                <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+                  <StringArray count="1">
+                    <StringItem index="0" value="clientType"/>
+                  </StringArray>
                 </Property>
-                <Property name="toolTipText" type="java.lang.String" value="Recorded By"/>
+                <Property name="dynamic" type="boolean" value="true"/>
+                <Property name="emptyText" type="java.lang.String" value="Select Employee"/>
+                <Property name="expression" type="java.lang.String" value="#{name}"/>
+                <Property name="immediate" type="boolean" value="true"/>
+                <Property name="items" type="java.lang.String" value="employeeList"/>
+                <Property name="name" type="java.lang.String" value="emp"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[165, 22]"/>
+                </Property>
               </Properties>
             </Component>
-            <Component class="com.rameses.rcp.control.XTextField" name="xTextField27">
+            <Component class="com.rameses.rcp.control.XComboBox" name="xComboBox8">
               <Properties>
-                <Property name="editable" type="boolean" value="false"/>
-                <Property name="caption" type="java.lang.String" value="Updated By"/>
-                <Property name="captionWidth" type="int" value="80"/>
-                <Property name="enabled" type="boolean" value="false"/>
-                <Property name="name" type="java.lang.String" value="entity.updatedBy"/>
-                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[0, 19]"/>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="1">
+                    <StringItem index="0" value="emp2"/>
+                  </StringArray>
                 </Property>
-                <Property name="toolTipText" type="java.lang.String" value="Updated/Edited By"/>
-              </Properties>
-            </Component>
-          </SubComponents>
-        </Container>
-        <Container class="com.rameses.rcp.util.FormPanel" name="formPanel26">
-          <Properties>
-            <Property name="captionWidth" type="int" value="100"/>
-          </Properties>
-          <SubComponents>
-            <Component class="com.rameses.rcp.control.XTextArea" name="xTextArea7">
-              <Properties>
-                <Property name="columns" type="int" value="20"/>
-                <Property name="rows" type="int" value="5"/>
-                <Property name="caption" type="java.lang.String" value="Purpose of Loan"/>
-                <Property name="hint" type="java.lang.String" value="Specify your specifications here."/>
-                <Property name="name" type="java.lang.String" value="entity.loaninfo.loanpurpose"/>
-                <Property name="required" type="boolean" value="true"/>
-                <Property name="toolTipText" type="java.lang.String" value="Purpose of Loan"/>
+                <Property name="toolTipText" type="java.lang.String" value="Click to select Interviewed By"/>
+                <Property name="caption" type="java.lang.String" value=""/>
+                <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+                  <StringArray count="1">
+                    <StringItem index="0" value="clientType"/>
+                  </StringArray>
+                </Property>
+                <Property name="dynamic" type="boolean" value="true"/>
+                <Property name="emptyText" type="java.lang.String" value="Select Employee"/>
+                <Property name="expression" type="java.lang.String" value="#{name}"/>
+                <Property name="immediate" type="boolean" value="true"/>
+                <Property name="items" type="java.lang.String" value="employeeList"/>
+                <Property name="name" type="java.lang.String" value="emp2"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[165, 22]"/>
+                </Property>
               </Properties>
             </Component>
           </SubComponents>
@@ -6840,54 +6828,17 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="com.rameses.rcp.util.FormPanel" name="formPanel12">
-          <Properties>
-            <Property name="captionWidth" type="int" value="90"/>
-          </Properties>
+        <Container class="com.rameses.rcp.util.FormPanel" name="formPanel26">
           <SubComponents>
-            <Component class="com.rameses.rcp.control.XComboBox" name="xComboBox7">
+            <Component class="com.rameses.rcp.control.XTextArea" name="xTextArea7">
               <Properties>
-                <Property name="toolTipText" type="java.lang.String" value="Click to select Interviewed By"/>
-                <Property name="caption" type="java.lang.String" value="Interviewed By"/>
-                <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
-                  <StringArray count="1">
-                    <StringItem index="0" value="clientType"/>
-                  </StringArray>
-                </Property>
-                <Property name="dynamic" type="boolean" value="true"/>
-                <Property name="emptyText" type="java.lang.String" value="Select Employee"/>
-                <Property name="expression" type="java.lang.String" value="#{name}"/>
-                <Property name="immediate" type="boolean" value="true"/>
-                <Property name="items" type="java.lang.String" value="employeeList"/>
-                <Property name="name" type="java.lang.String" value="emp"/>
-                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[165, 22]"/>
-                </Property>
-              </Properties>
-            </Component>
-            <Component class="com.rameses.rcp.control.XComboBox" name="xComboBox8">
-              <Properties>
-                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="1">
-                    <StringItem index="0" value="emp2"/>
-                  </StringArray>
-                </Property>
-                <Property name="toolTipText" type="java.lang.String" value="Click to select Interviewed By"/>
-                <Property name="caption" type="java.lang.String" value=""/>
-                <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
-                  <StringArray count="1">
-                    <StringItem index="0" value="clientType"/>
-                  </StringArray>
-                </Property>
-                <Property name="dynamic" type="boolean" value="true"/>
-                <Property name="emptyText" type="java.lang.String" value="Select Employee"/>
-                <Property name="expression" type="java.lang.String" value="#{name}"/>
-                <Property name="immediate" type="boolean" value="true"/>
-                <Property name="items" type="java.lang.String" value="employeeList"/>
-                <Property name="name" type="java.lang.String" value="emp2"/>
-                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[165, 22]"/>
-                </Property>
+                <Property name="columns" type="int" value="20"/>
+                <Property name="rows" type="int" value="5"/>
+                <Property name="caption" type="java.lang.String" value="Purpose of Loan"/>
+                <Property name="hint" type="java.lang.String" value="Specify your specifications here."/>
+                <Property name="name" type="java.lang.String" value="entity.loaninfo.loanpurpose"/>
+                <Property name="required" type="boolean" value="true"/>
+                <Property name="toolTipText" type="java.lang.String" value="Purpose of Loan"/>
               </Properties>
             </Component>
           </SubComponents>

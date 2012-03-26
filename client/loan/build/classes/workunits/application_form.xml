@@ -272,9 +272,9 @@
                         else
                             entity.updatedBy = OsirisContext.env.USERINFO.firstname+ ' '+OsirisContext.env.USERINFO.lastname;
                         
-                        if(entity.marketedby!=null)
+                        if(!entity.marketedby)
                             emp = entity.marketedby;
-                        if(entity.marketedby2!=null)
+                        if(!entity.marketedby2)
                             emp2 = entity.marketedby2;
                             
                     }else if(entity.clientType=="WALK-IN"){
@@ -282,6 +282,11 @@
                             entity.encodedBy = OsirisContext.env.USERINFO.firstname+ ' '+OsirisContext.env.USERINFO.lastname;
                         else
                             entity.updatedBy = OsirisContext.env.USERINFO.firstname+ ' '+OsirisContext.env.USERINFO.lastname;
+                            
+                        if(entity.marketedby)
+                            emp = "";
+                        if(entity.marketedby2)
+                            emp2 = "";
                     }
                     
                     def photoids = [];
@@ -476,38 +481,34 @@
                         throw new Exception('Pls. specify BCOH Recommendation.');
                     else if(!crecomrecommendation)
                         throw new Exception('Pls. specify Crecom Recommendation.');
-                    //else if( !entity.coMakerList )
-                        //throw new Exception("Please specify a CoMaker of the borrower");
                 }
 
                 if(mode=='renew'){
                     if( entity.clientType=="WALK-IN" ){
                         if( emp && emp2 ){
-                            MsgBox.alert("Marketed By Employee is not allowed");
-                            return;
+                            throw new Exception("Marketed By  Employee is not allowed.");
                         }
                     }
                     if( entity.clientType=="MARKETED" ){
-                        if( !emp || !emp2 ){
-                            MsgBox.alert('Loan Application no. '+ entity.appno +' Client Type is Marketed \nPls. select a Marketed By employee name');
-                            return;
-                        }    
+                        if( !emp ){
+                            throw new Exception('Loan Application no. '+ entity.appno +' Client Type is Marketed \nPls. select a Marketed By employee name');
+                        }
                     }
                     o=svc.createRenewal(entity);
-                    MsgBox.alert('Renewal request was successfully save');
+                    MsgBox.alert('Renewal request was successfully saved.');
                 }
                 else{               
                     if( entity.clientType=="WALK-IN" ){
                         if( emp && emp2 ){
-                            MsgBox.alert("Marketed By Employee is not allowed");
-                            return;
+                            throw new Exception("Marketed By  Employee is not allowed.");
+                         }
+                         if( emp || emp2 ){
+                            throw new Exception("Marketed By  Employee is not allowed.");
                          }
                     }
                     if( entity.clientType=="MARKETED" ){
-                        //if( !emp || !emp2 ){
-                        if(!emp){
-                            MsgBox.alert('Loan Application Client Type is Marketed \nPls. select a Marketed By employee name');
-                            return;
+                        if( !emp ){
+                            throw new Exception('Loan Application Client Type is Marketed \nPls. select a Marketed By employee name');
                         }
                     }
                     entity=svc.save(entity);

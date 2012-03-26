@@ -71,6 +71,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         xDataTable4 = new com.rameses.rcp.control.XDataTable();
         xButton23 = new com.rameses.rcp.control.XButton();
         xButton24 = new com.rameses.rcp.control.XButton();
+        xButton26 = new com.rameses.rcp.control.XButton();
         jPanel28 = new javax.swing.JPanel();
         xRadio4 = new com.rameses.rcp.control.XRadio();
         xRadio5 = new com.rameses.rcp.control.XRadio();
@@ -377,13 +378,14 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         xTextField13 = new com.rameses.rcp.control.XTextField();
         xActionTextField1 = new com.rameses.rcp.control.XActionTextField();
         formPanel10 = new com.rameses.rcp.util.FormPanel();
-        xLabel1 = new com.rameses.rcp.control.XLabel();
+        xComboBox5 = new com.rameses.rcp.control.XComboBox();
         xTextField3 = new com.rameses.rcp.control.XTextField();
         formPanel2 = new com.rameses.rcp.util.FormPanel();
         xComboBox1 = new com.rameses.rcp.control.XComboBox();
         xComboBox2 = new com.rameses.rcp.control.XComboBox();
         formPanel6 = new com.rameses.rcp.util.FormPanel();
         xTextField26 = new com.rameses.rcp.control.XTextField();
+        xTextField27 = new com.rameses.rcp.control.XTextField();
         formPanel26 = new com.rameses.rcp.util.FormPanel();
         xTextArea7 = new com.rameses.rcp.control.XTextArea();
         formPanel28 = new com.rameses.rcp.util.FormPanel();
@@ -690,6 +692,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder4 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder4.setTitle("Business Information");
         jPanel27.setBorder(xTitledBorder4);
+        xDataTable3.setToolTipText(" Business List");
         xDataTable3.setHandler("principalMainBusinessHandler");
         xDataTable3.setName("principalMainBusinessInfo");
 
@@ -753,6 +756,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder5 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder5.setTitle("Lending Information");
         jPanel51.setBorder(xTitledBorder5);
+        xDataTable4.setToolTipText("Other Lending List");
         xDataTable4.setHandler("otherLendingHandler");
         xDataTable4.setName("otherLendingInfo");
 
@@ -788,6 +792,14 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         xButton24.setName("removeOtherLending");
         xButton24.setVisibleWhen("#{mode!='read'}");
 
+        xButton26.setMnemonic('e');
+        xButton26.setText("Edit");
+        xButton26.setToolTipText("Edit Other Lending");
+        xButton26.setCaption("Edit Other Lending");
+        xButton26.setImmediate(true);
+        xButton26.setName("editOtherLending");
+        xButton26.setVisibleWhen("#{mode!='read'}");
+
         org.jdesktop.layout.GroupLayout jPanel40Layout = new org.jdesktop.layout.GroupLayout(jPanel40);
         jPanel40.setLayout(jPanel40Layout);
         jPanel40Layout.setHorizontalGroup(
@@ -799,7 +811,9 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
                     .add(jPanel40Layout.createSequentialGroup()
                         .add(xButton23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(xButton24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .add(xButton24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(xButton26, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
         jPanel40Layout.setVerticalGroup(
@@ -810,7 +824,8 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel40Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(xButton23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(xButton24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(xButton24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(xButton26, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         jTabbedPane6.addTab("Other Loan Record ", jPanel40);
@@ -844,6 +859,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         xList5.setExpression("#{subject}");
         xList5.setItems("assetsList");
         xList5.setName("selectedAsset");
+        xList5.setToolTipText("Assets List");
         jScrollPane15.setViewportView(xList5);
 
         xButton7.setMnemonic('r');
@@ -866,6 +882,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
 
         xSubFormPanel3.setLayout(null);
 
+        xSubFormPanel3.setToolTipText("Asset");
         xSubFormPanel3.setHandler("assetOpener");
 
         xRadio7.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -969,15 +986,18 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
 
         xImageViewer8.setBackground(new java.awt.Color(255, 255, 255));
         xImageViewer8.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        xImageViewer8.setToolTipText("Photo");
         xImageViewer8.setDynamic(true);
         xImageViewer8.setEmptyImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/nophoto.png")));
         xImageViewer8.setName("entity.borrower.photo");
 
         xButton21.setText("Browse Photo");
+        xButton21.setToolTipText("Browse Photo");
         xButton21.setImmediate(true);
         xButton21.setName("browsePic");
 
         xButton25.setText("Capture");
+        xButton25.setToolTipText("Take a Photo");
         xButton25.setEnabled(false);
         xButton25.setImmediate(true);
         xButton25.setName("capturePic");
@@ -992,6 +1012,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         formPanel32.setEmptyText("Please specify Principal Borrower.");
         formPanel32.setName("borrowerControls");
         formPanel32.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        formPanel32.setToolTipText("Borrower's Information");
         formPanel32.setViewType("html");
         jScrollPane4.setViewportView(formPanel32);
 
@@ -1062,10 +1083,12 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         xImageViewer10.setName("entity.spouse.photo");
 
         xButton56.setText("Browse Photo");
+        xButton56.setToolTipText("Browse Photo");
         xButton56.setImmediate(true);
         xButton56.setName("browseSpousePic");
 
         xButton57.setText("Capture");
+        xButton57.setToolTipText("Take a Photo");
         xButton57.setEnabled(false);
         xButton57.setImmediate(true);
         xButton57.setName("capturePic");
@@ -1080,6 +1103,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         formPanel33.setEmptyText("No Spouse specified.");
         formPanel33.setName("connectionControls");
         formPanel33.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        formPanel33.setToolTipText("Spouse Information");
         formPanel33.setViewType("html");
         jScrollPane5.setViewportView(formPanel33);
 
@@ -1153,6 +1177,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         );
         jTabbedPane1.addTab("Spouse", jPanel96);
 
+        xDataTable25.setToolTipText("Children's List");
         xDataTable25.setDepends(new String[] {"borrowerControls"});
         xDataTable25.setHandler("childrenHandler");
         xDataTable25.setName("childrenInfo");
@@ -1215,6 +1240,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder8 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder8.setTitle("Highest Educational Attainment");
         jPanel14.setBorder(xTitledBorder8);
+        xDataTable14.setToolTipText("Professional Background List");
         xDataTable14.setHandler("principalProfessionalBackgroundHandler");
         xDataTable14.setName("principalProfessionalBackgroundInfo");
 
@@ -1271,6 +1297,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder9 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder9.setTitle("Present/Previous Employment");
         jPanel39.setBorder(xTitledBorder9);
+        xDataTable13.setToolTipText("Employment's List");
         xDataTable13.setHandler("principalEmploymentHandler");
         xDataTable13.setName("principalEmploymentInfo");
 
@@ -1407,6 +1434,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder11 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder11.setTitle("Siblings");
         jPanel48.setBorder(xTitledBorder11);
+        xDataTable12.setToolTipText("Siblings List");
         xDataTable12.setDepends(new String[] {"borrowerControls"});
         xDataTable12.setHandler("principalsiblingsHandler");
         xDataTable12.setName("principalsiblingsInfo");
@@ -1547,6 +1575,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder13 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder13.setTitle("Siblings");
         jPanel49.setBorder(xTitledBorder13);
+        xDataTable11.setToolTipText("Siblings List");
         xDataTable11.setDepends(new String[] {"connectionControls"});
         xDataTable11.setHandler("principalSpouseSiblingsHandler");
         xDataTable11.setName("principalSpouseSiblingsInfo");
@@ -1631,6 +1660,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder14 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder14.setTitle("Other Source(s) of income");
         jPanel64.setBorder(xTitledBorder14);
+        xDataTable9.setToolTipText("Other Sources of Income List");
         xDataTable9.setHandler("principalOtherSourcesOfIncomeHandler");
         xDataTable9.setName("principalOtherSourcesOfIncomeInfo");
 
@@ -1691,9 +1721,11 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         );
         jTabbedPane1.addTab("Other Source(s) of Income", jPanel63);
 
+        jTabbedPane10.setToolTipText("Checking Accounts List");
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder15 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder15.setTitle("Savings Accounts");
         jPanel60.setBorder(xTitledBorder15);
+        xDataTable16.setToolTipText("Savings Accunts List");
         xDataTable16.setHandler("principalSavingsAccountHandler");
         xDataTable16.setName("principalSavingsInfo");
 
@@ -1827,6 +1859,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         xTextArea1.setName("entity.borrower.otherAccnts");
         xTextArea1.setRequired(true);
         xTextArea1.setShowCaption(false);
+        xTextArea1.setToolTipText("Other Accounts");
         jScrollPane8.setViewportView(xTextArea1);
 
         org.jdesktop.layout.GroupLayout jPanel22Layout = new org.jdesktop.layout.GroupLayout(jPanel22);
@@ -1909,16 +1942,19 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
 
         xImageViewer5.setBackground(new java.awt.Color(255, 255, 255));
         xImageViewer5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        xImageViewer5.setToolTipText("Join Borrower's Photo");
         xImageViewer5.setDepends(new String[] {"selectedJointBorrower"});
         xImageViewer5.setDynamic(true);
         xImageViewer5.setEmptyImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/nophoto.png")));
         xImageViewer5.setName("selectedJointBorrower.photo");
 
         xButton31.setText("Browse Photo");
+        xButton31.setToolTipText("Browse Photo");
         xButton31.setImmediate(true);
         xButton31.setName("browseJointPic");
 
         xButton32.setText("Capture");
+        xButton32.setToolTipText("Take a Photo");
         xButton32.setImmediate(true);
         xButton32.setName("capturePic");
 
@@ -1930,6 +1966,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         formPanel1.setEmptyText("No Joint Borrower specified.");
         formPanel1.setName("jointBorrowerControls");
         formPanel1.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        formPanel1.setToolTipText("Joint Borrower's Information");
         formPanel1.setViewType("html");
         jScrollPane3.setViewportView(formPanel1);
 
@@ -1982,16 +2019,19 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
 
         xImageViewer15.setBackground(new java.awt.Color(255, 255, 255));
         xImageViewer15.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        xImageViewer15.setToolTipText("Joint Borrower's Spouse Photo");
         xImageViewer15.setDepends(new String[] {"selectedJointBorrower"});
         xImageViewer15.setDynamic(true);
         xImageViewer15.setEmptyImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/nophoto.png")));
         xImageViewer15.setName("selectedJointBorrower.spouse.photo");
 
         xButton80.setText("Browse Photo");
+        xButton80.setToolTipText("Browse Photo");
         xButton80.setImmediate(true);
         xButton80.setName("browseJBSpousePic");
 
         xButton81.setText("Capture");
+        xButton81.setToolTipText("Take a Photo");
         xButton81.setImmediate(true);
         xButton81.setName("capturePic");
 
@@ -2004,6 +2044,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         formPanel45.setEmptyText("No Spouse specified.");
         formPanel45.setName("jointBorrowerConnectionControls");
         formPanel45.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        formPanel45.setToolTipText("Joint Borrower's Spouse Information");
         formPanel45.setViewType("html");
         jScrollPane22.setViewportView(formPanel45);
 
@@ -2078,6 +2119,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder20 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder20.setTitle("Business Information");
         jPanel20.setBorder(xTitledBorder20);
+        xDataTable5.setToolTipText("Business List");
         xDataTable5.setDepends(new String[] {"selectedJointBorrower"});
         xDataTable5.setDynamic(true);
         xDataTable5.setHandler("jbMainBusinessHandler");
@@ -2153,6 +2195,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder21 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder21.setTitle("Source(s) of Income");
         jPanel15.setBorder(xTitledBorder21);
+        xDataTable2.setToolTipText("Other Sources of Income List");
         xDataTable2.setDepends(new String[] {"selectedJointBorrower"});
         xDataTable2.setDynamic(true);
         xDataTable2.setHandler("jbOtherSourcesOfIncomeHandler");
@@ -2257,6 +2300,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder22 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder22.setTitle("Highest Educational Attainment");
         jPanel19.setBorder(xTitledBorder22);
+        xDataTable17.setToolTipText("Professional Background List");
         xDataTable17.setDepends(new String[] {"selectedJointBorrower"});
         xDataTable17.setDynamic(true);
         xDataTable17.setHandler("jbProfBackgroundHandler");
@@ -2332,6 +2376,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder23 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder23.setTitle("Present/Previous Employment");
         jPanel42.setBorder(xTitledBorder23);
+        xDataTable18.setToolTipText("Employment's List");
         xDataTable18.setDepends(new String[] {"selectedJointBorrower"});
         xDataTable18.setDynamic(true);
         xDataTable18.setHandler("jbEmploymentHandler");
@@ -2472,6 +2517,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder25 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder25.setTitle("Siblings");
         jPanel76.setBorder(xTitledBorder25);
+        xDataTable21.setToolTipText("Joint Borrower Siblings List");
         xDataTable21.setDepends(new String[] {"selectedJointBorrower"});
         xDataTable21.setDynamic(true);
         xDataTable21.setHandler("jbSiblingsHandler");
@@ -2546,47 +2592,47 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
 
         formPanel25.setCaptionWidth(60);
         xTextField71.setCaption("Father");
-        xTextField71.setDepends(new String[] {"selectedJointBorrower"});
+        xTextField71.setDepends(new String[] {"jointBorrowerConnectionControls"});
         xTextField71.setName("selectedJointBorrower.spouseFathersName");
         xTextField71.setPreferredSize(new java.awt.Dimension(165, 19));
         formPanel25.add(xTextField71);
 
         xDateField8.setCaption("Birthdate");
-        xDateField8.setDepends(new String[] {"selectedJointBorrower"});
+        xDateField8.setDepends(new String[] {"jointBorrowerConnectionControls"});
         xDateField8.setName("selectedJointBorrower.spouseFathersBDate");
         xDateField8.setPreferredSize(new java.awt.Dimension(165, 19));
         xDateField8.setUseDatePickerModel(true);
         formPanel25.add(xDateField8);
 
         xNumberField35.setCaption("Age");
-        xNumberField35.setDepends(new String[] {"selectedJointBorrower"});
+        xNumberField35.setDepends(new String[] {"jointBorrowerConnectionControls"});
         xNumberField35.setFieldType(Integer.class);
         xNumberField35.setName("selectedJointBorrower.spouseFathersAge");
         xNumberField35.setPreferredSize(new java.awt.Dimension(168, 19));
         formPanel25.add(xNumberField35);
 
         xTextField73.setCaption("Mother");
-        xTextField73.setDepends(new String[] {"selectedJointBorrower"});
+        xTextField73.setDepends(new String[] {"jointBorrowerConnectionControls"});
         xTextField73.setName("selectedJointBorrower.spouseMothersName");
         xTextField73.setPreferredSize(new java.awt.Dimension(165, 19));
         formPanel25.add(xTextField73);
 
         xDateField9.setCaption("Birthdate");
-        xDateField9.setDepends(new String[] {"selectedJointBorrower"});
+        xDateField9.setDepends(new String[] {"jointBorrowerConnectionControls"});
         xDateField9.setName("selectedJointBorrower.spouseMothersBDate");
         xDateField9.setPreferredSize(new java.awt.Dimension(165, 19));
         xDateField9.setUseDatePickerModel(true);
         formPanel25.add(xDateField9);
 
         xNumberField36.setCaption("Age");
-        xNumberField36.setDepends(new String[] {"selectedJointBorrower"});
+        xNumberField36.setDepends(new String[] {"jointBorrowerConnectionControls"});
         xNumberField36.setFieldType(Integer.class);
         xNumberField36.setName("selectedJointBorrower.spouseMothersAge");
         xNumberField36.setPreferredSize(new java.awt.Dimension(168, 19));
         formPanel25.add(xNumberField36);
 
         xTextField75.setCaption("Address");
-        xTextField75.setDepends(new String[] {"selectedJointBorrower"});
+        xTextField75.setDepends(new String[] {"jointBorrowerConnectionControls"});
         xTextField75.setName("selectedJointBorrower.spouseAddress");
         xTextField75.setPreferredSize(new java.awt.Dimension(165, 19));
         formPanel25.add(xTextField75);
@@ -2594,7 +2640,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         xTextArea11.setColumns(20);
         xTextArea11.setRows(5);
         xTextArea11.setCaption("Others");
-        xTextArea11.setDepends(new String[] {"selectedJointBorrower"});
+        xTextArea11.setDepends(new String[] {"jointBorrowerConnectionControls"});
         xTextArea11.setHint("Specify your specifications here.");
         xTextArea11.setName("selectedJointBorrower.spouseOthersSpecs");
         formPanel25.add(xTextArea11);
@@ -2618,7 +2664,8 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder27 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder27.setTitle("Siblings");
         jPanel75.setBorder(xTitledBorder27);
-        xDataTable20.setDepends(new String[] {"selectedJointBorrower"});
+        xDataTable20.setToolTipText("Joint Borrower Spouse Siblings List");
+        xDataTable20.setDepends(new String[] {});
         xDataTable20.setDynamic(true);
         xDataTable20.setHandler("jbSpouseSiblingsHandler");
         xDataTable20.setName("jbSpouseSiblings");
@@ -2705,6 +2752,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder28 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder28.setTitle("Saving Accounts");
         jPanel80.setBorder(xTitledBorder28);
+        xDataTable23.setToolTipText("Joint Borrower Savings Accounts LIst");
         xDataTable23.setDepends(new String[] {"selectedJointBorrower"});
         xDataTable23.setDynamic(true);
         xDataTable23.setHandler("jbSavingsAccountHandler");
@@ -2772,6 +2820,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder29 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder29.setTitle("Checking Accounts");
         jPanel82.setBorder(xTitledBorder29);
+        xDataTable24.setToolTipText("Joint Borrower Checking Accounts List");
         xDataTable24.setDepends(new String[] {"selectedJointBorrower"});
         xDataTable24.setDynamic(true);
         xDataTable24.setHandler("jbCheckingAccountHandler");
@@ -2846,6 +2895,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         xTextArea2.setName("selectedJointBorrower.otherAccnts");
         xTextArea2.setRequired(true);
         xTextArea2.setShowCaption(false);
+        xTextArea2.setToolTipText("Joint Borrower Other Accounts");
         jScrollPane6.setViewportView(xTextArea2);
 
         org.jdesktop.layout.GroupLayout jPanel18Layout = new org.jdesktop.layout.GroupLayout(jPanel18);
@@ -2913,6 +2963,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         xList2.setExpression("#{name}");
         xList2.setItems("entity.jointBorrowerList");
         xList2.setName("selectedJointBorrower");
+        xList2.setToolTipText("Joint Borrower's List");
         jScrollPane10.setViewportView(xList2);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12));
@@ -2958,20 +3009,24 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         xList3.setExpression("#{name}");
         xList3.setItems("entity.coMakerList");
         xList3.setName("selectedCoMaker");
+        xList3.setToolTipText("Co-Maker's List");
         jScrollPane11.setViewportView(xList3);
 
         xImageViewer6.setBackground(new java.awt.Color(255, 255, 255));
         xImageViewer6.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        xImageViewer6.setToolTipText("Co-Makers Photo");
         xImageViewer6.setDepends(new String[] {"selectedCoMaker"});
         xImageViewer6.setDynamic(true);
         xImageViewer6.setEmptyImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/nophoto.png")));
         xImageViewer6.setName("selectedCoMaker.photo");
 
         xButton33.setText("Browse Photo");
+        xButton33.setToolTipText("Browse Photo");
         xButton33.setImmediate(true);
         xButton33.setName("browseCoMakerPic");
 
         xButton34.setText("Capture");
+        xButton34.setToolTipText("Take a Photo");
         xButton34.setImmediate(true);
         xButton34.setName("capturePic");
 
@@ -2983,6 +3038,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         formPanel8.setEmptyText("No CoMaker specified.");
         formPanel8.setName("coMakerControls");
         formPanel8.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        formPanel8.setToolTipText("Co-Maker's Information");
         formPanel8.setViewType("html");
         jScrollPane7.setViewportView(formPanel8);
 
@@ -3035,16 +3091,19 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
 
         xImageViewer12.setBackground(new java.awt.Color(255, 255, 255));
         xImageViewer12.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        xImageViewer12.setToolTipText("Co-Maker's Spouse Photo");
         xImageViewer12.setDepends(new String[] {"selectedCoMaker"});
         xImageViewer12.setDynamic(true);
         xImageViewer12.setEmptyImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/nophoto.png")));
         xImageViewer12.setName("selectedCoMaker.spouse.photo");
 
         xButton61.setText("Browse Photo");
+        xButton61.setToolTipText("Browse Photo");
         xButton61.setImmediate(true);
         xButton61.setName("browseCMSpousePic");
 
         xButton62.setText("Capture");
+        xButton62.setToolTipText("Take a Photo");
         xButton62.setImmediate(true);
         xButton62.setName("capturePic");
 
@@ -3057,6 +3116,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         formPanel42.setEmptyText("No Spouse specified.");
         formPanel42.setName("coMakerConnectionControls");
         formPanel42.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        formPanel42.setToolTipText("Co-Maker's Spouse Information");
         formPanel42.setViewType("html");
         jScrollPane2.setViewportView(formPanel42);
 
@@ -3131,6 +3191,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder33 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder33.setTitle("Business Information");
         jPanel25.setBorder(xTitledBorder33);
+        xDataTable6.setToolTipText("Business List");
         xDataTable6.setDepends(new String[] {"selectedCoMaker"});
         xDataTable6.setDynamic(true);
         xDataTable6.setHandler("cmMainBusinessHandler");
@@ -3204,6 +3265,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder34 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder34.setTitle("Source(s) of Income");
         jPanel1.setBorder(xTitledBorder34);
+        xDataTable1.setToolTipText("Other Sources of Income List");
         xDataTable1.setDepends(new String[] {"selectedCoMaker"});
         xDataTable1.setDynamic(true);
         xDataTable1.setHandler("cmOtherSourcesOfIncomeHandler");
@@ -3305,6 +3367,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder35 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder35.setTitle("Highest Educational Attainment");
         jPanel31.setBorder(xTitledBorder35);
+        xDataTable19.setToolTipText("Professional Background List");
         xDataTable19.setDepends(new String[] {"selectedCoMaker"});
         xDataTable19.setDynamic(true);
         xDataTable19.setHandler("cmProfBackgroundHandler");
@@ -3378,6 +3441,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder36 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder36.setTitle("Present/Previous Employment");
         jPanel43.setBorder(xTitledBorder36);
+        xDataTable22.setToolTipText("Employment's List");
         xDataTable22.setDepends(new String[] {"selectedCoMaker"});
         xDataTable22.setDynamic(true);
         xDataTable22.setHandler("cmEmploymentHandler");
@@ -3482,6 +3546,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder37 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder37.setTitle("");
         jPanel98.setBorder(xTitledBorder37);
+        xTable9.setToolTipText("Loan History List");
         xTable9.setHandler("listLoanHistory");
         xTable9.setName("selectedLoanHistory");
 
@@ -3530,12 +3595,13 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder38 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder38.setTitle("");
         jPanel99.setBorder(xTitledBorder38);
+        xTable10.setToolTipText("Ledger Evaluation List");
         xTable10.setHandler("ledgerEvaluationHandler");
         xTable10.setName("ledgerEvaluationList");
 
         xButton59.setText("View Info");
         xButton59.setImmediate(true);
-        xButton59.setName("viewLoanHistory");
+        xButton59.setName("viewLedgerEvaluation");
 
         org.jdesktop.layout.GroupLayout jPanel99Layout = new org.jdesktop.layout.GroupLayout(jPanel99);
         jPanel99.setLayout(jPanel99Layout);
@@ -3698,6 +3764,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         );
 
         xEditorPane20.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(231, 223, 223)));
+        xEditorPane20.setToolTipText("CI Recommendation");
         xEditorPane20.setName("cirecommendation");
         jScrollPane9.setViewportView(xEditorPane20);
 
@@ -3745,6 +3812,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         jLabel24.setText("Crecom Summary");
 
         xEditorPane16.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(231, 223, 223)));
+        xEditorPane16.setToolTipText("Crecom Recommendation");
         xEditorPane16.setName("crecomrecommendation");
         jScrollPane18.setViewportView(xEditorPane16);
 
@@ -3760,6 +3828,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         xNumberField42.setName("entity.marketerRecomAmt");
         xNumberField42.setPattern("#,##0.00");
         xNumberField42.setPreferredSize(new java.awt.Dimension(0, 19));
+        xNumberField42.setToolTipText("Marketer amount Recommendation");
         formPanel3.add(xNumberField42);
 
         xNumberField44.setCaption("CI");
@@ -3767,6 +3836,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         xNumberField44.setName("entity.ciRecomAmt");
         xNumberField44.setPattern("#,##0.00");
         xNumberField44.setPreferredSize(new java.awt.Dimension(0, 19));
+        xNumberField44.setToolTipText("CI amount Recommendation");
         formPanel3.add(xNumberField44);
 
         xNumberField43.setCaption("FCA");
@@ -3774,6 +3844,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         xNumberField43.setName("entity.fcaRecomAmt");
         xNumberField43.setPattern("#,##0.00");
         xNumberField43.setPreferredSize(new java.awt.Dimension(0, 19));
+        xNumberField43.setToolTipText("FCA amount Recommendation");
         formPanel3.add(xNumberField43);
 
         xNumberField41.setCaption("CAO");
@@ -3781,6 +3852,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         xNumberField41.setName("entity.caoRecomAmt");
         xNumberField41.setPattern("#,##0.00");
         xNumberField41.setPreferredSize(new java.awt.Dimension(0, 19));
+        xNumberField41.setToolTipText("CAO amount Recommendation");
         formPanel3.add(xNumberField41);
 
         xNumberField45.setCaption("BCOH");
@@ -3788,6 +3860,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         xNumberField45.setName("entity.bcohRecomAmt");
         xNumberField45.setPattern("#,##0.00");
         xNumberField45.setPreferredSize(new java.awt.Dimension(0, 19));
+        xNumberField45.setToolTipText("BCOH amount Recommendation");
         formPanel3.add(xNumberField45);
 
         jSeparator4.setOrientation(javax.swing.SwingConstants.VERTICAL);
@@ -3846,6 +3919,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         jLabel10.setText("Comments");
 
         xEditorPane7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(231, 223, 223)));
+        xEditorPane7.setToolTipText("Coments/Remarks");
         xEditorPane7.setName("comments");
         jScrollPane14.setViewportView(xEditorPane7);
 
@@ -3893,6 +3967,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         jLabel7.setText("Transaction Log");
 
         xEditorPane4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(231, 223, 223)));
+        xEditorPane4.setToolTipText("Transaction Log File(s)");
         xEditorPane4.setName("translog");
         jScrollPane1.setViewportView(xEditorPane4);
 
@@ -3928,10 +4003,10 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         xTextField13.setName("entity.state");
         xTextField13.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField13.setReadonly(true);
+        xTextField13.setToolTipText("Loan Application Status");
         formPanel7.add(xTextField13);
 
         xActionTextField1.setEditable(false);
-        xActionTextField1.setToolTipText("Search Route");
         xActionTextField1.setActionName("lookupRoute");
         xActionTextField1.setCaption("Route");
         xActionTextField1.setHint("Search Route");
@@ -3939,24 +4014,36 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         xActionTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xActionTextField1.setReadonly(true);
         xActionTextField1.setRequired(true);
+        xActionTextField1.setToolTipText("Search Route");
         formPanel7.add(xActionTextField1);
 
         formPanel10.setPadding(new java.awt.Insets(5, 5, 10, 5));
-        xLabel1.setExpression("<html><b>#{applicationType}</b></html>");
-        xLabel1.setFont(new java.awt.Font("Arial", 1, 12));
-        xLabel1.setPreferredSize(new java.awt.Dimension(250, 21));
-        xLabel1.setShowCaption(false);
-        formPanel10.add(xLabel1);
+        xComboBox5.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "entity.appType" }));
+        xComboBox5.setToolTipText("Loan Application Type");
+        xComboBox5.setCaption("App. Type");
+        xComboBox5.setDynamic(true);
+        xComboBox5.setEmptyText("Select App Type");
+        xComboBox5.setExpression("#{type}");
+        xComboBox5.setImmediate(true);
+        xComboBox5.setItemKey("type");
+        xComboBox5.setItems("appTypeList");
+        xComboBox5.setName("entity.appType");
+        xComboBox5.setPreferredSize(new java.awt.Dimension(165, 22));
+        xComboBox5.setRequired(true);
+        formPanel10.add(xComboBox5);
 
         xTextField3.setCaption("App. No");
         xTextField3.setHint("Application No");
         xTextField3.setName("entity.appno");
         xTextField3.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField3.setReadonly(true);
+        xTextField3.setToolTipText("Application Number");
         formPanel10.add(xTextField3);
 
         formPanel2.setCaptionWidth(100);
+        xComboBox1.setToolTipText("Click to select a Client Type");
         xComboBox1.setCaption("Client Type");
+        xComboBox1.setDepends(new String[] {"entity.appType"});
         xComboBox1.setDynamic(true);
         xComboBox1.setEmptyText("Select Client Type");
         xComboBox1.setExpression("#{code}");
@@ -3968,6 +4055,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         xComboBox1.setRequired(true);
         formPanel2.add(xComboBox1);
 
+        xComboBox2.setToolTipText("Click to select Interviewed By");
         xComboBox2.setCaption("Interviewed By");
         xComboBox2.setDepends(new String[] {"clientType"});
         xComboBox2.setDynamic(true);
@@ -3985,7 +4073,17 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         xTextField26.setEnabled(false);
         xTextField26.setName("entity.encodedBy");
         xTextField26.setPreferredSize(new java.awt.Dimension(0, 19));
+        xTextField26.setToolTipText("Recorded By");
         formPanel6.add(xTextField26);
+
+        xTextField27.setEditable(false);
+        xTextField27.setCaption("Updated By");
+        xTextField27.setCaptionWidth(80);
+        xTextField27.setEnabled(false);
+        xTextField27.setName("entity.updatedBy");
+        xTextField27.setPreferredSize(new java.awt.Dimension(0, 19));
+        xTextField27.setToolTipText("Updated/Edited By");
+        formPanel6.add(xTextField27);
 
         formPanel26.setCaptionWidth(100);
         xTextArea7.setColumns(20);
@@ -3994,6 +4092,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         xTextArea7.setHint("Specify your specifications here.");
         xTextArea7.setName("entity.loaninfo.loanpurpose");
         xTextArea7.setRequired(true);
+        xTextArea7.setToolTipText("Purpose of Loan");
         formPanel26.add(xTextArea7);
 
         formPanel28.setCaptionWidth(70);
@@ -4003,9 +4102,11 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         xNumberField28.setName("entity.loaninfo.producttype.term");
         xNumberField28.setPreferredSize(new java.awt.Dimension(120, 19));
         xNumberField28.setRequired(true);
+        xNumberField28.setToolTipText("Product Term");
         formPanel28.add(xNumberField28);
 
         formPanel29.setCaptionWidth(100);
+        xComboBox15.setToolTipText("Product Type");
         xComboBox15.setAllowNull(false);
         xComboBox15.setCaption("Product Type");
         xComboBox15.setExpression("#{code}");
@@ -4022,6 +4123,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
         xNumberField27.setPattern("#,##0.00");
         xNumberField27.setPreferredSize(new java.awt.Dimension(0, 19));
         xNumberField27.setRequired(true);
+        xNumberField27.setToolTipText("Amount Applied");
         formPanel29.add(xNumberField27);
 
         org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
@@ -4082,7 +4184,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
             .add(layout.createSequentialGroup()
                 .add(jPanel10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 51, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 125, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jTabbedPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
                 .addContainerGap())
@@ -4274,6 +4376,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
     private com.rameses.rcp.control.XButton xButton23;
     private com.rameses.rcp.control.XButton xButton24;
     private com.rameses.rcp.control.XButton xButton25;
+    private com.rameses.rcp.control.XButton xButton26;
     private com.rameses.rcp.control.XButton xButton27;
     private com.rameses.rcp.control.XButton xButton28;
     private com.rameses.rcp.control.XButton xButton29;
@@ -4344,6 +4447,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
     private com.rameses.rcp.control.XComboBox xComboBox2;
     private com.rameses.rcp.control.XComboBox xComboBox3;
     private com.rameses.rcp.control.XComboBox xComboBox4;
+    private com.rameses.rcp.control.XComboBox xComboBox5;
     private com.rameses.rcp.control.XComboBox xComboBox9;
     private com.rameses.rcp.control.XDataTable xDataTable1;
     private com.rameses.rcp.control.XDataTable xDataTable11;
@@ -4390,7 +4494,6 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
     private com.rameses.rcp.control.XImageViewer xImageViewer5;
     private com.rameses.rcp.control.XImageViewer xImageViewer6;
     private com.rameses.rcp.control.XImageViewer xImageViewer8;
-    private com.rameses.rcp.control.XLabel xLabel1;
     private com.rameses.rcp.control.XLabel xLabel18;
     private com.rameses.rcp.control.XLabel xLabel27;
     private com.rameses.rcp.control.XLabel xLabel28;
@@ -4439,6 +4542,7 @@ public class ApplicationForm_3 extends javax.swing.JPanel {
     private com.rameses.rcp.control.XTextArea xTextArea9;
     private com.rameses.rcp.control.XTextField xTextField13;
     private com.rameses.rcp.control.XTextField xTextField26;
+    private com.rameses.rcp.control.XTextField xTextField27;
     private com.rameses.rcp.control.XTextField xTextField3;
     private com.rameses.rcp.control.XTextField xTextField32;
     private com.rameses.rcp.control.XTextField xTextField35;

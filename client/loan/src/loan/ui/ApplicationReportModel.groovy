@@ -2,13 +2,16 @@ package loan.ui;
 
 import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.reports.*;
+import com.rameses.common.*;
+import com.rameses.util.*;
+import java.lang.*;
+import java.io.*;
 
 public class ApplicationReportModel extends ReportModel {
 
     def printOut;
     def entity;
     
-    //static def dt_formatter = new java.text.SimpleDateFormat('yyyy-MM-dd');
     static def dt_formatter = new java.text.SimpleDateFormat('MMMM dd, yyyy');
         
     def getCustName( cust ){
@@ -99,70 +102,6 @@ public class ApplicationReportModel extends ReportModel {
             data.borrower.otherAccnts = "No other accounts specified.";
             data.otherAccts = " ";
         }
-        
-        /*-----For Loan Releasing-----*/
-        data.appno = data.appno;
-        data.contactno = data.borrower.contactno+'';
-        data.name = [data.borrower.firstname + ' ' + data.borrower.lastname];
-        data.name2 = [data.borrower.firstname + ' ' + data.borrower.lastname];
-        data.jointBorrowerList?.each {
-            data.name << it.firstname + ' ' + it.lastname;
-            data.name2 << it.firstname + ' ' + it.lastname;
-        }
-        data.name = data.name.join(' and ');
-        data.address = getCustAddress( data.borrower );
-        
-        //*** Ledger Data  ***//
-        if( data.ledger ){
-            if( data.ledger.dailyPayment !=null ) data.ledger.dailyPayment = data.ledger.dailyPayment as BigDecimal;
-                else data.ledger.dailyPayment = new BigDecimal( 0.00 );
-            if( data.ledger.term !=null ) data.ledger.term = data.ledger.term as BigDecimal;
-                else data.ledger.term = new BigDecimal( 0.00 );
-            
-            data.lenTerm = data.ledger.term / 30.00;
-        }
-        
-        //if( p.checkdate instanceof String )
-            //p.checkdate = dt_formatter.parse( p.checkdate );
-        //if( data.ledger.startdate ==null )
-            //data.ledger.startdate ='';
-        //else if( data.ledger.startdate instanceof String )
-            //data.ledger.startdate = dt_formatter.parse( data.ledger.startdate );
-        
-        /*
-        if ( data.ledger.startDate ==null )
-            data.ledger.startDate = '';
-        else
-            data.ledger.startDate = data.ledger.startDate;
-
-        if ( data.ledger.maturityDate ==null )    
-            data.ledger.maturityDate = '';
-        else
-            data.ledger.maturityDate = data.ledger.maturityDate;
-
-        if ( data.ledger.dailyPayment ==null )
-            data.ledger.dailyPayment = new BigDecimal(0);
-        else
-            data.dailyPayment = new BigDecimal(data.ledger.dailyPayment);
-        */
-        //data.bankname = data.ledger.bankname;
-        //data.checkno = data.ledger.checkno;
-        
-        //data.bankname = application.bankname;
-        //data.checkno = application.checkno;
-
-        //data.charges = accts;
-
-        //data.insurance = '';
-        
-        //data.lenTerm = data.ledger.term / 30.00;
-        
-        //data.notarial = accts.find{ it.title == 'NOTARIAL FEE' }?.amount;
-        //data.docstamp = accts.find{ it.title == 'DOCUMENTARY STAMP' }?.amount;
-        //data.chatrealreg = accts.find{ it.title == 'CHAT/REAL REGISTRATION' }?.amount;
-        //data.affidavit = accts.find{ it.title == 'AFFIDAVIT' }?.amount;
-        //data.totalCharges =  data.notarial + data.docstamp + data.chatrealreg + data.affidavit;
-        /*----------------*/
         
         data.mainBorrowerAge = data.borrower.age;
         data.borrowerAddress = getCustAddress( data.borrower );
@@ -551,6 +490,57 @@ public class ApplicationReportModel extends ReportModel {
             }else it.appraisedvalue = new BigDecimal( it.appraisedvalue );
                 //it.totalCav = it.appraisedvalue(it.appraisedvalue);
         };
+        
+        /*-----For Loan Releasing-----*/
+        data.appno = data.appno;
+        data.contactno = data.borrower.contactno+'';
+        data.name = [data.borrower.firstname + ' ' + data.borrower.lastname];
+        data.name2 = [data.borrower.firstname + ' ' + data.borrower.lastname];
+        data.jointBorrowerList?.each {
+            data.name << it.firstname + ' ' + it.lastname;
+            data.name2 << it.firstname + ' ' + it.lastname;
+        }
+        data.name = data.name.join(' and ');
+        data.address = getCustAddress( data.borrower );
+        
+        //*** Ledger Data  ***//
+        if( data.ledger ){
+            if( data.ledger.dailyPayment !=null ) data.ledger.dailyPayment = data.ledger.dailyPayment as BigDecimal;
+                else data.ledger.dailyPayment = new BigDecimal( 0.00 );
+            if( data.ledger.term !=null ) data.ledger.term = data.ledger.term as BigDecimal;
+                else data.ledger.term = new BigDecimal( 0.00 );    
+            data.lenTerm = data.ledger.term / 30.00;
+          
+            
+            if ( data.ledger.startDate ==null )
+                data.ledger.startDate = '';
+            else{ data.ledger.startDate = data.ledger.startDate;
+                //data.ledger.startDate = data.ledger.startDate.parse("dd-MM-yyyy", "31-12-2012");
+                //data.ledger.startDate = dt_formatter.format(data.ledger.startDate);
+            }
+            
+            if ( data.ledger.maturityDate ==null )    
+                data.ledger.maturityDate = '';
+            else data.ledger.maturityDate = data.ledger.maturityDate;
+            if ( data.ledger.dailyPayment ==null )
+                data.ledger.dailyPayment = new BigDecimal(0.00);
+            else data.dailyPayment = new BigDecimal(data.ledger.dailyPayment);
+        }
+        
+        //if( p.checkdate instanceof String )
+            //p.checkdate = dt_formatter.parse( p.checkdate );
+        //data.bankname = data.ledger.bankname;
+        //data.checkno = data.ledger.checkno;
+        //data.bankname = application.bankname;
+        //data.checkno = application.checkno;
+        //data.charges = accts;
+        //data.insurance = '';
+        //data.notarial = accts.find{ it.title == 'NOTARIAL FEE' }?.amount;
+        //data.docstamp = accts.find{ it.title == 'DOCUMENTARY STAMP' }?.amount;
+        //data.chatrealreg = accts.find{ it.title == 'CHAT/REAL REGISTRATION' }?.amount;
+        //data.affidavit = accts.find{ it.title == 'AFFIDAVIT' }?.amount;
+        //data.totalCharges =  data.notarial + data.docstamp + data.chatrealreg + data.affidavit;
+        /*----------------*/
         
         return data;
     }

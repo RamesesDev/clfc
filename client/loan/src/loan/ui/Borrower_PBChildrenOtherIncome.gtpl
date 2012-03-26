@@ -29,7 +29,7 @@
     </style>
     <body>
         <% if(!data.childrenList.otherSourcesOfIncomeList) { %>
-            <h3>No business specified for this application</h3>
+            <h3>No other sources of income specified.</h3>
         <%}else{%>
             <table width="100%">
                 <tr>

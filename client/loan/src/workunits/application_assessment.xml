@@ -21,7 +21,7 @@
         import java.sql.Timestamp;
         import java.lang.*;
         
-        class ApplicationForReleaseController{        
+        class ApplicationForReleaseController{
             @Service("LoanApplicationService")
             def appSvc;
             
@@ -60,7 +60,10 @@
                 //calculateCharges();
                 //return (mode="charges");
                 
-                checkApprovalDate();//Checking for Approval Date and Expiry Date
+                //Checking for Approval Date and Expiry Date
+                if( application.approvedate.compareTo(application.expirydate) > 0 ){
+                    throw new Exception("Approval Date on this account has already been expired.");
+                }
                 //if( application.loaninfo.offeredamount ){
                     //return (mode="amountOption");
                 //}else if( !application.loaninfo.offeredamount ){
@@ -70,12 +73,6 @@
                     calculateCharges();
                     return (mode="charges");
                 //}
-            }
-            
-            def checkApprovalDate(){
-                if( application.approvedate.compareTo(application.expirydate) > 0 ){
-                    throw new Exception("Approval Date on this account has already been expired.");
-                }
             }
             
             def listHandler=[
@@ -230,7 +227,7 @@
                     getReportData: {
                         def data = [:];
                         
-                        /*****For Loan Disclosure & Cash Voucher*****/
+                        /*****For Loan Disclosure , Loan Release Voucher & Cash Voucher*****/
                         data.name = [application.borrower.firstname + ' ' + application.borrower.lastname];
                         data.name2 = [application.borrower.firstname + ' ' + application.borrower.lastname];
                         application.jointBorrowerList?.each {
@@ -259,33 +256,10 @@
                         data.underpaymentpenalty = application.loaninfo.producttype.underpaymentpenalty as BigDecimal;
                         data.pastduerate = application.loaninfo.producttype.pastduerate as BigDecimal;
                         
-                        /*      ledger data      */
-                        if( data.startDate ==null )
-                            data.startDate = '';
-                        else
-                            data.startDate = parseDate(application.ledger.startDate);
-                            
-                        if( data.maturityDate ==null )    
-                            data.maturityDate = '';
-                        else
-                            data.maturityDate = parseDate(application.ledger.maturityDate);
-                            
-                        if( data.dailyPayment ==null )
-                            data.dailyPayment = new BigDecimal(0);
-                        else
-                            data.dailyPayment = new BigDecimal(application.ledger.dailyPayment);
-                            
-                        if( data.term ==null )
-                            data.term = 0;
-                        else
-                            data.term = application.ledger.term;
-                        /*  =============================  */
-                        
                         /*** Displaying of Loan Charges/Non Finance Charges ***/
                         def charges;
-                        data.otherCharges = data.charges;
                         data.charges = accts;
-                        data.insurance = '';
+                        data.otherCharges = accts;
                         data.notarial = accts.find{ it.title == 'NOTARIAL FEE' }?.amount;
                         data.docstamp = accts.find{ it.title == 'DOCUMENTARY STAMP FEE' }?.amount;
                         data.chatrealreg = accts.find{ it.title == 'CHAT/REAL REGISTRATION' }?.amount;
@@ -304,7 +278,7 @@
                         data.loanSurcharge = accts.find{ it.title == 'LOAN SURCHARGE' }?.amount;
                         data.loanInterest = accts.find{ it.title == 'LOAN INTEREST' }?.amount;
                         
-                        MsgBox.alert("Now Printing..." + "\nNotarial: " +data.notarial
+                        /*MsgBox.alert("Now Printing..." + "\nNotarial: " +data.notarial
                                      +"\nDoc Stamp: " +data.docstamp
                                      +"\nChat/Real Reg: " +data.chatrealreg
                                      +"\nAffidavit " +data.affidavit
@@ -319,9 +293,9 @@
                                      +"\nPast Due Principal: " +data.pastDuePrincipal
                                      +"\nLoan Surcharge: " +data.loanSurcharge
                                      +"\nLoan Interest: " +data.loanInterest
-                                     );
+                                     );*/
                                      
-                        data.totalCharges = (data.notarial==null? 0 : data.notarial) +(data.docstamp==null? 0 : data.docstamp)+(data.chatrealreg==null? 0 : data.chatrealreg)+(data.affidavit==null? 0 : data.affidavit)+(data.others==null? 0 : data.others)+(data.loadingGlobe==null? 0 : data.loadingGlobe)+(data.loadingSun==null? 0 : data.loadingSun)+(data.loanRenewal==null? 0 : data.loanRenewal)+(data.loanReceivable==null? 0 : data.loanReceivable)+(data.currentInterest==null? 0 : data.currentInterest)+(data.currentPrincipal==null? 0 : data.currentPrincipal)+(data.pastDueInterest==null? 0 : data.pastDueInterest)+(data.pastDuePrincipal==null? 0 : data.pastDuePrincipal)+(data.loanSurcharge==null? 0 : data.loanSurcharge)+(data.loanInterest==null? 0 : data.loanInterest);
+                        data.totalCharges = (data.notarial==null? 0 : data.notarial)+(data.docstamp==null? 0 : data.docstamp)+(data.chatrealreg==null? 0 : data.chatrealreg)+(data.affidavit==null? 0 : data.affidavit)+(data.others==null? 0 : data.others)+(data.loadingGlobe==null? 0 : data.loadingGlobe)+(data.loadingSun==null? 0 : data.loadingSun)+(data.loanRenewal==null? 0 : data.loanRenewal)+(data.loanReceivable==null? 0 : data.loanReceivable)+(data.currentInterest==null? 0 : data.currentInterest)+(data.currentPrincipal==null? 0 : data.currentPrincipal)+(data.pastDueInterest==null? 0 : data.pastDueInterest)+(data.pastDuePrincipal==null? 0 : data.pastDuePrincipal)+(data.loanSurcharge==null? 0 : data.loanSurcharge)+(data.loanInterest==null? 0 : data.loanInterest);
                         println data.totalCharges;
                         
                         data.netrelease = data.amountapproved + data.totalCharges;
@@ -330,12 +304,29 @@
                         data.amount = NumberToWords.instance.convert(data.netrelease).toUpperCase() + " pesos and 00/100 only";
                         /***********************************************/
                         
-                        //data.bankname = application.bankname;
-                        //data.checkno = application.checkno;
+                        /***      ledger data      ***/
+                        /*if( !application.ledger.startDate || application.ledger.startDate == null )
+                            data.startDate = '';
+                        else data.startDate = application.ledger.startDate;
+                        if( !application.ledger.maturityDate || application.ledger.maturityDate == null )
+                            data.maturityDate = '';
+                        else data.maturityDate = application.ledger.maturityDate;
+                        if( !application.ledger.dailyPayment || application.ledger.dailyPayment == null )
+                            data.dailyPayment = new BigDecimal(0.00);
+                        else data.dailyPayment = new BigDecimal(application.ledger.dailyPayment);
+                        if( !application.ledger.term || application.ledger.term == null )
+                            data.term = new BigDecimal(0.00);
+                        else data.term = new BigDecimal(application.ledger.term);
+                        data.lenTerm = data.term / 30.00;
+                        if( !application.ledger.bankname || application.ledger.bankname == null)
+                            data.bankname='';
+                        else data.bankname = application.ledger.bankname;
+                        if( !application.ledger.checkno || application.ledger.checkno == null )
+                            data.checkno='';
+                        else data.checkno = application.ledger.checkno;
+                        */
                         //data.refno = refs;
-                        //data.lenTerm = application.ledger.term / 30;
-                        //data.checkno = accts.find{ it.checkno }?.checkno;
-                        //data.bankname = accts.find{ it.bankname }?.bankname;
+                        /*  =============================  */
                         
                         return data;
                     },
