@@ -461,6 +461,16 @@ class LoanApplicationService
 		return updateFields(param);
 	}
 	
+	public def returnAppForFLA( param ) {
+	    def state = getState( param.objid );
+	    if( state == 'FOR_FLA' )
+	        throw new Exception("Application's state is already FOR_FLA.");
+	
+		param.state = 'FOR_FLA';	
+		param.dtsubmittedforfla=datesvc.serverDate;
+		return updateFields(param);
+	}
+	
 	@ProxyMethod
 	public def submitForApproval( param ) {
 	    def state = getState( param.objid );
@@ -475,8 +485,8 @@ class LoanApplicationService
 	@ProxyMethod
 	public def approveApp( param ){
 		def entity = param.entity;
-		def loanInfo = app.loaninfo;
-		def prodType = loanInfo.producttype;
+		//def loanInfo = param.loaninfo;
+		//def prodType = loanInfo.producttype;
 			
 	    def state = getState( entity.objid );
 	    if( state == 'APPROVED' )
@@ -490,6 +500,7 @@ class LoanApplicationService
 
 		entity.state = 'APPROVED';
 		entity.approvedate=datesvc.serverDate;
+		entity.expirydate=DateUtil.add(entity.approvedate, '30d');
 		entity.comments.add([
 			author:  env.USER, remarks: param.comment, date: datesvc.serverDate
 		]);

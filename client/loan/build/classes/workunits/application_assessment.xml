@@ -61,7 +61,7 @@
                 //return (mode="charges");
                 
                 //Checking for Approval Date and Expiry Date
-                if( application.approvedate.compareTo(application.expirydate) > 0 ){
+                if( application.approvedate.compareTo( application.expirydate ) > 0 ){
                     throw new Exception("Approval Date on this account has already been expired.");
                 }
                 //if( application.loaninfo.offeredamount ){
@@ -73,6 +73,13 @@
                     calculateCharges();
                     return (mode="charges");
                 //}
+            }
+            
+            def confirm(def handler){
+                 return InvokerUtil.lookupOpener("message:popup", [
+                    label: 'Please specify remarks.',
+                    actionHandler: handler
+                ]);
             }
             
             def listHandler=[

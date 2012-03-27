@@ -11,6 +11,8 @@
                            permission="application.submitForFLA"/>
         <invoker type="formActions" caption="Return to Pending" action="returnPending" icon="images/undo16.png"
             mnemonic="r" visibleWhen="#{entity.state=='FOR_INSPECTION'}" permission="application.returnApp"/>
+        <invoker type="formActions" caption="Re-FLA" action="returnForFLA" icon="images/undo16.png"
+            mnemonic="r" visibleWhen="#{entity.state=='APPROVED'}" permission="application.returnAppForFLA"/>    
         <invoker type="formActions" caption="Return For CI" action="returnForCI" icon="images/undo16.png"
             mnemonic="r" visibleWhen="#{entity.state=='FOR_FLA' }" permission="application.returnAppForCI"/>
         <invoker type="formActions" caption="Submit for Approval" icon="images/sending16.png" action="forApproval" mnemonic="s" 

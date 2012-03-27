@@ -3801,7 +3801,11 @@
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
 			<band height="443"  isSplitAllowed="true" >
-				<printWhenExpression><![CDATA[new Boolean((!$F{state}.equals("PENDING")))]]></printWhenExpression>
+				<printWhenExpression><![CDATA[new Boolean((!$F{state}.equals("FOR_FLA")) ||
+	   (!$F{state}.equals("FOR_APPROVAL")) ||
+           (!$F{state}.equals("FOR_RELEASE")) ||
+           (!$F{state}.equals("RELEASED"))
+)]]></printWhenExpression>
 				<line direction="BottomUp">
 					<reportElement
 						x="4"

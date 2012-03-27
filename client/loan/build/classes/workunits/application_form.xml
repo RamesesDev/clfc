@@ -282,11 +282,6 @@
                             entity.encodedBy = OsirisContext.env.USERINFO.firstname+ ' '+OsirisContext.env.USERINFO.lastname;
                         else
                             entity.updatedBy = OsirisContext.env.USERINFO.firstname+ ' '+OsirisContext.env.USERINFO.lastname;
-                            
-                        if(entity.marketedby)
-                            emp = "";
-                        if(entity.marketedby2)
-                            emp2 = "";
                     }
                     
                     def photoids = [];

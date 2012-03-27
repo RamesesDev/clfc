@@ -16,7 +16,6 @@ public abstract class AbstractLoanAppController {
 
     def report;
     def itemReport=["Client Information Sheet", "Loan Application", "Loan Disclosure", "Loan Release Voucher"];
-    //def itemReport=["Client Information Sheet", "Loan Application", "Loan Disclosure", "Loan Release Voucher", "Cash Voucher"];
     //def itemReport=["Client Information Sheet", "Loan Application" ];
     def _printOut;
     def entity;
@@ -106,6 +105,17 @@ public abstract class AbstractLoanAppController {
         }    
     }
 
+    def returnForFLA(){
+        if(MsgBox.confirm("You are about to return this application for FOR FLA, proceed?")){
+            return confirm({ message ->
+                def p = [comment: message, objid: entity.objid];
+                entity.putAll( service.submitForFLA(p) ); 
+                if( selectHandler ) selectHandler(entity);
+                    binding.refresh();
+            });
+        }    
+    }
+    
     def forApproval(){
         //validation if other recommedation is null before submitting for Final Loan Approval
         if( !entity.coMakerList ){

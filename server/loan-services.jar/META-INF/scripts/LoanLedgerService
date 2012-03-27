@@ -55,6 +55,7 @@ class LoanLedgerService
 				totalPaid:         0.00,
 				totalPrincipalPaid:0.00,
 				totalInterestPaid: 0.00,
+				addedInterest:	   0.00, //Additional Interest (optional)
 				totalPenaltyPaid:  0.00,
 				
 				totalPenalty:      0.00,

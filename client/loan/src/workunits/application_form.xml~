@@ -272,16 +272,23 @@
                         else
                             entity.updatedBy = OsirisContext.env.USERINFO.firstname+ ' '+OsirisContext.env.USERINFO.lastname;
                         
-                        if(!entity.marketedby)
+                        if(entity.marketedby)
                             emp = entity.marketedby;
-                        if(!entity.marketedby2)
+                        //else emp = entity.marketedby;    
+                        if(entity.marketedby2)
                             emp2 = entity.marketedby2;
+                        //else emp2 = entity.marketedby2;
                             
                     }else if(entity.clientType=="WALK-IN"){
                         if(!entity.encodedBy)
                             entity.encodedBy = OsirisContext.env.USERINFO.firstname+ ' '+OsirisContext.env.USERINFO.lastname;
                         else
                             entity.updatedBy = OsirisContext.env.USERINFO.firstname+ ' '+OsirisContext.env.USERINFO.lastname;
+                            
+                        //if(entity.marketedby)
+                           // emp = "";
+                        //if(entity.marketedby2)
+                           // emp2 = "";
                     }
                     
                     def photoids = [];
