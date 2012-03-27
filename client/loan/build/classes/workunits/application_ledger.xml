@@ -183,14 +183,14 @@
                 return cust.lastname + ', ' + cust.firstname + (cust.middlename? " ( $cust.middlename )" : "")
             }
             
-            def getTotalCharges() {
+            /*def getTotalCharges() {
                 if( !accts ) return 0.00;
 
                 def ch = accts*.amount.sum();
                 def och = otherCharges*.amount.sum();
 
                 return (ch? ch : 0.00) + (och? och : 0.00);
-            }
+            }*/
             /*                       */
             
             void print(){
@@ -202,14 +202,14 @@
                         "\nRoute Code: " +entity.routecode+ "\nRoute Description: " +entity.routedescription+
                         "\nLedger Details" + "\nActual Loan Balance: " +ledger.loanBalance+
                         "\nPrincipal Balance: " +ledger.principalBalance+ "\nTotal Principal Payment: " +ledger.totalPrincipalPaid+
-                        "\nAdded Interest " +addedInterest+ "\nTotal Interest Payment: " +ledger.totalInterestPaid+
+                        //"\nAdded Interest " +addedInterest+ "\nTotal Interest Payment: " +ledger.totalInterestPaid+
                         "\nTotal Penalty Payment: " +ledger.totalPenaltyPaid+ "\nTotal Payment: " +ledger.totalPaid+
                         "\nLast Payment Date: " +ledger.lastDatePaid+ "\nTotal Absences: " +ledger.totalAbsent+
                         "\nMode of Payment: " +ledger.totalAbsent+ 
                         "\nLoan Information...Check No.: " +ledger.checkInfo.bankname+ " - " +ledger.checkno+
                         "\nAmount Loaned: " +ledger.loanAmount+ "\nDate Granted: " +ledger.dtcreated+
-                        "\nMaturity Date: " +ledger.maturityDate+ "\nInterest Rate: " +ledger.interestrate+
-                        "\nTerm: " +ledger.term+ "\nTotal Charges: " +totalCharges+ "\nDaily Payment: " +ledger.dailyPayment
+                        "\nMaturity Date: " +ledger.maturityDate+ "\nInterest Rate: " +ledger.interestrate
+                        //"\nTerm: " +ledger.term+ "\nTotal Charges: " +totalCharges+ "\nDaily Payment: " +ledger.dailyPayment
                 );
                         
                 setPrintOut();
