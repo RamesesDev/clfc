@@ -74,7 +74,7 @@
                         new Column(name:"appno",           caption:"Application no.",width:70),
                         new Column(name:"fullborrowername",caption:"Borrower name",  width:300),
                         new Column(name:"state",           caption:"State",          width:90),
-                        new Column(name:"routecode",       caption:"Route",          width:40)
+                        new Column(name:"routedescription",       caption:"Route",          width:40)
                     ]
                 },
                 fetchList:{o->

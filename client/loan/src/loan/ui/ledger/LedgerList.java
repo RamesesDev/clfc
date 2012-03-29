@@ -64,7 +64,7 @@ public class LedgerList extends javax.swing.JPanel {
         xActionTextField1.setActionName("refreshList");
         xActionTextField1.setCaption("Search");
         xActionTextField1.setDepends(new String[] {"state"});
-        xActionTextField1.setHint("Search by Application No. / Borrower Name/ Route Code");
+        xActionTextField1.setHint("Search by Application No. / Borrower Name/ Route Code/Description ");
         xActionTextField1.setIndex(-1);
         xActionTextField1.setName("searchText");
         xActionTextField1.setPreferredSize(new java.awt.Dimension(200, 23));
