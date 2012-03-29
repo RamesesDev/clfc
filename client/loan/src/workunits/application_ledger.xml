@@ -52,8 +52,8 @@
         import com.rameses.rcp.common.*;
         import com.rameses.osiris2.client.*;
         import com.rameses.osiris2.reports.*;
-        import com.rameses.util.*;  
-        import com.rameses.io.*;
+        import com.rameses.util.*;
+        import java.lang.*;
         import java.io.*;
         import java.sql.Timestamp;
         
@@ -75,7 +75,7 @@
             
             def view = 'main';
             
-            void init() {
+            void init(){
                 if( !entity || !entity.objid ) 
                     throw new RuntimeException('Please select an application.');
 
@@ -178,11 +178,25 @@
                 return InvokerUtil.lookupOpener("application:removePaymentDate",[:]);
             }
             
-            /*                       */
+            /* Getting of Customer Name(s) record */
+            def cust;            
             def getCustName( cust ){
                 return cust.lastname + ', ' + cust.firstname + (cust.middlename? " ( $cust.middlename )" : "")
             }
             
+            def getCustAddress( cust ){
+                def addr = [];
+                if( !cust.currentaddress ) return '';
+
+                if( cust.currentaddress.address1 )  addr << cust.currentaddress.address1;
+                if( cust.currentaddress.address2? cust.currentaddress.address2: ' ' )  addr << cust.currentaddress.address2;
+                if( cust.currentaddress.city )      addr << cust.currentaddress.city;
+                if( cust.currentaddress.province )  addr << cust.currentaddress.province;
+                if( cust.currentaddress.zipcode )   addr << cust.currentaddress.zipcode;
+
+                return addr.join(', ');
+            }
+            /*====================================================*/
             /*def getTotalCharges() {
                 if( !accts ) return 0.00;
 
@@ -194,11 +208,11 @@
             /*                       */
             
             void print(){
-                //MsgBox.alert('Print ledger not yet supported.');
-                
                 MsgBox.alert("Now Printing..." + "\nApplication No. " +entity.appno+
                         "\nFirst Name: " +entity.borrower.firstname+ "\nLast Name: " +entity.borrower.lastname+
                         //"\nAddress: " +data.+
+                        //"\nJoint Borrower(s): " +entity.fullborrowername+
+                        "\nJoint Borrower(s): " +entity.jointBorrowerList+
                         "\nRoute Code: " +entity.routecode+ "\nRoute Description: " +entity.routedescription+
                         "\nLedger Details" + "\nActual Loan Balance: " +ledger.loanBalance+
                         "\nPrincipal Balance: " +ledger.principalBalance+ "\nTotal Principal Payment: " +ledger.totalPrincipalPaid+
@@ -208,8 +222,11 @@
                         "\nMode of Payment: " +ledger.totalAbsent+ 
                         "\nLoan Information...Check No.: " +ledger.checkInfo.bankname+ " - " +ledger.checkno+
                         "\nAmount Loaned: " +ledger.loanAmount+ "\nDate Granted: " +ledger.dtcreated+
-                        "\nMaturity Date: " +ledger.maturityDate+ "\nInterest Rate: " +ledger.interestrate
+                        "\nMaturity Date: " +ledger.maturityDate+ "\nInterest Rate: " +ledger.interestrate+
                         //"\nTerm: " +ledger.term+ "\nTotal Charges: " +totalCharges+ "\nDaily Payment: " +ledger.dailyPayment
+                        "\nCollateral(s)" + "\nAppliance(s): " +entity.appliancelist+
+                        "\nVehicle(s): " +entity.vehiclelist+
+                        "\nProperty(ies): " +entity.propertylist
                 );
                         
                 setPrintOut();
@@ -241,31 +258,48 @@
                         //return svc.getDetails(it)
                         //def cv = checkSvc.openByRefid( [refid: it.objid] );
                         
-                        //def appid = entity.objid;
-                        //def entity; //=[:];
-                        //def borrower;
-                        //def borrower = entity.objid;
-                        //def accts; // = [entity:entity];
-                        //def data = [:];
-                        //def data = [ ledger:ledger ];
-                        //def data = [ entity:entity, objid:appid, ledger:ledger, accts:accts ];
-                        //data.borrowername = data.borrower.lastname + ", " +data.borrower.firstname;
-                        //data.borrowername = getCustName( data.borrower );
-                        //data.borrowername = data.lastname+ ", " +data.firstname;
-                        
                         def data = [ entity:entity, ledger:ledger ];
                         
-                        data.appno = data.appno;
-                        data.borrowername = data.borrowername;
-                        data.jointBorrowerName = data.fullborrowername;
+                        data.entity.appno = data.entity.appno;
+                        data.borrowername = data.entity.fullborrowername;
+                        //data.borrowername = data.entity.borrower.lastname +", " + data.entity.borrower.firstname +" ( " +(data.entity.borrower.middlename==null? '-' : data.entity.borrower.middlename)+ " )";
+                        data.address = data.entity.borrower.currentaddress.address1 +", "+ data.entity.borrower.currentaddress.address2 + " " +data.entity.borrower.currentaddress.city +", " +data.entity.borrower.currentaddress.province +" " +data.entity.borrower.currentaddress.zipcode +" " +data.entity.borrower.currentaddress.country; 
                         
-                        if( data.routecode ==null )
-                            data.routecode = '';
-                        else data.routecode = data.routecode;
-                        if( data.routedescription ==null )
-                            data.routedescription = '';
-                        else data.routedescription = data.routedescription;
-                        data.route = data.routecode + " - " + data.routedescription;
+                        if( data.entity.routecode ==null )
+                            data.entity.routecode = '';
+                        else data.entity.routecode = data.entity.routecode;
+                        if( data.entity.routedescription ==null )
+                            data.entity.routedescription = '';
+                        else data.entity.routedescription = data.entity.routedescription;
+                        data.entity.route = data.entity.routecode + " - " + data.entity.routedescription;
+                        
+                        data.entity.propertylist.each{
+                            if( it.area==null )
+                                it.area = new BigDecimal( 0.00 );
+                            else it.area = new BigDecimal( it.area );
+
+                            if( it.appraisedvalue==null )
+                                it.appraisedvalue = new BigDecimal( 0.00 );
+                            else it.appraisedvalue = new BigDecimal( it.appraisedvalue );
+
+                            if( it.zonalvalue==null )
+                                it.zonalvalue = new BigDecimal( 0.00 );
+                            else it.zonalvalue = new BigDecimal( it.zonalvalue );
+                        };
+                        
+                        data.entity.vehiclelist.each{
+                            if( it.appraisedvalue==null )
+                                it.appraisedvalue = new BigDecimal( 0.00 );
+                            else it.appraisedvalue = new BigDecimal( it.appraisedvalue );   
+                        };
+
+                        data.entity.appliancelist.each{
+                            if( it.appraisedvalue==null ){
+                                it.appraisedvalue = new BigDecimal( 0.00 );    
+                                //it.totalCav = new BigDecimal(0.00);
+                            }else it.appraisedvalue = new BigDecimal( it.appraisedvalue );
+                                //it.totalCav = it.appraisedvalue(it.appraisedvalue);
+                        };
                         
                         /*
                         if( !data.ledger.checkInfo.bankname )
@@ -287,20 +321,21 @@
                         if (data.ledger.totalPrincipalPaid !=null) data.ledger.totalPrincipalPaid =  data.ledger.totalPrincipalPaid as BigDecimal;
                         if (data.ledger.principalBalance !=null) data.ledger.principalBalance =  data.ledger.principalBalance as BigDecimal;
                         if (data.ledger.principalBalance !=null) data.ledger.principalBalance =  data.ledger.principalBalance as BigDecimal;
+                        if (data.ledger.mode !=null) data.ledger.mode = data.ledger.mode.toUpperCase() +" PAYMENT";
                         
                         return data;
                     },
                     //getSubReports:{
                         //if( "Loan Ledger".equals(printOut) ){
                             //return[
-                               // new SubReport("BUSINESS", "loan/printout/subReportPrincipalBusiness.jasper"),
+                                //new SubReport("BUSINESS", "loan/printout/subReportPrincipalBusiness.jasper"),
                                 //new SubReport("COLLATERAL_VEHICLES", "loan/printout/subReportVehicles.jasper"),
                                 //new SubReport("COLLATERAL_PROPERTY", "loan/printout/subReportRealProperty.jasper"),
                                 //new SubReport("COLLATERAL_APPLIANCE", "loan/printout/subReportAppliance.jasper"),
                                 //new SubReport("COLLATERAL_OTHERS", "loan/printout/subReportOtherCollateral.jasper")
-                            //];
-                        //}
-                    //}
+                           // ];
+                       // }
+                    //},
                     getParameters:{
                         return[
                             BRANCH_NAME: OsirisContext.env.CLIENT.name,
