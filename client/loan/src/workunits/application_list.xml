@@ -5,7 +5,7 @@
         <invoker type="home:menu" caption="Loan Applications" action="init" icon="images/applications32.png"
                  permission="application.viewList" index="0" target="window"/>
         
-         <invoker type="refreshAction" icon="images/refresh16.png" tooltip="Refresh" action="refreshList"/>
+        <invoker type="refreshAction" icon="images/refresh16.png" tooltip="Refresh" action="refreshList"/>
          
         <!-- state codes -->
         <invoker type="application:state-list" caption="Pending"          name="PENDING"          permission="application.viewPendingList"/>  

@@ -3253,7 +3253,9 @@
 						y="184"
 						width="83"
 						height="13"
-						key="staticText-182"/>
+						key="staticText-182">
+							<printWhenExpression><![CDATA[new Boolean((!$F{loaninfo.offeredamount}.equals("assd")))]]></printWhenExpression>
+						</reportElement>
 					<box></box>
 					<textElement>
 						<font pdfFontName="Helvetica-Bold" isBold="true"/>
@@ -3266,7 +3268,9 @@
 						y="184"
 						width="107"
 						height="13"
-						key="staticText-183"/>
+						key="staticText-183">
+							<printWhenExpression><![CDATA[new Boolean((!$F{loaninfo.offeredamount}.equals("assd")))]]></printWhenExpression>
+						</reportElement>
 					<box></box>
 					<textElement>
 						<font size="9"/>
@@ -3279,7 +3283,9 @@
 						y="198"
 						width="107"
 						height="13"
-						key="staticText-184"/>
+						key="staticText-184">
+							<printWhenExpression><![CDATA[new Boolean((!$F{loaninfo.offeredamount}.equals("assd")))]]></printWhenExpression>
+						</reportElement>
 					<box></box>
 					<textElement>
 						<font size="9"/>
@@ -3292,7 +3298,9 @@
 						y="212"
 						width="107"
 						height="13"
-						key="staticText-185"/>
+						key="staticText-185">
+							<printWhenExpression><![CDATA[new Boolean((!$F{loaninfo.offeredpolicy}.equals("assd")))]]></printWhenExpression>
+						</reportElement>
 					<box></box>
 					<textElement>
 						<font size="9"/>
@@ -3305,7 +3313,9 @@
 						y="238"
 						width="107"
 						height="13"
-						key="staticText-188"/>
+						key="staticText-188">
+							<printWhenExpression><![CDATA[new Boolean((!$F{loaninfo.offeredcreditLimit}.equals("assd")))]]></printWhenExpression>
+						</reportElement>
 					<box></box>
 					<textElement>
 						<font size="9"/>
@@ -3318,7 +3328,9 @@
 						y="251"
 						width="107"
 						height="13"
-						key="staticText-189"/>
+						key="staticText-189">
+							<printWhenExpression><![CDATA[new Boolean((!$F{loaninfo.offeredincrease}.equals("assd")))]]></printWhenExpression>
+						</reportElement>
 					<box></box>
 					<textElement>
 						<font size="9"/>
@@ -3345,7 +3357,10 @@
 						y="266"
 						width="107"
 						height="13"
-						key="staticText-190"/>
+						key="staticText-190">
+							<printWhenExpression><![CDATA[new Boolean((!$F{offeralAnnotationPostedBy}.equals("assd"))
+	|| (!$F{loaninfo.offeralAnnotation}.equals("assd")))]]></printWhenExpression>
+						</reportElement>
 					<box></box>
 					<textElement>
 						<font size="9"/>
@@ -3430,7 +3445,9 @@
 						y="184"
 						width="92"
 						height="12"
-						key="textField-58"/>
+						key="textField-58">
+							<printWhenExpression><![CDATA[new Boolean((!$F{loaninfo.offeredamount}.equals("assd")))]]></printWhenExpression>
+						</reportElement>
 					<box>					<pen lineWidth="0.0"/>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0"/>
@@ -3448,7 +3465,9 @@
 						y="198"
 						width="92"
 						height="12"
-						key="textField-59"/>
+						key="textField-59">
+							<printWhenExpression><![CDATA[new Boolean((!$F{loaninfo.offeredamount}.equals("assd")))]]></printWhenExpression>
+						</reportElement>
 					<box>					<pen lineWidth="0.0"/>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0"/>
@@ -3466,7 +3485,9 @@
 						y="237"
 						width="92"
 						height="12"
-						key="textField-62"/>
+						key="textField-62">
+							<printWhenExpression><![CDATA[new Boolean((!$F{loaninfo.offeredcreditLimit}.equals("assd")))]]></printWhenExpression>
+						</reportElement>
 					<box>					<pen lineWidth="0.0"/>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0"/>
@@ -3484,7 +3505,9 @@
 						y="250"
 						width="92"
 						height="12"
-						key="textField-63"/>
+						key="textField-63">
+							<printWhenExpression><![CDATA[new Boolean((!$F{loaninfo.offeredincrease}.equals("assd")))]]></printWhenExpression>
+						</reportElement>
 					<box>					<pen lineWidth="0.0"/>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0"/>
@@ -3530,7 +3553,9 @@
 						y="225"
 						width="36"
 						height="13"
-						key="staticText-200"/>
+						key="staticText-200">
+							<printWhenExpression><![CDATA[new Boolean((!$F{loaninfo.offeredpolicy}.equals("assd")))]]></printWhenExpression>
+						</reportElement>
 					<box></box>
 					<textElement>
 						<font size="9"/>
@@ -3543,7 +3568,9 @@
 						y="225"
 						width="68"
 						height="13"
-						key="staticText-201"/>
+						key="staticText-201">
+							<printWhenExpression><![CDATA[new Boolean((!$F{loaninfo.offeredprovisions}.equals("assd")))]]></printWhenExpression>
+						</reportElement>
 					<box></box>
 					<textElement>
 						<font size="9"/>
@@ -3556,7 +3583,9 @@
 						y="225"
 						width="28"
 						height="12"
-						key="textField-64"/>
+						key="textField-64">
+							<printWhenExpression><![CDATA[new Boolean((!$F{loaninfo.offeredpolicy}.equals("assd")))]]></printWhenExpression>
+						</reportElement>
 					<box>					<pen lineWidth="0.0"/>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0"/>
@@ -3574,7 +3603,9 @@
 						y="226"
 						width="22"
 						height="12"
-						key="textField-65"/>
+						key="textField-65">
+							<printWhenExpression><![CDATA[new Boolean((!$F{loaninfo.offeredprovisions}.equals("assd")))]]></printWhenExpression>
+						</reportElement>
 					<box>					<pen lineWidth="0.0"/>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0"/>
@@ -3592,7 +3623,9 @@
 						y="224"
 						width="20"
 						height="13"
-						key="staticText-202"/>
+						key="staticText-202">
+							<printWhenExpression><![CDATA[new Boolean((!$F{loaninfo.offeredpolicy}.equals("assd")))]]></printWhenExpression>
+						</reportElement>
 					<box>					<bottomPen lineWidth="0.5"/>
 </box>
 					<textElement>
@@ -3606,7 +3639,9 @@
 						y="225"
 						width="20"
 						height="13"
-						key="staticText-203"/>
+						key="staticText-203">
+							<printWhenExpression><![CDATA[new Boolean((!$F{loaninfo.offeredprovisions}.equals("assd")))]]></printWhenExpression>
+						</reportElement>
 					<box>					<bottomPen lineWidth="0.5"/>
 </box>
 					<textElement>
@@ -3648,7 +3683,9 @@
 						y="237"
 						width="20"
 						height="12"
-						key="staticText-204"/>
+						key="staticText-204">
+							<printWhenExpression><![CDATA[new Boolean((!$F{loaninfo.offeredcreditLimit}.equals("assd")))]]></printWhenExpression>
+						</reportElement>
 					<box>					<bottomPen lineWidth="0.5"/>
 </box>
 					<textElement>
@@ -3662,7 +3699,9 @@
 						y="250"
 						width="20"
 						height="12"
-						key="staticText-205"/>
+						key="staticText-205">
+							<printWhenExpression><![CDATA[new Boolean((!$F{loaninfo.offeredincrease}.equals("assd")))]]></printWhenExpression>
+						</reportElement>
 					<box>					<bottomPen lineWidth="0.5"/>
 </box>
 					<textElement>
@@ -3768,7 +3807,9 @@
 						y="184"
 						width="22"
 						height="12"
-						key="staticText-210"/>
+						key="staticText-210">
+							<printWhenExpression><![CDATA[new Boolean((!$F{loaninfo.offeredamount}.equals("assd")))]]></printWhenExpression>
+						</reportElement>
 					<box>					<bottomPen lineWidth="0.5"/>
 </box>
 					<textElement>
@@ -3782,7 +3823,9 @@
 						y="198"
 						width="22"
 						height="12"
-						key="staticText-211"/>
+						key="staticText-211">
+							<printWhenExpression><![CDATA[new Boolean((!$F{loaninfo.offeredamount}.equals("assd")))]]></printWhenExpression>
+						</reportElement>
 					<box>					<bottomPen lineWidth="0.5"/>
 </box>
 					<textElement>

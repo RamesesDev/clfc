@@ -178,25 +178,6 @@
                 return InvokerUtil.lookupOpener("application:removePaymentDate",[:]);
             }
             
-            /* Getting of Customer Name(s) record */
-            def cust;            
-            def getCustName( cust ){
-                return cust.lastname + ', ' + cust.firstname + (cust.middlename? " ( $cust.middlename )" : "")
-            }
-            
-            def getCustAddress( cust ){
-                def addr = [];
-                if( !cust.currentaddress ) return '';
-
-                if( cust.currentaddress.address1 )  addr << cust.currentaddress.address1;
-                if( cust.currentaddress.address2? cust.currentaddress.address2: ' ' )  addr << cust.currentaddress.address2;
-                if( cust.currentaddress.city )      addr << cust.currentaddress.city;
-                if( cust.currentaddress.province )  addr << cust.currentaddress.province;
-                if( cust.currentaddress.zipcode )   addr << cust.currentaddress.zipcode;
-
-                return addr.join(', ');
-            }
-            /*====================================================*/
             /*def getTotalCharges() {
                 if( !accts ) return 0.00;
 
@@ -208,12 +189,12 @@
             /*                       */
             
             void print(){
-                MsgBox.alert("Now Printing..." + "\nApplication No. " +entity.appno+
+                MsgBox.alert("Now Printing..." + "\nLoan Information"+"\nApplication No. " +entity.appno+
                         "\nFirst Name: " +entity.borrower.firstname+ "\nLast Name: " +entity.borrower.lastname+
                         //"\nAddress: " +data.+
                         //"\nJoint Borrower(s): " +entity.fullborrowername+
-                        "\nJoint Borrower(s): " +entity.jointBorrowerList+
-                        "\nRoute Code: " +entity.routecode+ "\nRoute Description: " +entity.routedescription+
+                        //"\nJoint Borrower(s): " +entity.jointBorrowerList+
+                        "\nRoute Code: " +entity.routecode+ "\nRoute Description: " +entity.routedescription+ "\n"+
                         "\nLedger Details" + "\nActual Loan Balance: " +ledger.loanBalance+
                         "\nPrincipal Balance: " +ledger.principalBalance+ "\nTotal Principal Payment: " +ledger.totalPrincipalPaid+
                         //"\nAdded Interest " +addedInterest+ "\nTotal Interest Payment: " +ledger.totalInterestPaid+
@@ -223,7 +204,7 @@
                         "\nLoan Information...Check No.: " +ledger.checkInfo.bankname+ " - " +ledger.checkno+
                         "\nAmount Loaned: " +ledger.loanAmount+ "\nDate Granted: " +ledger.dtcreated+
                         "\nMaturity Date: " +ledger.maturityDate+ "\nInterest Rate: " +ledger.interestrate+
-                        //"\nTerm: " +ledger.term+ "\nTotal Charges: " +totalCharges+ "\nDaily Payment: " +ledger.dailyPayment
+                        //"\nTerm: " +ledger.term+ "\nTotal Charges: " +totalCharges+ "\nDaily Payment: " +ledger.dailyPayment+
                         "\nCollateral(s)" + "\nAppliance(s): " +entity.appliancelist+
                         "\nVehicle(s): " +entity.vehiclelist+
                         "\nProperty(ies): " +entity.propertylist
@@ -263,7 +244,18 @@
                         data.entity.appno = data.entity.appno;
                         data.borrowername = data.entity.fullborrowername;
                         //data.borrowername = data.entity.borrower.lastname +", " + data.entity.borrower.firstname +" ( " +(data.entity.borrower.middlename==null? '-' : data.entity.borrower.middlename)+ " )";
-                        data.address = data.entity.borrower.currentaddress.address1 +", "+ data.entity.borrower.currentaddress.address2 + " " +data.entity.borrower.currentaddress.city +", " +data.entity.borrower.currentaddress.province +" " +data.entity.borrower.currentaddress.zipcode +" " +data.entity.borrower.currentaddress.country; 
+                        
+                        def addr = data.entity.borrower.currentaddress;
+                        if( addr ){
+                            data.address = addr.address1 + (addr.address2? ' ' + addr.address2 : '') +
+                                           (addr.city? ' ' + addr.city : '') +
+                                           (addr.zipcode? ' ' + addr.zipcode : '') +
+                                           (addr.province? ' ' + addr.province : '') +
+                                           (addr.country? ' ' + addr.country : '');
+                        }
+                        else {
+                            data.address = '';
+                        }
                         
                         if( data.entity.routecode ==null )
                             data.entity.routecode = '';
@@ -325,17 +317,17 @@
                         
                         return data;
                     },
-                    //getSubReports:{
-                        //if( "Loan Ledger".equals(printOut) ){
-                            //return[
-                                //new SubReport("BUSINESS", "loan/printout/subReportPrincipalBusiness.jasper"),
-                                //new SubReport("COLLATERAL_VEHICLES", "loan/printout/subReportVehicles.jasper"),
-                                //new SubReport("COLLATERAL_PROPERTY", "loan/printout/subReportRealProperty.jasper"),
-                                //new SubReport("COLLATERAL_APPLIANCE", "loan/printout/subReportAppliance.jasper"),
-                                //new SubReport("COLLATERAL_OTHERS", "loan/printout/subReportOtherCollateral.jasper")
-                           // ];
-                       // }
-                    //},
+                    getSubReports:{
+                        if( "Loan Ledger".equals(printOut) ){
+                            return[
+                                new SubReport("BUSINESS", "loan/printout/subReportPrincipalBusiness.jasper"),
+                                new SubReport("COLLATERAL_VEHICLES", "loan/printout/subReportVehicles.jasper"),
+                                new SubReport("COLLATERAL_PROPERTY", "loan/printout/subReportRealProperty.jasper"),
+                                new SubReport("COLLATERAL_APPLIANCE", "loan/printout/subReportAppliance.jasper"),
+                                new SubReport("COLLATERAL_OTHERS", "loan/printout/subReportOtherCollateral.jasper")
+                            ];
+                       }
+                    },
                     getParameters:{
                         return[
                             BRANCH_NAME: OsirisContext.env.CLIENT.name,

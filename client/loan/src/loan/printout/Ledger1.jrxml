@@ -97,10 +97,10 @@
 			</band>
 			</groupFooter>
 		</group>
-		<group  name="property" >
+		<group  name="appliance" >
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
-			<band height="0"  isSplitAllowed="true" >
+			<band height="50"  isSplitAllowed="true" >
 			</band>
 			</groupHeader>
 			<groupFooter>
@@ -108,7 +108,7 @@
 			</band>
 			</groupFooter>
 		</group>
-		<group  name="appliance" >
+		<group  name="property" >
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
 			<band height="0"  isSplitAllowed="true" >
@@ -851,9 +851,9 @@
 				</textField>
 				<subreport  isUsingCache="true">
 					<reportElement
-						x="76"
-						y="255"
-						width="459"
+						x="29"
+						y="258"
+						width="506"
 						height="51"
 						key="subreport-2"
 						isRemoveLineWhenBlank="true"
@@ -863,9 +863,9 @@
 				</subreport>
 				<subreport  isUsingCache="true">
 					<reportElement
-						x="76"
+						x="29"
 						y="390"
-						width="459"
+						width="506"
 						height="50"
 						key="subreport-3"
 						isPrintWhenDetailOverflows="true"/>
@@ -875,7 +875,7 @@
 				<staticText>
 					<reportElement
 						x="3"
-						y="306"
+						y="310"
 						width="79"
 						height="13"
 						key="staticText-55"/>
@@ -888,7 +888,7 @@
 				<staticText>
 					<reportElement
 						x="3"
-						y="250"
+						y="245"
 						width="79"
 						height="13"
 						key="staticText-56"/>
@@ -1169,9 +1169,9 @@
 				</textField>
 				<subreport  isUsingCache="true">
 					<reportElement
-						x="76"
-						y="326"
-						width="459"
+						x="28"
+						y="323"
+						width="507"
 						height="64"
 						key="subreport-4"
 						isRemoveLineWhenBlank="true"
@@ -1181,9 +1181,9 @@
 				</subreport>
 				<subreport  isUsingCache="true">
 					<reportElement
-						x="76"
+						x="29"
 						y="440"
-						width="459"
+						width="506"
 						height="31"
 						key="subreport-5"/>
 					<dataSourceExpression><![CDATA[$F{entity.vehiclelist}]]></dataSourceExpression>
@@ -1191,9 +1191,9 @@
 				</subreport>
 				<subreport  isUsingCache="true">
 					<reportElement
-						x="76"
+						x="29"
 						y="471"
-						width="459"
+						width="506"
 						height="31"
 						key="subreport-6"/>
 					<dataSourceExpression><![CDATA[$F{entity.otherslist}]]></dataSourceExpression>

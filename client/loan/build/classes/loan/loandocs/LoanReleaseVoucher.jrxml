@@ -68,7 +68,7 @@
 					<textElement>
 						<font pdfFontName="Helvetica" size="10" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ledger.startDate}]]></textFieldExpression>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{ledger.startDate}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -146,7 +146,7 @@
 					<textElement>
 						<font pdfFontName="Helvetica" size="10" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ledger.maturityDate}]]></textFieldExpression>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{ledger.maturityDate}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement

@@ -23,7 +23,7 @@ public class ApplicationReportModel extends ReportModel {
         if( !cust.currentaddress ) return '';
         
         if( cust.currentaddress.address1 )  addr << cust.currentaddress.address1;
-        if( cust.currentaddress.address2? cust.currentaddress.address2: ' ' )  addr << cust.currentaddress.address2;
+        //if( cust.currentaddress.address2?  cust.currentaddress.address2: ' ' )  addr << cust.currentaddress.address2;
         if( cust.currentaddress.city )      addr << cust.currentaddress.city;
         if( cust.currentaddress.province )  addr << cust.currentaddress.province;
         if( cust.currentaddress.zipcode )   addr << cust.currentaddress.zipcode;
@@ -148,6 +148,20 @@ public class ApplicationReportModel extends ReportModel {
                 data.spouse.lotoccupancy.rentamount = new BigDecimal( 0.00 );    
             else if( data.spouse.lotoccupancy.rentamount!= null ) 
                 data.spouse.lotoccupancy.rentamount = data.spouse.lotoccupancy.rentamount as BigDecimal;
+            
+            def addr = data.spouse.currentaddress;
+            if( data.spouse.currentaddress ){
+                if( addr ){
+                    data.spouseAddress = addr.address1 + (addr.address2? ' ' + addr.address2 : '') +
+                                   (addr.city? ' ' + addr.city : '') +
+                                   (addr.zipcode? ' ' + addr.zipcode : '') +
+                                   (addr.province? ' ' + addr.province : '') +
+                                   (addr.country? ' ' + addr.country : '');
+                }
+                else {
+                    data.spouseAddress = '';
+                }
+            }
         }
         
         if( data.loaninfo.loanamount !=null ) data.loaninfo.loanamount = data.loaninfo.loanamount as BigDecimal;

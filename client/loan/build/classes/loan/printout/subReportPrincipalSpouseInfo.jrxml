@@ -53,6 +53,7 @@
 	<field name="age" class="java.lang.Integer"/>
 	<field name="resLenOfStay" class="java.lang.Integer"/>
 	<field name="lotLenOfStay" class="java.lang.Integer"/>
+	<field name="spouseAddress" class="java.lang.String"/>
 
 		<background>
 			<band height="0"  isSplitAllowed="true" >
@@ -229,7 +230,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{currentaddress.address1} + " " + $F{currentaddress.address2} + " " + $F{currentaddress.province} + " " + $F{currentaddress.city} + " " + $F{currentaddress.zipcode} + " " + $F{currentaddress.country}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{spouseAddress}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement

@@ -39,7 +39,7 @@ public class BusinessHours extends javax.swing.JPanel {
         xComboBox1.setAllowNull(false);
         xComboBox1.setCaption("From");
         xComboBox1.setImmediate(true);
-        xComboBox1.setItemsObject(new String[]{"24/7", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM", "12 AM"});
+        xComboBox1.setItemsObject(new String[]{"24/7", "1 AM", " 2AM", " 3AM", " 4AM", " 5AM", " 6AM", " 7AM", " 8AM", " 9AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM", "12 AM"});
         xComboBox1.setName("context.businessHoursFrom");
         xComboBox1.setPreferredSize(new java.awt.Dimension(167, 22));
         xComboBox1.setRequired(true);
@@ -48,7 +48,7 @@ public class BusinessHours extends javax.swing.JPanel {
         xComboBox2.setAllowNull(false);
         xComboBox2.setCaption("To");
         xComboBox2.setImmediate(true);
-        xComboBox2.setItemsObject(new String[]{"24/7", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM", "12 AM"});
+        xComboBox2.setItemsObject(new String[]{"24/7", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM", "12 AM"});
         xComboBox2.setName("context.businessHoursTo");
         xComboBox2.setPreferredSize(new java.awt.Dimension(167, 22));
         xComboBox2.setRequired(true);

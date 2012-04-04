@@ -18,7 +18,7 @@
         <invoker type="ledger:state-list" caption="Closed"         name="CLOSED"         permission="application.viewClosedList"/>
         <invoker type="ledger:state-list" caption="Canceled-Out"   name="CANCELED"       permission="application.viewCanceledList"/>
         <invoker type="ledger:state-list" caption="Back-Out"       name="BACK_OUT"       permission="application.viewBackOutList"/>
-        <invoker type="ledger:state-list" caption="Disqualified-Out" name="DISQUALIFIED_OUT" permission="application.viewDisqualifiedOutList"/>    
+        <invoker type="ledger:state-list" caption="Disqualified-Out" name="DISQUALIFIED_OUT" permission="application.viewDisqualifiedOutList"/>
     </invokers>
     <code>
         <![CDATA[
@@ -71,20 +71,29 @@
             def listHandler = [
                 getColumns: {
                     return [
-                        new Column(name:"appno",           caption:"Application no.",width:70),
-                        new Column(name:"fullborrowername",caption:"Borrower name",  width:300),
-                        new Column(name:"state",           caption:"State",          width:90),
-                        new Column(name:"routedescription",       caption:"Route",          width:40)
+                        new Column(name:"appno",           caption:"Application no.",width:50),
+                        new Column(name:"fullborrowername",caption:"Borrower name",  width:500),
+                        new Column(name:"state",           caption:"State",          width:70),
+                        new Column(name:"routecode",       caption:"Route",          width:10)
                     ]
                 },
                 fetchList:{o->
+                    
+                   //return entity.principalMainBusinessList.each{ it.routecode = it.routecode + '-' + it.routedescription };
+                    
                    o.state = state;
                    o.allowedStates = loadedStatusList;
                    o.searchText = searchText;
                    return searchSvc.getList(o);
+                   
+                   /*
+                    fetchList:{o->
+                    if(entity.principalMainBusinessList==null)entity.principalMainBusinessList=[]; 
+                    return entity.principalMainBusinessList.each{ it.avgsales = it.avgsales_from + '-' + it.avgsales_to };
+                   */
                 },
                 getRows:{
-                    return 18;
+                    return 30;
                 }
             ]as PageListModel;
            

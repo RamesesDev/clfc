@@ -3,13 +3,30 @@
     
     <invoker folderid="menu/services/loan" caption="Advance FLA" permission="application.createAdvanceApp" index="3" action="init"/>
     
+    <!-- state codes -->
+    <invoker type="application:state-list" caption="Pending"          name="PENDING"          permission="application.viewPendingList"/>  
+    <invoker type="application:state-list" caption="For Inspection"   name="FOR_INSPECTION"   permission="application.viewForInspectionList"/>
+    <invoker type="application:state-list" caption="For FLA"          name="FOR_FLA"          permission="application.viewForFLAList"/>
+    <invoker type="application:state-list" caption="For Approval"     name="FOR_APPROVAL"     permission="application.viewForApprovalList"/>
+    <invoker type="application:state-list" caption="Approved"         name="APPROVED"         permission="application.viewApprovedList"/>
+    <invoker type="application:state-list" caption="For Release"      name="FOR_RELEASE"      permission="application.viewForReleaseList"/>
+    <invoker type="application:state-list" caption="Released"         name="RELEASED"         permission="application.viewReleasedList"/>
+    <invoker type="application:state-list" caption="Fully Paid"       name="CLOSED"           permission="application.viewClosedList"/>
+    <invoker type="application:state-list" caption="Disapproved"      name="DISAPPROVED"      permission="application.viewDisapprovedList"/>
+    <invoker type="application:state-list" caption="Disqualified-Out" name="DISQUALIFIED_OUT" permission="application.viewDisqualifiedOutList"/>
+    <invoker type="application:state-list" caption="Canceled-Out"     name="CANCELED_OUT"     permission="application.viewCanceledOutList"/>
+    <invoker type="application:state-list" caption="Back-Out"         name="BACK_OUT"         permission="application.viewBackOutList"/>
+        
     <invoker type="formActions" action="proceed" caption="Proceed" tooltip="Proceed"/>
-    <invoker type="formActions" action="_close" caption="Cancel"   tooltip="Cancel"/>
+    <invoker type="formActions" action="_close" caption="Close"   tooltip="Cancel"/>
+    
     <code lang="groovy">
         <![CDATA[
         import com.rameses.rcp.annotations.*;
         import com.rameses.rcp.common.*;
+        import com.rameses.util.*;
         import com.rameses.osiris2.client.*;
+        import com.rameses.common.*;
         
         public class LoanWarningController{
             @Binding
@@ -24,12 +41,83 @@
             def messagesList=[];
             def messages;
             def selectedBorrower;
+            def entity=[:];
+            def selected;
+            def selection;
+            def searchText;
+            def opener;
+            def mode;
+            boolean busy;
             
-            //def messageWarning;
+            def itemStatus = InvokerUtil.lookup("application:state-list");
+            def loadedStatusList = [];
             
             void init(){
+                openLoanOpener();
                 
+                loadedStatusList.clear();
+                if( itemStatus ) {
+                    selection = itemStatus[0].properties.name;
+                    itemStatus.each { loadedStatusList << it.properties.name }
+                }
             }
+            
+            def listHandler = [
+                getColumns: {
+                    return[
+                            new Column(name:"appno",            caption:"Application no.",width:95),
+                            new Column(name:"fullborrowername", caption:"Borrower name",width:392),
+                            new Column(name:"state",            caption:"State", width: 107),
+                            new Column(name:"dtcreated",        caption:"Date Granted", width: 90),
+                            new Column(name:"loanBalance",      caption:"Balance", width: 90),
+                            new Column(name:"maturitydate",     caption:"Maturity Date", width: 90),
+                            new Column(name:"routecode",        caption:"Route", width: 70),
+                           ]
+                },
+                fetchList:{o->
+                   o.state = selection;
+                   o.allowedStates = loadedStatusList;
+                   o.searchText = searchText;
+                   return loanAppSearchSvc.getList(o);
+                },
+                getRows:{
+                    return 29;
+                }
+           ]as PageListModel;
+           
+           void openLoanOpener(){
+                initEntity();
+                if( !selected ) {
+                    mode='read';
+                }
+                else{
+                    entity=svc.read(selected);
+                    mode='selected';
+                }
+                opener=InvokerUtil.lookupOpener("loan:info",[
+                    entity:entity,
+                    mode:mode,
+                    selectHandler:{o->
+                        listHandler.load();
+                    }
+                ]);
+            }
+            
+            void refreshList(){
+                listHandler.load();
+            }
+
+            void initEntity(){
+               entity=[
+                    loaninfo:[interestrate:20],
+                    propertylist:[],
+                    vehiclelist:[],
+                    appliancelist:[],
+                    comments:[]
+                ];
+            }
+            
+            //def messageWarning;
             
             def proceed(){
                 //return InvokerUtil.lookupOpener("application:createDataCapture", [captureInfo: info]);

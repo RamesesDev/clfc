@@ -628,7 +628,7 @@
                         </tr>
                     <%}%><br>
                 </table>
-                <div align="center">
+                <!--<div align="center">
                     <%if( !data.totalCAV ){%>
                         Total Appliance(s) CAV :
                         Php <b class="maroon">0.00</b>
@@ -637,7 +637,7 @@
                         Total Appliance(s) CAV :
                         Php <b class="green">${format(data.totalCAV)}</b>
                     <%}%>
-                </div><br>
+                </div><br>-->
             <%}%>
             <%if(data.vehiclelist.size()>0){%>
                 <div class="box">
@@ -674,7 +674,7 @@
                         </tr>
                     <%}%>
                 </table>
-                <div align="center">
+                <!--<div align="center">
                     <%if( !data.totalCAV ){%>
                         Total Vehicle(s) CAV :
                         Php <b class="maroon">0.00</b>
@@ -683,7 +683,7 @@
                         Total Vehicle(s) CAV :
                         Php <b class="green">${format(data.totalCAV)}</b>
                     <%}%>
-                </div><br>
+                </div><br>-->
             <%}%>
             <%if(data.otherslist){%>    
                 <%if(data.otherslist.size()>0){%>
@@ -728,7 +728,7 @@
                             </tr>
                         <%}%>
                     </table>
-                    <div align="center">
+                    <!--<div align="center">
                         <%if( !data.totalCAV ){%>
                             Total Other CAV :
                             Php <b class="maroon">0.00</b>
@@ -737,10 +737,10 @@
                             Total Other CAV :
                             Php <b class="green">${format(data.totalCAV)}</b>
                         <%}%>
-                    </div><br>
+                    </div><br>-->
                 <%}%>
             <%}%>
-            <%if(data.propertylist || !data.appliancelist || !data.vehiclelist || !data.otherslist){%>
+            <!--<%if(data.propertylist || !data.appliancelist || !data.vehiclelist || !data.otherslist){%>
                 <div align="left">
                     <%if( !data.totalCAV ){%>
                         <font color="blue">Total Collateral(s) Appraised Value</font> :
@@ -753,12 +753,16 @@
                 </div><br>
             <%}%>
             <%if(!data.propertylist || !data.appliancelist || !data.vehiclelist || !data.otherslist){%>
+                <div class="box">
+                    <b>COLLATERAL</b>
+                </div>
                 <div align="left">
+                    <i class="maroon">No Collateral(s) Attached.</i>
                     <%if( !data.totalCAV ){%>
 
                     <%}%>
                 </div><br>
-            <%}%>
+            <%}%>-->
         <%}%>
         <%if(data.attachmentslist){%>    
             <%if(data.attachmentslist.size()>0){%>
@@ -963,7 +967,7 @@
                     <i class="red2">No FLA yet.</i>
                 <%}%>
             <%}%>
-            <%if( data.state=="APPROVED" ){%>
+            <%if( data.state=="APPROVED" || data.state=="FOR_RELEASE" || data.state=="RELEASED" ){%>
                 <div class="info">
                     <fieldset>
                         <h2><font color="blue">CURRENT FLA</font></h2>
@@ -1108,9 +1112,13 @@
                                 </div>
                             <%}%>
                         </fieldset>
-                        <hr>
-                        <h2><font color="maroon">PREVIOUS FLA</font></h2>
-                            &nbsp;<i class="maroon">no previous FLA record yet.</i>
+                        <%if( data.prevFLA.amountapproved ) {%>
+                            <fieldset>
+                                <hr>
+                                <h2><font color="maroon">PREVIOUS FLA</font></h2>
+                                    &nbsp;<i class="maroon">no previous FLA record yet.</i>
+                            </fieldset>
+                        <%}%>
                     <%}%>
                     <%if ( !data.loaninfo.amountapproved  && !data.loaninfo.offeredamount && !data.loaninfo.approvalAnnotation ) {%>
                         <br><i class="red2">No FLA yet.</i><br>
