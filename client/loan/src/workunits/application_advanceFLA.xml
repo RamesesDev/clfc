@@ -5,7 +5,9 @@
         <!--<invoker type="loan:warning" caption="Warning" target="popup" action="init"/>-->
     
         <invoker folderid="menu/services/loan" caption="Advance FLA" permission="application.createAdvanceApp" index="3"/>
-    
+        
+        <invoker type="formActions" action="proceed" caption="Proceed" tooltip="Proceed"/>
+        <invoker type="formActions" action="_close" caption="Close"   tooltip="Cancel"/>
     </invokers>
     <code>
     <![CDATA[
@@ -16,6 +18,12 @@
         class AdvanceFLAController{
             @Service('LoanApplicationSearchService')
             def svc;
+            
+            @Service('LoanApplicationService')
+            def loanAppSearchSvc;
+            
+            @Binding
+            def binding;
             
             def selected;
             def searchText;
@@ -31,15 +39,15 @@
             }
             def listHandler=[
                     getColumns:{
-                    return[ new Column(name:'appno',         caption:"Application No.", width:200),          
-                            new Column(name:'borrowername',  caption:"Borrower Name", width:380),
-                            new Column(name:'amountDue',     caption:"Amt Due", width:120),
-                            new Column(name:'dailyPayment',  caption:"Daily", width:120),
-                            new Column(name:"loanBalance",      caption:"Balance", width: 90),
-                            new Column(name:'loanAmount',    caption:"Loan Amount", width:140),
-                            new Column(name:'dtreleased',    caption:"Date Granted", width:160)
-                            new Column(name:'maturitydate',     caption:"Maturity Date", width: 90),
-                            new Column(name:'routecode',        caption:"Route", width: 70),
+                    return[ new Column(name:'appno',         caption:"Application No.", width:95),
+                            new Column(name:'borrowername',  caption:"Borrower Name", width:392),
+                            new Column(name:'amountDue',     caption:"Amt Due", width:70),
+                            new Column(name:'dailyPayment',  caption:"Daily", width:60),
+                            new Column(name:"loanBalance",   caption:"Balance", width: 70),
+                            new Column(name:'loanAmount',    caption:"Loan Amount", width:70),
+                            new Column(name:'dtreleased',    caption:"Date Granted", width:90),
+                            new Column(name:'maturitydate',  caption:"Maturity Date", width: 90),
+                            new Column(name:'routecode',     caption:"Route", width: 70),
                      ]
                 },
                 fetchList:{o-> 
@@ -49,11 +57,53 @@
                 getRows:{
                     return 30;
                 }
-            ]as PageListModel;  
+            ]as PageListModel;
+            
+            void openLoanOpener(){
+                initEntity();
+                if( !selected ) {
+                    mode='read';
+                }
+                else{
+                    entity=svc.read(selected);
+                    mode='selected';
+                }
+                opener=InvokerUtil.lookupOpener("loan:info",[
+                    entity:entity,
+                    mode:mode,
+                    selectHandler:{o->
+                        listHandler.load();
+                    }
+                ]);
+            }
+            
+            void refreshList(){
+                listHandler.load();
+            }
+
+            void initEntity(){
+               entity=[
+                    loaninfo:[interestrate:20],
+                    propertylist:[],
+                    vehiclelist:[],
+                    appliancelist:[],
+                    comments:[]
+                ];
+            }
+            
+            //def messageWarning;
+            
+            def proceed(){
+                //return InvokerUtil.lookupOpener("application:createDataCapture", [captureInfo: info]);
+                //return "_close";
+                
+                return InvokerUtil.lookupOpener("application:createDataCapture", [:]);
+            }
+            
         }
     ]]>    
     </code>
     <pages>
-	<page template="loan.ui.ApplicationLookupPage"/>
+	<page template="loan.ui.ledger.LoanWarningPopup"/>
     </pages>    
 </workunit>

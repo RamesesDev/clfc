@@ -50,19 +50,16 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="xDataTable1" pref="882" max="32767" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="xDataTable1" alignment="0" pref="882" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="xLabel1" min="-2" pref="49" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="xActionTextField1" min="-2" pref="412" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="xActionTextField1" min="-2" pref="412" max="-2" attributes="0"/>
-                              <EmptySpace pref="204" max="32767" attributes="0"/>
-                              <Component id="xLabel1" min="-2" pref="49" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
-                              <Component id="xComboBox1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
@@ -77,9 +74,8 @@
               <Group type="102" attributes="0">
                   <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="xActionTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="xComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="xLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="xActionTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="xDataTable1" min="-2" pref="406" max="-2" attributes="0"/>
@@ -160,28 +156,11 @@
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[200, 23]"/>
             </Property>
-            <Property name="showCaption" type="boolean" value="false"/>
-          </Properties>
-        </Component>
-        <Component class="com.rameses.rcp.control.XComboBox" name="xComboBox1">
-          <Properties>
-            <Property name="toolTipText" type="java.lang.String" value="Select Choices"/>
-            <Property name="caption" type="java.lang.String" value="State"/>
-            <Property name="dynamic" type="boolean" value="true"/>
-            <Property name="emptyText" type="java.lang.String" value="All "/>
-            <Property name="expression" type="java.lang.String" value="#{caption}"/>
-            <Property name="immediate" type="boolean" value="true"/>
-            <Property name="itemKey" type="java.lang.String" value="properties.name"/>
-            <Property name="items" type="java.lang.String" value="itemStatus"/>
-            <Property name="name" type="java.lang.String" value="state"/>
-            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[200, 23]"/>
-            </Property>
           </Properties>
         </Component>
         <Component class="com.rameses.rcp.control.XLabel" name="xLabel1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="State :"/>
+            <Property name="text" type="java.lang.String" value="Search :"/>
           </Properties>
         </Component>
       </SubComponents>

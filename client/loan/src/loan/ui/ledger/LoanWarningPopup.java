@@ -32,7 +32,6 @@ public class LoanWarningPopup extends javax.swing.JPanel {
         xLabel3 = new com.rameses.rcp.control.XLabel();
         xLabel2 = new com.rameses.rcp.control.XLabel();
         xActionTextField1 = new com.rameses.rcp.control.XActionTextField();
-        xComboBox1 = new com.rameses.rcp.control.XComboBox();
         xLabel1 = new com.rameses.rcp.control.XLabel();
         xActionBar1 = new com.rameses.rcp.control.XActionBar();
 
@@ -77,20 +76,8 @@ public class LoanWarningPopup extends javax.swing.JPanel {
         xActionTextField1.setIndex(-1);
         xActionTextField1.setName("searchText");
         xActionTextField1.setPreferredSize(new java.awt.Dimension(200, 23));
-        xActionTextField1.setShowCaption(false);
 
-        xComboBox1.setToolTipText("Select Choices");
-        xComboBox1.setCaption("State");
-        xComboBox1.setDynamic(true);
-        xComboBox1.setEmptyText("All ");
-        xComboBox1.setExpression("#{caption}");
-        xComboBox1.setImmediate(true);
-        xComboBox1.setItemKey("properties.name");
-        xComboBox1.setItems("itemStatus");
-        xComboBox1.setName("state");
-        xComboBox1.setPreferredSize(new java.awt.Dimension(200, 23));
-
-        xLabel1.setText("State :");
+        xLabel1.setText("Search :");
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -99,17 +86,14 @@ public class LoanWarningPopup extends javax.swing.JPanel {
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                        .add(jPanel1Layout.createSequentialGroup()
-                            .add(xDataTable1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 882, Short.MAX_VALUE)
-                            .addContainerGap())
-                        .add(jPanel1Layout.createSequentialGroup()
-                            .add(xActionTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 412, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 204, Short.MAX_VALUE)
-                            .add(xLabel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 49, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(17, 17, 17)
-                            .add(xComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .addContainerGap()))
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, xDataTable1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 882, Short.MAX_VALUE)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1Layout.createSequentialGroup()
+                                .add(xLabel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 49, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(xActionTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 412, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap())
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
                         .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(215, 215, 215))))
@@ -119,9 +103,8 @@ public class LoanWarningPopup extends javax.swing.JPanel {
             .add(jPanel1Layout.createSequentialGroup()
                 .add(6, 6, 6)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(xActionTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(xComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(xLabel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(xLabel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(xActionTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(xDataTable1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 406, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -161,7 +144,6 @@ public class LoanWarningPopup extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private com.rameses.rcp.control.XActionBar xActionBar1;
     private com.rameses.rcp.control.XActionTextField xActionTextField1;
-    private com.rameses.rcp.control.XComboBox xComboBox1;
     private com.rameses.rcp.control.XDataTable xDataTable1;
     private com.rameses.rcp.control.XLabel xLabel1;
     private com.rameses.rcp.control.XLabel xLabel2;
