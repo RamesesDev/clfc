@@ -1,7 +1,7 @@
 <workunit>
     <!--<invoker type="loan:warning" caption="Warning" target="popup" action="init"/>-->
     
-    <invoker folderid="menu/services/loan" caption="Advance FLA" permission="application.createAdvanceApp" index="3" action="init"/>
+    <!--<invoker folderid="menu/services/loan" caption="Advance FLA" permission="application.createAdvanceApp" index="3" action="init"/>-->
     
     <!-- state codes -->
     <invoker type="application:state-list" caption="Pending"          name="PENDING"          permission="application.viewPendingList"/>  
@@ -129,6 +129,7 @@
         ]]>
     </code>
     <pages>
-           <page template="loan.ui.ledger.LoanWarningPopup"/>
+        <!--<page template="loan.ui.ledger.LoanWarningPopup"/>-->
+        <page template="loantreasury.collection.ui.ApplicationLookupPage"/>
     </pages>
 </workunit>

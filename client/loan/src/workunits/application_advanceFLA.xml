@@ -1,0 +1,59 @@
+<workunit>
+    <invokers>
+        <!--<invoker type="loan_app:lookup" caption="Loan Application Search" target="popup"/>-->
+        
+        <!--<invoker type="loan:warning" caption="Warning" target="popup" action="init"/>-->
+    
+        <invoker folderid="menu/services/loan" caption="Advance FLA" permission="application.createAdvanceApp" index="3"/>
+    
+    </invokers>
+    <code>
+    <![CDATA[
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+  
+        class AdvanceFLAController{
+            @Service('LoanApplicationSearchService')
+            def svc;
+            
+            def selected;
+            def searchText;
+            def selectHandler;
+            def searchHandler;
+            
+            def select() {
+                if( !selected )
+                    throw new Exception('No item selected.');
+                    
+                if(selectHandler)selectHandler(selected);
+                return "_close";
+            }
+            def listHandler=[
+                    getColumns:{
+                    return[ new Column(name:'appno',         caption:"Application No.", width:200),          
+                            new Column(name:'borrowername',  caption:"Borrower Name", width:380),
+                            new Column(name:'amountDue',     caption:"Amt Due", width:120),
+                            new Column(name:'dailyPayment',  caption:"Daily", width:120),
+                            new Column(name:"loanBalance",      caption:"Balance", width: 90),
+                            new Column(name:'loanAmount',    caption:"Loan Amount", width:140),
+                            new Column(name:'dtreleased',    caption:"Date Granted", width:160)
+                            new Column(name:'maturitydate',     caption:"Maturity Date", width: 90),
+                            new Column(name:'routecode',        caption:"Route", width: 70),
+                     ]
+                },
+                fetchList:{o-> 
+                    if(searchText)o.borrowername=searchText;
+                    return svc.search(o);
+                },
+                getRows:{
+                    return 30;
+                }
+            ]as PageListModel;  
+        }
+    ]]>    
+    </code>
+    <pages>
+	<page template="loan.ui.ApplicationLookupPage"/>
+    </pages>    
+</workunit>

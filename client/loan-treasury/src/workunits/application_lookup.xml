@@ -8,7 +8,7 @@
         import com.rameses.rcp.common.*;
         import com.rameses.osiris2.client.*;
   
-        class applicationLoookupController{
+        class ApplicationLoookupController{
             @Service('LoanApplicationSearchService')
             def svc;
             

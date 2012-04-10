@@ -29,7 +29,9 @@ public class CheckPrintScript
     
         param.formatted_amount = dec_formatter.format( param.amount );
 
+        println param;
         printFormat = parse(param.format, param);
+        println printFormat;
         reportModel.viewReport();
         return ReportUtil.print(reportModel.report, true);
     }
@@ -65,6 +67,7 @@ public class CheckPrintScript
                     newstr = newstr + repeat(" ", str.length() - newstr.length());
             }
             
+            println "str=$str, newstr=$newstr";
             m.appendReplacement(sb, newstr);
         }
         m.appendTail(sb);
